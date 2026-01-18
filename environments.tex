@@ -28,10 +28,7 @@
 \usepackage[framemethod=TikZ]{mdframed}
 % https://tex.stackexchange.com/a/292090/76888
 % https://github.com/marcodaniel/mdframed/issues/12
-\xpatchcmd{\endmdframed}
-{\aftergroup\endmdf@trivlist\color@endgroup}
-{\endmdf@trivlist\color@endgroup\@doendpe}
-{}{}
+
 
 %start of chapter box
 \mdfdefinestyle{overviewbox}{%
@@ -39,7 +36,7 @@
     linewidth=1pt,
     skipabove=7pt,
     skipbelow=7pt,
-    innertopmargin=15pt,
+    innertopmargin=11pt,
     innerbottommargin=9pt,
     linecolor=lightslategreenborder,
     nobreak=true,
@@ -51,23 +48,9 @@
   {\end{mdframed}\end{minipage}}
 
 %Figure captions
-  \renewcommand{\figurename}{\small\rmfamily\bfseries {Figure}}
-
-%dot seperator instead of colon
-  \makeatletter
-  \renewcommand{\@makecaption}[2]{%
-    \vskip\abovecaptionskip
-    \sbox\@tempboxa{#1 { #2}}% Add a period after the figure name
-    \ifdim \wd\@tempboxa >\hsize
-      #1. \RaggedRight #2\par % Apply \RaggedRight here
-    \else
-      \global \@minipagefalse
-      \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-    \fi
-    \vskip\belowcaptionskip
-  }
-  \makeatother
-
+\captionnamefont{\hspace{-0.25em}\RaggedRight\small\bfseries\sffamily}
+\captiontitlefont{\small\RaggedRight\color{gray!30!black}}         % caption text
+\captiondelim{\hspace{0.25em}.\ }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %        _____                    _____                    _____                   _______                   _____                    _____                    _____                    _____
@@ -100,7 +83,7 @@
       linewidth=1pt,
       skipabove=15pt,
       skipbelow=5pt,
-      innertopmargin=10pt,
+      innertopmargin=6pt,
       nobreak=true,
       innerbottommargin=7pt,
 }
@@ -115,11 +98,10 @@
       innerbottommargin=9pt,
 }
 
-
   \newlength{\spaceblength}
   \settowidth{\spaceblength}{\bfseries\ }
   \declaretheoremstyle[
-      headfont=\bfseries,
+      headfont=\bfseries\sffamily,
       notefont=\scshape,
       notebraces={}{\\[\parskip]}, % Braces for additional text
       bodyfont=\normalfont,
@@ -148,11 +130,11 @@
   %for examples and remarks
   \mdfdefinestyle{examplebox}{%
       skipbelow=2pt,
-      roundcorner=2pt,
+      roundcorner=1pt,
       skipabove=8pt,
       linewidth=1pt,
-      innertopmargin=-4.1pt,
-      innerleftmargin=10pt,
+      innertopmargin=-10.8pt,
+      innerleftmargin=9.2pt,
       innerbottommargin=5pt,
       rightline=false,
       leftline=true,
@@ -167,9 +149,9 @@
   \definecolor{coolbeige}{HTML}{F5F6F4}
 
   \declaretheoremstyle[
-    headfont=\bfseries\color{coolbeige}\normalsize,
+    headfont=\bfseries\sffamily\color{coolbeige}\normalsize,
     headformat={%
-    \tcbox{\hspace{-2.3mm}\textcolor{coolbeige}{\ \ \ \textsc{\NAME}\ \NUMBER}}
+    \tcbox{\hspace{-2.3mm}\textcolor{coolbeige}{\ \ \ \scshape \NAME\ \NUMBER}}
     },          % Title font and color
     notefont=\normalfont,                    % Font for the optional note
     headpunct={~\\ ~\\ },                            % No punctuation after the title
@@ -180,24 +162,23 @@
     mdframed={style=examplebox},
   ]{thmexample}
 
-
   \mdfdefinestyle{rembox}{%
-  skipbelow=2pt,
-  skipabove=8pt,
+  skipbelow=20em,
+  skipabove=10pt,
   linewidth=1pt,
-  innertopmargin=10pt,
+  innertopmargin=5pt,
   innerleftmargin=12pt,
   innerbottommargin=10pt,
   rightline=false,
   leftline=false,
   topline=true,
-  bottomline=false,
+  bottomline=true,
   linecolor=black,
   backgroundcolor=coolbeige,
 }
 
   \declaretheoremstyle[
-  headfont=\bfseries,
+  headfont=\bfseries\sffamily,
   mdframed={style=rembox},
   bodyfont=\small,
   ]{thmremark}

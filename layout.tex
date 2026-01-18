@@ -1,4 +1,4 @@
-\documentclass[a4paper, 10pt, twoside, openany]{memoir}
+\documentclass[a4paper, 10    pt, twoside, openany]{memoir}
 %reduces compile time, albeit at the cost of way higher file size.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -35,6 +35,9 @@
 \usepackage[lite, zswash, subscriptcorrection]{mtpro2}
 \DeclareMathSizes{9 }{9}{6}{4}
 
+\setSingleSpace{1.1}
+\SingleSpacing
+
 
 \DeclareFontFamily{U} {cmsy}{}
 \DeclareFontShape{U}{cmsy}{m}{n}{
@@ -61,32 +64,23 @@
 %  Numbers=Lining,
 %  Renderer=Basic
 %]
-\setmainfont{Baskerville}[
-  BoldFont={Baskerville SemiBold}
-]
+%\setmainfont{Baskerville}[
+% BoldFont={Baskerville SemiBold}
+%]
+\setmainfont{Sabon}
 %sans font, for section headings.
 \setsansfont{Jost Light}[
   BoldFont={Jost Medium},
 ]
 %mono font
-\setmonofont{JetBrainsMono}[
-  Extension      = .ttf,
-  UprightFont    = JetBrainsMonoNerdFont-ExtraLight.ttf,
-  ItalicFont     = JetBrainsMonoNerdFont-Italic.ttf,
-  BoldFont       = JetBrainsMonoNerdFont-Bold.ttf,
-]
+\setmonofont{JetBrainsMono}
 %for some reason too large
-\newfontfamily\JBMmdfamily{JetBrainsMono}[
-  Extension      = .ttf,
-  UprightFont    = JetBrainsMonoNerdFont-ExtraLight.ttf,
-  ItalicFont     = JetBrainsMonoNerdFont-Italic.ttf,
-  BoldFont       = JetBrainsMonoNerdFont-Bold.ttf,
-]
+\newfontfamily\JBMmdfamily{JetBrainsMono}
 
 
 %redefinitions because they were acting weird
 \renewcommand{\Large}{\fontsize{15}{20}\selectfont}
-\renewcommand{\large}{\fontsize{12}{20}\selectfont}
+\renewcommand{\large}{\fontsize{13}{20}\selectfont}
 \renewcommand{\LARGE}{\fontsize{22}{40}\selectfont}
 \renewcommand{\huge}{\fontsize{30}{60}\selectfont}
 \renewcommand{\Huge}{\fontsize{40}{60}\selectfont}
@@ -134,8 +128,8 @@
 \setulmarginsandblock{1.8cm}{0cm}{*}
 
 %non indented paras.
-\setlength{\parindent}{0em}
-\nonzeroparskip
+%\setlength{\parindent}{0em}
+%\nonzeroparskip
 
 \usepackage[dvipsnames]{xcolor}
 \usepackage{ragged2e}
@@ -173,9 +167,9 @@
 %section title styling
 \newcommand{\ruledsec}[1]{
 {\sffamily\color[HTML]{29383D}\Large#1} \par
-\vspace{-0.3cm}
+\vspace{0cm}\noindent
 \rule{\textwidth}{0.1pt}
-\vspace{-0.5cm}
+\vspace{-0.7cm}
 }
 \setsecheadstyle{\ruledsec}
 \setsubsecheadstyle{\sffamily\color[HTML]{29383D}\large}
@@ -474,7 +468,7 @@ urlcolor=hkgreen,
         \setlength{\memRTLrightskip}{0pt}
         \interlinepenalty\@M
 
-        \cftpartfont #1
+        \noindent\cftpartfont #1
         \par
       }
       \nobreak

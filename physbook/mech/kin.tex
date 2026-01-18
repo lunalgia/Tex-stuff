@@ -1,4 +1,4 @@
-\setlength{\chnumsep}{10em}
+\setlength{\chnumsep}{8.5em}
 \chapter{Kinematics}
 
 
@@ -20,7 +20,6 @@ particular co-ordinate system called the reference frame.
     which we measure the physical quantities.
 \end{definition}
 
-
 There is some distinction between the mathematics and physics to be made here.
 What we call a reference frame here is not purely a physical thing, it has co-ordinates.
 Some people prefer to distinguish between this and what we'll refer to as an \emph{observational reference frame},
@@ -35,7 +34,6 @@ which is purely a physical concept which may be rotating, moving or be stationar
 An observer in this observational reference frame may choose to employ any set of co-ordinates for measurements,
 for instance cartesian or spherical co-ordinates. The physical quantities are not affected by changing our 
 co-ordinate system in the same observational frame, but can change upon a change of the observational frame.
-
 
 \begin{remark}
     We have yet to discuss acceleration and velocity, and things like angular velocity, and energy won't be introduced for a 
@@ -54,16 +52,14 @@ co-ordinate system in the same observational frame, but can change upon a change
     the lab frame.
 \end{remark}
 
-There are some things that depend on our choice of co-ordinates in our reference frame, and some that
-don't. We'll have a look at using reference frames to deal with some questions
-later. 
-
+Some quantities depend on our choice of reference frame, and care must be taken when dealing with them. We'll
+have a look at using different reference frames later on.
 Typically, we either use cartesian or curvilinear co-ordinates (spherical, cylindrical). 
 We'll have a look at the 2d versions of both in this chapter, especially plane polar-coordinates 
 (2d versions of cylindrical co-ordinates).
 
-We usually deal with either point particles, or rigid bodies.  You might think a point 
-particle is not really a physically meaningful thing. However, we can
+In mechanics we'll primarily deal with either point particles or rigid bodies.  
+You might think a point particle is not really a physically meaningful thing. However, we can
 approximate bodies, when their size is \emph{not} meaningful to their
 motion, as particles to a very good precision. 
 
@@ -85,9 +81,7 @@ A position vector is an example of a \emph{vector field}.
 
 In \Cref{fig: position}, the position vector of $A$ is $\vec{r}_A = x\ihat + y\jhat + z\khat$, where 
 $\ihat$ is the unit vector along the $x$ axis, $\jhat$ the unit vector along the $y$ axis and $\khat$ is 
-the one along the $z$ axis.
-
-As you may notice, this is dependent on our origin. The position vector is not quite
+the one along the $z$ axis. As you may notice, this is dependent on our origin. The position vector is not quite
 a true vector, it's more so a relative quantity. Anyway, it is still plenty useful,
 if we just remember to adjust it when switching to a different reference frame.
 
@@ -98,9 +92,8 @@ if we just remember to adjust it when switching to a different reference frame.
 \end{marginfigure}
 
 The other thing of importance is \emph{Displacement}. 
-The \index{Displacement} \emph{Displacement}, $\vec{s}_{AB}$ from $A$ to $B$, is $\vec{s}_{AB} \equiv \vec{r}_B - \vec{r}_A$.
-
-We need two points to define the displacement. Also, unlike position, displacement 
+The \index{Displacement} \emph{Displacement}, $\vec{s}_{AB}$ from $A$ to $B$, is 
+$\vec{s}_{AB} \equiv \vec{r}_B - \vec{r}_A$. We need two points to define the displacement. Also, unlike position, displacement 
 is not changed by using a rotated or translated reference frame. 
 
 Note that displacement is not the property of the path, which is the \emph{distance}. For a path 
@@ -151,14 +144,12 @@ to time. `$\equiv$' stands for defined as.}
     \begin{equation}
         \vec{v}_{\text{avg}} = \vec{\bar{v}} \equiv \frac{\vec{r}(t_2) - \vec{r}(t_1)}{t_2 - t_1}.
     \end{equation}
-
     And in the limit $t_2 \to t_1$, this becomes the velocity. The case for acceleration
     is the same.
 
     Speed at a time $t$ is the magnitude of velocity at that time. It is always greater
     than or equal to $0$. In the case of average speed, it is defined as the \textit{distance} the particle travels over the
     time interval in which it travels that distance. 
-
     When the time interval goes to $0$, the distance becomes the displacement, or atleast the magnitude of 
     it. Thus, speed is the magnitude of velocity at that point. 
     Also, don't confuse between $\norm{\dv*{\vec{r}}{t}}$ and $\dv*{\norm{\vec{r}}}{t}$, the first is speed, 
@@ -183,7 +174,6 @@ Similarly,
 \begin{equation}
     \vec{r} = \vec{r}_0 + \int \vec{v} \dd{t}.
 \end{equation}
-
 If acceleration is a function of position, which it often is, we can use a neat trick, at least when 
 every thing is one dimension,
 $$
