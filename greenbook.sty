@@ -154,7 +154,9 @@
 
 \RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{ragged2e}
-\raggedbottom
+%pages are filled to the bottom: when a box does not fit, the space left is
+%spread over the glue of the page instead of left empty at its foot
+\flushbottom
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     _______. _______   ______ .___________.__    ______   .__   __.   %
@@ -548,13 +550,14 @@ urlcolor=hkgreen,
 %need framemethod tikz for round corners, https://tex.stackexchange.com/questions/151532/could-not-get-round-corner-working-in-mdframed
 \RequirePackage[framemethod=TikZ]{mdframed}
 %A breakable box (example, remark) that does not fit on the rest of the page
-%but fits on an empty one goes to the next page instead of being split.
+%but fits on an empty one goes to the next page instead of being split
+%(with \flushbottom the page before it is stretched to the bottom).
 %Only boxes taller than a page are split.
 \def\gb@mdf@split{%
   \ifdim\pagegoal=\maxdimen
     \def\mdf@reserved@a{\mdf@put@frame@i}%
   \else\ifdim\mdf@verticalmarginwhole@length<\textheight
-    \hrule\@height\z@\@width\hsize\vfill\eject
+    \hrule\@height\z@\@width\hsize\penalty-\@M
     \def\mdf@reserved@a{\mdf@put@frame}%
   \else
     \def\mdf@reserved@a{\mdf@put@frame@i}%
