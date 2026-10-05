@@ -547,6 +547,20 @@ urlcolor=hkgreen,
 \setmarginnotes{0.5cm}{4.5cm}{0.2cm}
 %need framemethod tikz for round corners, https://tex.stackexchange.com/questions/151532/could-not-get-round-corner-working-in-mdframed
 \RequirePackage[framemethod=TikZ]{mdframed}
+%A breakable box (example, remark) that does not fit on the rest of the page
+%but fits on an empty one goes to the next page instead of being split.
+%Only boxes taller than a page are split.
+\def\gb@mdf@split{%
+  \ifdim\pagegoal=\maxdimen
+    \def\mdf@reserved@a{\mdf@put@frame@i}%
+  \else\ifdim\mdf@verticalmarginwhole@length<\textheight
+    \hrule\@height\z@\@width\hsize\vfill\eject
+    \def\mdf@reserved@a{\mdf@put@frame}%
+  \else
+    \def\mdf@reserved@a{\mdf@put@frame@i}%
+  \fi\fi}
+\patchcmd{\mdf@put@frame}{\def\mdf@reserved@a{\mdf@put@frame@i}}{\gb@mdf@split}{}
+  {\PackageWarning{greenbook}{Could not patch mdframed; boxes may split}}
 % https://tex.stackexchange.com/a/292090/76888
 % https://github.com/marcodaniel/mdframed/issues/12
 
@@ -598,13 +612,21 @@ urlcolor=hkgreen,
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%thmtools' notebraces read the note as (#3), i.e. up to its first ")", so a
+%note such as $\mathcal{P}_m(\mathbb{F})$ was cut after the "F". In \NOTE
+%the note is followed by \egroup: read up to the ")" just before it.
+\def\thmt@embrace#1#2(#3)\egroup{#1#3#2\egroup}
+
+%Theorems start with \addvspace{-\parskip} (LaTeX's \@item), so the inner top
+%margins below include the paragraph skip: with parskip 0 they are smaller
+%than they were with \nonzeroparskip.
 %for theorems and such, hanging title
 \mdfdefinestyle{mdthmbox}{%
       roundcorner=4pt,
       linewidth=1pt,
       skipabove=15pt,
       skipbelow=5pt,
-      innertopmargin=10pt,
+      innertopmargin=6pt,
       nobreak=true,
       innerbottommargin=7pt,
 }
@@ -614,7 +636,7 @@ urlcolor=hkgreen,
       linewidth=1pt,
       skipabove=10pt,
       skipbelow=7pt,
-      innertopmargin=9pt,
+      innertopmargin=5pt,
       nobreak=true,
       innerbottommargin=9pt,
 }
@@ -654,7 +676,7 @@ urlcolor=hkgreen,
       roundcorner=1pt,
       skipabove=8pt,
       linewidth=1pt,
-      innertopmargin=-4pt,
+      innertopmargin=-10pt,
       innerleftmargin=9.2pt,
       innerbottommargin=5pt,
       rightline=false,
@@ -687,7 +709,7 @@ urlcolor=hkgreen,
   skipbelow=20em,
   skipabove=20pt,
   linewidth=1pt,
-  innertopmargin=10pt,
+  innertopmargin=7pt,
   innerleftmargin=12pt,
   innerbottommargin=10pt,
   rightline=false,
@@ -792,7 +814,7 @@ urlcolor=hkgreen,
     }%
   }
   \newenvironment{exc}{%
-      ~\\ \rule[0cm]{\textwidth-4cm}{0.01cm}\rule[-0.11cm]{4cm}{0.12cm} \vskip2pt {\hspace*{\textwidth-3.8cm}\Large\textbf{Exercises}}}%
+      \par\noindent~\\ \rule[0cm]{\textwidth-4cm}{0.01cm}\rule[-0.11cm]{4cm}{0.12cm} \vskip2pt \noindent{\hspace*{\textwidth-3.8cm}\Large\textbf{Exercises}}}%
       {\bigskip \hrule \medskip}
 
 
