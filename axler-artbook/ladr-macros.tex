@@ -66,10 +66,30 @@
 % Fix for artbook's \marginnote: its \raisebox[\ht\z@][\dp\z@]{\box\z@}
 % reports a size of zero to \marginpar, so LaTeX never pushes the next note
 % below it and consecutive notes overlap.  Set the note as an ordinary
-% \marginpar paragraph instead (first baseline on the text line); a nonzero
-% offset becomes space above the note.
-\renewcommand\artbook@noteput[2]{\artbook@notestyle
-  \ifdim\dimexpr#1\relax=\z@\else\vspace*{#1}\fi #2\par}
+% \marginpar paragraph instead (first baseline on the text line).  The notes
+% are placed by marginfix: a note moves down to clear the note above it and
+% up when it would run off the foot of the page, so the hand-set offsets
+% (\marginnote[offset]{...}) are ignored.
+\RequirePackage{marginfix}
+\renewcommand\artbook@noteput[2]{\artbook@notestyle #2\par}
+% The labels of theorems, proofs, sections and exercise blocks (RESULT 1.3,
+% PROOF, SECTION 1A) stand in the same column, but marginfix does not see
+% them: reserve their place, so that notes move around them.
+% When the page is almost full the box goes to the next page, and a phantom
+% left at the foot of this page would keep the notes above it from moving up:
+% then there is none.
+\newcommand*\ax@labelroom[1]{\par\begingroup
+  \skip@=\glueexpr#1\relax \dimen@=\skip@
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax<\dimexpr\dimen@+4\baselineskip\relax
+    \def\x{\endgroup}%
+  \else
+    \edef\x{\endgroup\noexpand\marginphantom{\the\dimen@}}%
+  \fi\x}
+% (added in the preamble, so that it runs before the hook that opens the box)
+\@for\ax@env:={definition,definition*,result,result*,notation,example,%
+                 example*,remark,remark*,theorem,lemma,proof}\do{%
+    \edef\ax@hook{env/\ax@env/before}%
+    \expandafter\AddToHook\expandafter{\ax@hook}{\ax@labelroom{\artbook@opt@thmskip+1.4\baselineskip}}}
 \makeatother
 
 % ------------------------------------------------- lists inside the text
@@ -102,6 +122,7 @@
   \par\addvspace{\artbook@opt@secbefore}%
   \Needspace*{6\baselineskip}%
   \global\axafterexercisestrue
+  \ax@labelroom{\artbook@opt@secpad+1.4\baselineskip}%
   \begingroup
     \ax@exrule
     \noindent\artbook@leftlabel{\artbook@opt@fontsecnum}{Exercises}{#1}%
@@ -123,8 +144,18 @@
 
 % a small unnumbered figure in the label column, as Axler's margin figures:
 %   \marginfig{<tikz or \includegraphics>}{caption}
-\newcommand\marginfig[3][0pt]{\marginnote[#1]{\vskip0pt\centering #2\par\smallskip
-  {\itshape #3}\par}}
+% The drawing is set once to measure it, then again with its coordinates
+% scaled so that it fills the label column (at most 1.8 times its own
+% scale); the text of its labels keeps its size.
+\makeatletter
+\newsavebox\ax@figbox
+\newcommand\marginfig[3][0pt]{%
+  \sbox\ax@figbox{#2}%
+  \edef\ax@figscale{\fpeval{min(1.8,(\the\marginparwidth)/(\the\wd\ax@figbox))}}%
+  \marginnote{\vskip0pt\centering
+    {\tikzset{every picture/.append style={scale=\ax@figscale}}#2}\par\smallskip
+    {\itshape #3}\par}}
+\makeatother
 
 % the quotation that closes some exercise sets
 \newcommand\axquote[2]{\par\bigskip\begingroup\raggedleft\small\itshape
@@ -154,6 +185,9 @@
 \AddToHook{cmd/section/before}{%
   \ifaxafterexercises\clearpage\global\axafterexercisesfalse\fi}
 \AddToHook{cmd/chapter/before}{\global\axafterexercisesfalse}
+\makeatletter
+\AddToHook{cmd/section/before}{\ax@labelroom{3.8\baselineskip+\artbook@opt@secpad}}
+\makeatother
 \AddToHook{cmd/part/before}{\global\axafterexercisesfalse}
 \allowdisplaybreaks[1]
 
