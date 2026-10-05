@@ -85,8 +85,38 @@
 \setlist[axprops]{style=nextline,leftmargin=1em,font=\normalfont\bfseries,
   itemsep=2pt,topsep=3pt,parsep=0pt}
 
-% "Exercises 1A": a run-in heading for the exercise block of a section
-\newcommand\exercisesheading[1]{\subsection*{Exercises #1}}
+% "Exercises 1A": the heading of the exercise block of a section, in the
+% manner of a section heading.  A hairline across the page, broken at the
+% divider, with a thick bar in the accent colour at its right end; the label
+% EXERCISES 1A in the label column and "Exercises" under the bar.
+\newif\ifaxafterexercises
+\makeatletter
+\newcommand*\ax@exrule{%
+  \nointerlineskip
+  \hbox to\z@{\hskip-\artbook@bodyleft
+    \rlap{\artbook@gaprulew{\artbook@fulltw}{\z@}{\artbook@fulltw}{\artbook@bsplit}}%
+    \hskip\dimexpr\artbook@bodyleft+\artbook@bodytw-40mm\relax
+    {\color{artbook@accent}\rule[-2.6pt]{40mm}{3pt}}\hss}%
+  \nobreak\vskip\artbook@opt@secpad\nointerlineskip}
+\newcommand\exercisesheading[1]{%
+  \par\addvspace{\artbook@opt@secbefore}%
+  \Needspace*{6\baselineskip}%
+  \global\axafterexercisestrue
+  \begingroup
+    \ax@exrule
+    \noindent\artbook@leftlabel{\artbook@opt@fontsecnum}{Exercises}{#1}%
+    \hfill{\artbook@opt@fontsection Exercises}\par
+  \endgroup
+  \nobreak\vskip\artbook@opt@secafter\relax
+  \@afterindentfalse\@afterheading}
+
+% subsections: a short bar in the accent colour above the title
+\renewcommand*\artbook@subsectionstyle{%
+  \nointerlineskip
+  \hbox{\color{artbook@accent}\rule{10mm}{1.5pt}}%
+  \nobreak\vskip 1.8mm\nointerlineskip
+  \raggedright\artbook@opt@fontsubsection}
+\makeatother
 
 % a short attribution line for the solutions
 \newcommand\solnote[2]{\par\smallskip\noindent{\bfseries #1.}\ {\itshape #2}\par}
@@ -119,6 +149,12 @@
 
 % same space after the last exercise of every section
 \AddToHook{cmd/section/before}{\par\addvspace{\bigskipamount}}
+% the section after an exercise block starts on a new page (the quotation
+% that closes some exercise blocks stays with them)
+\AddToHook{cmd/section/before}{%
+  \ifaxafterexercises\clearpage\global\axafterexercisesfalse\fi}
+\AddToHook{cmd/chapter/before}{\global\axafterexercisesfalse}
+\AddToHook{cmd/part/before}{\global\axafterexercisesfalse}
 \allowdisplaybreaks[1]
 
 % artbook's contents lists only section-level rows (chapters are headers),
