@@ -1,0 +1,904 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{4}\setcounter{theorem}{86}
+\fi % TEST-ONLY-END
+% Source: book pp. 96--104 (PDF 110--118); solutions pp. 104--112, 172.
+\section{Products and Quotients of Vector Spaces}
+
+\subsection{Products of Vector Spaces}
+
+As usual when dealing with more than one vector space, all vector spaces in use
+should be over the same field.
+
+\begin{definition}[Product of vector spaces]\label{ax:3.87}\leavevmode
+Suppose $V_1,\dots,V_m$ are vector spaces over $\F$.
+\begin{itemize}
+\item The \emph{product} $V_1\times\cdots\times V_m$ is defined by
+  \[ V_1\times\cdots\times V_m
+     = \{(v_1,\dots,v_m) : v_1\in V_1,\dots,v_m\in V_m\}. \]
+\item Addition on $V_1\times\cdots\times V_m$ is defined by
+  \[ (u_1,\dots,u_m)+(v_1,\dots,v_m) = (u_1+v_1,\dots,u_m+v_m). \]
+\item Scalar multiplication on $V_1\times\cdots\times V_m$ is defined by
+  \[ \lambda(v_1,\dots,v_m) = (\lambda v_1,\dots,\lambda v_m). \]
+\end{itemize}
+\end{definition}
+
+\begin{example}[Product of the vector spaces $\Poly_5(\R)$ and $\R^3$]\label{ax:3.88}
+Elements of $\Poly_5(\R)\times\R^3$ are lists of length two, with the first item
+in the list an element of $\Poly_5(\R)$ and the second item in the list an
+element of $\R^3$.
+
+For example, $\bigl(5-6x+4x^2,(3,8,7)\bigr)$ and $\bigl(x+9x^5,(2,2,2)\bigr)$
+are elements of $\Poly_5(\R)\times\R^3$. Their sum is defined by
+\begin{align*}
+&\bigl(5-6x+4x^2,(3,8,7)\bigr)+\bigl(x+9x^5,(2,2,2)\bigr)\\
+&\qquad= \bigl(5-5x+4x^2+9x^5,(5,10,9)\bigr).
+\end{align*}
+Also, $2\bigl(5-6x+4x^2,(3,8,7)\bigr)=\bigl(10-12x+8x^2,(6,16,14)\bigr)$.
+\end{example}
+
+The next result should be interpreted to mean that the product of vector spaces
+is a vector space with the operations of addition and scalar multiplication as
+defined by \ref{ax:3.87}.
+
+\begin{result}[Product of vector spaces is a vector space]\label{ax:3.89}
+Suppose $V_1,\dots,V_m$ are vector spaces over $\F$. Then
+$V_1\times\cdots\times V_m$ is a vector space over $\F$.
+\end{result}
+
+The proof of the result above is left to the reader. Note that the additive
+identity of $V_1\times\cdots\times V_m$ is $(0,\dots,0)$, where the $0$ in the
+$k^{\text{th}}$ slot is the additive identity of $V_k$. The additive inverse of
+$(v_1,\dots,v_m)\in V_1\times\cdots\times V_m$ is $(-v_1,\dots,-v_m)$.
+
+\begin{example}[$\R^2\times\R^3\ne\R^5$ but $\R^2\times\R^3$ is isomorphic to
+$\R^5$]\label{ax:3.90}
+Elements of the vector space $\R^2\times\R^3$ are lists
+\[ \bigl((x_1,x_2),(x_3,x_4,x_5)\bigr), \]
+where $x_1,x_2,x_3,x_4,x_5\in\R$. Elements of $\R^5$ are lists
+\[ (x_1,x_2,x_3,x_4,x_5), \]
+where $x_1,x_2,x_3,x_4,x_5\in\R$.
+
+Although elements of $\R^2\times\R^3$ and $\R^5$ look similar, they are not the
+same kind of object. Elements of $\R^2\times\R^3$ are lists of length two (with
+the first item itself a list of length two and the second item a list of length
+three), and elements of $\R^5$ are lists of length five. Thus $\R^2\times\R^3$
+does not equal $\R^5$.
+
+The linear map
+\[ \bigl((x_1,x_2),(x_3,x_4,x_5)\bigr) \mapsto (x_1,x_2,x_3,x_4,x_5) \]
+is an isomorphism of the vector space $\R^2\times\R^3$ onto the vector space
+$\R^5$. Thus these two vector spaces are isomorphic, although they are not
+equal.
+\end{example}
+
+\marginnote[-30mm]{This isomorphism is so natural that we should think of it as a
+relabeling. Some people informally say that $\R^2\times\R^3$ equals $\R^5$,
+which is not technically correct but which captures the spirit of
+identification via relabeling.}%
+The next example illustrates the idea that we will use in the proof of
+\ref{ax:3.92}.
+
+\begin{example}[A basis of $\Poly_2(\R)\times\R^2$]\label{ax:3.91}
+Consider this list of length five of elements of $\Poly_2(\R)\times\R^2$:
+\[ \bigl(1,(0,0)\bigr),\ \bigl(x,(0,0)\bigr),\ \bigl(x^2,(0,0)\bigr),\
+   \bigl(0,(1,0)\bigr),\ \bigl(0,(0,1)\bigr). \]
+The list above is linearly independent and it spans $\Poly_2(\R)\times\R^2$.
+Thus it is a basis of $\Poly_2(\R)\times\R^2$.
+\end{example}
+
+\begin{result}[Dimension of a product is the sum of dimensions]\label{ax:3.92}
+Suppose $V_1,\dots,V_m$ are finite-dimensional vector spaces. Then
+$V_1\times\cdots\times V_m$ is finite-dimensional and
+\[ \dim(V_1\times\cdots\times V_m) = \dim V_1+\cdots+\dim V_m. \]
+\end{result}
+
+\begin{proof}
+Choose a basis of each $V_k$. For each basis vector of each $V_k$, consider the
+element of $V_1\times\cdots\times V_m$ that equals the basis vector in the
+$k^{\text{th}}$ slot and $0$ in the other slots. The list of all such vectors is
+linearly independent and spans $V_1\times\cdots\times V_m$. Thus it is a basis
+of $V_1\times\cdots\times V_m$. The length of this basis is
+$\dim V_1+\cdots+\dim V_m$, as desired.
+\end{proof}
+
+In the next result, the map $\Gamma$ is surjective by the definition of
+$V_1+\cdots+V_m$. Thus the last word in the result below could be changed from
+``injective'' to ``invertible''.
+
+\begin{result}[Products and direct sums]\label{ax:3.93}
+Suppose that $V_1,\dots,V_m$ are subspaces of $V$. Define a linear map
+$\Gamma\colon V_1\times\cdots\times V_m\to V_1+\cdots+V_m$ by
+\[ \Gamma(v_1,\dots,v_m) = v_1+\cdots+v_m. \]
+Then $V_1+\cdots+V_m$ is a direct sum if and only if $\Gamma$ is injective.
+\end{result}
+
+\begin{proof}
+By \ref{ax:3.15}, $\Gamma$ is injective if and only if the only way to write $0$
+as a sum $v_1+\cdots+v_m$, where each $v_k$ is in $V_k$, is by taking each $v_k$
+equal to $0$. Thus \ref{ax:1.45} shows that $\Gamma$ is injective if and only if
+$V_1+\cdots+V_m$ is a direct sum, as desired.
+\end{proof}
+
+\begin{result}[A sum is a direct sum if and only if dimensions add
+up]\label{ax:3.94}
+Suppose $V$ is finite-dimensional and $V_1,\dots,V_m$ are subspaces of $V$. Then
+$V_1+\cdots+V_m$ is a direct sum if and only if
+\[ \dim(V_1+\cdots+V_m) = \dim V_1+\cdots+\dim V_m. \]
+\end{result}
+
+\begin{proof}
+The map $\Gamma$ in \ref{ax:3.93} is surjective. Thus by the fundamental theorem
+of linear maps (\ref{ax:3.21}), $\Gamma$ is injective if and only if
+\[ \dim(V_1+\cdots+V_m) = \dim(V_1\times\cdots\times V_m). \]
+Combining \ref{ax:3.93} and \ref{ax:3.92} now shows that $V_1+\cdots+V_m$ is a
+direct sum if and only if
+\[ \dim(V_1+\cdots+V_m) = \dim V_1+\cdots+\dim V_m, \]
+as desired.
+\end{proof}
+
+In the special case $m=2$, an alternative proof that $V_1+V_2$ is a direct sum
+if and only if $\dim(V_1+V_2)=\dim V_1+\dim V_2$ can be obtained by combining
+\ref{ax:1.46} and \ref{ax:2.43}.
+
+\subsection{Quotient Spaces}
+
+We begin our approach to quotient spaces by defining the sum of a vector and a
+subset.
+
+\begin{notation}[$v+U$]\label{ax:3.95}
+Suppose $v\in V$ and $U\subseteq V$. Then $v+U$ is the subset of $V$ defined by
+\[ v+U = \{v+u : u\in U\}. \]
+\end{notation}
+
+\marginfig[16mm]{\begin{tikzpicture}[scale=.14]
+  \draw[axis] (-1,0)--(21,0); \draw[axis] (0,-1.5)--(0,22);
+  \draw[line width=.5pt] (-.6,-1.2)--(10.5,21) node[above,font=\scriptsize]
+    {$(10,20)$};
+  \draw[line width=.5pt] (6.4,-1.2)--(17.5,21) node[above right=-2pt,
+    font=\scriptsize] {$(17,20)$};
+  \draw (10,0)--(10,-.6) node[below,font=\scriptsize] {$10$};
+  \draw (17,0)--(17,-.6) node[below,font=\scriptsize] {$17$};
+  \draw (0,20)--(-.6,20) node[left,font=\scriptsize] {$20$};
+  \node[font=\scriptsize] at (6.3,8.5) {$U$};
+  \node[font=\scriptsize,right] at (13.6,11) {$(17,20)+U$};
+\end{tikzpicture}}{$(17,20)+U$ is parallel to the subspace $U$.}%
+\begin{example}[Sum of a vector and a one-dimensional subspace of
+$\R^2$]\label{ax:3.96}
+Suppose
+\[ U = \{(x,2x)\in\R^2 : x\in\R\}. \]
+Hence $U$ is the line in $\R^2$ through the origin with slope $2$. Thus
+\[ (17,20)+U \]
+is the line in $\R^2$ that contains the point $(17,20)$ and has slope $2$.
+
+Because
+\[ (10,20)\in U \quad\text{and}\quad (17,20)\in(17,20)+U, \]
+we see that $(17,20)+U$ is obtained by moving $U$ to the right by $7$ units.
+\end{example}
+
+\begin{definition}[Translate]\label{ax:3.97}
+For $v\in V$ and $U$ a subset of $V$, the set $v+U$ is said to be a
+\emph{translate} of $U$.
+\end{definition}
+
+\begin{example}[Translates]\label{ax:3.98}\leavevmode
+\begin{itemize}
+\item If $U$ is the line in $\R^2$ defined by $U=\{(x,2x)\in\R^2 : x\in\R\}$,
+  then all lines in $\R^2$ with slope $2$ are translates of $U$. See Example
+  \ref{ax:3.96} above for a drawing of $U$ and one of its translates.
+\item More generally, if $U$ is a line in $\R^2$, then the set of all
+  translates of $U$ is the set of all lines in $\R^2$ that are parallel to $U$.
+\item If $U=\{(x,y,0)\in\R^3 : x,y\in\R\}$, then the translates of $U$ are the
+  planes in $\R^3$ that are parallel to the $xy$-plane $U$.
+\item More generally, if $U$ is a plane in $\R^3$, then the set of all
+  translates of $U$ is the set of all planes in $\R^3$ that are parallel to $U$
+  (see, for example, Exercise~7).
+\end{itemize}
+\end{example}
+
+\begin{definition}[Quotient space, $V/U$]\label{ax:3.99}
+Suppose $U$ is a subspace of $V$. Then the \emph{quotient space} $V/U$ is the
+set of all translates of $U$. Thus
+\[ V/U = \{v+U : v\in V\}. \]
+\end{definition}
+
+\begin{example}[Quotient spaces]\label{ax:3.100}\leavevmode
+\begin{itemize}
+\item If $U=\{(x,2x)\in\R^2 : x\in\R\}$, then $\R^2/U$ is the set of all lines
+  in $\R^2$ that have slope $2$.
+\item If $U$ is a line in $\R^3$ containing the origin, then $\R^3/U$ is the set
+  of all lines in $\R^3$ parallel to $U$.
+\item If $U$ is a plane in $\R^3$ containing the origin, then $\R^3/U$ is the
+  set of all planes in $\R^3$ parallel to $U$.
+\end{itemize}
+\end{example}
+
+Our next goal is to make $V/U$ into a vector space. To do this, we will need
+the next result.
+
+\begin{result}[Two translates of a subspace are equal or
+disjoint]\label{ax:3.101}
+Suppose $U$ is a subspace of $V$ and $v,w\in V$. Then
+\[ v-w\in U \iff v+U=w+U \iff (v+U)\cap(w+U)\ne\varnothing. \]
+\end{result}
+
+\begin{proof}
+First suppose $v-w\in U$. If $u\in U$, then
+\[ v+u = w+\bigl((v-w)+u\bigr)\in w+U. \]
+Thus $v+U\subseteq w+U$. Similarly, $w+U\subseteq v+U$. Thus $v+U=w+U$,
+completing the proof that $v-w\in U$ implies $v+U=w+U$.
+
+The equation $v+U=w+U$ implies that $(v+U)\cap(w+U)\ne\varnothing$.
+
+Now suppose $(v+U)\cap(w+U)\ne\varnothing$. Thus there exist $u_1,u_2\in U$
+such that
+\[ v+u_1 = w+u_2. \]
+Thus $v-w=u_2-u_1$. Hence $v-w\in U$, showing that
+$(v+U)\cap(w+U)\ne\varnothing$ implies $v-w\in U$, which completes the proof.
+\end{proof}
+
+Now we can define addition and scalar multiplication on $V/U$.
+
+\begin{definition}[Addition and scalar multiplication on $V/U$]\label{ax:3.102}
+Suppose $U$ is a subspace of $V$. Then \emph{addition} and \emph{scalar
+multiplication} are defined on $V/U$ by
+\begin{align*}
+(v+U)+(w+U) &= (v+w)+U\\
+\lambda(v+U) &= (\lambda v)+U
+\end{align*}
+for all $v,w\in V$ and all $\lambda\in\F$.
+\end{definition}
+
+As part of the proof of the next result, we will show that the definitions above
+make sense.
+
+\begin{result}[Quotient space is a vector space]\label{ax:3.103}
+Suppose $U$ is a subspace of $V$. Then $V/U$, with the operations of addition
+and scalar multiplication as defined above, is a vector space.
+\end{result}
+
+\begin{proof}
+The potential problem with the definitions above of addition and scalar
+multiplication on $V/U$ is that the representation of a translate of $U$ is not
+unique. Specifically, suppose $v_1,v_2,w_1,w_2\in V$ are such that
+\[ v_1+U=v_2+U \quad\text{and}\quad w_1+U=w_2+U. \]
+To show that the definition of addition on $V/U$ given above makes sense, we
+must show that $(v_1+w_1)+U=(v_2+w_2)+U$.
+
+By \ref{ax:3.101}, we have
+\[ v_1-v_2\in U \quad\text{and}\quad w_1-w_2\in U. \]
+Because $U$ is a subspace of $V$ and thus is closed under addition, this implies
+that $(v_1-v_2)+(w_1-w_2)\in U$. Thus $(v_1+w_1)-(v_2+w_2)\in U$. Using
+\ref{ax:3.101} again, we see that
+\[ (v_1+w_1)+U = (v_2+w_2)+U, \]
+as desired. Thus the definition of addition on $V/U$ makes sense.
+
+Similarly, suppose $\lambda\in\F$. We are still assuming that $v_1+U=v_2+U$.
+Because $U$ is a subspace of $V$ and thus is closed under scalar multiplication,
+we have $\lambda(v_1-v_2)\in U$. Thus $\lambda v_1-\lambda v_2\in U$. Hence
+\ref{ax:3.101} implies that
+\[ (\lambda v_1)+U = (\lambda v_2)+U. \]
+Thus the definition of scalar multiplication on $V/U$ makes sense.
+
+Now that addition and scalar multiplication have been defined on $V/U$, the
+verification that these operations make $V/U$ into a vector space is
+straightforward and is left to the reader. Note that the additive identity of
+$V/U$ is $0+U$ (which equals $U$) and that the additive inverse of $v+U$ is
+$(-v)+U$.
+\end{proof}
+
+The next concept will lead to a computation of the dimension of $V/U$.
+
+\begin{definition}[Quotient map, $\pi$]\label{ax:3.104}
+Suppose $U$ is a subspace of $V$. The \emph{quotient map} $\pi\colon V\to V/U$
+is the linear map defined by
+\[ \pi(v) = v+U \]
+for each $v\in V$.
+\end{definition}
+
+The reader should verify that $\pi$ is indeed a linear map. Although $\pi$
+depends on $U$ as well as $V$, these spaces are left out of the notation because
+they should be clear from the context.
+
+\begin{result}[Dimension of quotient space]\label{ax:3.105}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$. Then
+\[ \dim V/U = \dim V-\dim U. \]
+\end{result}
+
+\begin{proof}
+Let $\pi$ denote the quotient map from $V$ to $V/U$. If $v\in V$, then
+$v+U=0+U$ if and only if $v\in U$ (by \ref{ax:3.101}), which implies that
+$\nul\pi=U$. The definition of $\pi$ implies $\range\pi=V/U$. The fundamental
+theorem of linear maps (\ref{ax:3.21}) now implies $\dim V=\dim U+\dim V/U$,
+which gives the desired result.
+\end{proof}
+
+Each linear map $T$ on $V$ induces a linear map $\widetilde{T}$ on
+$V/(\nul T)$, as defined below.
+
+\begin{notation}[$\widetilde{T}$]\label{ax:3.106}
+Suppose $T\in\Lin(V,W)$. Define $\widetilde{T}\colon V/(\nul T)\to W$ by
+\[ \widetilde{T}(v+\nul T) = Tv. \]
+\end{notation}
+
+To show that the definition of $\widetilde{T}$ makes sense, suppose $u,v\in V$
+are such that $u+\nul T=v+\nul T$. By \ref{ax:3.101}, we have $u-v\in\nul T$.
+Thus $T(u-v)=0$. Hence $Tu=Tv$. Thus the definition of $\widetilde{T}$ indeed
+makes sense. The routine verification that $\widetilde{T}$ is a linear map from
+$V/(\nul T)$ to $W$ is left to the reader.
+
+The next result shows that we can think of $\widetilde{T}$ as a modified version
+of $T$, with a domain that produces a one-to-one map.
+
+\begin{result}[Null space and range of $\widetilde{T}$]\label{ax:3.107}
+Suppose $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $\widetilde{T}\circ\pi=T$, where $\pi$ is the quotient map of $V$ onto
+  $V/(\nul T)$;
+\item $\widetilde{T}$ is injective;
+\item $\range\widetilde{T}=\range T$;
+\item $V/(\nul T)$ and $\range T$ are isomorphic vector spaces.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item If $v\in V$, then $(\widetilde{T}\circ\pi)(v)=\widetilde{T}\bigl(\pi(v)\bigr)
+  =\widetilde{T}(v+\nul T)=Tv$, as desired.
+\item Suppose $v\in V$ and $\widetilde{T}(v+\nul T)=0$. Then $Tv=0$. Thus
+  $v\in\nul T$. Hence \ref{ax:3.101} implies that $v+\nul T=0+\nul T$. This
+  implies that $\nul\widetilde{T}=\{0+\nul T\}$. Hence $\widetilde{T}$ is
+  injective, as desired.
+\item The definition of $\widetilde{T}$ shows that
+  $\range\widetilde{T}=\range T$.
+\item Now (b) and (c) imply that if we think of $\widetilde{T}$ as mapping into
+  $\range T$, then $\widetilde{T}$ is an isomorphism from $V/(\nul T)$ onto
+  $\range T$. \qedhere
+\end{parts}
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{3E}
+
+\begin{exercise}
+Suppose $T$ is a function from $V$ to $W$. The \emph{graph} of $T$ is the
+subset of $V\times W$ defined by
+\[ \text{graph of } T = \{(v,Tv)\in V\times W : v\in V\}. \]
+Prove that $T$ is a linear map if and only if the graph of $T$ is a subspace of
+$V\times W$.
+\exnote{Formally, a function $T$ from $V$ to $W$ is a subset $T$ of $V\times W$
+such that for each $v\in V$, there exists exactly one element $(v,w)\in T$. In
+other words, formally a function is what is called above its graph. We do not
+usually think of functions in this formal manner. However, if we do become
+formal, then this exercise could be rephrased as follows: Prove that a function
+$T$ from $V$ to $W$ is a linear map if and only if $T$ is a subspace of
+$V\times W$.}
+\end{exercise}
+\begin{solution}\emergencystretch=1.5em
+Let $G(T)$ denote the graph of $T$. Now, suppose $T$ is a linear map. Then
+$G(T)$ is nonempty since $(0,T0)=(0,0)\in G(T)$. Now, let
+$(v_1,Tv_1),(v_2,Tv_2)\in G(T)$. Then
+\[ (v_1-v_2,Tv_1-Tv_2) = (v_1,Tv_1)-(v_2,Tv_2)\in G(T) \]
+since $T$ is linear. Now, let $(v,Tv)\in G(T)$ and $\alpha\in\F$. Then
+\[ (\alpha v,\alpha Tv) = \alpha(v,Tv)\in G(T) \]
+since $T$ is linear. Thus, $G(T)$ is a subspace of $V\times W$.
+
+Conversely, suppose $G(T)$ is a subspace of $V\times W$. By definition, we have
+$(v_1,Tv_1),\allowbreak(v_2,Tv_2)\in G(T)$ for all $v_1,v_2\in V$. Since $G(T)$ is a
+subspace of $V\times W$, for all $\alpha,\beta\in\F$, we have
+\[ (\alpha v_1+\beta v_2,\alpha Tv_1+\beta Tv_2)
+   = \alpha(v_1,Tv_1)+\beta(v_2,Tv_2)\in G(T). \]
+By definition of $G(T)$, we have $\alpha Tv_1+\beta Tv_2=T(\alpha v_1+\beta
+v_2)$. Thus, $T$ is a linear map.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V_1,\dots,V_m$ are vector spaces such that
+$V_1\times\cdots\times V_m$ is finite-dimensional. Prove that $V_k$ is
+finite-dimensional for each $k=1,\dots,m$.
+\end{exercise}
+\begin{solution}\emergencystretch=1.5em
+Let $V=V_1\times\cdots\times V_m$, and consider $T\in\Lin(V,V_k)$ defined by
+$T(v_1,\dots,v_m)=v_k$. Then $T$ is a linear map since for all
+$\alpha,\beta\in\F$ and all $(v_1,\dots,v_m),(w_1,\dots,w_m)\in V$, we have
+\begin{align*}
+T\bigl(\alpha(v_1,\dots,v_m)+\beta(w_1,\dots,w_m)\bigr)
+  &= T(\alpha v_1+\beta w_1,\dots,\alpha v_m+\beta w_m)\\
+  &= \alpha v_k+\beta w_k\\
+  &= \alpha T(v_1,\dots,v_m)+\beta T(w_1,\dots,w_m).
+\end{align*}
+Moreover, $T$ is surjective since for any $v_k\in V_k$, we have
+$v_k=T(0,\dots,0,v_k,0,\dots,0)$ where $v_k$ is in the $k$-th coordinate. Since
+$V$ is finite-dimensional and $T$ is a linear map that is surjective, it follows
+that $V_k$ is finite-dimensional.
+\end{solution}
+
+\begin{exercise}
+Suppose $V_1,\dots,V_m$ are vector spaces. Prove that
+$\Lin(V_1\times\cdots\times V_m,W)$ and
+$\Lin(V_1,W)\times\cdots\times\Lin(V_m,W)$ are isomorphic vector spaces.
+\exnote{There is no assumption in the exercise above or in the two following
+exercises that the vector spaces are finite-dimensional.}
+\end{exercise}
+\begin{solution}
+Let $V=V_1\times\cdots\times V_m$. Let
+$L=\Lin(V_1,W)\times\cdots\times\Lin(V_m,W)$. Define
+$T\in\Lin\bigl(\Lin(V,W),L\bigr)$ by
+\[ T(S) = (S\circ\iota_1,\dots,S\circ\iota_m) \]
+where $\iota_k\in\Lin(V_k,V)$ is the map defined as
+\[ \iota_k(v_k) = (0,\dots,0,v_k,0,\dots,0) \]
+with $\iota_k(v_k)$ having $v_k$ in the $k$-th coordinate and $0$ in all other
+coordinates. Then $T$ is linear since for all $\alpha,\beta\in\F$ and all
+$S_1,S_2\in\Lin(V,W)$, we have
+\begin{align*}
+T(\alpha S_1+\beta S_2)
+  &= \bigl((\alpha S_1+\beta S_2)\circ\iota_1,\dots,
+     (\alpha S_1+\beta S_2)\circ\iota_m\bigr)\\
+  &= \bigl(\alpha(S_1\circ\iota_1)+\beta(S_2\circ\iota_1),\dots,
+     \alpha(S_1\circ\iota_m)+\beta(S_2\circ\iota_m)\bigr)\\
+  &= \alpha T(S_1)+\beta T(S_2),
+\end{align*}
+hence $T$ is a linear map. Now suppose $T(S)=0$. Then $S\circ\iota_k=0$ for all
+$k=1,\dots,m$. Moreover, for all $(v_1,\dots,v_m)\in V$, we have
+\begin{align*}
+S(v_1,\dots,v_m) &= S\bigl(\iota_1(v_1)+\cdots+\iota_m(v_m)\bigr)\\
+  &= S\circ\iota_1(v_1)+\cdots+S\circ\iota_m(v_m) = 0.
+\end{align*}
+It follows that $S(v_1,\dots,v_m)=0$ for all $(v_1,\dots,v_m)\in V$. Thus,
+$S=0$, and hence $T$ is injective.
+
+Now, let $(S_1,\dots,S_m)\in L$. Define $S\in\Lin(V,W)$ by
+$S(v_1,\dots,v_m)=S_1v_1+\cdots+S_mv_m$. Then $T(S)=(S_1,\dots,S_m)$. Thus, $T$
+is surjective. Therefore, $T$ is an isomorphism.
+\end{solution}
+
+\begin{exercise}
+Suppose $W_1,\dots,W_m$ are vector spaces. Prove that
+$\Lin(V,W_1\times\cdots\times W_m)$ and
+$\Lin(V,W_1)\times\cdots\times\Lin(V,W_m)$ are isomorphic vector spaces.
+\end{exercise}
+\begin{solution}\emergencystretch=1.5em
+\solnote{Manual Remark}{Note the difference between this exercise and
+Exercise~3E3. Here, the domain is decomposed, while in Exercise~3E3, the
+codomain is decomposed. Hence, the use of the maps $\iota_k$ and $\pi_k$ in the
+solutions to these exercises are reversed.}
+Let $W=W_1\times\cdots\times W_m$. Let
+$L=\Lin(V,W_1)\times\cdots\times\Lin(V,W_m)$. Define
+$T\in\Lin\bigl(\Lin(V,W),L\bigr)$ by
+\[ T(S) = (\pi_1\circ S,\dots,\pi_m\circ S) \]
+where $\pi_k\in\Lin(W,W_k)$ is the map defined as
+\[ \pi_k(w_1,\dots,w_m) = w_k \]
+Then $T$ is linear since for all $\alpha,\beta\in\F$ and all
+$S_1,S_2\in\Lin(V,W)$, we have
+\begin{align*}
+T(\alpha S_1+\beta S_2)
+  &= \bigl(\pi_1\circ(\alpha S_1+\beta S_2),\dots,
+     \pi_m\circ(\alpha S_1+\beta S_2)\bigr)\\
+  &= \bigl(\alpha(\pi_1\circ S_1)+\beta(\pi_1\circ S_2),\dots,
+     \alpha(\pi_m\circ S_1)+\beta(\pi_m\circ S_2)\bigr)\\
+  &= \alpha T(S_1)+\beta T(S_2),
+\end{align*}
+hence $T$ is a linear map. Now suppose $T(S)=0$. Then $\pi_k\circ S=0$ for all
+$k=1,\dots,m$. Moreover, for all $v\in V$, we have
+\[ Sv = \bigl(\pi_1(Sv),\dots,\pi_m(Sv)\bigr) = (0,\dots,0) = 0. \]
+It follows that $Sv=0$ for all $v$, hence $S=0$, and thus $T$ is injective.
+
+Now let $(S_1,\dots,S_m)\in L$. Define $S\in\Lin(V,W)$ by
+$Sv=(S_1v,\dots,S_mv)$. Then $T(S)=(S_1,\dots,S_m)$. Thus, $T$ is surjective.
+Therefore, $T$ is an isomorphism.
+\end{solution}
+
+\begin{exercise}
+For $m$ a positive integer, define $V^m$ by
+\[ V^m = \ftimes{V\times\cdots\times V}{m\text{ times}}. \]
+Prove that $V^m$ and $\Lin(\F^m,V)$ are isomorphic vector spaces.
+\end{exercise}
+\begin{solution}\emergencystretch=1.5em
+Let $e_1,\dots,e_m$ be the standard basis of $\F^m$. Define
+$T\in\Lin\bigl(V^m,\allowbreak\Lin(\F^m,V)\bigr)$ by
+\[ T(v_1,\dots,v_m)(\lambda_1,\dots,\lambda_m)
+   = \lambda_1v_1+\cdots+\lambda_mv_m. \]
+Then $T$ is linear since for all $\alpha,\beta\in\F$ and all
+$v=(v_1,\dots,v_m),w=(w_1,\dots,w_m)\in V^m$, we have
+\begin{align*}
+T(\alpha v+\beta w)(\lambda_1,\dots,\lambda_m)
+  &= T(\alpha v_1+\beta w_1,\dots,\alpha v_m+\beta w_m)
+     (\lambda_1,\dots,\lambda_m)\\
+  &= \lambda_1(\alpha v_1+\beta w_1)+\cdots+\lambda_m(\alpha v_m+\beta w_m)\\
+  &= \alpha(\lambda_1v_1+\cdots+\lambda_mv_m)
+     +\beta(\lambda_1w_1+\cdots+\lambda_mw_m)\\
+  &= \alpha T(v)(\lambda_1,\dots,\lambda_m)
+     +\beta T(w)(\lambda_1,\dots,\lambda_m),
+\end{align*}
+hence $T$ is a linear map. Now suppose $T(v)=0$. Then $T(v)(e_k)=0$ for all
+$k=1,\dots,m$. It follows that $v_k=0$ for all $k=1,\dots,m$, hence $v=0$, and
+thus $T$ is injective.
+
+Now let $S\in\Lin(\F^m,V)$. Define $v\in V^m$ by $v_k=Se_k$ for all
+$k=1,\dots,m$. Then $T(v)=S$. Thus, $T$ is surjective. Therefore, $T$ is an
+isomorphism.
+\end{solution}
+
+\begin{exercise}
+Suppose that $v,x$ are vectors in $V$ and that $U,W$ are subspaces of $V$ such
+that $v+U=x+W$. Prove that $U=W$.
+\end{exercise}
+\begin{solution}
+Let $u\in U$. Then $v+u\in v+U=x+W$. Thus, there exists $w\in W$ such that
+$v+u=x+w$. Note that $v\in x+W$ implies the existence of some $w'\in W$ such
+that $v=x+w'$, or $x-v=-w'\in W$. Similarly, $x\in v+U$ implies the existence of
+some $u'\in U$ such that $x=v+u'$, or $v-x=-u'\in U$. It follows that
+$u=(x-v)+w\in W$, hence $U\subseteq W$. Now let $w\in W$. Then
+$x+w\in x+W=v+U$. Thus, there exists $u\in U$ such that $x+w=v+u$. It follows
+that $w=(v-x)+u\in U$, hence $W\subseteq U$. Therefore, $U=W$.
+\end{solution}
+
+\begin{exercise}
+Let $U=\{(x,y,z)\in\R^3 : 2x+3y+5z=0\}$. Suppose $A\subseteq\R^3$. Prove that
+$A$ is a translate of $U$ if and only if there exists $c\in\R$ such that
+\[ A = \{(x,y,z)\in\R^3 : 2x+3y+5z=c\}. \]
+\end{exercise}
+\begin{solution}
+Suppose $A$ is a translate of $U$. Then there exists $v\in\R^3$ such that
+$A=v+U$. Let $v=(x_0,y_0,z_0)$. Then
+\begin{align*}
+A &= v+U\\
+  &= \{(x_0,y_0,z_0)+(x,y,z)\in\R^3 \mid 2x+3y+5z=0\}\\
+  &= \{(x',y',z')\in\R^3 \mid 2(x'-x_0)+3(y'-y_0)+5(z'-z_0)=0\}\\
+  &= \{(x',y',z')\in\R^3 \mid 2x'+3y'+5z'=2x_0+3y_0+5z_0\}.
+\end{align*}
+Conversely, suppose there exists $c\in\R$ such that
+\[ A = \{(x,y,z)\in\R^3 \mid 2x+3y+5z=c\}. \]
+Let $v=(x_0,y_0,z_0)$ where $x_0,y_0,z_0$ are any real numbers such that
+$2x_0+3y_0+5z_0=c$. Then
+\begin{align*}
+v+U &= (x_0,y_0,z_0)+U\\
+    &= \{(x_0,y_0,z_0)+(x,y,z)\in\R^3 \mid 2x+3y+5z=0\}\\
+    &= A. \qedhere
+\end{align*}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Suppose $T\in\Lin(V,W)$ and $c\in W$. Prove that $\{x\in V : Tx=c\}$ is
+  either the empty set or is a translate of $\nul T$.
+\item Explain why the set of solutions to a system of linear equations such as
+  \ref{ax:3.27} is either the empty set or is a translate of some subspace of
+  $\F^n$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $T\in\Lin(V,W)$ and $c\in W$. Let $A=\{x\in V \mid Tx=c\}$. If $A$
+  is nonempty, then there exists $v\in V$ such that $Tv=c$. We claim that
+  $A=v+\nul T$. Let $x\in A$. Then $Tx=c=Tv$, hence $T(x-v)=0$, and thus
+  $x-v\in\nul T$. It follows that $x\in v+\nul T$, hence $A\subseteq v+\nul T$.
+  Now let $y\in v+\nul T$. Then there exists $u\in\nul T$ such that $y=v+u$. It
+  follows that $Ty=T(v+u)=Tv+Tu=c+0=c$, hence $y\in A$, and thus
+  $v+\nul T\subseteq A$. Therefore, $A=v+\nul T$.
+\item A system of linear equations such as \ref{ax:3.27} can be written in the
+  form $Tx=c$ for some linear map $T$ and some vector $c$. By part (a), the set
+  of solutions to this system of linear equations is either the empty set or is
+  a translate of $\nul T$, which is a subspace of $\F^n$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Prove that a nonempty subset $A$ of $V$ is a translate of some subspace of $V$
+if and only if $\lambda v+(1-\lambda)w\in A$ for all $v,w\in A$ and all
+$\lambda\in\F$.
+\end{exercise}
+\begin{solution}
+Suppose $A$ is a translate of some subspace of $V$. Then there exists $v\in V$
+and a subspace $U$ of $V$ such that $A=v+U$. Let $v+u,v+u'\in A$. Then for any
+$\lambda\in\F$,
+\[ \lambda(v+u)+(1-\lambda)(v+u')
+   = v+\underbrace{\bigl(\lambda u+(1-\lambda)u'\bigr)}_{\in U}\in A. \]
+Conversely, suppose $\lambda v+(1-\lambda)w\in A$ for all $v,w\in A$ and all
+$\lambda\in\F$. Fix some $v_0\in A$, and let $U=\{u\in V \mid v_0+u\in A\}$. We
+first claim that $U$ is a subspace of $V$. Since $v_0=v_0+0\in A$, we have
+$0\in U$. Let $u_1,u_2\in U$. Then $v_0+u_1,v_0+u_2\in A$. Now let
+$\lambda\in\F$. Then
+\begin{align*}
+\lambda(v_0+u_1)+(1-\lambda)(v_0+u_2) &= v_0+\lambda u_1+(1-\lambda)u_2\\
+  &= v_0+\bigl(\lambda u_1+(1-\lambda)u_2\bigr)\in A.
+\end{align*}
+It follows that $\lambda u_1+(1-\lambda)u_2\in U$, hence $U$ is a subspace of
+$V$. Now we claim that $A=v_0+U$. Let $w\in A$. By definition,
+$v_0+(w-v_0)=w\in A$, hence $w-v_0\in U$, and thus $w\in v_0+U$, so
+$A\subseteq v_0+U$. Now let $v_0+u\in v_0+U$. Then $v_0+u\in A$ by definition of
+$U$, hence $v_0+U\subseteq A$. Therefore, $A=v_0+U$.
+\end{solution}
+
+\begin{exercise}
+Suppose $A_1=v+U_1$ and $A_2=w+U_2$ for some $v,w\in V$ and some subspaces
+$U_1,U_2$ of $V$. Prove that the intersection $A_1\cap A_2$ is either a
+translate of some subspace of $V$ or is the empty set.
+\end{exercise}
+\begin{solution}
+If $A_1\cap A_2$ is the empty set, then we are done. Suppose that $A_1\cap A_2$
+is nonempty. Let $x,y\in A_1\cap A_2$ and $\lambda\in\F$. Then $x,y\in A_1$,
+hence $\lambda x+(1-\lambda)y\in A_1$. Moreover, $x,y\in A_2$, hence
+$\lambda x+(1-\lambda)y\in A_2$. It follows that
+$\lambda x+(1-\lambda)y\in A_1\cap A_2$. Thus, by Exercise~3E9, $A_1\cap A_2$ is
+a translate of some subspace of $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U=\{(x_1,x_2,\dots)\in\F^\infty : x_k\ne0 \text{ for only finitely many
+} k\}$.
+\begin{parts}
+\item Show that $U$ is a subspace of $\F^\infty$.
+\item Prove that $\F^\infty/U$ is infinite-dimensional.
+\end{parts}
+\end{exercise}
+\begin{solution}\emergencystretch=1.5em
+\solnote{Appendix}{See the alternate proof at the end of this solution for a
+generalization of this treatment, so long as you are comfortable with the idea
+$\N$ can be partitioned into infinitely many disjoint infinite sets.}
+\begin{parts}
+\item We claim that $U$ can be reformulated as the set of vectors
+  $(x_1,x_2,\dots)\in\F^\infty$ such that there exists an index $N$ such that
+  $x_k=0$ for all $k>N$. To see this, suppose $(x_1,x_2,\dots)\in U$. Then there
+  exists a finite set of indices $K$ such that $x_k=0$ for all $k\notin K$. If
+  $K$ is empty, let $N=0$. Otherwise, let $N=\max K$. Then $x_k=0$ for all
+  $k>N$.
+
+  Conversely, suppose there exists an index $N$ such that $x_k=0$ for all
+  $k>N$. Then the set of indices $\{1,2,\dots,N\}$ is finite and contains all
+  indices where $x_k\ne0$, hence $(x_1,x_2,\dots)\in U$. Thus, the two
+  formulations of $U$ are equivalent.
+
+  We now show that $U$ is a subspace of $\F^\infty$. First, note that the zero
+  vector $(0,0,\dots)\in U$ since it has no nonzero coordinates. Now let
+  $u=(u_1,u_2,\dots),v=(v_1,v_2,\dots)\in U$. Then there exist indices $N_u$ and
+  $N_v$ such that $u_k=0$ for all $k>N_u$ and $v_k=0$ for all $k>N_v$. Let
+  $N=\max(N_u,N_v)$. Then for all $k>N$, we have $u_k=0$ and $v_k=0$, hence
+  $(u+v)_k=u_k+v_k=0+0=0$. Thus, $u+v\in U$. Now let $\alpha\in\F$. Then for all
+  $k>N_u$, we have $(\alpha u)_k=\alpha u_k=\alpha\cdot0=0$, hence
+  $\alpha u\in U$. Therefore, $U$ is a subspace of $\F^\infty$.
+\item For any given positive integer $m$, define the sets $B_i$ for
+  $1\le i\le m$ as follows:
+  \[ B_i = \{i+km \mid k\in\N\} = \{i,i+m,i+2m,\dots\}. \]
+  Then $B_1,\dots,B_m$ are pairwise disjoint subsets of $\N$. For each
+  $i=1,\dots,m$, define
+  \[ v_i = (v_{i,1},v_{i,2},\dots)\in\F^\infty \]
+  such that $v_{i,j}=1$ if $j\in B_i$ and $v_{i,j}=0$ otherwise. We claim that
+  $v_1+U,\dots,v_m+U$ are linearly independent in $\F^\infty/U$.
+
+  Let $\lambda_1,\dots,\lambda_m\in\F$ such that
+  $\lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U)=U$. Then
+  $\lambda_1v_1+\cdots+\lambda_mv_m\in U$. Then we can show that $\lambda_i=0$
+  for all $i=1,\dots,m$ as follows. For each $i$, consider the $j$-th coordinate
+  of $v_i$ for $j\in B_i$. Since $v_i$ has $1$'s in all coordinates indexed by
+  $B_i$ and $0$'s elsewhere, and $B_i$ is disjoint from $B_k$ for $k\ne i$, the
+  $j$-th coordinate of $\lambda_1v_1+\cdots+\lambda_mv_m$ is $\lambda_i$. But
+  this sum is in $U$, which means it has only finitely many nonzero coordinates.
+  Since $B_i$ is infinite, it follows that $\lambda_i=0$. Hence, all
+  $\lambda_i=0$, proving that $v_1+U,\dots,v_m+U$ are linearly independent.
+  Since $m$ was arbitrary, $\F^\infty/U$ is infinite-dimensional.
+\end{parts}
+
+\emph{Alternate proof.}
+\begin{parts}
+\item Since $(0,0,\dots)\in U$, $U$ is nonempty. Suppose $x,y\in U$ and
+  $c\in\F$. Let $S_x$ and $S_y$ be the sets of indices where $x$ and $y$ have
+  nonzero terms, respectively. By definition, $S_x$ and $S_y$ are finite.
+  $cx+y$ can only have nonzero terms at indices in $S_x\cup S_y$. Since the
+  union of two finite sets is finite, $cx+y\in U$, which makes $U$ a subspace
+  of $\F^\infty$.
+\item Partition $\Z^+$ into a countably infinite family of disjoint infinite
+  subsets $A_1,\allowbreak A_2,\allowbreak\dots$. For each $n$, define $v_n\in\F^\infty$ such that its
+  $j$-th term is $1$ if $j\in A_n$ and $0$ otherwise.
+
+  Suppose that $\sum_{i=1}^m c_i(v_i+U)=0+U$ for some positive integer $m$ and
+  scalars $c_1,\dots,c_m\in\F$. Then, $w=\sum_{i=1}^m c_iv_i\in U$. By
+  construction, for $i\in\{1,\dots,m\}$, the $j$-th term of $w$ is $c_i$ for all
+  $j\in A_i$. Since $w\in U$, it only has a finite number of nonzero terms. But
+  each $A_i$ is infinite, so this forces $c_i=0$ for all $i\in\{1,\dots,m\}$.
+  Hence, $v_1+U,v_2+U,\dots$ are linearly independent in $\F^\infty/U$.
+
+  Because $\F^\infty/U$ contains an infinite sequence of linearly independent
+  vectors, it is infinite-dimensional.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m\in V$. Let
+\[ A = \{\lambda_1v_1+\cdots+\lambda_mv_m : \lambda_1,\dots,\lambda_m\in\F
+   \text{ and } \lambda_1+\cdots+\lambda_m=1\}. \]
+\begin{parts}
+\item Prove that $A$ is a translate of some subspace of $V$.
+\item Prove that if $B$ is a translate of some subspace of $V$ and
+  $\{v_1,\dots,v_m\}\subseteq B$, then $A\subseteq B$.
+\item Prove that $A$ is a translate of some subspace of $V$ of dimension less
+  than $m$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item For any element $\lambda_1v_1+\cdots+\lambda_mv_m\in A$, we can write
+  \begin{align*}
+  \lambda_1v_1+\cdots+\lambda_mv_m
+    &= v_1+\lambda_2(v_2-v_1)+\cdots+\lambda_m(v_m-v_1)\\
+    &= v_1+\sum_{i=2}^m\lambda_i(v_i-v_1),
+  \end{align*}
+  where $\lambda_1=1-(\lambda_2+\cdots+\lambda_m)$. Let
+  $U=\spn(v_2-v_1,\dots,v_m-v_1)$. Then $A=v_1+U$, hence $A$ is a translate of
+  the subspace $U$ of $V$.
+\item By Exercise~3E9, since $B$ is a translate of some subspace of $V$, we have
+  $\lambda v+(1-\lambda)w\in B$ for all $v,w\in B$ and all $\lambda\in\F$. Since
+  $\{v_1,\dots,v_m\}\subseteq B$, it follows that any linear combination of
+  $v_1,\dots,v_m$ with coefficients summing to $1$ is in $B$. Hence,
+  $A\subseteq B$.
+\item The subspace $U=\spn(v_2-v_1,\dots,v_m-v_1)$ has dimension at most $m-1$,
+  since it is spanned by $m-1$ vectors. Therefore, $A=v_1+U$ is a translate of a
+  subspace of $V$ of dimension less than $m$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$ such that $V/U$ is finite-dimensional. Prove
+that $V$ is isomorphic to $U\times(V/U)$.
+\end{exercise}
+\begin{solution}
+Since $V/U$ is finite-dimensional, let $v_1+U,\dots,v_m+U$ be a basis of $V/U$.
+Let $W=\spn(v_1,\dots,v_m)$. We show that $V=U\oplus W$. First, note that any
+$v\in V$ can be written as $v=u+w$ for some $u\in U$ and $w\in W$. Indeed, since
+$v+U\in V/U$, we can write
+\[ v+U = \lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U) \]
+for some scalars $\lambda_1,\dots,\lambda_m$. This gives
+\[ v-(\lambda_1v_1+\cdots+\lambda_mv_m)\in U. \]
+So setting $u=v-(\lambda_1v_1+\cdots+\lambda_mv_m)\in U$ and
+$w=\lambda_1v_1+\cdots+\lambda_mv_m\in W$, we have $v=u+w$. To see that the sum
+is direct, suppose $u+w=0$ with $u\in U$ and $w\in W$. Then $w=-u\in W\cap U$.
+Since $w\in W$, we can write $w=\lambda_1v_1+\cdots+\lambda_mv_m$ for some
+scalars $\lambda_1,\dots,\lambda_m$. Since we established that $w\in U$, we have
+$w+U=0+U$. But $v_1+U,\dots,v_m+U$ are linearly independent in $V/U$, hence
+$\lambda_1=\cdots=\lambda_m=0$, and thus $w=0$. It follows that $u=0$ as well,
+proving that the sum is direct. Therefore, $V=U\oplus W$.
+
+Consider the map $T\colon V\to U\times(V/U)$ given by $Tv=(u,v+U)$, where
+$v=u+w$ with $u\in U$ and $w\in W$. This map is well-defined because the
+decomposition $v=u+w$ is unique. It is linear, injective, and surjective, hence
+an isomorphism. Therefore, $V\cong U\times(V/U)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ and $W$ are subspaces of $V$ and $V=U\oplus W$. Suppose
+$w_1,\dots,w_m$ is a basis of $W$. Prove that $w_1+U,\dots,w_m+U$ is a basis of
+$V/U$.
+\end{exercise}
+\begin{solution}
+Since $V=U\oplus W$, every $v\in V$ can be written uniquely as $v=u+w$ with
+$u\in U$ and $w\in W$. We claim that $w_1+U,\dots,w_m+U$ is a basis of $V/U$.
+First, we show that they span $V/U$. Let $v+U\in V/U$. Write $v=u+w$ with
+$u\in U$ and $w\in W$. Then $v+U=(u+w)+U=w+U$. Since $w\in W$, we can write
+$w=\lambda_1w_1+\cdots+\lambda_mw_m$ for some scalars
+$\lambda_1,\dots,\lambda_m$. Hence,
+$v+U=\lambda_1(w_1+U)+\cdots+\lambda_m(w_m+U)$, showing that
+$w_1+U,\dots,w_m+U$ span $V/U$.
+
+Next, we show linear independence. Suppose
+$\lambda_1(w_1+U)+\cdots+\lambda_m(w_m+U)=0+U$. Then
+$\lambda_1w_1+\cdots+\lambda_mw_m\in U$. But
+$\lambda_1w_1+\cdots+\lambda_mw_m\in W$ and $U\cap W=\{0\}$, so
+$\lambda_1w_1+\cdots+\lambda_mw_m=0$. Since $w_1,\dots,w_m$ are linearly
+independent, we have $\lambda_1=\cdots=\lambda_m=0$. Therefore,
+$w_1+U,\dots,w_m+U$ are linearly independent, and hence form a basis of $V/U$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$ and $v_1+U,\dots,v_m+U$ is a basis of $V/U$
+and $u_1,\dots,u_n$ is a basis of $U$. Prove that
+$v_1,\dots,v_m,u_1,\dots,u_n$ is a basis of $V$.
+\end{exercise}
+\begin{solution}
+First, we show that $v_1,\dots,v_m,u_1,\dots,u_n$ span $V$. Let $v\in V$. Then
+$v+U\in V/U$, so we can write
+\[ v+U = \lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U) \]
+for some scalars $\lambda_1,\dots,\lambda_m$. This gives
+$v-(\lambda_1v_1+\cdots+\lambda_mv_m)\in U$. Since $u_1,\dots,u_n$ is a basis
+of $U$, we can write $v-(\lambda_1v_1+\cdots+\lambda_mv_m)=\mu_1u_1+\cdots
++\mu_nu_n$ for some scalars $\mu_1,\dots,\mu_n$. Hence,
+$v=\lambda_1v_1+\cdots+\lambda_mv_m+\mu_1u_1+\cdots+\mu_nu_n$, showing that
+$v_1,\dots,v_m,u_1,\dots,u_n$ span $V$.
+
+Next, we show linear independence. Suppose
+$\lambda_1v_1+\cdots+\lambda_mv_m+\mu_1u_1+\cdots+\mu_nu_n=0$. Then
+$\lambda_1v_1+\cdots+\lambda_mv_m\in U$. Then
+\[ \lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U) = 0+U. \]
+Since $v_1+U,\dots,v_m+U$ are linearly independent in $V/U$, we must have
+$\lambda_1=\cdots=\lambda_m=0$. Then the original equation reduces to
+$\mu_1u_1+\cdots+\mu_nu_n=0$, and since $u_1,\dots,u_n$ are linearly
+independent, we have $\mu_1=\cdots=\mu_n=0$. Therefore,
+$v_1,\dots,v_m,u_1,\dots,u_n$ are linearly independent, and hence form a basis
+of $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $\varphi\in\Lin(V,\F)$ and $\varphi\ne0$. Prove that
+$\dim V/(\nul\varphi)=1$.
+\end{exercise}
+\begin{solution}
+From \ref{ax:3.107} in the text, we know that $V/\nul\varphi\cong\range\varphi$.
+Since $\varphi\ne0$, we have $\range\varphi\ne\{0\}$, and since $\range\varphi$
+is a subspace of $\F$, it follows that $\dim\range\varphi=1$. This implies
+$\range\varphi=\F$, and hence $\dim V/(\nul\varphi)=\dim\range\varphi=1$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$ such that $\dim V/U=1$. Prove that there exists
+$\varphi\in\Lin(V,\F)$ such that $\nul\varphi=U$.
+\end{exercise}
+\begin{solution}
+Since $\dim V/U=\dim\F=1$, there exists some isomorphism
+$\psi\in\Lin(V/U,\F)$. Let $\pi\colon V\to V/U$ be the quotient map. Define
+$\varphi=\psi\circ\pi\in\Lin(V,\F)$. Suppose $\varphi(v)=0$. Then
+$\psi\bigl(\pi(v)\bigr)=0$, which implies $\pi(v)=0$ since $\psi$ is an
+isomorphism. Hence, $v\in U$, and we have $\nul\varphi\subseteq U$. Conversely,
+if $v\in U$, then $\pi(v)=0$, so $\varphi(v)=\psi\bigl(\pi(v)\bigr)=0$.
+Therefore, $\nul\varphi=U$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $U$ is a subspace of $V$ such that $V/U$ is finite-dimensional.
+\begin{parts}
+\item Show that if $W$ is a finite-dimensional subspace of $V$ and $V=U+W$, then
+  $\dim W\ge\dim V/U$.
+\item Prove that there exists a finite-dimensional subspace $W$ of $V$ such that
+  $\dim W=\dim V/U$ and $V=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $W$ is a finite-dimensional subspace of $V$ and $V=U+W$. Let
+  $\pi\colon V\to V/U$ be the quotient map, and consider the restriction
+  $\pi|_W\colon W\to V/U$. To see that $\range(\pi|_W)=V/U$, note that for any
+  $v+U\in V/U$, we can write $v=u+w$ for some $u\in U$ and $w\in W$. Then
+  $\pi(v)=\pi(u+w)=\pi(u)+\pi(w)=0+\pi(w)=\pi(w)$, so
+  $v+U=\pi(w)\in\range(\pi|_W)$. Hence, $\range(\pi|_W)=V/U$. From the
+  fundamental theorem of linear maps, we have
+  \begin{align*}
+  \dim W &= \dim\nul\pi|_W+\dim\range(\pi|_W)\\
+         &= \dim\nul\pi|_W+\dim V/U \ge \dim V/U.
+  \end{align*}
+\item Let $v_1+U,\dots,v_m+U$ be a basis of $V/U$. We claim that
+  $v_1,\dots,v_m$ are linearly independent. Suppose
+  $\lambda_1v_1+\cdots+\lambda_mv_m=0$ for some scalars
+  $\lambda_1,\dots,\lambda_m$. Then
+  \[ \lambda_1v_1+\cdots+\lambda_mv_m\in U. \]
+  But $\lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U)=0$ in $V/U$, and since
+  $v_1+U,\dots,v_m+U$ are linearly independent, it follows that
+  $\lambda_1=\cdots=\lambda_m=0$. Hence, $v_1,\dots,v_m$ are linearly
+  independent.
+
+  Let $W=\spn\{v_1,\dots,v_m\}$. Then $\dim W=m=\dim V/U$. For any $v\in V$, we
+  can write
+  \[ v+U = \lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U). \]
+  This implies that
+  \[ v-(\lambda_1v_1+\cdots+\lambda_mv_m)\in U, \]
+  so $v\in U+W$. Hence, $V=U+W$. To see that $U\cap W=\{0\}$, let
+  $w\in U\cap W$. Then $w\in W$, so $w=\lambda_1v_1+\cdots+\lambda_mv_m$ for
+  some scalars $\lambda_1,\dots,\lambda_m$. But $w\in U$, so $w+U=0$ in $V/U$.
+  Hence,
+  \[ \lambda_1(v_1+U)+\cdots+\lambda_m(v_m+U) = 0 \]
+  in $V/U$. Since $v_1+U,\dots,v_m+U$ are linearly independent, it follows that
+  $\lambda_1=\cdots=\lambda_m=0$. Hence, $w=0$, and we have $U\cap W=\{0\}$.
+  Therefore, $V=U\oplus W$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ and $U$ is a subspace of $V$. Let $\pi$ denote the
+quotient map from $V$ onto $V/U$. Prove that there exists $S\in\Lin(V/U,W)$ such
+that $T=S\circ\pi$ if and only if $U\subseteq\nul T$.
+\end{exercise}
+\begin{solution}
+Suppose $S\in\Lin(V/U,W)$ is such that $T=S\circ\pi$. Then for any $u\in U$, we
+have $T(u)=S\bigl(\pi(u)\bigr)=S(0)=0$, so $U\subseteq\nul T$.
+
+Conversely, suppose $U\subseteq\nul T$. Define $S\colon V/U\to W$ by
+$S(v+U)=T(v)$. This is well-defined because if $v+U=v'+U$, then
+$v-v'\in U\subseteq\nul T$, so $T(v)=T(v')$. It is straightforward to check that
+$S$ is linear and that $T=S\circ\pi$.
+\end{solution}

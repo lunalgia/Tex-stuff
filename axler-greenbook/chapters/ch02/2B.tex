@@ -1,0 +1,517 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{1}\setcounter{theorem}{25}
+\fi % TEST-ONLY-END
+% Source: book pp. 39--43 (PDF 53--57); solutions pp. 35--41.
+% A numbered display (Axler's 2.29, 2.44, 2.45) takes its number from the
+% shared item counter: \axeqnum{2.29} inside equation* (same definition in 2A, 2C).
+\providecommand\axeqnum[1]{\refstepcounter{theorem}\tag*{\thetheorem}\label{ax:#1}}
+\section{Bases}
+
+In the previous section, we discussed linearly independent lists and we also
+discussed spanning lists. Now we bring these concepts together by considering
+lists that have both properties.
+
+\begin{definition}[Basis]\label{ax:2.26}
+A \emph{basis} of $V$ is a list of vectors in $V$ that is linearly independent
+and spans $V$.
+\end{definition}
+
+\begin{example}[Bases]\label{ax:2.27}\leavevmode
+\begin{parts}
+\item The list $(1,0,\dots,0),(0,1,0,\dots,0),\dots,(0,\dots,0,1)$ is a basis of
+  $\F^n$, called the \emph{standard basis} of $\F^n$.
+\item The list $(1,2),(3,5)$ is a basis of $\F^2$. Note that this list has
+  length two, which is the same as the length of the standard basis of $\F^2$.
+  In the next section, we will see that this is not a coincidence.
+\item The list $(1,2,-4),(7,-5,6)$ is linearly independent in $\F^3$ but is not
+  a basis of $\F^3$ because it does not span $\F^3$.
+\item The list $(1,2),(3,5),(4,13)$ spans $\F^2$ but is not a basis of $\F^2$
+  because it is not linearly independent.
+\item The list $(1,1,0),(0,0,1)$ is a basis of $\{(x,x,y)\in\F^3 : x,y\in\F\}$.
+\item The list $(1,-1,0),(1,0,-1)$ is a basis of
+  \[ \{(x,y,z)\in\F^3 : x+y+z=0\}. \]
+\item The list $1,z,\dots,z^m$ is a basis of $\Poly_m(\F)$, called the
+  \emph{standard basis} of $\Poly_m(\F)$.
+\end{parts}
+\end{example}
+
+In addition to the standard basis, $\F^n$ has many other bases. For example,
+\[ (7,5),(-4,9) \quad\text{and}\quad (1,2),(3,5) \]
+are both bases of $\F^2$.
+
+The next result helps explain why bases are useful. Recall that ``uniquely''
+means ``in only one way''.
+
+\begin{result}[Criterion for basis]\label{ax:2.28}
+A list $v_1,\dots,v_n$ of vectors in $V$ is a basis of $V$ if and only if every
+$v\in V$ can be written uniquely in the form
+\begin{equation*}
+v = a_1v_1+\cdots+a_nv_n, \axeqnum{2.29}
+\end{equation*}
+where $a_1,\dots,a_n\in\F$.
+\end{result}
+
+\begin{proof}
+\marginnote[2em]{This proof is essentially a repetition of the ideas that led us to
+the definition of linear independence.}%
+First suppose that $v_1,\dots,v_n$ is a basis of $V$. Let $v\in V$. Because
+$v_1,\dots,v_n$ spans $V$, there exist $a_1,\dots,a_n\in\F$ such that
+\ref{ax:2.29} holds. To show that the representation in \ref{ax:2.29} is
+unique, suppose $c_1,\dots,c_n$ are scalars such that we also have
+\[ v = c_1v_1+\cdots+c_nv_n. \]
+Subtracting the last equation from \ref{ax:2.29}, we get
+\[ 0 = (a_1-c_1)v_1+\cdots+(a_n-c_n)v_n. \]
+This implies that each $a_k-c_k$ equals $0$ (because $v_1,\dots,v_n$ is linearly
+independent). Hence $a_1=c_1,\dots,a_n=c_n$. We have the desired uniqueness,
+completing the proof in one direction.
+
+For the other direction, suppose every $v\in V$ can be written uniquely in the
+form given by \ref{ax:2.29}. This implies that the list $v_1,\dots,v_n$ spans
+$V$. To show that $v_1,\dots,v_n$ is linearly independent, suppose
+$a_1,\dots,a_n\in\F$ are such that
+\[ 0 = a_1v_1+\cdots+a_nv_n. \]
+The uniqueness of the representation \ref{ax:2.29} (taking $v=0$) now implies
+that $a_1=\cdots=a_n=0$. Thus $v_1,\dots,v_n$ is linearly independent and hence
+is a basis of $V$.
+\end{proof}
+
+A spanning list in a vector space may not be a basis because it is not linearly
+independent. Our next result says that given any spanning list, some (possibly
+none) of the vectors in it can be discarded so that the remaining list is
+linearly independent and still spans the vector space.
+
+As an example in the vector space $\F^2$, if the procedure in the proof below is
+applied to the list $(1,2),(3,6),(4,7),(5,9)$, then the second and fourth
+vectors will be removed. This leaves $(1,2),(4,7)$, which is a basis of $\F^2$.
+
+\begin{result}[Every spanning list contains a basis]\label{ax:2.30}
+Every spanning list in a vector space can be reduced to a basis of the vector
+space.
+\end{result}
+
+\begin{proof}
+Suppose $v_1,\dots,v_n$ spans $V$. We want to remove some of the vectors from
+$v_1,\dots,v_n$ so that the remaining vectors form a basis of $V$. We do this
+through the multistep process described below.
+
+Start with $B$ equal to the list $v_1,\dots,v_n$.
+\begin{description}[style=nextline,leftmargin=1em,itemsep=2pt,parsep=3pt]
+\item[Step 1] If $v_1=0$, then delete $v_1$ from $B$. If $v_1\ne0$, then leave
+  $B$ unchanged.
+\item[Step $\bm{k}$] If $v_k$ is in $\spn(v_1,\dots,v_{k-1})$, then
+  delete $v_k$ from the list $B$. If $v_k$ is not in $\spn(v_1,\dots,v_{k-1})$,
+  then leave $B$ unchanged.
+\end{description}
+Stop the process after step $n$, getting a list $B$. This list $B$ spans $V$
+because our original list spanned $V$ and we have discarded only vectors that
+were already in the span of the previous vectors. The process ensures that no
+vector in $B$ is in the span of the previous ones. Thus $B$ is linearly
+independent, by the linear dependence lemma (\ref{ax:2.19}). Hence $B$ is a
+basis of $V$.
+\end{proof}
+
+We now come to an important corollary of the previous result.
+
+\begin{result}[Basis of finite-dimensional vector space]\label{ax:2.31}
+Every finite-dimensional vector space has a basis.
+\end{result}
+
+\begin{proof}
+By definition, a finite-dimensional vector space has a spanning list. The
+previous result tells us that each spanning list can be reduced to a basis.
+\end{proof}
+
+Our next result is in some sense a dual of \ref{ax:2.30}, which said that every
+spanning list can be reduced to a basis. Now we show that given any linearly
+independent list, we can adjoin some additional vectors (this includes the
+possibility of adjoining no additional vectors) so that the extended list is
+still linearly independent but also spans the space.
+
+\begin{result}[Every linearly independent list extends to a basis]\label{ax:2.32}
+Every linearly independent list of vectors in a finite-dimensional vector space
+can be extended to a basis of the vector space.
+\end{result}
+
+\begin{proof}
+Suppose $u_1,\dots,u_m$ is linearly independent in a finite-dimensional vector
+space $V$. Let $w_1,\dots,w_n$ be a list of vectors in $V$ that spans $V$. Thus
+the list
+\[ u_1,\dots,u_m,w_1,\dots,w_n \]
+spans $V$. Applying the procedure of the proof of \ref{ax:2.30} to reduce this
+list to a basis of $V$ produces a basis consisting of the vectors
+$u_1,\dots,u_m$ and some of the $w$'s (none of the $u$'s get deleted in this
+procedure because $u_1,\dots,u_m$ is linearly independent).
+\end{proof}
+
+As an example in $\F^3$, suppose we start with the linearly independent list
+$(2,3,4),(9,6,8)$. If we take $w_1,w_2,w_3$ to be the standard basis of $\F^3$,
+then applying the procedure in the proof above produces the list
+\[ (2,3,4),(9,6,8),(0,1,0), \]
+which is a basis of $\F^3$.
+
+\marginnote{Using the same ideas but more advanced tools, the next result can be
+proved without the hypothesis that $V$ is finite-dimensional.}%
+As an application of the result above, we now show that every subspace of a
+finite-dimensional vector space can be paired with another subspace to form a
+direct sum of the whole space.
+
+\begin{result}[Every subspace of $V$ is part of a direct sum equal to
+$V$]\label{ax:2.33}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$. Then there is a
+subspace $W$ of $V$ such that $V=U\oplus W$.
+\end{result}
+
+\begin{proof}
+Because $V$ is finite-dimensional, so is $U$ (see \ref{ax:2.25}). Thus there is
+a basis $u_1,\dots,u_m$ of $U$ (by \ref{ax:2.31}). Of course $u_1,\dots,u_m$ is a
+linearly independent list of vectors in $V$. Hence this list can be extended to
+a basis $u_1,\dots,u_m,w_1,\dots,w_n$ of $V$ (by \ref{ax:2.32}). Let
+$W=\spn(w_1,\dots,w_n)$.
+
+To prove that $V=U\oplus W$, by \ref{ax:1.46} we only need to show that
+\[ V=U+W \quad\text{and}\quad U\cap W=\{0\}. \]
+
+To prove the first equation above, suppose $v\in V$. Then, because the list
+$u_1,\dots,u_m,w_1,\dots,w_n$ spans $V$, there exist
+$a_1,\dots,a_m,b_1,\dots,b_n\in\F$ such that
+\[ v = \underbrace{a_1u_1+\cdots+a_mu_m}_{u}
+     + \underbrace{b_1w_1+\cdots+b_nw_n}_{w}. \]
+We have $v=u+w$, where $u\in U$ and $w\in W$ are defined as above. Thus
+$v\in U+W$, completing the proof that $V=U+W$.
+
+To show that $U\cap W=\{0\}$, suppose $v\in U\cap W$. Then there exist scalars
+$a_1,\dots,a_m,b_1,\dots,b_n\in\F$ such that
+\[ v = a_1u_1+\cdots+a_mu_m = b_1w_1+\cdots+b_nw_n. \]
+Thus
+\[ a_1u_1+\cdots+a_mu_m-b_1w_1-\cdots-b_nw_n = 0. \]
+Because $u_1,\dots,u_m,w_1,\dots,w_n$ is linearly independent, this implies that
+\[ a_1=\cdots=a_m=b_1=\cdots=b_n=0. \]
+Thus $v=0$, completing the proof that $U\cap W=\{0\}$.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{2B}
+
+\begin{exercise}
+Find all vector spaces that have exactly one basis.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{The proof of this exercise fails if $\F$ contains only
+two elements. In this case, an additional vector space with exactly one basis is
+the vector space of dimension one over $\F$, since the only nonzero scalar is
+$1$, and any nonzero vector $v$ in the vector space is a basis.}
+
+Since an infinite-dimensional vector space has infinitely many bases, we only
+need to consider finite-dimensional vector spaces. Let $V$ be a
+finite-dimensional vector space, and let $v_1,\dots,v_n$ be a basis of $V$. Then
+any other basis of $V$ must have the same length as $v_1,\dots,v_n$, which is
+$n$. If $n\ge1$, consider $\alpha\in\F$ such that $\alpha\ne0$ and $\alpha\ne1$.
+Then the list $\alpha v_1,v_2,\dots,v_n$ still spans $V$, since we may recover
+$v_1=\alpha^{-1}(\alpha v_1)$. Moreover, the list $\alpha v_1,v_2,\dots,v_n$ is
+linearly independent, since if
+\[ \beta_1(\alpha v_1)+\beta_2v_2+\cdots+\beta_nv_n = 0, \]
+then we may write
+\[ (\alpha\beta_1)v_1+\beta_2v_2+\cdots+\beta_nv_n = 0. \]
+Since $v_1,\dots,v_n$ is linearly independent, we must have $\alpha\beta_1=0$,
+which implies that $\beta_1=0$. Then we also have $\beta_2=\cdots=\beta_n=0$.
+Thus, the list $\alpha v_1,v_2,\dots,v_n$ is linearly independent. Therefore, if
+$n\ge1$, then $V$ has more than one basis. If $n=0$, then $V=\{0\}$. The empty
+list spans $V$, and the empty list must be linearly independent, since there
+are no nonzero scalars to consider. Thus, the empty list is a basis of $V$.
+Moreover, this is the only basis of $V$, since $0$ is linearly dependent.
+Therefore, the only vector space that has exactly one basis is the zero vector
+space.
+\end{solution}
+
+\begin{exercise}
+Verify all assertions in Example~\ref{ax:2.27}.
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $\alpha_1,\dots,\alpha_n\in\F$ such that
+  \[ \alpha_1(1,0,\dots,0)+\alpha_2(0,1,0,\dots,0)+\cdots+\alpha_n(0,\dots,0,1)
+     = 0. \]
+  Then each $\alpha_i=0$, so the list is linearly independent. Moreover, any
+  vector $(x_1,\dots,x_n)\in\F^n$ can be written as
+  \[ (x_1,\dots,x_n) = x_1(1,0,\dots,0)+x_2(0,1,0,\dots,0)+\cdots
+     +x_n(0,\dots,0,1), \]
+  so the list spans $\F^n$. Thus, the list is a basis of $\F^n$.
+\item If $(3,5)=a(1,2)$ for some $a\in\F$, then we must have $3=a$ and $5=2a$,
+  which is impossible. Thus, the list is linearly independent. Moreover, for
+  any element $(x,y)\in\F^2$, we can solve the system of equations
+  \begin{align*}
+  x &= 3\alpha+\beta,\\
+  y &= 5\alpha+2\beta
+  \end{align*}
+  for $\alpha,\beta\in\F$. Solving this system of equations, we find that
+  \[ \alpha=2x-y, \quad \beta=-5x+3y. \]
+  Since we can find $\alpha,\beta\in\F$ for any $(x,y)\in\F^2$, the list spans
+  $\F^2$. Thus, the list is a basis of $\F^2$.
+\item Note that $\F^3$ is spanned by the linearly independent list
+  $(1,0,0),\allowbreak(0,1,0),\allowbreak(0,0,1)$. Since the length of a spanning list must be at
+  least the length of a linearly independent list, the list
+  $(1,2,-4),(7,-5,6)$ cannot span $\F^3$.
+\item From part (b), we saw that $(1,2),(3,5)$ is a basis of $\F^2$. Since
+  $(4,13)=-5(3,5)+19(1,2)$, the list $(1,2),(3,5),(4,13)$ is linearly
+  dependent. Moreover, since $(1,2),(3,5)$ is a basis of $\F^2$, the list
+  $(1,2),(3,5),(4,13)$ spans $\F^2$. Thus, the list is not a basis of $\F^2$.
+\item Let $U$ be the subspace in question. If $\alpha,\beta\in\F$ such that
+  \[ \alpha(1,1,0)+\beta(0,0,1) = (0,0,0), \]
+  then we must have $\alpha=\beta=0$, so the list is linearly independent.
+  Moreover, for any $(x,x,y)\in U$, we can write
+  \[ (x,x,y) = x(1,1,0)+y(0,0,1), \]
+  so the list spans $U$. Thus, the list is a basis of $U$.
+\item Let $U$ be the subspace in question. If $\alpha,\beta\in\F$ such that
+  \[ \alpha(1,-1,0)+\beta(1,0,-1) = (0,0,0), \]
+  then we must have $\alpha=\beta=0$, so the list is linearly independent.
+  Moreover, for any $(x,y,z)\in U$, note that $x+y+z=0$, implying that
+  $x=-y-z$. Then we can write
+  \[ (x,y,z) = (-y-z,y,z) = -y(1,-1,0)-z(1,0,-1), \]
+  so the list spans $U$. Thus, the list is a basis of $U$.
+\item If $\alpha_0,\dots,\alpha_m\in\F$ such that
+  \[ \alpha_0+\alpha_1z+\cdots+\alpha_mz^m = 0, \]
+  then we must have $\alpha_0=\cdots=\alpha_m=0$, so the list is linearly
+  independent. Moreover, any polynomial $p(z)\in\Poly_m(\F)$ can be written as
+  \[ p(z) = \alpha_0+\alpha_1z+\cdots+\alpha_mz^m, \]
+  so the list spans $\Poly_m(\F)$. Thus, the list is a basis of $\Poly_m(\F)$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U$ be the subspace of $\R^5$ defined by
+  \[ U = \{(x_1,x_2,x_3,x_4,x_5)\in\R^5 : x_1=3x_2 \text{ and } x_3=7x_4\}. \]
+  Find a basis of $U$.
+\item Extend the basis in (a) to a basis of $\R^5$.
+\item Find a subspace $W$ of $\R^5$ such that $\R^5=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Note that we can rewrite the subspace $U$ as
+  \[ U = \{(3x_2,x_2,7x_4,x_4,x_5)\in\R^5 \mid x_2,x_4,x_5\in\R\}. \]
+  Then we can write any vector in $U$ as a linear combination of the following
+  three vectors:
+  \[ u_1=(3,1,0,0,0), \quad u_2=(0,0,7,1,0), \quad u_3=(0,0,0,0,1). \]
+  Moreover, these three vectors are linearly independent, since the only way to
+  write the zero vector as a linear combination of $u_1,u_2,u_3$ is to take all
+  coefficients to be zero. Thus, $\{u_1,u_2,u_3\}$ is a basis of $U$.
+\item We can extend the basis $\{u_1,u_2,u_3\}$ of $U$ to a basis of $\R^5$ by
+  adding two more vectors that are linearly independent of $u_1,u_2,u_3$. For
+  example, we can add the vectors
+  \[ u_4=(1,0,0,0,0), \quad u_5=(0,0,1,0,0), \]
+  which are linearly independent of $u_1,u_2,u_3$: since $u_1$ is the only
+  vector in the list with a nonzero first component, $u_4$ cannot be a linear
+  combination of $u_1,u_2,u_3$. Similarly, since $u_2$ is the only vector in the
+  list with a nonzero third component, $u_5$ cannot be a linear combination of
+  $u_1,u_2,u_3,u_4$. Thus, $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis of $\R^5$.
+\item Let $W$ be the subspace of $\R^5$ spanned by the vectors $u_4$ and $u_5$.
+  Then we have
+  \[ \R^5 = U\oplus W, \]
+  since $U\cap W=\{0\}$ and every vector in $\R^5$ can be written as a sum of a
+  vector in $U$ and a vector in $W$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U$ be the subspace of $\C^5$ defined by
+  \[ U = \{(z_1,z_2,z_3,z_4,z_5)\in\C^5 : 6z_1=z_2 \text{ and }
+     z_3+2z_4+3z_5=0\}. \]
+  Find a basis of $U$.
+\item Extend the basis in (a) to a basis of $\C^5$.
+\item Find a subspace $W$ of $\C^5$ such that $\C^5=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Note that we can rewrite the subspace $U$ as
+  \[ U = \{(z_1,6z_1,-2z_4-3z_5,z_4,z_5)\in\C^5 \mid z_1,z_4,z_5\in\C\}. \]
+  Then we can write any vector in $U$ as a linear combination of the following
+  three vectors:
+  \[ u_1=(1,6,0,0,0), \quad u_2=(0,0,-2,1,0), \quad u_3=(0,0,-3,0,1). \]
+  Moreover, these three vectors are linearly independent, since the only way to
+  write the zero vector as a linear combination of $u_1,u_2,u_3$ is to take all
+  coefficients to be zero. Thus, $\{u_1,u_2,u_3\}$ is a basis of $U$.
+\item We can extend the basis $\{u_1,u_2,u_3\}$ of $U$ to a basis of $\C^5$ by
+  adding two more vectors that are linearly independent of $u_1,u_2,u_3$. For
+  example, we can add the vectors
+  \[ u_4=(1,0,0,0,0), \quad u_5=(0,0,1,0,0), \]
+  which are linearly independent of $u_1,u_2,u_3$: since $u_1$ is the only
+  vector in the list with a nonzero first component, $u_4$ cannot be a linear
+  combination of $u_1,u_2,u_3$. Similarly, $u_2$ and $u_3$ have nonzero third
+  components, but any linear combination of $u_2$ and $u_3$ will have nonzero
+  fourth and fifth components, so $u_5$ cannot be a linear combination of
+  $u_1,u_2,u_3,u_4$. Thus, $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis of $\C^5$.
+\item Let $W$ be the subspace of $\C^5$ spanned by the vectors $u_4$ and $u_5$.
+  Then we have
+  \[ \C^5 = U\oplus W, \]
+  since $U\cap W=\{0\}$ and every vector in $\C^5$ can be written as a sum of a
+  vector in $U$ and a vector in $W$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $U,W$ are subspaces of $V$ such that
+$V=U+W$. Prove that there exists a basis of $V$ consisting of vectors in
+$U\cup W$.
+\end{exercise}
+\begin{solution}
+Let $u_1,\dots,u_m$ be a basis of $U$ and $w_1,\dots,w_n$ a basis of $W$. Then
+the list $u_1,\dots,u_m,w_1,\dots,w_n$ spans $V$, since any vector in $V$ can be
+written as a sum of a vector in $U$ and a vector in $W$. We can extract a basis
+of $V$ from this list by removing any linearly dependent vectors. Thus, there
+exists a basis of $V$ consisting of vectors in $U\cup W$.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $p_0,p_1,p_2,p_3$ is a list in $\Poly_3(\F)$
+such that none of the polynomials $p_0,p_1,p_2,p_3$ has degree $2$, then
+$p_0,p_1,p_2,p_3$ is not a basis of $\Poly_3(\F)$.
+\end{exercise}
+\begin{solution}
+This is not true. Let $p_0=1$, $p_1=x$, $p_2=x^3$, $p_3=x^2+x^3$. Then none of
+the polynomials $p_0,p_1,p_2,p_3$ has degree $2$. Moreover, the list
+$p_0,p_1,p_2,p_3$ is linearly independent, since the only way to write the zero
+polynomial as a linear combination of $p_0,p_1,p_2,p_3$ is to take all
+coefficients to be zero. Finally, noting that $x^2=p_3-p_2$, then for any
+polynomial $p(x)=a_0+a_1x+a_2x^2+a_3x^3\in\Poly_3(\F)$, we can write
+\[ p(x) = a_0p_0+a_1p_1+a_2(p_3-p_2)+a_3p_2
+        = a_0p_0+a_1p_1+(a_3-a_2)p_2+a_2p_3, \]
+which shows that the list spans $\Poly_3(\F)$. Thus, the list
+$p_0,p_1,p_2,p_3$ is a basis of $\Poly_3(\F)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,v_2,v_3,v_4$ is a basis of $V$. Prove that
+\[ v_1+v_2,\,v_2+v_3,\,v_3+v_4,\,v_4 \]
+is also a basis of $V$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{The technique of transforming the scalars
+$\beta_1,\beta_2,\beta_3,\beta_4$ into the scalars
+$\alpha_1,\alpha_2,\alpha_3,\alpha_4$ is good to remember. You will later learn
+that this is called a \textup{change of basis}.}
+
+Let $\alpha_1,\dots,\alpha_4\in\F$ such that
+\[ \alpha_1(v_1+v_2)+\alpha_2(v_2+v_3)+\alpha_3(v_3+v_4)+\alpha_4v_4 = 0. \]
+Then we may write
+\[ \alpha_1v_1+(\alpha_1+\alpha_2)v_2+(\alpha_2+\alpha_3)v_3
+   +(\alpha_3+\alpha_4)v_4 = 0. \]
+Since $v_1,v_2,v_3,v_4$ is a basis of $V$, we must have
+\[ \alpha_1=0, \quad \alpha_1+\alpha_2=0, \quad \alpha_2+\alpha_3=0, \quad
+   \alpha_3+\alpha_4=0. \]
+From the first equation, we have $\alpha_1=0$. Substituting this into the second
+equation gives us $\alpha_2=0$. Substituting this into the third equation gives
+us $\alpha_3=0$. Finally, substituting this into the fourth equation gives us
+$\alpha_4=0$. Thus, the list is linearly independent. Moreover, since
+$v_1,v_2,v_3,v_4$ is a basis of $V$, then any vector $v\in V$ can be written as
+\[ v = \beta_1v_1+\beta_2v_2+\beta_3v_3+\beta_4v_4 \]
+for some $\beta_1,\dots,\beta_4\in\F$. Using the expressions from proving the
+linear independence of the list, we may show that there exist
+$\alpha_1,\dots,\alpha_4\in\F$ such that
+\[ \begin{cases}
+   \beta_1=\alpha_1,\\
+   \beta_2=\alpha_1+\alpha_2,\\
+   \beta_3=\alpha_2+\alpha_3,\\
+   \beta_4=\alpha_3+\alpha_4.
+   \end{cases} \]
+Then $v\in V$ may be written as
+\[ v = \alpha_1(v_1+v_2)+\alpha_2(v_2+v_3)+\alpha_3(v_3+v_4)+\alpha_4v_4, \]
+where
+\[ \alpha_1=\beta_1, \quad \alpha_2=\beta_2-\beta_1, \quad
+   \alpha_3=\beta_3-\beta_2+\beta_1, \quad
+   \alpha_4=\beta_4-\beta_3+\beta_2-\beta_1. \]
+Thus, the list spans $V$. Therefore, the list is a basis of $V$.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $v_1,v_2,v_3,v_4$ is a basis of $V$ and $U$ is
+a subspace of $V$ such that $v_1,v_2\in U$ and $v_3\notin U$ and $v_4\notin U$,
+then $v_1,v_2$ is a basis of $U$.
+\end{exercise}
+\begin{solution}
+This is not true. Let $V=\R^4$ and $v_1,v_2,v_3,v_4$ be the standard basis of
+$\R^4$. Let $U$ be the subspace of $\R^4$ defined by
+\[ U = \spn(v_1,v_2,v_3+v_4) = \{(x,y,z,z)\in\R^4 \mid x,y,z\in\R\}. \]
+Then $v_1,v_2\in U$ and $v_3,v_4\notin U$. However, $v_1,v_2$ does not span
+$U$, since $(0,0,1,1)\in U$ but cannot be written as a linear combination of
+$v_1$ and $v_2$. Thus, $v_1,v_2$ is not a basis of $U$.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m$ is a list of vectors in $V$. For $k\in\{1,\dots,m\}$, let
+\[ w_k = v_1+\cdots+v_k. \]
+Show that $v_1,\dots,v_m$ is a basis of $V$ if and only if $w_1,\dots,w_m$ is a
+basis of $V$.
+\end{exercise}
+\begin{solution}
+By Exercise~2A14, we know that $v_1,\dots,v_m$ is linearly independent if and
+only if $w_1,\dots,w_m$ is linearly independent. By Exercise~2A3, we know that
+$v_1,\dots,v_m$ spans $V$ if and only if $w_1,\dots,w_m$ spans $V$. Thus,
+$v_1,\dots,v_m$ is a basis of $V$ if and only if $w_1,\dots,w_m$ is a basis
+of $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ and $W$ are subspaces of $V$ such that $V=U\oplus W$. Suppose also
+that $u_1,\dots,u_m$ is a basis of $U$ and $w_1,\dots,w_n$ is a basis of $W$.
+Prove that
+\[ u_1,\dots,u_m,w_1,\dots,w_n \]
+is a basis of $V$.
+\end{exercise}
+\begin{solution}
+Let $u_1,\dots,u_m$ be a basis of $U$ and $w_1,\dots,w_n$ be a basis of $W$. We
+claim that the list
+\[ u_1,\dots,u_m,w_1,\dots,w_n \]
+is a basis of $V$. Let $\alpha_1,\dots,\alpha_m,\beta_1,\dots,\beta_n\in\F$ such
+that
+\[ \alpha_1u_1+\cdots+\alpha_mu_m+\beta_1w_1+\cdots+\beta_nw_n = 0. \]
+Then we may write
+\[ \alpha_1u_1+\cdots+\alpha_mu_m = -\beta_1w_1-\cdots-\beta_nw_n. \]
+Since the left-hand side is in $U$ and the right-hand side is in $W$, and
+$U\cap W=\{0\}$, we must have
+\[ \alpha_1u_1+\cdots+\alpha_mu_m = 0 \quad\text{and}\quad
+   \beta_1w_1+\cdots+\beta_nw_n = 0. \]
+Since $u_1,\dots,u_m$ is a basis of $U$, we have $\alpha_1=\cdots=\alpha_m=0$.
+Similarly, since $w_1,\dots,w_n$ is a basis of $W$, we have
+$\beta_1=\cdots=\beta_n=0$. Thus, the list is linearly independent. Moreover,
+since $V=U\oplus W$, then $v=u+w$ for some $u\in U$ and $w\in W$. Then we may
+write
+\[ u = \gamma_1u_1+\cdots+\gamma_mu_m \quad\text{and}\quad
+   w = \delta_1w_1+\cdots+\delta_nw_n \]
+for some $\gamma_1,\dots,\gamma_m,\delta_1,\dots,\delta_n\in\F$. Hence,
+\[ v = u+w = \gamma_1u_1+\cdots+\gamma_mu_m+\delta_1w_1+\cdots+\delta_nw_n, \]
+which shows that the list spans $V$. Therefore, the list is a basis of $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a real vector space. Show that if $v_1,\dots,v_n$ is a basis of
+$V$ (as a real vector space), then $v_1,\dots,v_n$ is also a basis of the
+complexification $V_{\C}$ (as a complex vector space).
+\exnote{See Exercise~8 in Section~1B for the definition of the
+complexification $V_{\C}$.}
+\end{exercise}
+\begin{solution}
+Let $v_1,\dots,v_n$ be a basis of $V$. We claim that $v_1,\dots,v_n$ is also a
+basis of $V_{\C}$. Let $\alpha_1,\dots,\alpha_n\in\C$ such that
+\[ \alpha_1v_1+\cdots+\alpha_nv_n = 0. \]
+Then we may write each $\alpha_k=a_k+b_ki$ for some $a_k,b_k\in\R$. Then we have
+\[ (a_1+b_1i)v_1+\cdots+(a_n+b_ni)v_n = 0. \]
+This implies that
+\[ (a_1v_1+\cdots+a_nv_n)+i(b_1v_1+\cdots+b_nv_n) = 0. \]
+Since the left-hand side is a sum of two vectors in $V$, and $V$ is a real
+vector space, we must have
+\[ a_1v_1+\cdots+a_nv_n = 0 \quad\text{and}\quad b_1v_1+\cdots+b_nv_n = 0. \]
+Since $v_1,\dots,v_n$ is a basis of $V$, we have $a_1=\cdots=a_n=0$ and
+$b_1=\cdots=b_n=0$. Thus, $\alpha_1=\cdots=\alpha_n=0$, which shows that the
+list is linearly independent. Moreover, let $v\in V_{\C}$. Then we may write
+$v=u+wi$ for some $u,w\in V$. Since $v_1,\dots,v_n$ is a basis of $V$, we may
+write
+\[ u = \gamma_1v_1+\cdots+\gamma_nv_n \quad\text{and}\quad
+   w = \delta_1v_1+\cdots+\delta_nv_n \]
+for some $\gamma_1,\dots,\gamma_n,\delta_1,\dots,\delta_n\in\R$. Hence,
+\[ v = u+wi = (\gamma_1+\delta_1i)v_1+\cdots+(\gamma_n+\delta_ni)v_n, \]
+which shows that the list spans $V_{\C}$. Therefore, the list is a basis of
+$V_{\C}$.
+\end{solution}

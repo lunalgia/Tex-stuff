@@ -1,0 +1,141 @@
+% ladr-macros.tex: notation and environments for the Axler transcription.
+
+% test builds of a single section set their counters only when this is true
+\newif\iftestbuild
+% Loaded after greenbook.sty.  Nothing in greenbook.sty is changed.
+
+% ---------------------------------------------------------------- notation
+\DeclareRobustCommand{\F}{\mathbb{F}}
+\DeclareRobustCommand{\R}{\mathbb{R}}
+\DeclareRobustCommand{\C}{\mathbb{C}}
+\DeclareRobustCommand{\Q}{\mathbb{Q}}
+\DeclareRobustCommand{\Z}{\mathbb{Z}}
+\DeclareRobustCommand{\N}{\mathbb{N}}
+\DeclareRobustCommand{\Lin}{\mathcal{L}}           % \Lin(V,W)
+\DeclareRobustCommand{\Poly}{\mathcal{P}}          % \Poly_m(\F)
+\DeclareRobustCommand{\Mat}{\mathcal{M}}           % \Mat(T)
+\DeclareMathOperator{\nul}{null}         % \null is a TeX primitive
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\dett}{det}
+\DeclareMathOperator{\sgn}{sign}
+\renewcommand{\rank}{\operatorname{rank}}
+\renewcommand{\tr}{\operatorname{tr}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\renewcommand{\dim}{\operatorname{dim}}
+% physics' \det reads a (...) argument, which breaks inside theorem notes
+\renewcommand{\det}{\operatorname{det}}
+\renewcommand{\ip}[2]{\langle #1, #2 \rangle}
+\renewcommand{\norm}[1]{\lVert #1 \rVert}
+\renewcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\ftimes}[2]{\underbrace{#1}_{#2}}  % x\cdots x with "m times" under it
+
+% physics.sty turns \dd, \dv ... into commands; nothing of Axler needs them.
+% Axler's l is a plain l: undo the \ell mapping of greenbook.sty.
+
+% ------------------------------------------------- numbering as in Axler
+% Every numbered item (definition, result, example, notation, figure) shares
+% one counter per chapter: 1.1, 1.2, ...  Sections are 1A, 1B, ...
+\renewcommand\thesection{\thechapter\Alph{section}}
+% Axler's subsections are unnumbered (but stay in the contents)
+\setcounter{secnumdepth}{1}
+\makeatletter
+% greenbook numbers definitions, theorems and examples per chapter, but each
+% on its own counter: make definition and example use the theorem counter
+\let\c@definition\c@theorem
+\let\c@example\c@theorem
+% Axler's results carry no name of their own: "Result" in the margin
+\declaretheorem[style=hangingtheo,name=Result,sibling=theorem]{result}
+\declaretheorem[style=hangingtheo,name=Result,numbered=no]{result*}
+\declaretheorem[style=hangingtheo,name=Notation,sibling=theorem]{notation}
+\declaretheorem[style=hangingtheo,name=Definition,numbered=no]{definition*}
+\declaretheorem[style=thmremark,name=Remark,numbered=no]{remark*}
+% a numbered figure takes its number from the same counter
+\renewcommand\thefigure{\thetheorem}
+% \axfigure: a numbered figure in Axler's counter.  Use as
+%   \begin{figure}[htbp] ... \axcaption{text}\label{ax:6.9} \end{figure}
+\newcommand\axcaption[1]{\refstepcounter{theorem}%
+  \addtocounter{figure}{-1}\caption{#1}}
+
+% The chapters use artbook's \marginnote[offset]{text}; the marginnote
+% package (loaded by greenbook) takes \marginnote{text}[offset].  Accept both.
+\let\gb@marginnote\marginnote
+\RenewDocumentCommand\marginnote{O{0pt} +m o}{%
+  \IfNoValueTF{#3}{\gb@marginnote{\footnotesize #2}[#1]}%
+                  {\gb@marginnote{\footnotesize #2}[#3]}}
+\makeatother
+
+% ------------------------------------------------- lists inside the text
+% (a), (b), ... as Axler sets them; bullets keep the default.
+\newlist{parts}{enumerate}{1}
+\setlist[parts]{label=(\alph*),leftmargin=*,widest=m,itemsep=1pt,topsep=3pt}
+\setlist[itemize]{itemsep=1pt,topsep=3pt,leftmargin=1.2em}
+\setlist[enumerate]{itemsep=1pt,topsep=3pt}
+
+% the named property lists of Axler (commutativity, associativity, ...):
+%   \begin{axprops} \item[commutativity] text ... \end{axprops}
+\newlist{axprops}{description}{1}
+\setlist[axprops]{style=nextline,leftmargin=1em,font=\normalfont\bfseries,
+  itemsep=2pt,topsep=3pt,parsep=0pt}
+
+% "Exercises 1A": a run-in heading for the exercise block of a section
+\newcommand\exercisesheading[1]{\subsection*{Exercises #1}}
+
+% a short attribution line for the solutions
+\newcommand\solnote[2]{\par\smallskip\noindent{\bfseries #1.}\ {\itshape #2}\par}
+
+% a small unnumbered figure in the label column, as Axler's margin figures:
+%   \marginfig{<tikz or \includegraphics>}{caption}
+\newcommand\marginfig[3][0pt]{\marginnote[#1]{\vskip0pt\centering #2\par\smallskip
+  {\itshape #3}\par}}
+
+% the quotation that closes some exercise sets
+\newcommand\axquote[2]{\par\bigskip\begingroup\raggedleft\small\itshape
+  \parbox{.8\linewidth}{\raggedleft #1\par\smallskip\upshape\textemdash #2}\par\endgroup}
+
+% the arrows of the R^2 pictures
+\tikzset{vec/.style={-{Stealth[length=2.2mm]},line width=.6pt},
+         axis/.style={-{Stealth[length=1.6mm]},line width=.3pt,black!60}}
+
+% exercise numbers restart in every section (1A.1, 1A.2, ...)
+\xsimsetup{exercise/within=section}
+
+% solutions end with the black square, as in the manual; \qedhere works in a
+% closing display
+\AtBeginDocument{\xsimsetup{solution/pre-hook={\pushQED{\qed}},
+  solution/post-hook={\popQED}}}
+
+% the small italic remark Axler sets under some exercises
+\newcommand\exnote[1]{\par\smallskip{\small\itshape\leftskip=1.5em\relax #1\par}}
+\let\axexnote\exnote
+\let\exercisenote\exnote
+
+% the text column is narrow: allow a little extra stretch before overfull lines
+\setlength\emergencystretch{1.5em}
+
+% same space after the last exercise of every section
+\AddToHook{cmd/section/before}{\par\addvspace{\bigskipamount}}
+\allowdisplaybreaks[1]
+
+% each group of solutions gets its own section-level contents entry
+\renewcommand{\printsolutionsbysection}{%
+  \def\lastchapter{}\def\lastsection{}%
+  \ForEachUsedExerciseByType{%
+    \edef\currentchapter{\ExercisePropertyGet{##1}{##2}{chapter-value}}%
+    \edef\currentsection{\ExercisePropertyGet{##1}{##2}{section-value}}%
+    \ifx\lastchapter\currentchapter\else
+      \section*{Chapter~\ExercisePropertyGet{##1}{##2}{chapter}}%
+    \fi
+    \ifx\lastsection\currentsection\else
+      \subsection*{\S\ExercisePropertyGet{##1}{##2}{section}}%
+      \addcontentsline{toc}{section}{Solutions to
+        \ExercisePropertyGet{##1}{##2}{section}}%
+    \fi
+    \XSIMprint{solution}{##1}{##2}%
+    \let\lastchapter\currentchapter
+    \let\lastsection\currentsection}}

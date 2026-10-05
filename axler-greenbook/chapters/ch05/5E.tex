@@ -1,0 +1,350 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{4}\setcounter{theorem}{70}
+\fi % TEST-ONLY-END
+% Source: book pp. 175--180 (PDF 189--194); no solutions.
+% \axtag and \exnote: see the top of 5C.tex.
+\DeclareRobustCommand\axtag[1]{\refstepcounter{theorem}\tag{\thetheorem}\label{#1}}
+\section{Commuting Operators}
+
+\begin{definition}[Commute]\label{ax:5.71}\leavevmode
+\begin{itemize}
+\item Two operators $S$ and $T$ on the same vector space \emph{commute} if
+  $ST=TS$.
+\item Two square matrices $A$ and $B$ of the same size \emph{commute} if
+  $AB=BA$.
+\end{itemize}
+\end{definition}
+
+For example, if $I$ is the identity operator on $V$ and $\lambda\in\F$, then
+$\lambda I$ commutes with every operator on $V$.
+
+As another example, if $T$ is an operator then $T^2$ and $T^3$ commute. More
+generally, if $p,q\in\Poly(\F)$, then $p(T)$ and $q(T)$ commute
+[see \ref{ax:5.17}(b)].
+
+\begin{example}[Partial differentiation operators commute]\label{ax:5.72}
+Suppose $m$ is a nonnegative integer. Let $\Poly_m(\C^2,\C)$ denote the complex
+vector space of polynomials (with coefficients in $\C$) in two variables and of
+degree at most $m$, with the usual operations of addition and scalar
+multiplication of $\C$-valued functions. Thus the elements of $\Poly_m(\C^2,\C)$
+are functions $p$ from $\C^2$ to $\C$ of the form
+\[ p(w,z) = \sum_{j+k\le m} a_{j,k}w^jz^k, \axtag{ax:5.73} \]
+where the indices $j$ and $k$ take on all nonnegative integer values such that
+$j+k\le m$, each $a_{j,k}$ is in $\C$, and $w^jz^k$ denotes the function on
+$\C^2$ defined by $(w,z)\mapsto w^jz^k$.
+
+Define operators $D_w,D_z\in\Lin\bigl(\Poly_m(\C^2,\C)\bigr)$ by
+\[ D_wp = \frac{\partial p}{\partial w} = \sum_{j+k\le m} ja_{j,k}w^{j-1}z^k
+   \quad\text{and}\quad
+   D_zp = \frac{\partial p}{\partial z} = \sum_{j+k\le m} ka_{j,k}w^jz^{k-1}, \]
+where $p$ is as in \ref{ax:5.73}. The operators $D_w$ and $D_z$ are called
+partial differentiation operators because each of these operators
+differentiates with respect to one of the variables while pretending that the
+other variable is a constant.
+
+The operators $D_w$ and $D_z$ commute because if $p$ is as in \ref{ax:5.73},
+then
+\[ (D_wD_z)p = \sum_{j+k\le m} jka_{j,k}w^{j-1}z^{k-1} = (D_zD_w)p. \]
+
+The equation $D_wD_z=D_zD_w$ on $\Poly_m(\C^2,\C)$ illustrates a more general
+result that the order of partial differentiation does not matter for nice
+functions.
+\end{example}
+
+\marginnote{All 214,358,881 (which equals $11^8$) ordered pairs of the 2-by-2
+matrices under consideration were checked by a computer to discover that only
+674,609 of these ordered pairs of matrices commute.}%
+Commuting matrices are unusual. For example, there are 214,358,881 ordered
+pairs of 2-by-2 matrices all of whose entries are integers in the interval
+$[-5,5]$. Only about $0.3\%$ of these ordered pairs of matrices commute.
+
+The next result shows that two operators commute if and only if their matrices
+(with respect to the same basis) commute.
+
+\begin{result}[Commuting operators correspond to commuting matrices]\label{ax:5.74}
+Suppose $S,T\in\Lin(V)$ and $v_1,\dots,v_n$ is a basis of $V$. Then $S$ and $T$
+commute if and only if $\Mat\bigl(S,(v_1,\allowbreak\dots,v_n)\bigr)$ and
+$\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ commute.
+\end{result}
+
+\begin{proof}
+We have
+\begin{align*}
+S\text{ and }T\text{ commute} &\iff ST=TS\\
+  &\iff \Mat(ST)=\Mat(TS)\\
+  &\iff \Mat(S)\Mat(T)=\Mat(T)\Mat(S)\\
+  &\iff \Mat(S)\text{ and }\Mat(T)\text{ commute},
+\end{align*}
+as desired.
+\end{proof}
+
+The next result shows that if two operators commute, then every eigenspace for
+one operator is invariant under the other operator. This result, which we will
+use several times, is one of the main reasons why a pair of commuting operators
+behaves better than a pair of operators that does not commute.
+
+\begin{result}[Eigenspace is invariant under commuting operator]\label{ax:5.75}
+Suppose $S,T\in\Lin(V)$ commute and $\lambda\in\F$. Then $E(\lambda,S)$ is
+invariant under $T$.
+\end{result}
+
+\begin{proof}
+Suppose $v\in E(\lambda,S)$. Then
+\[ S(Tv) = (ST)v = (TS)v = T(Sv) = T(\lambda v) = \lambda Tv. \]
+The equation above shows that $Tv\in E(\lambda,S)$. Thus $E(\lambda,S)$ is
+invariant under $T$.
+\end{proof}
+
+Suppose we have two operators, each of which is diagonalizable. If we want to
+do computations involving both operators (for example, involving their sum),
+then we want the two operators to be diagonalizable by the same basis, which
+according to the next result is possible when the two operators commute.
+
+\begin{result}[Simultaneous diagonalizability $\iff$ commutativity]\label{ax:5.76}
+Two diagonalizable operators on the same vector space have diagonal matrices
+with respect to the same basis if and only if the two operators commute.
+\end{result}
+
+\begin{proof}
+First suppose $S,T\in\Lin(V)$ have diagonal matrices with respect to the same
+basis. The product of two diagonal matrices of the same size is the diagonal
+matrix obtained by multiplying the corresponding elements of the two diagonals.
+Thus any two diagonal matrices of the same size commute. Thus $S$ and $T$
+commute, by \ref{ax:5.74}.
+
+To prove the implication in the other direction, now suppose that
+$S,T\in\Lin(V)$ are diagonalizable operators that commute. Let
+$\lambda_1,\dots,\lambda_m$ denote the distinct eigenvalues of $S$. Because $S$
+is diagonalizable, \ref{ax:5.55}(c) shows that
+\[ V = E(\lambda_1,S)\oplus\cdots\oplus E(\lambda_m,S). \axtag{ax:5.77} \]
+For each $k=1,\dots,m$, the subspace $E(\lambda_k,S)$ is invariant under $T$
+(by \ref{ax:5.75}). Because $T$ is diagonalizable, \ref{ax:5.65} implies that
+$T|_{E(\lambda_k,S)}$ is diagonalizable for each $k$. Hence for each
+$k=1,\dots,m$, there is a basis of $E(\lambda_k,S)$ consisting of eigenvectors
+of $T$. Putting these bases together gives a basis of $V$ (because of
+\ref{ax:5.77}), with each vector in this basis being an eigenvector of both $S$
+and $T$. Thus $S$ and $T$ both have diagonal matrices with respect to this
+basis, as desired.
+\end{proof}
+
+See Exercise~2 for an extension of the result above to more than two operators.
+
+Suppose $V$ is a finite-dimensional nonzero complex vector space. Then every
+operator on $V$ has an eigenvector (see \ref{ax:5.19}). The next result shows
+that if two operators on $V$ commute, then there is a vector in $V$ that is an
+eigenvector for both operators (but the two commuting operators might not have
+a common eigenvalue). For an extension of the next result to more than two
+operators, see Exercise~9(a).
+
+\begin{result}[Common eigenvector for commuting operators]\label{ax:5.78}
+Every pair of commuting operators on a finite-dimensional nonzero complex
+vector space has a common eigenvector.
+\end{result}
+
+\begin{proof}
+Suppose $V$ is a finite-dimensional nonzero complex vector space and
+$S,T\in\Lin(V)$ commute. Let $\lambda$ be an eigenvalue of $S$ (\ref{ax:5.19}
+tells us that $S$ does indeed have an eigenvalue). Thus $E(\lambda,S)\ne\{0\}$.
+Also, $E(\lambda,S)$ is invariant under $T$ (by \ref{ax:5.75}).
+
+Thus $T|_{E(\lambda,S)}$ has an eigenvector (again using \ref{ax:5.19}), which
+is an eigenvector for both $S$ and $T$, completing the proof.
+\end{proof}
+
+\begin{example}[Common eigenvector for partial differentiation operators]\label{ax:5.79}
+Let $\Poly_m(\C^2,\C)$ be as in Example~\ref{ax:5.72} and let
+$D_w,D_z\in\Lin\bigl(\Poly_m(\C^2,\C)\bigr)$ be the commuting partial
+differentiation operators in that example. As you can verify, $0$ is the only
+eigenvalue of each of these operators. Also
+\begin{align*}
+E(0,D_w) &= \biggl\{\sum_{k=0}^m a_kz^k : a_0,\dots,a_m\in\C\biggr\},\\
+E(0,D_z) &= \biggl\{\sum_{j=0}^m c_jw^j : c_0,\dots,c_m\in\C\biggr\}.
+\end{align*}
+The intersection of these two eigenspaces is the set of common eigenvectors of
+the two operators. Because $E(0,D_w)\cap E(0,D_z)$ is the set of constant
+functions, we see that $D_w$ and $D_z$ indeed have a common eigenvector, as
+promised by \ref{ax:5.78}.
+\end{example}
+
+The next result extends \ref{ax:5.47} (the existence of a basis that gives an
+upper-triangular matrix) to two commuting operators.
+
+\begin{result}[Commuting operators are simultaneously upper triangularizable]\label{ax:5.80}
+Suppose $V$ is a finite-dimensional complex vector space and $S,T$ are
+commuting operators on $V$. Then there is a basis of $V$ with respect to which
+both $S$ and $T$ have upper-triangular matrices.
+\end{result}
+
+\begin{proof}
+Let $n=\dim V$. We will use induction on $n$. The desired result holds if $n=1$
+because all 1-by-1 matrices are upper triangular. Now suppose $n>1$ and the
+desired result holds for all complex vector spaces whose dimension is $n-1$.
+
+Let $v_1$ be any common eigenvector of $S$ and $T$ (using \ref{ax:5.78}).
+Hence $Sv_1\in\spn(v_1)$ and $Tv_1\in\spn(v_1)$. Let $W$ be a subspace of $V$
+such that
+\[ V = \spn(v_1)\oplus W; \]
+see \ref{ax:2.33} for the existence of $W$. Define a linear map
+$P\colon V\to W$ by
+\[ P(av_1+w) = w \]
+for each $a\in\C$ and each $w\in W$. Define
+$\widehat{S},\widehat{T}\in\Lin(W)$ by
+\[ \widehat{S}w = P(Sw) \quad\text{and}\quad \widehat{T}w = P(Tw) \]
+for each $w\in W$. To apply our induction hypothesis to $\widehat{S}$ and
+$\widehat{T}$, we must first show that these two operators on $W$ commute. To
+do this, suppose $w\in W$. Then there exists $a\in\C$ such that
+\[ (\widehat{S}\widehat{T})w = \widehat{S}\bigl(P(Tw)\bigr)
+   = \widehat{S}(Tw-av_1) = P\bigl(S(Tw-av_1)\bigr) = P\bigl((ST)w\bigr), \]
+where the last equality holds because $v_1$ is an eigenvector of $S$ and
+$Pv_1=0$. Similarly,
+\[ (\widehat{T}\widehat{S})w = P\bigl((TS)w\bigr). \]
+Because the operators $S$ and $T$ commute, the last two displayed equations
+show that $(\widehat{S}\widehat{T})w=(\widehat{T}\widehat{S})w$. Hence
+$\widehat{S}$ and $\widehat{T}$ commute.
+
+Thus we can use our induction hypothesis to state that there exists a basis
+$v_2,\allowbreak\dots,v_n$ of $W$ such that $\widehat{S}$ and $\widehat{T}$ both have
+upper-triangular matrices with respect to this basis. The list
+$v_1,\dots,v_n$ is a basis of $V$.
+
+If $k\in\{2,\dots,n\}$, then there exist $a_k,b_k\in\C$ such that
+\[ Sv_k = a_kv_1+\widehat{S}v_k \quad\text{and}\quad
+   Tv_k = b_kv_1+\widehat{T}v_k. \]
+Because $\widehat{S}$ and $\widehat{T}$ have upper-triangular matrices with
+respect to $v_2,\dots,v_n$, we know that
+$\widehat{S}v_k\in\spn(v_2,\dots,v_k)$ and
+$\widehat{T}v_k\in\spn(v_2,\dots,v_k)$. Hence the equations above imply that
+\[ Sv_k\in\spn(v_1,\dots,v_k) \quad\text{and}\quad
+   Tv_k\in\spn(v_1,\dots,v_k). \]
+Thus $S$ and $T$ have upper-triangular matrices with respect to
+$v_1,\dots,v_n$, as desired.
+\end{proof}
+
+Exercise~9(b) extends the result above to more than two operators.
+
+In general, it is not possible to determine the eigenvalues of the sum or
+product of two operators from the eigenvalues of the two operators. However,
+the next result shows that something nice happens when the two operators
+commute.
+
+\begin{result}[Eigenvalues of sum and product of commuting operators]\label{ax:5.81}
+Suppose $V$ is a finite-dimensional complex vector space and $S,T$ are
+commuting operators on $V$. Then
+\begin{itemize}
+\item every eigenvalue of $S+T$ is an eigenvalue of $S$ plus an eigenvalue of
+  $T$,
+\item every eigenvalue of $ST$ is an eigenvalue of $S$ times an eigenvalue of
+  $T$.
+\end{itemize}
+\end{result}
+
+\begin{proof}
+There is a basis of $V$ with respect to which both $S$ and $T$ have
+upper-triangular matrices (by \ref{ax:5.80}). With respect to that basis,
+\[ \Mat(S+T) = \Mat(S)+\Mat(T) \quad\text{and}\quad \Mat(ST) = \Mat(S)\Mat(T), \]
+as stated in \ref{ax:3.35} and \ref{ax:3.43}.
+
+The definition of matrix addition shows that each entry on the diagonal of
+$\Mat(S+T)$ equals the sum of the corresponding entries on the diagonals of
+$\Mat(S)$ and $\Mat(T)$. Similarly, because $\Mat(S)$ and $\Mat(T)$ are
+upper-triangular matrices, the definition of matrix multiplication shows that
+each entry on the diagonal of $\Mat(ST)$ equals the product of the
+corresponding entries on the diagonals of $\Mat(S)$ and $\Mat(T)$.
+Furthermore, $\Mat(S+T)$ and $\Mat(ST)$ are upper-triangular matrices (see
+Exercise~2 in Section~5C).
+
+Every entry on the diagonal of $\Mat(S)$ is an eigenvalue of $S$, and every
+entry on the diagonal of $\Mat(T)$ is an eigenvalue of $T$ (by \ref{ax:5.41}).
+Every eigenvalue of $S+T$ is on the diagonal of $\Mat(S+T)$, and every
+eigenvalue of $ST$ is on the diagonal of $\Mat(ST)$ (these assertions follow
+from \ref{ax:5.41}). Putting all this together, we conclude that every
+eigenvalue of $S+T$ is an eigenvalue of $S$ plus an eigenvalue of $T$, and
+every eigenvalue of $ST$ is an eigenvalue of $S$ times an eigenvalue of $T$.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{5E}
+
+\begin{exercise}
+Give an example of two commuting operators $S,T$ on $\F^4$ such that there is a
+subspace of $\F^4$ that is invariant under $S$ but not under $T$ and there is a
+subspace of $\F^4$ that is invariant under $T$ but not under $S$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\mathcal{E}$ is a subset of $\Lin(V)$ and every element of
+$\mathcal{E}$ is diagonalizable. Prove that there exists a basis of $V$ with
+respect to which every element of $\mathcal{E}$ has a diagonal matrix if and
+only if every pair of elements of $\mathcal{E}$ commutes.
+
+\exnote{This exercise extends \ref{ax:5.76}, which considers the case in which
+$\mathcal{E}$ contains only two elements. For this exercise, $\mathcal{E}$ may
+contain any number of elements, and $\mathcal{E}$ may even be an infinite set.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $S,T\in\Lin(V)$ are such that $ST=TS$. Suppose $p\in\Poly(\F)$.
+\begin{parts}
+\item Prove that $\nul p(S)$ is invariant under $T$.
+\item Prove that $\range p(S)$ is invariant under $T$.
+\end{parts}
+\exnote{See \ref{ax:5.18} for the special case $S=T$.}
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $A$ is a diagonal matrix and $B$ is an
+upper-triangular matrix of the same size as $A$, then $A$ and $B$ commute.
+\end{exercise}
+
+\begin{exercise}
+Prove that a pair of operators on a finite-dimensional vector space commute if
+and only if their dual operators commute.
+
+\exnote{See \ref{ax:3.118} for the definition of the dual of an operator.}
+\end{exercise}
+
+\begin{exercise}
+Suppose that $V$ is a nonzero finite-dimensional complex vector space and
+$S,T\in\Lin(V)$ commute. Prove that there exist $\alpha,\lambda\in\C$ such that
+\[ \range(S-\alpha I)+\range(T-\lambda I)\ne V. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a complex vector space, $S\in\Lin(V)$ is diagonalizable, and
+$T\in\Lin(V)$ commutes with $S$. Prove that there is a basis of $V$ such that
+$S$ has a diagonal matrix with respect to this basis and $T$ has an
+upper-triangular matrix with respect to this basis.
+\end{exercise}
+
+\begin{exercise}
+Suppose $m=3$ in Example~\ref{ax:5.72} and $D_x,D_y$ are the commuting partial
+differentiation operators on $\Poly_3(\R^2)$ from that example. Find a basis of
+$\Poly_3(\R^2)$ with respect to which $D_x$ and $D_y$ each have an
+upper-triangular matrix.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a finite-dimensional nonzero complex vector space. Suppose that
+$\mathcal{E}\subseteq\Lin(V)$ is such that $S$ and $T$ commute for all
+$S,T\in\mathcal{E}$.
+\begin{parts}
+\item Prove that there is a vector in $V$ that is an eigenvector for every
+  element of $\mathcal{E}$.
+\item Prove that there is a basis of $V$ with respect to which every element of
+  $\mathcal{E}$ has an upper-triangular matrix.
+\end{parts}
+\exnote{This exercise extends \ref{ax:5.78} and \ref{ax:5.80}, which consider the
+case in which $\mathcal{E}$ contains only two elements. For this exercise,
+$\mathcal{E}$ may contain any number of elements, and $\mathcal{E}$ may even be
+an infinite set.}
+\end{exercise}
+
+\begin{exercise}
+Give an example of two commuting operators $S,T$ on a finite-dimensional real
+vector space such that $S+T$ has an eigenvalue that does not equal an
+eigenvalue of $S$ plus an eigenvalue of $T$ and $ST$ has an eigenvalue that
+does not equal an eigenvalue of $S$ times an eigenvalue of $T$.
+
+\exnote{This exercise shows that \ref{ax:5.81} does not hold on real vector
+spaces.}
+\end{exercise}

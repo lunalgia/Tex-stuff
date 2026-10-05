@@ -1,0 +1,708 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{3}\setcounter{theorem}{67}
+\fi % TEST-ONLY-END
+% Source: book pp. 370--382 (PDF 384--396); no solutions.
+% \exnote: Axler's small italic comment under an exercise
+% Numbered equations (9.75, 9.81): \axeqstep{ax:N.M} steps Axler's counter and
+% sets the label just before the display; \axeqtag prints the number.
+\DeclareRobustCommand\axeqstep[1]{\refstepcounter{theorem}\label{#1}}
+\DeclareRobustCommand\axeqtag{\tag*{\thetheorem}}
+\section{Tensor Products}
+
+\subsection{Tensor Product of Two Vector Spaces}
+
+The motivation for our next topic comes from wanting to form the product of a
+vector $v\in V$ and a vector $w\in W$. This product will be denoted by
+$v\otimes w$, pronounced ``$v$ tensor $w$'', and will be an element of some new
+vector space called $V\otimes W$ (also pronounced ``$V$ tensor $W$'').
+
+We already have a vector space $V\times W$ (see Section~3E), called the product
+of $V$ and $W$. However, $V\times W$ will not serve our purposes here because it
+does not provide a natural way to multiply an element of $V$ by an element of
+$W$. We would like our tensor product to satisfy some of the usual properties
+of multiplication. For example, we would like the distributive property to be
+satisfied, meaning that if $v_1,v_2,v\in V$ and $w_1,w_2,w\in W$, then
+\[ (v_1+v_2)\otimes w = v_1\otimes w+v_2\otimes w \quad\text{and}\quad
+   v\otimes(w_1+w_2) = v\otimes w_1+v\otimes w_2. \]
+
+\marginnote{To produce $\otimes$ in \TeX, type \texttt{\textbackslash otimes}.}%
+We would also like scalar multiplication to interact well with this new
+multiplication, meaning that
+\[ \lambda(v\otimes w) = (\lambda v)\otimes w = v\otimes(\lambda w) \]
+for all $\lambda\in\F$, $v\in V$, and $w\in W$.
+
+Furthermore, it would be nice if each basis of $V$ when combined with each
+basis of $W$ produced a basis of $V\otimes W$. Specifically, if
+$e_1,\dots,e_m$ is a basis of $V$ and $f_1,\dots,f_n$ is a basis of $W$, then
+we would like a list (in any order) consisting of $e_j\otimes f_k$, as $j$
+ranges from $1$ to $m$ and $k$ ranges from $1$ to $n$, to be a basis of
+$V\otimes W$. This implies that $\dim(V\otimes W)$ should equal
+$(\dim V)(\dim W)$. Recall that $\dim(V\times W)=\dim V+\dim W$ (see
+\ref{ax:3.92}), which shows that the product $V\times W$ will not serve our
+purposes here.
+
+To produce a vector space whose dimension is $(\dim V)(\dim W)$ in a natural
+fashion from $V$ and $W$, we look at the vector space of bilinear functionals,
+as defined below.
+
+\begin{definition}[Bilinear functional on $V\times W$, the vector space
+$\mathcal{B}(V,W)$]\label{ax:9.68}\leavevmode
+\begin{itemize}
+\item A \emph{bilinear functional} on $V\times W$ is a function
+  $\beta\colon V\times W\to\F$ such that $v\mapsto\beta(v,w)$ is a linear
+  functional on $V$ for each $w\in W$ and $w\mapsto\beta(v,w)$ is a linear
+  functional on $W$ for each $v\in V$.
+\item The vector space of bilinear functionals on $V\times W$ is denoted by
+  $\mathcal{B}(V,W)$.
+\end{itemize}
+\end{definition}
+
+If $W=V$, then a bilinear functional on $V\times W$ is a bilinear form; see
+\ref{ax:9.1}.
+
+The operations of addition and scalar multiplication on $\mathcal{B}(V,W)$ are
+defined to be the usual operations of addition and scalar multiplication of
+functions. As you can verify, these operations make $\mathcal{B}(V,W)$ into a
+vector space whose additive identity is the zero function from $V\times W$ to
+$\F$.
+
+\begin{example}[Bilinear functionals]\label{ax:9.69}\leavevmode
+\begin{itemize}
+\item Suppose $\varphi\in V'$ and $\tau\in W'$. Define
+  $\beta\colon V\times W\to\F$ by $\beta(v,w)=\varphi(v)\tau(w)$. Then $\beta$
+  is a bilinear functional on $V\times W$.
+\item Suppose $v\in V$ and $w\in W$. Define $\beta\colon V'\times W'\to\F$ by
+  $\beta(\varphi,\tau)=\varphi(v)\tau(w)$. Then $\beta$ is a bilinear
+  functional on $V'\times W'$.
+\item Define $\beta\colon V\times V'\to\F$ by $\beta(v,\varphi)=\varphi(v)$.
+  Then $\beta$ is a bilinear functional on $V\times V'$.
+\item Suppose $\varphi\in V'$. Define $\beta\colon V\times\Lin(V)\to\F$ by
+  $\beta(v,T)=\varphi(Tv)$. Then $\beta$ is a bilinear functional on
+  $V\times\Lin(V)$.
+\item Suppose $m$ and $n$ are positive integers. Define
+  $\beta\colon\F^{m,n}\times\F^{n,m}\to\F$ by $\beta(A,B)=\tr(AB)$. Then
+  $\beta$ is a bilinear functional on $\F^{m,n}\times\F^{n,m}$.
+\end{itemize}
+\end{example}
+
+\begin{result}[Dimension of the vector space of bilinear
+functionals]\label{ax:9.70}\leavevmode
+\[ \dim\mathcal{B}(V,W)=(\dim V)(\dim W). \]
+\end{result}
+
+\begin{proof}
+Let $e_1,\dots,e_m$ be a basis of $V$ and $f_1,\dots,f_n$ be a basis of $W$.
+For a bilinear functional $\beta\in\mathcal{B}(V,W)$, let $\Mat(\beta)$ be the
+$m$-by-$n$ matrix whose entry in row $j$, column $k$ is $\beta(e_j,f_k)$. The
+map $\beta\mapsto\Mat(\beta)$ is a linear map of $\mathcal{B}(V,W)$ into
+$\F^{m,n}$.
+
+For a matrix $C\in\F^{m,n}$, define a bilinear functional $\beta_C$ on
+$V\times W$ by
+\[ \beta_C(a_1e_1+\cdots+a_me_m,\,b_1f_1+\cdots+b_nf_n)
+   = \sum_{k=1}^n\sum_{j=1}^m C_{j,k}a_jb_k \]
+for $a_1,\dots,a_m,b_1,\dots,b_n\in\F$.
+
+The linear map $\beta\mapsto\Mat(\beta)$ from $\mathcal{B}(V,W)$ to $\F^{m,n}$
+and the linear map $C\mapsto\beta_C$ from $\F^{m,n}$ to $\mathcal{B}(V,W)$ are
+inverses of each other because $\beta_{\Mat(\beta)}=\beta$ for all
+$\beta\in\mathcal{B}(V,W)$ and $\Mat(\beta_C)=C$ for all $C\in\F^{m,n}$, as you
+should verify.
+
+Thus both maps are isomorphisms and the two spaces that they connect have the
+same dimension. Hence
+$\dim\mathcal{B}(V,W)=\dim\F^{m,n}=mn=(\dim V)(\dim W)$.
+\end{proof}
+
+Several different definitions of $V\otimes W$ appear in the mathematical
+literature. These definitions are equivalent to each other, at least in the
+finite-dimensional context, because any two vector spaces of the same dimension
+are isomorphic.
+
+The result above states that $\mathcal{B}(V,W)$ has the dimension that we seek,
+as do $\Lin(V,W)$ and $\F^{\dim V,\dim W}$. Thus it may be tempting to define
+$V\otimes W$ to be $\mathcal{B}(V,W)$ or $\Lin(V,W)$ or $\F^{\dim V,\dim W}$.
+However, none of those definitions would lead to a basis-free definition of
+$v\otimes w$ for $v\in V$ and $w\in W$.
+
+The following definition, while it may seem a bit strange and abstract at
+first, has the huge advantage that it defines $v\otimes w$ in a basis-free
+fashion. We define $V\otimes W$ to be the vector space of bilinear functionals
+on $V'\times W'$ instead of the more tempting choice of the vector space of
+bilinear functionals on $V\times W$.
+
+\begin{definition}[Tensor product, $V\otimes W$, $v\otimes w$]\label{ax:9.71}\leavevmode
+\begin{itemize}
+\item The \emph{tensor product} $V\otimes W$ is defined to be
+  $\mathcal{B}(V',W')$.
+\item For $v\in V$ and $w\in W$, the \emph{tensor product} $v\otimes w$ is the
+  element of $V\otimes W$ defined by
+  \[ (v\otimes w)(\varphi,\tau) = \varphi(v)\tau(w) \]
+  for all $(\varphi,\tau)\in V'\times W'$.
+\end{itemize}
+\end{definition}
+
+We can quickly prove that the definition of $V\otimes W$ gives it the desired
+dimension.
+
+\begin{result}[Dimension of the tensor product of two vector
+spaces]\label{ax:9.72}\leavevmode
+\[ \dim(V\otimes W)=(\dim V)(\dim W). \]
+\end{result}
+
+\begin{proof}
+Because a vector space and its dual have the same dimension (by
+\ref{ax:3.111}), we have $\dim V'=\dim V$ and $\dim W'=\dim W$. Thus
+\ref{ax:9.70} tells us that the dimension of $\mathcal{B}(V',W')$ equals
+$(\dim V)(\dim W)$.
+\end{proof}
+
+To understand the definition of the tensor product $v\otimes w$ of two vectors
+$v\in V$ and $w\in W$, focus on the kind of object it is. An element of
+$V\otimes W$ is a bilinear functional on $V'\times W'$, and in particular it is
+a function from $V'\times W'$ to $\F$. Thus for each element of $V'\times W'$,
+it should produce an element of $\F$. The definition above has this behavior,
+because $v\otimes w$ applied to a typical element $(\varphi,\tau)$ of
+$V'\times W'$ produces the number $\varphi(v)\tau(w)$.
+
+The somewhat abstract nature of $v\otimes w$ should not matter. The important
+point is the behavior of these objects. The next result shows that tensor
+products of vectors have the desired bilinearity properties.
+
+\begin{result}[Bilinearity of tensor product]\label{ax:9.73}
+Suppose $v,v_1,v_2\in V$ and $w,w_1,w_2\in W$ and $\lambda\in\F$. Then
+\[ (v_1+v_2)\otimes w = v_1\otimes w+v_2\otimes w \quad\text{and}\quad
+   v\otimes(w_1+w_2) = v\otimes w_1+v\otimes w_2 \]
+and
+\[ \lambda(v\otimes w) = (\lambda v)\otimes w = v\otimes(\lambda w). \]
+\end{result}
+
+\begin{proof}
+Suppose $(\varphi,\tau)\in V'\times W'$. Then
+\begin{align*}
+\bigl((v_1+v_2)\otimes w\bigr)(\varphi,\tau) &= \varphi(v_1+v_2)\tau(w)\\
+  &= \varphi(v_1)\tau(w)+\varphi(v_2)\tau(w)\\
+  &= (v_1\otimes w)(\varphi,\tau)+(v_2\otimes w)(\varphi,\tau)\\
+  &= (v_1\otimes w+v_2\otimes w)(\varphi,\tau).
+\end{align*}
+Thus $(v_1+v_2)\otimes w=v_1\otimes w+v_2\otimes w$.
+
+The other two equalities are proved similarly.
+\end{proof}
+
+Lists are, by definition, ordered. The order matters when, for example, we
+form the matrix of an operator with respect to a basis. For lists in this
+section with two indices, such as
+$\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$ in the next result, the
+ordering does not matter and we do not specify it---just choose any convenient
+ordering.
+
+The linear independence of elements of $V\otimes W$ in (a) of the result below
+captures the idea that there are no relationships among vectors in
+$V\otimes W$ other than the relationships that come from bilinearity of the
+tensor product (see \ref{ax:9.73}) and the relationships that may be present
+due to linear dependence of a list of vectors in $V$ or a list of vectors in
+$W$.
+
+\begin{result}[Basis of $V\otimes W$]\label{ax:9.74}
+Suppose $e_1,\dots,e_m$ is a list of vectors in $V$ and $f_1,\dots,f_n$ is a
+list of vectors in $W$.
+\begin{parts}
+\item If $e_1,\dots,e_m$ and $f_1,\dots,f_n$ are both linearly independent
+  lists, then
+  \[ \{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n} \]
+  is a linearly independent list in $V\otimes W$.
+\item If $e_1,\dots,e_m$ is a basis of $V$ and $f_1,\dots,f_n$ is a basis of
+  $W$, then the list $\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$ is a
+  basis of $V\otimes W$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+To prove (a), suppose $e_1,\dots,e_m$ and $f_1,\dots,f_n$ are both linearly
+independent lists. This linear independence and the linear map lemma
+(\ref{ax:3.4}) imply that there exist $\varphi_1,\dots,\allowbreak\varphi_m\in V'$ and
+$\tau_1,\dots,\tau_n\in W'$ such that
+\[ \varphi_j(e_k) = \begin{cases} 1 & \text{if } j=k,\\
+                                  0 & \text{if } j\ne k \end{cases}
+   \quad\text{and}\quad
+   \tau_j(f_k) = \begin{cases} 1 & \text{if } j=k,\\
+                               0 & \text{if } j\ne k, \end{cases} \]
+where $j,k\in\{1,\dots,m\}$ in the first equation and $j,k\in\{1,\dots,n\}$ in
+the second equation.
+
+Suppose $\{a_{j,k}\}_{j=1,\dots,m;\,k=1,\dots,n}$ is a list of scalars such
+that\axeqstep{ax:9.75}
+\begin{equation*}
+\sum_{k=1}^n\sum_{j=1}^m a_{j,k}(e_j\otimes f_k) = 0. \axeqtag
+\end{equation*}
+Note that $(e_j\otimes f_k)(\varphi_M,\tau_N)$ equals $1$ if $j=M$ and $k=N$,
+and equals $0$ otherwise. Thus applying both sides of \ref{ax:9.75} to
+$(\varphi_M,\tau_N)$ shows that $a_{M,N}=0$, proving that
+$\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$ is linearly independent.
+
+Now (b) follows from (a), the equation $\dim V\otimes W=(\dim V)(\dim W)$ [see
+\ref{ax:9.72}], and the result that a linearly independent list of the right
+length is a basis (see \ref{ax:2.38}).
+\end{proof}
+
+Every element of $V\otimes W$ is a finite sum of elements of the form
+$v\otimes w$, where $v\in V$ and $w\in W$, as implied by (b) in the result
+above. However, if $\dim V>1$ and $\dim W>1$, then Exercise~4 shows that
+\[ \{v\otimes w : (v,w)\in V\times W\} \ne V\otimes W. \]
+
+\begin{example}[Tensor product of element of $\F^m$ with element of
+$\F^n$]\label{ax:9.76}
+Suppose $m$ and $n$ are positive integers. Let $e_1,\dots,e_m$ denote the
+standard basis of $\F^m$ and let $f_1,\dots,f_n$ denote the standard basis of
+$\F^n$. Suppose
+\[ v = (v_1,\dots,v_m)\in\F^m \quad\text{and}\quad w = (w_1,\dots,w_n)\in\F^n. \]
+Then
+\begin{align*}
+v\otimes w &= \biggl(\sum_{j=1}^m v_je_j\biggr)\otimes
+              \biggl(\sum_{k=1}^n w_kf_k\biggr)\\
+           &= \sum_{k=1}^n\sum_{j=1}^m (v_jw_k)(e_j\otimes f_k).
+\end{align*}
+Thus with respect to the basis
+$\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$ of $\F^m\otimes\F^n$ provided
+by \ref{ax:9.74}(b), the coefficients of $v\otimes w$ are the numbers
+$\{v_jw_k\}_{j=1,\dots,m;\,k=1,\dots,n}$. If instead of writing these numbers
+in a list, we write them in an $m$-by-$n$ matrix with $v_jw_k$ in row $j$,
+column $k$, then we can identify $v\otimes w$ with the $m$-by-$n$ matrix
+\[ \begin{pmatrix} v_1w_1 & \cdots & v_1w_n\\
+                          & \ddots &       \\
+                   v_mw_1 & \cdots & v_mw_n \end{pmatrix}. \]
+\end{example}
+
+See Exercises 5 and 6 for practice in using the identification from the
+example above.
+
+We now define bilinear maps, which differ from bilinear functionals in that the
+target space can be an arbitrary vector space rather than just the scalar
+field.
+
+\begin{definition}[Bilinear map]\label{ax:9.77}\emergencystretch=1.5em
+A \emph{bilinear map} from $V\times W$ to a vector space $U$ is a function
+$\Gamma\colon V\times W\to U$ such that $v\mapsto\Gamma(v,w)$ is a linear map
+from $V$ to $U$ for each $w\in W$ and $w\mapsto\Gamma(v,w)$ is a linear map
+from $W$ to $U$ for each $v\in V$.
+\end{definition}
+
+\begin{example}[Bilinear maps]\label{ax:9.78}\leavevmode
+\begin{itemize}
+\item Every bilinear functional on $V\times W$ is a bilinear map from
+  $V\times W$ to $\F$.
+\item The function $\Gamma\colon V\times W\to V\otimes W$ defined by
+  $\Gamma(v,w)=v\otimes w$ is a bilinear map from $V\times W$ to $V\otimes W$
+  (by \ref{ax:9.73}).
+\item The function $\Gamma\colon\Lin(V)\times\Lin(V)\to\Lin(V)$ defined by
+  $\Gamma(S,T)=ST$ is a bilinear map from $\Lin(V)\times\Lin(V)$ to $\Lin(V)$.
+\item The function $\Gamma\colon V\times\Lin(V,W)\to W$ defined by
+  $\Gamma(v,T)=Tv$ is a bilinear map from $V\times\Lin(V,W)$ to $W$.
+\end{itemize}
+\end{example}
+
+Tensor products allow us to convert bilinear maps on $V\times W$ into linear
+maps on $V\otimes W$ (and vice versa), as shown by the next result. In the
+mathematical literature, (a) of the result below is called the ``universal
+property'' of tensor products.
+
+\begin{result}[Converting bilinear maps to linear maps]\label{ax:9.79}
+Suppose $U$ is a vector space.
+\begin{parts}
+\item Suppose $\Gamma\colon V\times W\to U$ is a bilinear map. Then there
+  exists a unique linear map $\hat\Gamma\colon V\otimes W\to U$ such that
+  \[ \hat\Gamma(v\otimes w) = \Gamma(v,w) \]
+  for all $(v,w)\in V\times W$.
+\item Conversely, suppose $T\colon V\otimes W\to U$ is a linear map. Then there
+  exists a unique bilinear map $T^\#\colon V\times W\to U$ such that
+  \[ T^\#(v,w) = T(v\otimes w) \]
+  for all $(v,w)\in V\times W$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Let $e_1,\dots,e_m$ be a basis of $V$ and let $f_1,\dots,f_n$ be a basis of
+$W$. By the linear map lemma (\ref{ax:3.4}) and \ref{ax:9.74}(b), there exists
+a unique linear map $\hat\Gamma\colon V\otimes W\to U$ such that
+\[ \hat\Gamma(e_j\otimes f_k) = \Gamma(e_j,f_k) \]
+for all $j\in\{1,\dots,m\}$ and $k\in\{1,\dots,n\}$.
+
+Now suppose $(v,w)\in V\times W$. There exist
+$a_1,\dots,a_m,b_1,\dots,b_n\in\F$ such that $v=a_1e_1+\cdots+a_me_m$ and
+$w=b_1f_1+\cdots+b_nf_n$. Thus
+\begin{align*}
+\hat\Gamma(v\otimes w)
+  &= \hat\Gamma\biggl(\sum_{k=1}^n\sum_{j=1}^m (a_jb_k)(e_j\otimes f_k)\biggr)\\
+  &= \sum_{k=1}^n\sum_{j=1}^m a_jb_k\hat\Gamma(e_j\otimes f_k)\\
+  &= \sum_{k=1}^n\sum_{j=1}^m a_jb_k\Gamma(e_j,f_k)\\
+  &= \Gamma(v,w),
+\end{align*}
+as desired, where the second line holds because $\hat\Gamma$ is linear, the
+third line holds by the definition of $\hat\Gamma$, and the fourth line holds
+because $\Gamma$ is bilinear.
+
+The uniqueness of the linear map $\hat\Gamma$ satisfying
+$\hat\Gamma(v\otimes w)=\Gamma(v,w)$ follows from \ref{ax:9.74}(b), completing
+the proof of (a).
+
+To prove (b), define a function $T^\#\colon V\times W\to U$ by
+$T^\#(v,w)=T(v\otimes w)$ for all $(v,w)\in V\times W$. The bilinearity of the
+tensor product (see \ref{ax:9.73}) and the linearity of $T$ imply that $T^\#$
+is bilinear.
+
+Clearly the choice of $T^\#$ that satisfies the conditions is unique.
+\end{proof}
+
+To prove \ref{ax:9.79}(a), we could not just define
+$\hat\Gamma(v\otimes w)=\Gamma(v,w)$ for all $v\in V$ and $w\in W$ (and then
+extend $\hat\Gamma$ linearly to all of $V\otimes W$) because elements of
+$V\otimes W$ do not have unique representations as finite sums of elements of
+the form $v\otimes w$. Our proof used a basis of $V$ and a basis of $W$ to get
+around this problem.
+
+Although our construction of $\hat\Gamma$ in the proof of \ref{ax:9.79}(a)
+depended on a basis of $V$ and a basis of $W$, the equation
+$\hat\Gamma(v\otimes w)=\Gamma(v,w)$ that holds for all $v\in V$ and $w\in W$
+shows that $\hat\Gamma$ does not depend on the choice of bases for $V$ and $W$.
+
+\subsection{Tensor Product of Inner Product Spaces}
+
+The result below features three inner products---one on $V\otimes W$, one on
+$V$, and one on $W$, although we use the same symbol
+$\langle\cdot,\cdot\rangle$ for all three inner products.
+
+\begin{result}[Inner product on tensor product of two inner product
+spaces]\label{ax:9.80}
+Suppose $V$ and $W$ are inner product spaces. Then there is a unique inner
+product on $V\otimes W$ such that
+\[ \ip{v\otimes w}{u\otimes x} = \ip{v}{u}\ip{w}{x} \]
+for all $v,u\in V$ and $w,x\in W$.
+\end{result}
+
+\begin{proof}
+Suppose $e_1,\dots,e_m$ is an orthonormal basis of $V$ and $f_1,\dots,f_n$ is
+an orthonormal basis of $W$. Define an inner product on $V\otimes W$
+by\axeqstep{ax:9.81}
+\begin{equation*}
+\biggl\langle\sum_{k=1}^n\sum_{j=1}^m b_{j,k}\,e_j\otimes f_k,\,
+  \sum_{k=1}^n\sum_{j=1}^m c_{j,k}\,e_j\otimes f_k\biggr\rangle
+  = \sum_{k=1}^n\sum_{j=1}^m b_{j,k}\overline{c_{j,k}}. \axeqtag
+\end{equation*}
+The straightforward verification that \ref{ax:9.81} defines an inner product
+on $V\otimes W$ is left to the reader [use \ref{ax:9.74}(b)].
+
+Suppose that $v,u\in V$ and $w,x\in W$. Let $v_1,\dots,v_m\in\F$ be such that
+$v=v_1e_1+\cdots+v_me_m$, with similar expressions for $u$, $w$, and $x$. Then
+\begin{align*}
+\ip{v\otimes w}{u\otimes x}
+  &= \biggl\langle\sum_{j=1}^m v_je_j\otimes\sum_{k=1}^n w_kf_k,\,
+     \sum_{j=1}^m u_je_j\otimes\sum_{k=1}^n x_kf_k\biggr\rangle\\
+  &= \biggl\langle\sum_{k=1}^n\sum_{j=1}^m v_jw_k\,e_j\otimes f_k,\,
+     \sum_{k=1}^n\sum_{j=1}^m u_jx_k\,e_j\otimes f_k\biggr\rangle\\
+  &= \sum_{k=1}^n\sum_{j=1}^m v_j\overline{u_j}w_k\overline{x_k}\\
+  &= \biggl(\sum_{j=1}^m v_j\overline{u_j}\biggr)
+     \biggl(\sum_{k=1}^n w_k\overline{x_k}\biggr)\\
+  &= \ip{v}{u}\ip{w}{x}.
+\end{align*}
+
+There is only one inner product on $V\otimes W$ such that
+$\ip{v\otimes w}{u\otimes x}=\ip{v}{u}\ip{w}{x}$ for all $v,u\in V$ and
+$w,x\in W$ because every element of $V\otimes W$ can be written as a linear
+combination of elements of the form $v\otimes w$ [by \ref{ax:9.74}(b)].
+\end{proof}
+
+The definition below of a natural inner product on $V\otimes W$ is now
+justified by \ref{ax:9.80}. We could not have simply defined
+$\ip{v\otimes w}{u\otimes x}$ to be $\ip{v}{u}\ip{w}{x}$ (and then used
+additivity in each slot separately to extend the definition to $V\otimes W$)
+without some proof because elements of $V\otimes W$ do not have unique
+representations as finite sums of elements of the form $v\otimes w$.
+
+\begin{definition}[Inner product on tensor product of two inner product
+spaces]\label{ax:9.82}
+Suppose $V$ and $W$ are inner product spaces. The inner product on $V\otimes W$
+is the unique function $\langle\cdot,\cdot\rangle$ from
+$(V\otimes W)\times(V\otimes W)$ to $\F$ such that
+\[ \ip{v\otimes w}{u\otimes x} = \ip{v}{u}\ip{w}{x} \]
+for all $v,u\in V$ and $w,x\in W$.
+\end{definition}
+
+Take $u=v$ and $x=w$ in the equation above and then take square roots to show
+that
+\[ \norm{v\otimes w} = \norm{v}\,\norm{w} \]
+for all $v\in V$ and all $w\in W$.
+
+The construction of the inner product in the proof of \ref{ax:9.80} depended
+on an orthonormal basis $e_1,\dots,e_m$ of $V$ and an orthonormal basis
+$f_1,\dots,f_n$ of $W$. Formula \ref{ax:9.81} implies that
+$\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$ is a doubly indexed
+orthonormal list in $V\otimes W$ and hence is an orthonormal basis of
+$V\otimes W$ [by \ref{ax:9.74}(b)]. The importance of the next result arises
+because the orthonormal bases used there can be different from the orthonormal
+bases used to define the inner product in \ref{ax:9.80}. Although the notation
+for the bases is the same in the proof of \ref{ax:9.80} and in the result
+below, think of them as two different sets of orthonormal bases.
+
+\begin{result}[Orthonormal basis of $V\otimes W$]\label{ax:9.83}
+Suppose $V$ and $W$ are inner product spaces, and $e_1,\dots,e_m$ is an
+orthonormal basis of $V$ and $f_1,\dots,f_n$ is an orthonormal basis of $W$.
+Then
+\[ \{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n} \]
+is an orthonormal basis of $V\otimes W$.
+\end{result}
+
+\begin{proof}
+We know that $\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$ is a basis of
+$V\otimes W$ [by \ref{ax:9.74}(b)]. Thus we only need to verify
+orthonormality. To do this, suppose $j,M\in\{1,\dots,m\}$ and
+$k,N\in\{1,\dots,n\}$. Then
+\[ \ip{e_j\otimes f_k}{e_M\otimes f_N} = \ip{e_j}{e_M}\ip{f_k}{f_N}
+   = \begin{cases} 1 & \text{if } j=M \text{ and } k=N,\\
+                   0 & \text{otherwise.} \end{cases} \]
+Hence the doubly indexed list $\{e_j\otimes f_k\}_{j=1,\dots,m;\,k=1,\dots,n}$
+is indeed an orthonormal basis of $V\otimes W$.
+\end{proof}
+
+See Exercise 11 for an example of how the inner product structure on
+$V\otimes W$ interacts with operators on $V$ and $W$.
+
+\subsection{Tensor Product of Multiple Vector Spaces}
+
+We have been discussing properties of the tensor product of two
+finite-dimensional vector spaces. Now we turn our attention to the tensor
+product of multiple finite-dimensional vector spaces. This generalization
+requires no new ideas, only some slightly more complicated notation. Readers
+with a good understanding of the tensor product of two vector spaces should be
+able to make the extension to the tensor product of more than two vector
+spaces.
+
+Thus in this subsection, no proofs will be provided. The definitions and the
+statements of results that will be provided should be enough information to
+enable readers to fill in the details, using what has already been learned
+about the tensor product of two vector spaces.
+
+We begin with the following notational assumption.
+
+\begin{notation}[$V_1,\dots,V_m$]\label{ax:9.84}
+For the rest of this subsection, $m$ denotes an integer greater than $1$ and
+$V_1,\dots,V_m$ denote finite-dimensional vector spaces.
+\end{notation}
+
+The notion of an $m$-linear functional, which we are about to define,
+generalizes the notion of a bilinear functional (see \ref{ax:9.68}). Recall
+that the use of the word ``functional'' indicates that we are mapping into the
+scalar field $\F$. Recall also that the terminology ``$m$-linear form'' is used
+in the special case $V_1=\cdots=V_m$ (see \ref{ax:9.25}). The notation
+$\mathcal{B}(V_1,\dots,V_m)$ generalizes our previous notation
+$\mathcal{B}(V,W)$.
+
+\begin{definition}[$m$-linear functional, the vector space
+$\mathcal{B}(V_1,\dots,V_m)$]\label{ax:9.85}\leavevmode\emergencystretch=3em
+\begin{itemize}
+\item An \emph{$m$-linear functional} on $V_1\times\cdots\times V_m$ is a
+  function $\beta\colon V_1\times\cdots\times V_m\to\F$ that is a linear
+  functional in each slot when the other slots are held fixed.
+\item The vector space of $m$-linear functionals on $V_1\times\cdots\times V_m$
+  is denoted by $\mathcal{B}(V_1,\dots,V_m)$.
+\end{itemize}
+\end{definition}
+
+\begin{example}[$m$-linear functional]\label{ax:9.86}\emergencystretch=3em
+Suppose $\varphi_k\in V_k{}'$ for each $k\in\{1,\dots,m\}$. Define
+$\beta\colon V_1\times\cdots\times V_m\to\F$ by
+\[ \beta(v_1,\dots,v_m) = \varphi_1(v_1)\times\cdots\times\varphi_m(v_m). \]
+Then $\beta$ is an $m$-linear functional on $V_1\times\cdots\times V_m$.
+\end{example}
+
+The next result can be proved by imitating the proof of \ref{ax:9.70}.
+
+\begin{result}[Dimension of the vector space of $m$-linear
+functionals]\label{ax:9.87}\leavevmode
+\[ \dim\mathcal{B}(V_1,\dots,V_m)=(\dim V_1)\times\cdots\times(\dim V_m). \]
+\end{result}
+
+Now we can define the tensor product of multiple vector spaces and the tensor
+product of elements of those vector spaces. The following definition is
+completely analogous to our previous definition (\ref{ax:9.71}) in the case
+$m=2$.
+
+\begin{definition}[Tensor product, $V_1\otimes\cdots\otimes V_m$,
+$v_1\otimes\cdots\otimes v_m$]\label{ax:9.88}\leavevmode
+\begin{itemize}
+\item The \emph{tensor product} $V_1\otimes\cdots\otimes V_m$ is defined to be
+  $\mathcal{B}(V_1',\dots,V_m')$.
+\item For $v_1\in V_1,\dots,v_m\in V_m$, the \emph{tensor product}
+  $v_1\otimes\cdots\otimes v_m$ is the element of $V_1\otimes\cdots\otimes V_m$
+  defined by
+  \[ (v_1\otimes\cdots\otimes v_m)(\varphi_1,\dots,\varphi_m)
+     = \varphi_1(v_1)\cdots\varphi_m(v_m) \]
+  for all $(\varphi_1,\dots,\varphi_m)\in V_1'\times\cdots\times V_m'$.
+\end{itemize}
+\end{definition}
+
+The next result can be proved by following the pattern of the proof of the
+analogous result when $m=2$ (see \ref{ax:9.72}).
+
+\begin{result}[Dimension of the tensor product]\label{ax:9.89}\leavevmode
+\[ \dim(V_1\otimes\cdots\otimes V_m)=(\dim V_1)\cdots(\dim V_m). \]
+\end{result}
+
+Our next result generalizes \ref{ax:9.74}.
+
+\begin{result}[Basis of $V_1\otimes\cdots\otimes V_m$]\label{ax:9.90}
+Suppose $\dim V_k=n_k$ and $e^k_1,\dots,e^k_{n_k}$ is a basis of $V_k$ for
+$k=1,\dots,m$. Then
+\[ \{e^1_{j_1}\otimes\cdots\otimes e^m_{j_m}\}_{j_1=1,\dots,n_1;\,\cdots;\,
+   j_m=1,\dots,n_m} \]
+is a basis of $V_1\otimes\cdots\otimes V_m$.
+\end{result}
+
+Suppose $m=2$ and $e^1_1,\dots,e^1_{n_1}$ is a basis of $V_1$ and
+$e^2_1,\dots,e^2_{n_2}$ is a basis of $V_2$. Then with respect to the basis
+$\{e^1_{j_1}\otimes e^2_{j_2}\}_{j_1=1,\dots,n_1;\,j_2=1,\dots,n_2}$ in the
+result above, the coefficients of an element of $V_1\otimes V_2$ can be
+represented by an $n_1$-by-$n_2$ matrix that contains the coefficient of
+$e^1_{j_1}\otimes e^2_{j_2}$ in row $j_1$, column $j_2$. Thus we need a matrix,
+which is an array specified by two indices, to represent an element of
+$V_1\otimes V_2$.
+
+If $m>2$, then the result above shows that we need an array specified by $m$
+indices to represent an arbitrary element of $V_1\otimes\cdots\otimes V_m$.
+Thus tensor products may appear when we deal with objects specified by arrays
+with multiple indices.
+
+The next definition generalizes the notion of a bilinear map (see
+\ref{ax:9.77}). As with bilinear maps, the target space can be an arbitrary
+vector space.
+
+\begin{definition}[$m$-linear map]\label{ax:9.91}
+An \emph{$m$-linear map} from $V_1\times\cdots\times V_m$ to a vector space $U$
+is a function $\Gamma\colon V_1\times\cdots\times V_m\to U$ that is a linear
+map in each slot when the other slots are held fixed.
+\end{definition}
+
+The next result can be proved by following the pattern of the proof of
+\ref{ax:9.79}.
+
+\begin{result}[Converting $m$-linear maps to linear maps]\label{ax:9.92}
+Suppose $U$ is a vector space.
+\begin{parts}
+\item Suppose that $\Gamma\colon V_1\times\cdots\times V_m\to U$ is an
+  $m$-linear map. Then there exists a unique linear map
+  $\hat\Gamma\colon V_1\otimes\cdots\otimes V_m\to U$ such that
+  \[ \hat\Gamma(v_1\otimes\cdots\otimes v_m) = \Gamma(v_1,\dots,v_m) \]
+  for all $(v_1,\dots,v_m)\in V_1\times\cdots\times V_m$.
+\item Conversely, suppose $T\colon V_1\otimes\cdots\otimes V_m\to U$ is a
+  linear map. Then there exists a unique $m$-linear map
+  $T^\#\colon V_1\times\cdots\times V_m\to U$ such that
+  \[ T^\#(v_1,\dots,v_m) = T(v_1\otimes\cdots\otimes v_m) \]
+  for all $(v_1,\dots,v_m)\in V_1\times\cdots\times V_m$.
+\end{parts}
+\end{result}
+
+See Exercises 12 and 13 for tensor products of multiple inner product spaces.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{9D}
+
+\begin{exercise}
+Suppose $v\in V$ and $w\in W$. Prove that $v\otimes w=0$ if and only if $v=0$
+or $w=0$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of six distinct vectors $v_1,v_2,v_3,w_1,w_2,w_3$ in $\R^3$
+such that
+\[ v_1\otimes w_1+v_2\otimes w_2+v_3\otimes w_3 = 0 \]
+but none of $v_1\otimes w_1,v_2\otimes w_2,v_3\otimes w_3$ is a scalar multiple
+of another element of this list.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $v_1,\dots,v_m$ is a linearly independent list in $V$. Suppose
+also that $w_1,\dots,w_m$ is a list in $W$ such that
+\[ v_1\otimes w_1+\cdots+v_m\otimes w_m = 0. \]
+Prove that $w_1=\cdots=w_m=0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\dim V>1$ and $\dim W>1$. Prove that
+\[ \{v\otimes w : (v,w)\in V\times W\} \]
+is not a subspace of $V\otimes W$.
+\exnote{This exercise implies that if $\dim V>1$ and $\dim W>1$, then
+\[ \{v\otimes w : (v,w)\in V\times W\} \ne V\otimes W. \]}
+\end{exercise}
+
+\begin{exercise}
+Suppose $m$ and $n$ are positive integers. For $v\in\F^m$ and $w\in\F^n$,
+identify $v\otimes w$ with an $m$-by-$n$ matrix as in Example~\ref{ax:9.76}.
+With that identification, show that the set
+\[ \{v\otimes w : v\in\F^m \text{ and } w\in\F^n\} \]
+is the set of $m$-by-$n$ matrices (with entries in $\F$) that have rank at most
+one.
+\end{exercise}
+
+\begin{exercise}
+Suppose $m$ and $n$ are positive integers. Give a description, analogous to
+Exercise 5, of the set of $m$-by-$n$ matrices (with entries in $\F$) that have
+rank at most two.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\dim V>2$ and $\dim W>2$. Prove that
+\[ \{v_1\otimes w_1+v_2\otimes w_2 : v_1,v_2\in V \text{ and } w_1,w_2\in W\}
+   \ne V\otimes W. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m\in V$ and $w_1,\dots,w_m\in W$ are such that
+\[ v_1\otimes w_1+\cdots+v_m\otimes w_m = 0. \]
+Suppose that $U$ is a vector space and $\Gamma\colon V\times W\to U$ is a
+bilinear map. Show that
+\[ \Gamma(v_1,w_1)+\cdots+\Gamma(v_m,w_m) = 0. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $S\in\Lin(V)$ and $T\in\Lin(W)$. Prove that there exists a unique
+operator on $V\otimes W$ that takes $v\otimes w$ to $Sv\otimes Tw$ for all
+$v\in V$ and $w\in W$.
+\exnote{In an abuse of notation, the operator on $V\otimes W$ given by this
+exercise is often called $S\otimes T$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $S\in\Lin(V)$ and $T\in\Lin(W)$. Prove that $S\otimes T$ is an
+invertible operator on $V\otimes W$ if and only if both $S$ and $T$ are
+invertible operators. Also, prove that if both $S$ and $T$ are invertible
+operators, then $(S\otimes T)^{-1}=S^{-1}\otimes T^{-1}$, where we are using the
+notation from the comment after Exercise 9.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ and $W$ are inner product spaces. Prove that if $S\in\Lin(V)$ and
+$T\in\Lin(W)$, then $(S\otimes T)^*=S^*\otimes T^*$, where we are using the
+notation from the comment after Exercise 9.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $V_1,\dots,V_m$ are finite-dimensional inner product spaces.
+Prove that there is a unique inner product on $V_1\otimes\cdots\otimes V_m$
+such that
+\[ \ip{v_1\otimes\cdots\otimes v_m}{u_1\otimes\cdots\otimes u_m}
+   = \ip{v_1}{u_1}\cdots\ip{v_m}{u_m} \]
+for all $(v_1,\dots,v_m)$ and $(u_1,\dots,u_m)$ in $V_1\times\cdots\times V_m$.
+\exnote{Note that the equation above implies that
+\[ \norm{v_1\otimes\cdots\otimes v_m} = \norm{v_1}\times\cdots\times\norm{v_m} \]
+for all $(v_1,\dots,v_m)\in V_1\times\cdots\times V_m$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose that $V_1,\dots,V_m$ are finite-dimensional inner product spaces and
+$V_1\otimes\cdots\otimes V_m$ is made into an inner product space using the
+inner product from Exercise 12. Suppose $e^k_1,\dots,e^k_{n_k}$ is an
+orthonormal basis of $V_k$ for each $k=1,\dots,m$. Show that the list
+\[ \{e^1_{j_1}\otimes\cdots\otimes e^m_{j_m}\}_{j_1=1,\dots,n_1;\,\cdots;\,
+   j_m=1,\dots,n_m} \]
+is an orthonormal basis of $V_1\otimes\cdots\otimes V_m$.
+\end{exercise}

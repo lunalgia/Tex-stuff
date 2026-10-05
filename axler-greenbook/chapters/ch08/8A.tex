@@ -1,0 +1,582 @@
+% Source: book pp. 298--307 (PDF 312--321). No solutions.
+% numbered displays (Axler's 8.5, 8.7, ...): step the item counter and label
+% it just before the display, then \tag*{\thetheorem} inside the display
+\DeclareRobustCommand\axeqnum[1]{\refstepcounter{theorem}\label{ax:#1}}
+% the italic comment that follows some exercises
+
+\section{Generalized Eigenvectors and Nilpotent Operators}
+
+\subsection{Null Spaces of Powers of an Operator}
+
+We begin this chapter with a study of null spaces of powers of an operator.
+
+\begin{result}[Sequence of increasing null spaces]\label{ax:8.1}
+Suppose $T\in\Lin(V)$. Then
+\[ \{0\} = \nul T^0 \subseteq \nul T^1 \subseteq \cdots \subseteq \nul T^k
+   \subseteq \nul T^{k+1} \subseteq \cdots. \]
+\end{result}
+
+\begin{proof}
+Suppose $k$ is a nonnegative integer and $v\in\nul T^k$. Then $T^kv=0$, which
+implies that $T^{k+1}v=T(T^kv)=T(0)=0$. Thus $v\in\nul T^{k+1}$. Hence
+$\nul T^k\subseteq\nul T^{k+1}$, as desired.
+\end{proof}
+
+\marginnote{For similar results about decreasing sequences of ranges, see
+Exercises 6, 7, and 8.}%
+The following result states that if two consecutive terms in the sequence of
+subspaces above are equal, then all later terms in the sequence are equal.
+
+\begin{result}[Equality in the sequence of null spaces]\label{ax:8.2}
+Suppose $T\in\Lin(V)$ and $m$ is a nonnegative integer such that
+\[ \nul T^m = \nul T^{m+1}. \]
+Then
+\[ \nul T^m = \nul T^{m+1} = \nul T^{m+2} = \nul T^{m+3} = \cdots. \]
+\end{result}
+
+\begin{proof}
+Let $k$ be a positive integer. We want to prove that
+\[ \nul T^{m+k} = \nul T^{m+k+1}. \]
+We already know from \ref{ax:8.1} that $\nul T^{m+k}\subseteq\nul T^{m+k+1}$.
+
+To prove the inclusion in the other direction, suppose $v\in\nul T^{m+k+1}$.
+Then
+\[ T^{m+1}(T^kv) = T^{m+k+1}v = 0. \]
+Hence
+\[ T^kv\in\nul T^{m+1} = \nul T^m. \]
+Thus $T^{m+k}v=T^m(T^kv)=0$, which means that $v\in\nul T^{m+k}$. This implies
+that $\nul T^{m+k+1}\subseteq\nul T^{m+k}$, completing the proof.
+\end{proof}
+
+The result above raises the question of whether there exists a nonnegative
+integer $m$ such that $\nul T^m=\nul T^{m+1}$. The next result shows that this
+equality holds at least when $m$ equals the dimension of the vector space on
+which $T$ operates.
+
+\begin{result}[Null spaces stop growing]\label{ax:8.3}
+Suppose $T\in\Lin(V)$. Then
+\[ \nul T^{\dim V} = \nul T^{\dim V+1} = \nul T^{\dim V+2} = \cdots. \]
+\end{result}
+
+\begin{proof}\emergencystretch=1.5em
+We only need to prove that $\nul T^{\dim V}=\nul T^{\dim V+1}$ (by
+\ref{ax:8.2}). Suppose this is not true. Then, by \ref{ax:8.1} and
+\ref{ax:8.2}, we have
+\[ \{0\} = \nul T^0 \subsetneq \nul T^1 \subsetneq \cdots \subsetneq
+   \nul T^{\dim V} \subsetneq \nul T^{\dim V+1}, \]
+where the symbol $\subsetneq$ means ``contained in but not equal to''. At each
+of the strict inclusions in the chain above, the dimension increases by at
+least $1$. Thus $\dim\nul T^{\dim V+1}\ge\dim V+1$, a contradiction because a
+subspace of $V$ cannot have a larger dimension than $\dim V$.
+\end{proof}
+
+It is not true that $V=\nul T\oplus\range T$ for every $T\in\Lin(V)$. However,
+the next result can be a useful substitute.
+
+\begin{result}[$V$ is the direct sum of $\nul T^{\dim V}$ and
+$\range T^{\dim V}$]\label{ax:8.4}
+Suppose $T\in\Lin(V)$. Then
+\[ V = \nul T^{\dim V}\oplus\range T^{\dim V}. \]
+\end{result}
+
+\begin{proof}
+Let $n=\dim V$. First we show that\axeqnum{8.5}%
+\[ (\nul T^n)\cap(\range T^n) = \{0\}. \tag*{\thetheorem} \]
+Suppose $v\in(\nul T^n)\cap(\range T^n)$. Then $T^nv=0$, and there exists
+$u\in V$ such that $v=T^nu$. Applying $T^n$ to both sides of the last equation
+shows that $T^nv=T^{2n}u$. Hence $T^{2n}u=0$, which implies that $T^nu=0$ (by
+\ref{ax:8.3}). Thus $v=T^nu=0$, completing the proof of \ref{ax:8.5}.
+
+Now \ref{ax:8.5} implies that $\nul T^n+\range T^n$ is a direct sum (by
+\ref{ax:1.46}). Also,
+\[ \dim(\nul T^n\oplus\range T^n) = \dim\nul T^n+\dim\range T^n = \dim V, \]
+where the first equality above comes from \ref{ax:3.94} and the second equality
+comes from the fundamental theorem of linear maps (\ref{ax:3.21}). The equation
+above implies that $\nul T^n\oplus\range T^n=V$ (see \ref{ax:2.39}), as
+desired.
+\end{proof}
+
+For an improvement of the result above, see Exercise 19.
+
+\begin{example}[$\F^3=\nul T^3\oplus\range T^3$ for $T\in\Lin(\F^3)$]\label{ax:8.6}
+Suppose $T\in\Lin(\F^3)$ is defined by
+\[ T(z_1,z_2,z_3) = (4z_2,0,5z_3). \]
+Then $\nul T=\{(z_1,0,0) : z_1\in\F\}$ and
+$\range T=\{(z_1,0,z_3) : z_1,z_3\in\F\}$. Thus $\nul T\cap\range T\ne\{0\}$.
+Hence $\nul T+\range T$ is not a direct sum. Also note that
+$\nul T+\range T\ne\F^3$. However, we have $T^3(z_1,z_2,z_3)=(0,0,125z_3)$.
+Thus we see that
+\[ \nul T^3 = \{(z_1,z_2,0) : z_1,z_2\in\F\} \quad\text{and}\quad
+   \range T^3 = \{(0,0,z_3) : z_3\in\F\}. \]
+Hence $\F^3=\nul T^3\oplus\range T^3$, as expected by \ref{ax:8.4}.
+\end{example}
+
+\subsection{Generalized Eigenvectors}
+
+Some operators do not have enough eigenvectors to lead to good descriptions of
+their behavior. Thus in this subsection we introduce the concept of generalized
+eigenvectors, which will play a major role in our description of the structure
+of an operator.
+
+To understand why we need more than eigenvectors, let's examine the question of
+describing an operator by decomposing its domain into invariant subspaces. Fix
+$T\in\Lin(V)$. We seek to describe $T$ by finding a ``nice'' direct sum
+decomposition
+\[ V = V_1\oplus\cdots\oplus V_n, \]
+where each $V_k$ is a subspace of $V$ invariant under $T$. The simplest
+possible nonzero invariant subspaces are one-dimensional. A decomposition as
+above in which each $V_k$ is a one-dimensional subspace of $V$ invariant under
+$T$ is possible if and only if $V$ has a basis consisting of eigenvectors of
+$T$ (see \ref{ax:5.55}). This happens if and only if $V$ has an eigenspace
+decomposition\axeqnum{8.7}%
+\[ V = E(\lambda_1,T)\oplus\cdots\oplus E(\lambda_m,T), \tag*{\thetheorem} \]
+where $\lambda_1,\dots,\lambda_m$ are the distinct eigenvalues of $T$ (see
+\ref{ax:5.55}).
+
+The spectral theorem in the previous chapter shows that if $V$ is an inner
+product space, then a decomposition of the form \ref{ax:8.7} holds for every
+self-adjoint operator if $\F=\R$ and for every normal operator if $\F=\C$
+because operators of those types have enough eigenvectors to form a basis of
+$V$ (see \ref{ax:7.29} and \ref{ax:7.31}).
+
+However, a decomposition of the form \ref{ax:8.7} may not hold for more general
+operators, even on a complex vector space. An example was given by the operator
+in \ref{ax:5.57}, which does not have enough eigenvectors for \ref{ax:8.7} to
+hold. Generalized eigenvectors and generalized eigenspaces, which we now
+introduce, will remedy this situation.
+
+\begin{definition}[Generalized eigenvector]\label{ax:8.8}
+Suppose $T\in\Lin(V)$ and $\lambda$ is an eigenvalue of $T$. A vector $v\in V$
+is called a \emph{generalized eigenvector} of $T$ corresponding to $\lambda$ if
+$v\ne0$ and
+\[ (T-\lambda I)^kv = 0 \]
+for some positive integer $k$.
+\end{definition}
+
+\marginnote{Generalized eigenvalues are not defined because doing so would not
+lead to anything new. Reason: if $(T-\lambda I)^k$ is not injective for some
+positive integer $k$, then $T-\lambda I$ is not injective, and hence $\lambda$
+is an eigenvalue of $T$.}%
+A nonzero vector $v\in V$ is a generalized eigenvector of $T$ corresponding to
+$\lambda$ if and only if
+\[ (T-\lambda I)^{\dim V}v = 0, \]
+as follows from applying \ref{ax:8.1} and \ref{ax:8.3} to the operator
+$T-\lambda I$.
+
+As we know, an operator on a complex vector space may not have enough
+eigenvectors to form a basis of the domain. The next result shows that on a
+complex vector space there are enough generalized eigenvectors to do this.
+
+\begin{result}[A basis of generalized eigenvectors]\label{ax:8.9}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then there is a basis of $V$ consisting of
+generalized eigenvectors of $T$.
+\end{result}
+
+\begin{proof}
+Let $n=\dim V$. We will use induction on $n$. To get started, note that the
+desired result holds if $n=1$ because then every nonzero vector in $V$ is an
+eigenvector of $T$.
+
+\marginnote{This step is where we use the hypothesis that $\F=\C$, because if
+$\F=\R$ then $T$ may not have any eigenvalues.}%
+Now suppose $n>1$ and the desired result holds for all smaller values of
+$\dim V$. Let $\lambda$ be an eigenvalue of $T$. Applying \ref{ax:8.4} to
+$T-\lambda I$ shows that
+\[ V = \nul(T-\lambda I)^n\oplus\range(T-\lambda I)^n. \]
+
+If $\nul(T-\lambda I)^n=V$, then every nonzero vector in $V$ is a generalized
+eigenvector of $T$, and thus in this case there is a basis of $V$ consisting
+of generalized eigenvectors of $T$. Hence we can assume that
+$\nul(T-\lambda I)^n\ne V$, which implies that
+$\range(T-\lambda I)^n\ne\{0\}$.
+
+Also, $\nul(T-\lambda I)^n\ne\{0\}$, because $\lambda$ is an eigenvalue of $T$.
+Thus we have
+\[ 0 < \dim\range(T-\lambda I)^n < n. \]
+Furthermore, $\range(T-\lambda I)^n$ is invariant under $T$
+$\bigl[$by \ref{ax:5.18} with $p(z)=(z-\lambda)^n\bigr]$. Let
+$S\in\Lin\bigl(\range(T-\lambda I)^n\bigr)$ equal $T$ restricted to
+$\range(T-\lambda I)^n$. Our induction hypothesis applied to the operator $S$
+implies that there is a basis of $\range(T-\lambda I)^n$ consisting of
+generalized eigenvectors of $S$, which of course are generalized eigenvectors
+of $T$. Adjoining that basis of $\range(T-\lambda I)^n$ to a basis of
+$\nul(T-\lambda I)^n$ gives a basis of $V$ consisting of generalized
+eigenvectors of $T$.
+\end{proof}
+
+If $\F=\R$ and $\dim V>1$, then some operators on $V$ have the property that
+there exists a basis of $V$ consisting of generalized eigenvectors of the
+operator, and (unlike what happens when $\F=\C$) other operators do not have
+this property. See Exercise 11 for a necessary and sufficient condition that
+determines whether an operator has this property.
+
+\begin{example}[Generalized eigenvectors of an operator on $\C^3$]\label{ax:8.10}
+Define $T\in\Lin(\C^3)$ by
+\[ T(z_1,z_2,z_3) = (4z_2,0,5z_3) \]
+for each $(z_1,z_2,z_3)\in\C^3$. A routine use of the definition of eigenvalue
+shows that the eigenvalues of $T$ are $0$ and $5$. Furthermore, the
+eigenvectors corresponding to the eigenvalue $0$ are the nonzero vectors of the
+form $(z_1,0,0)$, and the eigenvectors corresponding to the eigenvalue $5$ are
+the nonzero vectors of the form $(0,0,z_3)$. Hence this operator does not have
+enough eigenvectors to span its domain $\C^3$.
+
+We compute that $T^3(z_1,z_2,z_3)=(0,0,125z_3)$. Thus \ref{ax:8.1} and
+\ref{ax:8.3} imply that the generalized eigenvectors of $T$ corresponding to the
+eigenvalue $0$ are the nonzero vectors of the form $(z_1,z_2,0)$.
+
+We also have $(T-5I)^3(z_1,z_2,z_3)=(-125z_1+300z_2,-125z_2,0)$. Thus the
+generalized eigenvectors of $T$ corresponding to the eigenvalue $5$ are the
+nonzero vectors of the form $(0,0,z_3)$.
+
+The paragraphs above show that each of the standard basis vectors of $\C^3$ is a
+generalized eigenvector of $T$. Thus $\C^3$ indeed has a basis consisting of
+generalized eigenvectors of $T$, as promised by \ref{ax:8.9}.
+\end{example}
+
+If $v$ is an eigenvector of $T\in\Lin(V)$, then the corresponding eigenvalue
+$\lambda$ is uniquely determined by the equation $Tv=\lambda v$, which can be
+satisfied by only one $\lambda\in\F$ (because $v\ne0$). However, if $v$ is a
+generalized eigenvector of $T$, then it is not obvious that the equation
+$(T-\lambda I)^{\dim V}v=0$ can be satisfied by only one $\lambda\in\F$.
+Fortunately, the next result tells us that all is well on this issue.
+
+\begin{result}[Generalized eigenvector corresponds to a unique
+eigenvalue]\label{ax:8.11}
+Suppose $T\in\Lin(V)$. Then each generalized eigenvector of $T$ corresponds to
+only one eigenvalue of $T$.
+\end{result}
+
+\begin{proof}
+Suppose $v\in V$ is a generalized eigenvector of $T$ corresponding to
+eigenvalues $\alpha$ and $\lambda$ of $T$. Let $m$ be the smallest positive
+integer such that $(T-\alpha I)^mv=0$. Let $n=\dim V$. Then
+\begin{align*}
+0 &= (T-\lambda I)^nv\\
+  &= \bigl((T-\alpha I)+(\alpha-\lambda)I\bigr)^nv\\
+  &= \sum_{k=0}^{n} b_k(\alpha-\lambda)^{n-k}(T-\alpha I)^kv,
+\end{align*}
+where $b_0=1$ and the values of the other binomial coefficients $b_k$ do not
+matter. Apply the operator $(T-\alpha I)^{m-1}$ to both sides of the equation
+above, getting
+\[ 0 = (\alpha-\lambda)^n(T-\alpha I)^{m-1}v. \]
+Because $(T-\alpha I)^{m-1}v\ne0$, the equation above implies that
+$\alpha=\lambda$, as desired.
+\end{proof}
+
+We saw earlier (\ref{ax:5.11}) that eigenvectors corresponding to distinct
+eigenvalues are linearly independent. Now we prove a similar result for
+generalized eigenvectors, with a proof that roughly follows the pattern of the
+proof of that earlier result.
+
+\begin{result}[Linearly independent generalized eigenvectors]\label{ax:8.12}
+Suppose that $T\in\Lin(V)$. Then every list of generalized eigenvectors of $T$
+corresponding to distinct eigenvalues of $T$ is linearly independent.
+\end{result}
+
+\begin{proof}
+Suppose the desired result is false. Then there exists a smallest positive
+integer $m$ such that there exists a linearly dependent list
+$v_1,\dots,v_m$ of generalized eigenvectors of $T$ corresponding to distinct
+eigenvalues $\lambda_1,\dots,\lambda_m$ of $T$ (note that $m\ge2$ because a
+generalized eigenvector is, by definition, nonzero). Thus there exist
+$a_1,\dots,a_m\in\F$, none of which are $0$ (because of the minimality of $m$),
+such that
+\[ a_1v_1+\cdots+a_mv_m = 0. \]
+
+Let $n=\dim V$. Apply $(T-\lambda_mI)^n$ to both sides of the equation above,
+getting\axeqnum{8.13}%
+\[ a_1(T-\lambda_mI)^nv_1+\cdots+a_{m-1}(T-\lambda_mI)^nv_{m-1} = 0.
+   \tag*{\thetheorem} \]
+Suppose $k\in\{1,\dots,m-1\}$. Then
+\[ (T-\lambda_mI)^nv_k \ne 0 \]
+because otherwise $v_k$ would be a generalized eigenvector of $T$ corresponding
+to the distinct eigenvalues $\lambda_k$ and $\lambda_m$, which would contradict
+\ref{ax:8.11}. However,
+\[ (T-\lambda_kI)^n\bigl((T-\lambda_mI)^nv_k\bigr)
+   = (T-\lambda_mI)^n\bigl((T-\lambda_kI)^nv_k\bigr) = 0. \]
+
+Thus the last two displayed equations show that $(T-\lambda_mI)^nv_k$ is a
+generalized eigenvector of $T$ corresponding to the eigenvalue $\lambda_k$.
+Hence
+\[ (T-\lambda_mI)^nv_1,\dots,(T-\lambda_mI)^nv_{m-1} \]
+is a linearly dependent list (by \ref{ax:8.13}) of $m-1$ generalized
+eigenvectors corresponding to distinct eigenvalues, contradicting the
+minimality of $m$. This contradiction completes the proof.
+\end{proof}
+
+\subsection{Nilpotent Operators}
+
+\begin{definition}[Nilpotent]\label{ax:8.14}
+An operator is called \emph{nilpotent} if some power of it equals $0$.
+\end{definition}
+
+Thus an operator $T\in\Lin(V)$ is nilpotent if and only if every nonzero vector
+in $V$ is a generalized eigenvector of $T$ corresponding to the eigenvalue $0$.
+
+\begin{example}[Nilpotent operators]\label{ax:8.15}\leavevmode
+\begin{parts}
+\item The operator $T\in\Lin(\F^4)$ defined by
+  \[ T(z_1,z_2,z_3,z_4) = (0,0,z_1,z_2) \]
+  is nilpotent because $T^2=0$.
+\item The operator on $\F^3$ whose matrix (with respect to the standard basis)
+  is
+  \[ \begin{pmatrix} -3 & 9 & 0\\ -7 & 9 & 6\\ 4 & 0 & -6 \end{pmatrix} \]
+  is nilpotent, as can be shown by cubing the matrix above to get the zero
+  matrix.
+\item The operator of differentiation on $\Poly_m(\R)$ is nilpotent because the
+  $(m+1)^{\text{th}}$ derivative of every polynomial of degree at most $m$
+  equals $0$. Note that on this space of dimension $m+1$, we need to raise the
+  nilpotent operator to the power $m+1$ to get the $0$ operator.
+\end{parts}
+\end{example}
+
+\marginnote{The Latin word \textbf{nil} means nothing or zero; the Latin word
+\textbf{potens} means having power. Thus \textbf{nilpotent} literally means
+having a power that is zero.}%
+The next result shows that when raising a nilpotent operator to a power, we
+never need to use a power higher than the dimension of the space. For a
+slightly stronger result, see Exercise 18.
+
+\begin{result}[Nilpotent operator raised to dimension of domain is
+$0$]\label{ax:8.16}
+Suppose $T\in\Lin(V)$ is nilpotent. Then $T^{\dim V}=0$.
+\end{result}
+
+\begin{proof}
+Because $T$ is nilpotent, there exists a positive integer $k$ such that
+$T^k=0$. Thus $\nul T^k=V$. Now \ref{ax:8.1} and \ref{ax:8.3} imply that
+$\nul T^{\dim V}=V$. Thus $T^{\dim V}=0$.
+\end{proof}
+
+\begin{result}[Eigenvalues of nilpotent operator]\label{ax:8.17}
+Suppose $T\in\Lin(V)$.
+\begin{parts}
+\item If $T$ is nilpotent, then $0$ is an eigenvalue of $T$ and $T$ has no
+  other eigenvalues.
+\item If $\F=\C$ and $0$ is the only eigenvalue of $T$, then $T$ is nilpotent.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item To prove (a), suppose $T$ is nilpotent. Hence there is a positive integer
+  $m$ such that $T^m=0$. This implies that $T$ is not injective. Thus $0$ is an
+  eigenvalue of $T$.
+
+  To show that $T$ has no other eigenvalues, suppose $\lambda$ is an eigenvalue
+  of $T$. Then there exists a nonzero vector $v\in V$ such that
+  \[ \lambda v = Tv. \]
+  Repeatedly applying $T$ to both sides of this equation shows that
+  \[ \lambda^mv = T^mv = 0. \]
+  Thus $\lambda=0$, as desired.
+\item Suppose $\F=\C$ and $0$ is the only eigenvalue of $T$. By
+  \ref{ax:5.27}(b), the minimal polynomial of $T$ equals $z^m$ for some
+  positive integer $m$. Thus $T^m=0$. Hence $T$ is nilpotent.
+\end{parts}
+\end{proof}
+
+Exercise 23 shows that the hypothesis that $\F=\C$ cannot be deleted in (b) of
+the result above.
+
+Given an operator on $V$, we want to find a basis of $V$ such that the matrix
+of the operator with respect to this basis is as simple as possible, meaning
+that the matrix contains many $0$'s. The next result shows that if $T$ is
+nilpotent, then we can choose a basis of $V$ such that the matrix of $T$ with
+respect to this basis has more than half of its entries equal to $0$. Later in
+this chapter we will do even better.
+
+\begin{result}[Minimal polynomial and upper-triangular matrix of nilpotent
+operator]\label{ax:8.18}
+Suppose $T\in\Lin(V)$. Then the following are equivalent.
+\begin{parts}
+\item $T$ is nilpotent.
+\item The minimal polynomial of $T$ is $z^m$ for some positive integer $m$.
+\item There is a basis of $V$ with respect to which the matrix of $T$ has the
+  form
+  \[ \begin{pmatrix} 0 & & *\\ & \ddots & \\ 0 & & 0 \end{pmatrix}, \]
+  where all entries on and below the diagonal equal $0$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Suppose (a) holds, so $T$ is nilpotent. Thus there exists a positive integer
+$n$ such that $T^n=0$. Now \ref{ax:5.29} implies that $z^n$ is a polynomial
+multiple of the minimal polynomial of $T$. Thus the minimal polynomial of $T$
+is $z^m$ for some positive integer $m$, proving that (a) implies (b).
+
+Now suppose (b) holds, so the minimal polynomial of $T$ is $z^m$ for some
+positive integer $m$. This implies, by \ref{ax:5.27}(a), that $0$ (which is the
+only zero of $z^m$) is the only eigenvalue of $T$. This further implies, by
+\ref{ax:5.44}, that there is a basis of $V$ with respect to which the matrix of
+$T$ is upper triangular. This also implies, by \ref{ax:5.41}, that all entries
+on the diagonal of this matrix are $0$, proving that (b) implies (c).
+
+Now suppose (c) holds. Then \ref{ax:5.40} implies that $T^{\dim V}=0$. Thus $T$
+is nilpotent, proving that (c) implies (a).
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{8A}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that if $\dim\nul T^4=8$ and $\dim\nul T^6=9$,
+then $\dim\nul T^m=9$ for all integers $m\ge5$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$, $m$ is a positive integer, $v\in V$, and
+$T^{m-1}v\ne0$ but $T^mv=0$. Prove that $v,Tv,T^2v,\dots,T^{m-1}v$ is linearly
+independent.
+\exnote{The result in this exercise is used in the proof of \ref{ax:8.45}.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that
+\[ V = \nul T\oplus\range T \iff \nul T^2 = \nul T. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$, $\lambda\in\F$, and $m$ is a positive integer such that
+the minimal polynomial of $T$ is a polynomial multiple of $(z-\lambda)^m$.
+Prove that
+\[ \dim\nul(T-\lambda I)^m \ge m. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $m$ is a positive integer. Prove that
+\[ \dim\nul T^m \le m\dim\nul T. \]
+\exnote{Hint: Exercise 21 in Section 3B may be useful.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Show that
+\[ V = \range T^0 \supseteq \range T^1 \supseteq \cdots \supseteq \range T^k
+   \supseteq \range T^{k+1} \supseteq \cdots. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $m$ is a nonnegative integer such that
+\[ \range T^m = \range T^{m+1}. \]
+Prove that $\range T^k=\range T^m$ for all $k>m$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that
+\[ \range T^{\dim V} = \range T^{\dim V+1} = \range T^{\dim V+2} = \cdots. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $m$ is a nonnegative integer. Prove that
+\[ \nul T^m = \nul T^{m+1} \iff \range T^m = \range T^{m+1}. \]
+\end{exercise}
+
+\begin{exercise}
+Define $T\in\Lin(\C^2)$ by $T(w,z)=(z,0)$. Find all generalized eigenvectors
+of $T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V)$. Prove that there is a basis of $V$ consisting of
+generalized eigenvectors of $T$ if and only if the minimal polynomial of $T$
+equals $(z-\lambda_1)\cdots(z-\lambda_m)$ for some
+$\lambda_1,\dots,\lambda_m\in\F$.
+\exnote{Assume $\F=\R$ because the case $\F=\C$ follows from
+\ref{ax:5.27}\textup{(b)} and \ref{ax:8.9}.}
+\exnote{This exercise states that the condition for there to be a basis of $V$
+consisting of generalized eigenvectors of $T$ is the same as the condition for
+there to be a basis with respect to which $T$ has an upper-triangular matrix
+(see \ref{ax:5.44}).}
+\exnote{\textbf{Caution:} If $T$ has an upper-triangular matrix with respect to
+a basis $v_1,\dots,v_n$ of $V$, then $v_1$ is an eigenvector of $T$ but it is
+not necessarily true that $v_2,\dots,v_n$ are generalized eigenvectors of $T$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is such that every nonzero vector in $V$ is a
+generalized eigenvector of $T$. Prove that there exists $\lambda\in\F$ such
+that $T-\lambda I$ is nilpotent.
+\end{exercise}
+
+\begin{exercise}
+Suppose $S,T\in\Lin(V)$ and $ST$ is nilpotent. Prove that $TS$ is nilpotent.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is nilpotent and $T\ne0$. Prove $T$ is not
+diagonalizable.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Prove that $T$ is diagonalizable if and only
+if every generalized eigenvector of $T$ is an eigenvector of $T$.
+\exnote{For $\F=\C$, this exercise adds another equivalence to the list of
+conditions for diagonalizability in \ref{ax:5.55}.}
+\end{exercise}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Give an example of nilpotent operators $S,T$ on the same vector space
+  such that neither $S+T$ nor $ST$ is nilpotent.
+\item Suppose $S,T\in\Lin(V)$ are nilpotent and $ST=TS$. Prove that $S+T$ and
+  $ST$ are nilpotent.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is nilpotent and $m$ is a positive integer such that
+$T^m=0$.
+\begin{parts}
+\item Prove that $I-T$ is invertible and that
+  $(I-T)^{-1}=I+T+\cdots+T^{m-1}$.
+\item Explain how you would guess the formula above.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is nilpotent. Prove that $T^{1+\dim\range T}=0$.
+\exnote{If $\dim\range T<\dim V-1$, then this exercise improves
+\ref{ax:8.16}.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is not nilpotent. Show that
+\[ V = \nul T^{\dim V-1}\oplus\range T^{\dim V-1}. \]
+\exnote{For operators that are not nilpotent, this exercise improves
+\ref{ax:8.4}.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space and $T\in\Lin(V)$ is normal and
+nilpotent. Prove that $T=0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is such that $\nul T^{\dim V-1}\ne\nul T^{\dim V}$.
+Prove that $T$ is nilpotent and that $\dim\nul T^k=k$ for every integer $k$
+with $0\le k\le\dim V$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(\C^5)$ is such that $\range T^4\ne\range T^5$. Prove that $T$
+is nilpotent.
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator $T$ on a finite-dimensional real vector space
+such that $0$ is the only eigenvalue of $T$ but $T$ is not nilpotent.
+\exnote{This exercise shows that the implication \textup{(b)}
+$\Longrightarrow$ \textup{(a)} in \ref{ax:8.17} does not hold without the
+hypothesis that $\F=\C$.}
+\end{exercise}
+
+\begin{exercise}
+For each item in Example \ref{ax:8.15}, find a basis of the domain vector space
+such that the matrix of the nilpotent operator with respect to that basis has
+the upper-triangular form promised by \ref{ax:8.18}(c).
+\end{exercise}
+
+\begin{exercise}
+Suppose that $V$ is an inner product space and $T\in\Lin(V)$ is nilpotent.
+Show that there is an orthonormal basis of $V$ with respect to which the matrix
+of $T$ has the upper-triangular form promised by \ref{ax:8.18}(c).
+\end{exercise}

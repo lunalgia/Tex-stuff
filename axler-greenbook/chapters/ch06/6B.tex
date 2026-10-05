@@ -1,0 +1,748 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{1}\setcounter{theorem}{21}
+\fi % TEST-ONLY-END
+% Source: book pp. 197--210 (PDF 211--224); no solutions for this section.
+\section{Orthonormal Bases}
+
+\subsection{Orthonormal Lists and the Gram--Schmidt Procedure}
+
+\begin{definition}[Orthonormal]\label{ax:6.22}\leavevmode
+\begin{itemize}
+\item A list of vectors is called \emph{orthonormal} if each vector in the list
+  has norm $1$ and is orthogonal to all the other vectors in the list.
+\item In other words, a list $e_1,\dots,e_m$ of vectors in $V$ is orthonormal if
+  \[ \ip{e_j}{e_k} = \begin{cases} 1 & \text{if } j=k,\\
+                                   0 & \text{if } j\ne k \end{cases} \]
+  for all $j,k\in\{1,\dots,m\}$.
+\end{itemize}
+\end{definition}
+
+\begin{example}[Orthonormal lists]\label{ax:6.23}\leavevmode
+\begin{parts}
+\item The standard basis of $\F^n$ is an orthonormal list.
+\item $\bigl(1/\sqrt3,1/\sqrt3,1/\sqrt3\bigr),
+  \bigl(-1/\sqrt2,1/\sqrt2,0\bigr)$ is an orthonormal list
+  in $\F^3$.
+\item $\bigl(1/\sqrt3,1/\sqrt3,1/\sqrt3\bigr),
+  \bigl(-1/\sqrt2,1/\sqrt2,0\bigr),
+  \bigl(1/\sqrt6,1/\sqrt6,-2/\sqrt6\bigr)$ is an
+  orthonormal list in $\F^3$.
+\item Suppose $n$ is a positive integer. Then, as Exercise~4 asks you to verify,
+  \[ \frac{1}{\sqrt{2\pi}}, \frac{\cos x}{\sqrt\pi}, \frac{\cos 2x}{\sqrt\pi},
+     \dots, \frac{\cos nx}{\sqrt\pi}, \frac{\sin x}{\sqrt\pi},
+     \frac{\sin 2x}{\sqrt\pi}, \dots, \frac{\sin nx}{\sqrt\pi} \]
+  is an orthonormal list of vectors in $C[-\pi,\pi]$, the vector space of
+  continuous real-valued functions on $[-\pi,\pi]$ with inner product
+  \[ \ip{f}{g} = \int_{-\pi}^{\pi} fg. \]
+  The orthonormal list above is often used for modeling periodic phenomena,
+  such as tides.
+\item Suppose we make $\Poly_2(\R)$ into an inner product space using the inner
+  product given by
+  \[ \ip{p}{q} = \int_{-1}^{1} pq \]
+  for all $p,q\in\Poly_2(\R)$. The standard basis $1,x,x^2$ of $\Poly_2(\R)$ is
+  not an orthonormal list because the vectors in that list do not have norm $1$.
+  Dividing each vector by its norm gives the list $1/\sqrt2$,
+  $\sqrt{3/2}\,x$, $\sqrt{5/2}\,x^2$, in which each vector has norm $1$, and the
+  second vector is orthogonal to the first and third vectors. However, the
+  first and third vectors are not orthogonal. Thus this is not an orthonormal
+  list. Soon we will see how to construct an orthonormal list from the standard
+  basis $1,x,x^2$ (see Example~\ref{ax:6.34}).
+\end{parts}
+\end{example}
+
+Orthonormal lists are particularly easy to work with, as illustrated by the
+next result.
+
+\begin{result}[Norm of an orthonormal linear combination]\label{ax:6.24}
+Suppose $e_1,\dots,e_m$ is an orthonormal list of vectors in $V$. Then
+\[ \norm{a_1e_1+\cdots+a_me_m}^2 = \abs{a_1}^2+\cdots+\abs{a_m}^2 \]
+for all $a_1,\dots,a_m\in\F$.
+\end{result}
+
+\begin{proof}
+Because each $e_k$ has norm $1$, this follows from repeated applications of the
+Pythagorean theorem (\ref{ax:6.12}).
+\end{proof}
+
+The result above has the following important corollary.
+
+\begin{result}[Orthonormal lists are linearly independent]\label{ax:6.25}
+Every orthonormal list of vectors is linearly independent.
+\end{result}
+
+\begin{proof}
+Suppose $e_1,\dots,e_m$ is an orthonormal list of vectors in $V$ and
+$a_1,\dots,a_m\in\F$ are such that
+\[ a_1e_1+\cdots+a_me_m = 0. \]
+Then $\abs{a_1}^2+\cdots+\abs{a_m}^2=0$ (by \ref{ax:6.24}), which means that all
+the $a_k$'s are $0$. Thus $e_1,\dots,e_m$ is linearly independent.
+\end{proof}
+
+Now we come to an important inequality.
+
+\begin{result}[Bessel's inequality]\label{ax:6.26}
+Suppose $e_1,\dots,e_m$ is an orthonormal list of vectors in $V$. If $v\in V$
+then
+\[ \abs{\ip{v}{e_1}}^2+\cdots+\abs{\ip{v}{e_m}}^2 \le \norm{v}^2. \]
+\end{result}
+
+\begin{proof}
+Suppose $v\in V$. Then
+\[ v = \underbrace{\ip{v}{e_1}e_1+\cdots+\ip{v}{e_m}e_m}_{u}
+     + \underbrace{v-\ip{v}{e_1}e_1-\cdots-\ip{v}{e_m}e_m}_{w}. \]
+
+Let $u$ and $w$ be defined as in the equation above. If $k\in\{1,\dots,m\}$, then
+$\ip{w}{e_k}=\ip{v}{e_k}-\ip{v}{e_k}\ip{e_k}{e_k}=0$. This implies that
+$\ip{w}{u}=0$. The Pythagorean theorem now implies that
+\begin{align*}
+\norm{v}^2 &= \norm{u}^2+\norm{w}^2\\
+           &\ge \norm{u}^2\\
+           &= \abs{\ip{v}{e_1}}^2+\cdots+\abs{\ip{v}{e_m}}^2,
+\end{align*}
+where the last line comes from \ref{ax:6.24}.
+\end{proof}
+
+The next definition introduces one of the most useful concepts in the study of
+inner product spaces.
+
+\begin{definition}[Orthonormal basis]\label{ax:6.27}
+An \emph{orthonormal basis} of $V$ is an orthonormal list of vectors in $V$ that
+is also a basis of $V$.
+\end{definition}
+
+For example, the standard basis is an orthonormal basis of $\F^n$.
+
+\begin{result}[Orthonormal lists of the right length are orthonormal
+bases]\label{ax:6.28}
+Suppose $V$ is finite-dimensional. Then every orthonormal list of vectors in $V$
+of length $\dim V$ is an orthonormal basis of $V$.
+\end{result}
+
+\begin{proof}
+By \ref{ax:6.25}, every orthonormal list of vectors in $V$ is linearly
+independent. Thus every such list of the right length is a basis---see
+\ref{ax:2.38}.
+\end{proof}
+
+\begin{example}[An orthonormal basis of $\F^4$]\label{ax:6.29}
+As mentioned above, the standard basis is an orthonormal basis of $\F^4$. We now
+show that
+\[ (1/2,1/2,1/2,1/2),
+   (1/2,1/2,-1/2,-1/2),
+   (1/2,-1/2,-1/2,1/2),
+   (-1/2,1/2,-1/2,1/2) \]
+is also an orthonormal basis of $\F^4$.
+
+We have
+\[ \bigl\lVert(1/2,1/2,1/2,1/2)\bigr\rVert
+   = \sqrt{1/2^2+1/2^2+1/2^2+1/2^2} = 1. \]
+Similarly, the other three vectors in the list above also have norm $1$.
+
+Note that
+\[ \bigl\langle(1/2,1/2,1/2,1/2),(1/2,1/2,-1/2,-1/2)\bigr\rangle
+   = 1/2\cdot1/2+1/2\cdot1/2+1/2\cdot(-1/2)+1/2\cdot(-1/2) = 0. \]
+Similarly, the inner product of any two distinct vectors in the list above also
+equals $0$.
+
+Thus the list above is orthonormal. Because we have an orthonormal list of
+length four in the four-dimensional vector space $\F^4$, this list is an
+orthonormal basis of $\F^4$ (by \ref{ax:6.28}).
+\end{example}
+
+In general, given a basis $e_1,\dots,e_n$ of $V$ and a vector $v\in V$, we know
+that there is some choice of scalars $a_1,\dots,a_n\in\F$ such that
+\[ v = a_1e_1+\cdots+a_ne_n. \]
+Computing the numbers $a_1,\dots,a_n$ that satisfy the equation above can be a
+long computation for an arbitrary basis of $V$. The next result shows, however,
+that this is easy for an orthonormal basis---just take $a_k=\ip{v}{e_k}$.
+
+\marginnote{The formula below for $\norm{v}$ is called Parseval's
+identity. It was published in 1799 in the context of Fourier series.}%
+Notice how the next result makes each inner product space of dimension $n$
+behave like $\F^n$, with the role of the coordinates of a vector in $\F^n$
+played by $\ip{v}{e_1},\dots,\ip{v}{e_n}$.
+
+\begin{result}[Writing a vector as a linear combination of an orthonormal
+basis]\label{ax:6.30}
+Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$ and $u,v\in V$. Then
+\begin{parts}
+\item $v=\ip{v}{e_1}e_1+\cdots+\ip{v}{e_n}e_n$;
+\item $\norm{v}^2=\abs{\ip{v}{e_1}}^2+\cdots+\abs{\ip{v}{e_n}}^2$;
+\item $\ip{u}{v}=\ip{u}{e_1}\overline{\ip{v}{e_1}}+\cdots
+  +\ip{u}{e_n}\overline{\ip{v}{e_n}}$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Because $e_1,\dots,e_n$ is a basis of $V$, there exist scalars $a_1,\dots,a_n$
+such that
+\[ v = a_1e_1+\cdots+a_ne_n. \]
+Because $e_1,\dots,e_n$ is orthonormal, taking the inner product of both sides of
+this equation with $e_k$ gives $\ip{v}{e_k}=a_k$. Thus (a) holds.
+
+Now (b) follows immediately from (a) and \ref{ax:6.24}.
+
+Take the inner product of $u$ with each side of (a) and then get (c) by using
+conjugate linearity [\ref{ax:6.6}(d) and \ref{ax:6.6}(e)] in the second slot of
+the inner product.
+\end{proof}
+
+\begin{example}[Finding coefficients for a linear combination]\label{ax:6.31}
+Suppose we want to write the vector $(1,2,4,7)\in\F^4$ as a linear combination
+of the orthonormal basis
+\[ (1/2,1/2,1/2,1/2),
+   (1/2,1/2,-1/2,-1/2),
+   (1/2,-1/2,-1/2,1/2),
+   (-1/2,1/2,-1/2,1/2) \]
+of $\F^4$ from Example~\ref{ax:6.29}. Instead of solving a system of four linear
+equations in four unknowns, as typically would be required if we were working
+with a nonorthonormal basis, we simply evaluate four inner products and use
+\ref{ax:6.30}(a), getting that $(1,2,4,7)$ equals
+\[ 7(1/2,1/2,1/2,1/2)
+   -4(1/2,1/2,-1/2,-1/2)
+   +(1/2,-1/2,-1/2,1/2)
+   +2(-1/2,1/2,-1/2,1/2). \]
+\end{example}
+
+Now that we understand the usefulness of orthonormal bases, how do we go about
+finding them? For example, does $\Poly_m(\R)$ with inner product as in
+\ref{ax:6.3}(c) have an orthonormal basis? The next result will lead to answers
+to these questions.
+
+\marginnote{J\o rgen Gram (1850--1916) and Erhard Schmidt (1876--1959)
+popularized this algorithm that constructs orthonormal lists.}%
+The algorithm used in the next proof is called the \emph{Gram--Schmidt
+procedure}. It gives a method for turning a linearly independent list into an
+orthonormal list with the same span as the original list.
+
+\begin{result}[Gram--Schmidt procedure]\label{ax:6.32}
+Suppose $v_1,\dots,v_m$ is a linearly independent list of vectors in $V$. Let
+$f_1=v_1$. For $k=2,\dots,m$, define $f_k$ inductively by
+\[ f_k = v_k-\frac{\ip{v_k}{f_1}}{\norm{f_1}^2}f_1-\cdots
+         -\frac{\ip{v_k}{f_{k-1}}}{\norm{f_{k-1}}^2}f_{k-1}. \]
+For each $k=1,\dots,m$, let $e_k=\dfrac{f_k}{\norm{f_k}}$. Then
+$e_1,\dots,e_m$ is an orthonormal list of vectors in $V$ such that
+\[ \spn(v_1,\dots,v_k) = \spn(e_1,\dots,e_k) \]
+for each $k=1,\dots,m$.
+\end{result}
+
+\begin{proof}
+We will show by induction on $k$ that the desired conclusion holds. To get
+started with $k=1$, note that because $e_1=f_1/\norm{f_1}$, we have
+$\norm{e_1}=1$; also, $\spn(v_1)=\spn(e_1)$ because $e_1$ is a nonzero multiple
+of $v_1$.
+
+Suppose $1<k\le m$ and the list $e_1,\dots,e_{k-1}$ generated by \ref{ax:6.32}
+is an orthonormal list such that\refstepcounter{theorem}\label{ax:6.33}
+\[ \spn(v_1,\dots,v_{k-1}) = \spn(e_1,\dots,e_{k-1}). \tag*{\thetheorem} \]
+Because $v_1,\dots,v_m$ is linearly independent, we have
+$v_k\notin\spn(v_1,\dots,v_{k-1})$. Thus
+$v_k\notin\spn(e_1,\dots,e_{k-1})=\spn(f_1,\dots,f_{k-1})$, which implies that
+$f_k\ne0$. Hence we are not dividing by $0$ in the definition of $e_k$ given in
+\ref{ax:6.32}. Dividing a vector by its norm produces a new vector with
+norm $1$; thus $\norm{e_k}=1$.
+
+Let $j\in\{1,\dots,k-1\}$. Then
+\begin{align*}
+\ip{e_k}{e_j}
+  &= \frac{1}{\norm{f_k}\,\norm{f_j}}\ip{f_k}{f_j}\\
+  &= \frac{1}{\norm{f_k}\,\norm{f_j}}
+     \biggl\langle v_k-\frac{\ip{v_k}{f_1}}{\norm{f_1}^2}f_1-\cdots
+     -\frac{\ip{v_k}{f_{k-1}}}{\norm{f_{k-1}}^2}f_{k-1}, f_j\biggr\rangle\\
+  &= \frac{1}{\norm{f_k}\,\norm{f_j}}(\ip{v_k}{f_j}-\ip{v_k}{f_j})\\
+  &= 0.
+\end{align*}
+Thus $e_1,\dots,e_k$ is an orthonormal list.
+
+From the definition of $e_k$ given in \ref{ax:6.32}, we see that
+$v_k\in\spn(e_1,\dots,e_k)$. Combining this information with \ref{ax:6.33}
+shows that
+\[ \spn(v_1,\dots,v_k) \subseteq \spn(e_1,\dots,e_k). \]
+Both lists above are linearly independent (the $v$'s by hypothesis, and the
+$e$'s by orthonormality and \ref{ax:6.25}). Thus both subspaces above have
+dimension $k$, and hence they are equal, completing the induction step and thus
+completing the proof.
+\end{proof}
+
+\begin{example}[An orthonormal basis of $\Poly_2(\R)$]\label{ax:6.34}
+Suppose we make $\Poly_2(\R)$ into an inner product space using the inner product
+given by
+\[ \ip{p}{q} = \int_{-1}^{1} pq \]
+for all $p,q\in\Poly_2(\R)$. We know that $1,x,x^2$ is a basis of $\Poly_2(\R)$,
+but it is not an orthonormal basis. We will find an orthonormal basis of
+$\Poly_2(\R)$ by applying the Gram--Schmidt procedure with $v_1=1$, $v_2=x$,
+and $v_3=x^2$.
+
+To get started, take $f_1=v_1=1$. Thus $\norm{f_1}^2=\int_{-1}^{1}1=2$. Hence
+the formula in \ref{ax:6.32} tells us that
+\[ f_2 = v_2-\frac{\ip{v_2}{f_1}}{\norm{f_1}^2}f_1
+       = x-\frac{\ip{x}{1}}{\norm{f_1}^2} = x, \]
+where the last equality holds because $\ip{x}{1}=\int_{-1}^{1}t\,dt=0$.
+
+The formula above for $f_2$ implies that
+$\norm{f_2}^2=\int_{-1}^{1}t^2\,dt=2/3$. Now the formula in \ref{ax:6.32}
+tells us that
+\[ f_3 = v_3-\frac{\ip{v_3}{f_1}}{\norm{f_1}^2}f_1
+            -\frac{\ip{v_3}{f_2}}{\norm{f_2}^2}f_2
+       = x^2-1/2\ip{x^2}{1}-3/2\ip{x^2}{x}x = x^2-1/3. \]
+
+The formula above for $f_3$ implies that
+\[ \norm{f_3}^2 = \int_{-1}^{1}(t^2-1/3)^2\,dt
+   = \int_{-1}^{1}(t^4-2/3t^2+1/9)\,dt = 8/45. \]
+
+Now dividing each of $f_1,f_2,f_3$ by its norm gives us the orthonormal list
+\[ \sqrt{1/2},\ \sqrt{3/2}\,x,\
+   \sqrt{45/8}(x^2-1/3). \]
+The orthonormal list above has length three, which is the dimension of
+$\Poly_2(\R)$. Hence this orthonormal list is an orthonormal basis of
+$\Poly_2(\R)$ [by \ref{ax:6.28}].
+\end{example}
+
+Now we can answer the question about the existence of orthonormal bases.
+
+\begin{result}[Existence of orthonormal basis]\label{ax:6.35}
+Every finite-dimensional inner product space has an orthonormal basis.
+\end{result}
+
+\begin{proof}
+Suppose $V$ is finite-dimensional. Choose a basis of $V$. Apply the
+Gram--Schmidt procedure (\ref{ax:6.32}) to it, producing an orthonormal list of
+length $\dim V$. By \ref{ax:6.28}, this orthonormal list is an orthonormal basis
+of $V$.
+\end{proof}
+
+Sometimes we need to know not only that an orthonormal basis exists, but also
+that every orthonormal list can be extended to an orthonormal basis. In the next
+corollary, the Gram--Schmidt procedure shows that such an extension is always
+possible.
+
+\begin{result}[Every orthonormal list extends to an orthonormal
+basis]\label{ax:6.36}
+Suppose $V$ is finite-dimensional. Then every orthonormal list of vectors in $V$
+can be extended to an orthonormal basis of $V$.
+\end{result}
+
+\begin{proof}
+Suppose $e_1,\dots,e_m$ is an orthonormal list of vectors in $V$. Then
+$e_1,\dots,e_m$ is linearly independent (by \ref{ax:6.25}). Hence this list can
+be extended to a basis $e_1,\dots,e_m,v_1,\dots,v_n$ of $V$ (see
+\ref{ax:2.32}). Now apply the Gram--Schmidt procedure (\ref{ax:6.32}) to
+$e_1,\dots,e_m,v_1,\dots,v_n$, producing an orthonormal list
+\[ e_1,\dots,e_m,f_1,\dots,f_n; \]
+here the formula given by the Gram--Schmidt procedure leaves the first $m$
+vectors unchanged because they are already orthonormal. The list above is an
+orthonormal basis of $V$ by \ref{ax:6.28}.
+\end{proof}
+
+Recall that a matrix is called upper triangular if it looks like this:
+\[ \begin{pmatrix} * & & *\\ & \ddots & \\ 0 & & * \end{pmatrix}, \]
+where the $0$ in the matrix above indicates that all entries below the diagonal
+equal $0$, and asterisks are used to denote entries on and above the diagonal.
+
+In the last chapter, we gave a necessary and sufficient condition for an
+operator to have an upper-triangular matrix with respect to some basis (see
+\ref{ax:5.44}). Now that we are dealing with inner product spaces, we would like
+to know whether there exists an \emph{orthonormal} basis with respect to which
+we have an upper-triangular matrix. The next result shows that the condition for
+an operator to have an upper-triangular matrix with respect to some orthonormal
+basis is the same as the condition to have an upper-triangular matrix with
+respect to an arbitrary basis.
+
+\begin{result}[Upper-triangular matrix with respect to some orthonormal
+basis]\label{ax:6.37}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Then $T$ has an
+upper-triangular matrix with respect to some orthonormal basis of $V$ if and
+only if the minimal polynomial of $T$ equals $(z-\lambda_1)\cdots(z-\lambda_m)$
+for some $\lambda_1,\dots,\lambda_m\in\F$.
+\end{result}
+
+\begin{proof}
+Suppose $T$ has an upper-triangular matrix with respect to some basis
+$v_1,\dots,v_n$ of $V$. Thus $\spn(v_1,\dots,v_k)$ is invariant under $T$ for
+each $k=1,\dots,n$ (see \ref{ax:5.39}).
+
+Apply the Gram--Schmidt procedure to $v_1,\dots,v_n$, producing an orthonormal
+basis $e_1,\dots,e_n$ of $V$. Because
+\[ \spn(e_1,\dots,e_k) = \spn(v_1,\dots,v_k) \]
+for each $k$ (see \ref{ax:6.32}), we conclude that $\spn(e_1,\dots,e_k)$ is
+invariant under $T$ for each $k=1,\dots,n$. Thus, by \ref{ax:5.39}, $T$ has an
+upper-triangular matrix with respect to the orthonormal basis $e_1,\dots,e_n$.
+Now use \ref{ax:5.44} to complete the proof.
+\end{proof}
+
+\marginnote{Issai Schur (1875--1941) published a proof of the next result in
+1909.}%
+For complex vector spaces, the next result is an important application of the
+result above. See Exercise~20 for a version of Schur's theorem that applies
+simultaneously to more than one operator.
+
+\begin{result}[Schur's theorem]\label{ax:6.38}
+Every operator on a finite-dimensional complex inner product space has an
+upper-triangular matrix with respect to some orthonormal basis.
+\end{result}
+
+\begin{proof}
+The desired result follows from the second version of the fundamental theorem of
+algebra (\ref{ax:4.13}) and \ref{ax:6.37}.
+\end{proof}
+
+\subsection{Linear Functionals on Inner Product Spaces}
+
+Because linear maps into the scalar field $\F$ play a special role, we defined a
+special name for them and their vector space in Section~3F. Those definitions
+are repeated below in case you skipped Section~3F.
+
+\begin{definition}[Linear functional, dual space, $V'$]\label{ax:6.39}\leavevmode
+\begin{itemize}
+\item A \emph{linear functional} on $V$ is a linear map from $V$ to $\F$.
+\item The \emph{dual space} of $V$, denoted by $V'$, is the vector space of all
+  linear functionals on $V$. In other words, $V'=\Lin(V,\F)$.
+\end{itemize}
+\end{definition}
+
+\begin{example}[Linear functional on $\F^3$]\label{ax:6.40}
+The function $\varphi\colon\F^3\to\F$ defined by
+\[ \varphi(z_1,z_2,z_3) = 2z_1-5z_2+z_3 \]
+is a linear functional on $\F^3$. We could write this linear functional in the
+form
+\[ \varphi(z) = \ip{z}{w} \]
+for every $z\in\F^3$, where $w=(2,-5,1)$.
+\end{example}
+
+\begin{example}[Linear functional on $\Poly_5(\R)$]\label{ax:6.41}
+The function $\varphi\colon\Poly_5(\R)\to\R$ defined by
+\[ \varphi(p) = \int_{-1}^{1} p(t)\bigl(\cos(\pi t)\bigr)\,dt \]
+is a linear functional on $\Poly_5(\R)$.
+\end{example}
+
+\marginnote{The next result is named in honor of Frigyes Riesz (1880--1956), who
+proved several theorems early in the twentieth century that look very much like
+the result below.}%
+If $v\in V$, then the map that sends $u$ to $\ip{u}{v}$ is a linear functional
+on $V$. The next result states that every linear functional on $V$ is of this
+form. For example, we can take $v=(2,-5,1)$ in Example~\ref{ax:6.40}.
+
+Suppose we make the vector space $\Poly_5(\R)$ into an inner product space by
+defining $\ip{p}{q}=\int_{-1}^{1}pq$. Let $\varphi$ be as in
+Example~\ref{ax:6.41}. It is not obvious that there exists $q\in\Poly_5(\R)$
+such that
+\[ \int_{-1}^{1} p(t)\bigl(\cos(\pi t)\bigr)\,dt = \ip{p}{q} \]
+for every $p\in\Poly_5(\R)$ [we cannot take $q(t)=\cos(\pi t)$ because that
+choice of $q$ is not an element of $\Poly_5(\R)$]. The next result tells us the
+somewhat surprising result that there indeed exists a polynomial
+$q\in\Poly_5(\R)$ such that the equation above holds for all $p\in\Poly_5(\R)$.
+
+\begin{result}[Riesz representation theorem]\label{ax:6.42}
+Suppose $V$ is finite-dimensional and $\varphi$ is a linear functional on $V$.
+Then there is a unique vector $v\in V$ such that
+\[ \varphi(u) = \ip{u}{v} \]
+for every $u\in V$.
+\end{result}
+
+\begin{proof}
+First we show that there exists a vector $v\in V$ such that
+$\varphi(u)=\ip{u}{v}$ for every $u\in V$. Let $e_1,\dots,e_n$ be an orthonormal
+basis of $V$. Then
+\begin{align*}
+\varphi(u) &= \varphi(\ip{u}{e_1}e_1+\cdots+\ip{u}{e_n}e_n)\\
+  &= \ip{u}{e_1}\varphi(e_1)+\cdots+\ip{u}{e_n}\varphi(e_n)\\
+  &= \bigl\langle u, \overline{\varphi(e_1)}e_1+\cdots
+     +\overline{\varphi(e_n)}e_n\bigr\rangle
+\end{align*}
+for every $u\in V$, where the first equality comes from \ref{ax:6.30}(a). Thus
+setting\refstepcounter{theorem}\label{ax:6.43}
+\[ v = \overline{\varphi(e_1)}e_1+\cdots+\overline{\varphi(e_n)}e_n,
+   \tag*{\thetheorem} \]
+we have $\varphi(u)=\ip{u}{v}$ for every $u\in V$, as desired.
+
+Now we prove that only one vector $v\in V$ has the desired behavior. Suppose
+$v_1,v_2\in V$ are such that
+\[ \varphi(u) = \ip{u}{v_1} = \ip{u}{v_2} \]
+for every $u\in V$. Then
+\[ 0 = \ip{u}{v_1}-\ip{u}{v_2} = \ip{u}{v_1-v_2} \]
+for every $u\in V$. Taking $u=v_1-v_2$ shows that $v_1-v_2=0$. Thus $v_1=v_2$,
+completing the proof of the uniqueness part of the result.
+\end{proof}
+
+\begin{example}[Computation illustrating Riesz representation
+theorem]\label{ax:6.44}
+Suppose we want to find a polynomial $q\in\Poly_2(\R)$
+such that\refstepcounter{theorem}\label{ax:6.45}
+\[ \int_{-1}^{1} p(t)\bigl(\cos(\pi t)\bigr)\,dt = \int_{-1}^{1} pq
+   \tag*{\thetheorem} \]
+for every polynomial $p\in\Poly_2(\R)$. To do this, we make $\Poly_2(\R)$ into
+an inner product space by defining $\ip{p}{q}$ to be the right side of the
+equation above for $p,q\in\Poly_2(\R)$. Note that the left side of the equation
+above does not equal the inner product in $\Poly_2(\R)$ of $p$ and the function
+$t\mapsto\cos(\pi t)$ because this last function is not a polynomial.
+
+Define a linear functional $\varphi$ on $\Poly_2(\R)$ by letting
+\[ \varphi(p) = \int_{-1}^{1} p(t)\bigl(\cos(\pi t)\bigr)\,dt \]
+for each $p\in\Poly_2(\R)$. Now use the orthonormal basis from
+Example~\ref{ax:6.34} and apply formula \ref{ax:6.43} from the proof of the
+Riesz representation theorem to see that if $p\in\Poly_2(\R)$, then
+$\varphi(p)=\ip{p}{q}$, where
+\begin{align*}
+q(x) &= \biggl(\int_{-1}^{1}\sqrt{1/2}\cos(\pi t)\,dt\biggr)\sqrt{1/2}
+        +\biggl(\int_{-1}^{1}\sqrt{3/2}\,t\cos(\pi t)\,dt\biggr)
+        \sqrt{3/2}\,x\\
+     &\quad+\biggl(\int_{-1}^{1}\sqrt{45/8}(t^2-1/3)
+        \cos(\pi t)\,dt\biggr)\sqrt{45/8}(x^2-1/3).
+\end{align*}
+A bit of calculus applied to the equation above shows that
+\[ q(x) = \tfrac{15}{2\pi^2}(1-3x^2). \]
+
+The same procedure shows that if we want to find $q\in\Poly_5(\R)$ such that
+\ref{ax:6.45} holds for all $p\in\Poly_5(\R)$, then we should take
+\[ q(x) = \tfrac{105}{8\pi^4}\Bigl((27-2\pi^2)+(24\pi^2-270)x^2
+          +(315-30\pi^2)x^4\Bigr). \]
+\end{example}
+
+Suppose $V$ is finite-dimensional and $\varphi$ a linear functional on $V$. Then
+\ref{ax:6.43} gives a formula for the vector $v$ that satisfies
+\[ \varphi(u) = \ip{u}{v} \]
+for all $u\in V$. Specifically, we have
+\[ v = \overline{\varphi(e_1)}e_1+\cdots+\overline{\varphi(e_n)}e_n. \]
+The right side of the equation above seems to depend on the orthonormal basis
+$e_1,\dots,e_n$ as well as on $\varphi$. However, \ref{ax:6.42} tells us that
+$v$ is uniquely determined by $\varphi$. Thus the right side of the equation
+above is the same regardless of which orthonormal basis $e_1,\dots,e_n$ of $V$
+is chosen.
+
+For two additional different proofs of the Riesz representation theorem, see
+\ref{ax:6.58} and also Exercise~13 in Section~6C.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{6B}
+
+\begin{exercise}
+Suppose $e_1,\dots,e_m$ is a list of vectors in $V$ such that
+\[ \norm{a_1e_1+\cdots+a_me_m}^2 = \abs{a_1}^2+\cdots+\abs{a_m}^2 \]
+for all $a_1,\dots,a_m\in\F$. Show that $e_1,\dots,e_m$ is an orthonormal list.
+\exnote{This exercise provides a converse to \ref{ax:6.24}.}
+\end{exercise}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Suppose $\theta\in\R$. Show that both
+  \[ (\cos\theta,\sin\theta), (-\sin\theta,\cos\theta) \quad\text{and}\quad
+     (\cos\theta,\sin\theta), (\sin\theta,-\cos\theta) \]
+  are orthonormal bases of $\R^2$.
+\item Show that each orthonormal basis of $\R^2$ is of the form given by one of
+  the two possibilities in (a).
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $e_1,\dots,e_m$ is an orthonormal list in $V$ and $v\in V$. Prove that
+\[ \norm{v}^2 = \abs{\ip{v}{e_1}}^2+\cdots+\abs{\ip{v}{e_m}}^2
+   \iff v\in\spn(e_1,\dots,e_m). \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $n$ is a positive integer. Prove that
+\[ \frac{1}{\sqrt{2\pi}}, \frac{\cos x}{\sqrt\pi}, \frac{\cos 2x}{\sqrt\pi},
+   \dots, \frac{\cos nx}{\sqrt\pi}, \frac{\sin x}{\sqrt\pi},
+   \frac{\sin 2x}{\sqrt\pi}, \dots, \frac{\sin nx}{\sqrt\pi} \]
+is an orthonormal list of vectors in $C[-\pi,\pi]$, the vector space of
+continuous real-valued functions on $[-\pi,\pi]$ with inner product
+\[ \ip{f}{g} = \int_{-\pi}^{\pi} fg. \]
+\exnote{Hint: The following formulas should help.
+\begin{align*}
+(\sin x)(\cos y) &= \frac{\sin(x-y)+\sin(x+y)}{2}\\
+(\sin x)(\sin y) &= \frac{\cos(x-y)-\cos(x+y)}{2}\\
+(\cos x)(\cos y) &= \frac{\cos(x-y)+\cos(x+y)}{2}
+\end{align*}}
+\end{exercise}
+
+\begin{exercise}
+Suppose $f\colon[-\pi,\pi]\to\R$ is continuous. For each nonnegative integer
+$k$, define
+\[ a_k = \tfrac{1}{\sqrt\pi}\int_{-\pi}^{\pi} f(x)\cos(kx)\,dx
+   \quad\text{and}\quad
+   b_k = \tfrac{1}{\sqrt\pi}\int_{-\pi}^{\pi} f(x)\sin(kx)\,dx. \]
+Prove that
+\[ \frac{a_0^2}{2}+\sum_{k=1}^{\infty}(a_k^2+b_k^2) \le \int_{-\pi}^{\pi} f^2. \]
+\exnote{The inequality above is actually an equality for all continuous
+functions $f\colon[-\pi,\pi]\to\R$. However, proving that this inequality is an
+equality involves Fourier series techniques beyond the scope of this book.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$.
+\begin{parts}
+\item Prove that if $v_1,\dots,v_n$ are vectors in $V$ such that
+  \[ \norm{e_k-v_k} < \frac{1}{\sqrt n} \]
+  for each $k$, then $v_1,\dots,v_n$ is a basis of $V$.
+\item Show that there exist $v_1,\dots,v_n\in V$ such that
+  \[ \norm{e_k-v_k} \le \frac{1}{\sqrt n} \]
+  for each $k$, but $v_1,\dots,v_n$ is not linearly independent.
+\end{parts}
+\exnote{This exercise states in \textup{(a)} that an appropriately small
+perturbation of an orthonormal basis is a basis. Then \textup{(b)} shows that
+the number $1/\sqrt n$ on the right side of the inequality in \textup{(a)}
+cannot be higher.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(\R^3)$ has an upper-triangular matrix with respect to the
+basis $(1,0,0)$, $(1,1,1)$, $(1,1,2)$. Find an orthonormal basis of $\R^3$ with
+respect to which $T$ has an upper-triangular matrix.
+\end{exercise}
+
+\begin{exercise}
+Make $\Poly_2(\R)$ into an inner product space by defining
+$\ip{p}{q}=\int_0^1 pq$ for all $p,q\in\Poly_2(\R)$.
+\begin{parts}
+\item Apply the Gram--Schmidt procedure to the basis $1,x,x^2$ to produce an
+  orthonormal basis of $\Poly_2(\R)$.
+\item The differentiation operator (the operator that takes $p$ to $p'$) on
+  $\Poly_2(\R)$ has an upper-triangular matrix with respect to the basis
+  $1,x,x^2$, which is not an orthonormal basis. Find the matrix of the
+  differentiation operator on $\Poly_2(\R)$ with respect to the orthonormal
+  basis produced in (a) and verify that this matrix is upper triangular, as
+  expected from the proof of \ref{ax:6.37}.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $e_1,\dots,e_m$ is the result of applying the Gram--Schmidt procedure to
+a linearly independent list $v_1,\dots,v_m$ in $V$. Prove that
+$\ip{v_k}{e_k}>0$ for each $k=1,\dots,m$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m$ is a linearly independent list in $V$. Explain why the
+orthonormal list produced by the formulas of the Gram--Schmidt procedure
+(\ref{ax:6.32}) is the only orthonormal list $e_1,\dots,e_m$ in $V$ such that
+$\ip{v_k}{e_k}>0$ and $\spn(v_1,\dots,v_k)=\spn(e_1,\dots,e_k)$ for each
+$k=1,\dots,m$.
+\exnote{The result in this exercise is used in the proof of \ref{ax:7.58}.}
+\end{exercise}
+
+\begin{exercise}
+Find a polynomial $q\in\Poly_2(\R)$ such that
+$p(1/2)=\int_0^1 pq$ for every $p\in\Poly_2(\R)$.
+\end{exercise}
+
+\begin{exercise}
+Find a polynomial $q\in\Poly_2(\R)$ such that
+\[ \int_0^1 p(x)\cos(\pi x)\,dx = \int_0^1 pq \]
+for every $p\in\Poly_2(\R)$.
+\end{exercise}
+
+\begin{exercise}
+Show that a list $v_1,\dots,v_m$ of vectors in $V$ is linearly dependent if and
+only if the Gram--Schmidt formula in \ref{ax:6.32} produces $f_k=0$ for some
+$k\in\{1,\dots,m\}$.
+\exnote{This exercise gives an alternative to Gaussian elimination techniques
+for determining whether a list of vectors in an inner product space is linearly
+dependent.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a real inner product space and $v_1,\dots,v_m$ is a linearly
+independent list of vectors in $V$. Prove that there exist exactly $2^m$
+orthonormal lists $e_1,\dots,e_m$ of vectors in $V$ such that
+\[ \spn(v_1,\dots,v_k) = \spn(e_1,\dots,e_k) \]
+for all $k\in\{1,\dots,m\}$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\ip{\cdot}{\cdot}_1$ and $\ip{\cdot}{\cdot}_2$ are inner products on $V$
+such that $\ip{u}{v}_1=0$ if and only if $\ip{u}{v}_2=0$. Prove that there is a
+positive number $c$ such that $\ip{u}{v}_1=c\ip{u}{v}_2$ for every $u,v\in V$.
+\exnote{This exercise shows that if two inner products have the same pairs of
+orthogonal vectors, then each of the inner products is a scalar multiple of the
+other inner product.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional. Suppose $\ip{\cdot}{\cdot}_1$,
+$\ip{\cdot}{\cdot}_2$ are inner products on $V$ with corresponding norms
+$\norm{\cdot}_1$ and $\norm{\cdot}_2$. Prove that there exists a positive number
+$c$ such that $\norm{v}_1\le c\norm{v}_2$ for every $v\in V$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $V$ is finite-dimensional. Prove that if $T$ is an operator
+on $V$ such that $1$ is the only eigenvalue of $T$ and $\norm{Tv}\le\norm{v}$
+for all $v\in V$, then $T$ is the identity operator.
+\end{exercise}
+
+\begin{exercise}
+Suppose $u_1,\dots,u_m$ is a linearly independent list in $V$. Show that there
+exists $v\in V$ such that $\ip{u_k}{v}=1$ for all $k\in\{1,\dots,m\}$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_n$ is a basis of $V$. Prove that there exists a basis
+$u_1,\dots,u_n$ of $V$ such that
+\[ \ip{v_j}{u_k} = \begin{cases} 0 & \text{if } j\ne k,\\
+                                 1 & \text{if } j=k. \end{cases} \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$, $V$ is finite-dimensional, and
+$\mathcal{E}\subseteq\Lin(V)$ is such that
+\[ ST = TS \]
+for all $S,T\in\mathcal{E}$. Prove that there is an orthonormal basis of $V$
+with respect to which every element of $\mathcal{E}$ has an upper-triangular
+matrix.
+\exnote{This exercise strengthens Exercise~9\textup{(b)} in Section~5E (in the
+context of inner product spaces) by asserting that the basis in that exercise
+can be chosen to be orthonormal.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$, $V$ is finite-dimensional, $T\in\Lin(V)$, and all eigenvalues
+of $T$ have absolute value less than $1$. Let $\epsilon>0$. Prove that there
+exists a positive integer $m$ such that $\norm{T^mv}\le\epsilon\norm{v}$ for
+every $v\in V$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $C[-1,1]$ is the vector space of continuous real-valued functions on the
+interval $[-1,1]$ with inner product given by
+\[ \ip{f}{g} = \int_{-1}^{1} fg \]
+for all $f,g\in C[-1,1]$. Let $\varphi$ be the linear functional on $C[-1,1]$
+defined by $\varphi(f)=f(0)$. Show that there does not exist $g\in C[-1,1]$
+such that
+\[ \varphi(f) = \ip{f}{g} \]
+for every $f\in C[-1,1]$.
+\exnote{This exercise shows that the Riesz representation theorem
+\textup{(\ref{ax:6.42})} does not hold on infinite-dimensional vector spaces
+without additional hypotheses on $V$ and $\varphi$.}
+\end{exercise}
+
+\begin{exercise}
+For all $u,v\in V$, define $d(u,v)=\norm{u-v}$.
+\begin{parts}
+\item Show that $d$ is a metric on $V$.
+\item Show that if $V$ is finite-dimensional, then $d$ is a complete metric on
+  $V$ (meaning that every Cauchy sequence converges).
+\item Show that every finite-dimensional subspace of $V$ is a closed subset
+  of $V$ (with respect to the metric $d$).
+\end{parts}
+\exnote{This exercise requires familiarity with metric spaces.}
+\end{exercise}
+
+\begin{remark*}[Orthogonality at the Supreme Court]\normalfont
+Law professor Richard Friedman presenting a case before the U.S. Supreme Court
+in 2010:
+\begin{description}[font=\normalfont\itshape,style=sameline,leftmargin=2em,
+  labelindent=0pt,itemsep=0pt,topsep=3pt]
+\item[Mr. Friedman\textup{:}] I think that issue is entirely orthogonal to the
+  issue here because the Commonwealth is acknowledging---
+\item[Chief Justice Roberts\textup{:}] I'm sorry. Entirely what?
+\item[Mr. Friedman\textup{:}] Orthogonal. Right angle. Unrelated. Irrelevant.
+\item[Chief Justice Roberts\textup{:}] Oh.
+\item[Justice Scalia\textup{:}] What was that adjective? I liked that.
+\item[Mr. Friedman\textup{:}] Orthogonal.
+\item[Chief Justice Roberts\textup{:}] Orthogonal.
+\item[Mr. Friedman\textup{:}] Right, right.
+\item[Justice Scalia\textup{:}] Orthogonal, ooh. (Laughter.)
+\item[Justice Kennedy\textup{:}] I knew this case presented us a problem.
+  (Laughter.)
+\end{description}
+\end{remark*}

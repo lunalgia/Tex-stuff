@@ -1,0 +1,1265 @@
+% Source: book pp. 59--68 (PDF 73--82); solutions pp. 65--82, 170--171 (A3).
+\section{Null Spaces and Ranges}
+
+\subsection{Null Space and Injectivity}
+
+In this section we will learn about two subspaces that are intimately
+connected with each linear map. We begin with the set of vectors that get
+mapped to $0$.
+
+\begin{definition}[Null space, $\nul T$]\label{ax:3.11}
+For $T\in\Lin(V,W)$, the \emph{null space} of $T$, denoted by $\nul T$, is
+the subset of $V$ consisting of those vectors that $T$ maps to $0$:
+\[ \nul T=\{v\in V : Tv=0\}. \]
+\end{definition}
+
+\marginnote[14mm]{The word ``null'' means zero. Thus the term ``null space''
+should remind you of the connection to $0$. Some mathematicians use the term
+\emph{kernel} instead of null space.}%
+\begin{example}[Null space]\label{ax:3.12}\leavevmode
+\begin{itemize}
+\item If $T$ is the zero map from $V$ to $W$, meaning that $Tv=0$ for every
+  $v\in V$, then $\nul T=V$.
+\item Suppose $\varphi\in\Lin(\C^3,\C)$ is defined by
+  $\varphi(z_1,z_2,z_3)=z_1+2z_2+3z_3$. Then $\nul\varphi$ equals
+  $\{(z_1,z_2,z_3)\in\C^3 : z_1+2z_2+3z_3=0\}$, which is a subspace of the
+  domain of $\varphi$. We will soon see that the null space of each linear map
+  is a subspace of its domain.
+\item Suppose $D\in\Lin(\Poly(\R))$ is the differentiation map defined by
+  $Dp=p'$. The only functions whose derivative equals the zero function are
+  the constant functions. Thus the null space of $D$ equals the set of
+  constant functions.
+\item Suppose that $T\in\Lin(\Poly(\R))$ is the multiplication by $x^2$ map
+  defined by $(Tp)(x)=x^2p(x)$. The only polynomial $p$ such that
+  $x^2p(x)=0$ for all $x\in\R$ is the $0$ polynomial. Thus $\nul T=\{0\}$.
+\item Suppose $T\in\Lin(\F^\infty)$ is the backward shift defined by
+  \[ T(x_1,x_2,x_3,\dots)=(x_2,x_3,\dots). \]
+  Then $T(x_1,x_2,x_3,\dots)$ equals $0$ if and only if the numbers
+  $x_2,x_3,\dots$ are all $0$. Thus $\nul T=\{(a,0,0,\dots) : a\in\F\}$.
+\end{itemize}
+\end{example}
+
+The next result shows that the null space of each linear map is a subspace of
+the domain. In particular, $0$ is in the null space of every linear map.
+
+\begin{result}[The null space is a subspace]\label{ax:3.13}
+Suppose $T\in\Lin(V,W)$. Then $\nul T$ is a subspace of $V$.
+\end{result}
+
+\begin{proof}
+Because $T$ is a linear map, $T(0)=0$ (by \ref{ax:3.10}). Thus
+$0\in\nul T$.
+
+Suppose $u,v\in\nul T$. Then
+\[ T(u+v)=Tu+Tv=0+0=0. \]
+Hence $u+v\in\nul T$. Thus $\nul T$ is closed under addition.
+
+Suppose $u\in\nul T$ and $\lambda\in\F$. Then
+\[ T(\lambda u)=\lambda Tu=\lambda0=0. \]
+Hence $\lambda u\in\nul T$. Thus $\nul T$ is closed under scalar
+multiplication.
+
+We have shown that $\nul T$ contains $0$ and is closed under addition and
+scalar multiplication. Thus $\nul T$ is a subspace of $V$ (by
+\ref{ax:1.34}).
+\end{proof}
+
+As we will soon see, for a linear map the next definition is closely
+connected to the null space.
+
+\begin{definition}[Injective]\label{ax:3.14}
+A function $T\colon V\to W$ is called \emph{injective} if $Tu=Tv$ implies
+$u=v$.
+\end{definition}
+
+\marginnote{The term \emph{one-to-one} means the same as injective.}%
+We could rephrase the definition above to say that $T$ is injective if
+$u\ne v$ implies that $Tu\ne Tv$. Thus $T$ is injective if and only if it maps
+distinct inputs to distinct outputs.
+
+The next result says that we can check whether a linear map is injective by
+checking whether $0$ is the only vector that gets mapped to $0$. As a simple
+application of this result, we see that of the linear maps whose null spaces
+we computed in \ref{ax:3.12}, only multiplication by $x^2$ is injective
+(except that the zero map is injective in the special case $V=\{0\}$).
+
+\begin{result}[Injectivity $\iff$ null space equals $\{0\}$]\label{ax:3.15}
+Let $T\in\Lin(V,W)$. Then $T$ is injective if and only if $\nul T=\{0\}$.
+\end{result}
+
+\begin{proof}
+First suppose $T$ is injective. We want to prove that $\nul T=\{0\}$. We
+already know that $\{0\}\subseteq\nul T$ (by \ref{ax:3.10}). To prove the
+inclusion in the other direction, suppose $v\in\nul T$. Then
+\[ T(v)=0=T(0). \]
+Because $T$ is injective, the equation above implies that $v=0$. Thus we can
+conclude that $\nul T=\{0\}$, as desired.
+
+To prove the implication in the other direction, now suppose
+$\nul T=\{0\}$. We want to prove that $T$ is injective. To do this, suppose
+$u,v\in V$ and $Tu=Tv$. Then
+\[ 0=Tu-Tv=T(u-v). \]
+Thus $u-v$ is in $\nul T$, which equals $\{0\}$. Hence $u-v=0$, which
+implies that $u=v$. Hence $T$ is injective, as desired.
+\end{proof}
+
+\subsection{Range and Surjectivity}
+
+Now we give a name to the set of outputs of a linear map.
+
+\begin{definition}[Range]\label{ax:3.16}
+For $T\in\Lin(V,W)$, the \emph{range} of $T$ is the subset of $W$ consisting
+of those vectors that are equal to $Tv$ for some $v\in V$:
+\[ \range T=\{Tv : v\in V\}. \]
+\end{definition}
+
+\begin{example}[Range]\label{ax:3.17}\leavevmode
+\begin{itemize}
+\item If $T$ is the zero map from $V$ to $W$, meaning that $Tv=0$ for every
+  $v\in V$, then $\range T=\{0\}$.
+\item Suppose $T\in\Lin(\R^2,\R^3)$ is defined by $T(x,y)=(2x,5y,x+y)$. Then
+  \[ \range T=\bigl\{(2x,5y,x+y) : x,y\in\R\bigr\}. \]
+  Note that $\range T$ is a subspace of $\R^3$. We will soon see that the
+  range of each element of $\Lin(V,W)$ is a subspace of $W$.
+\item Suppose $D\in\Lin(\Poly(\R))$ is the differentiation map defined by
+  $Dp=p'$. Because for every polynomial $q\in\Poly(\R)$ there exists a
+  polynomial $p\in\Poly(\R)$ such that $p'=q$, the range of $D$ is
+  $\Poly(\R)$.
+\end{itemize}
+\end{example}
+
+The next result shows that the range of each linear map is a subspace of the
+vector space into which it is being mapped.
+
+\begin{result}[The range is a subspace]\label{ax:3.18}
+If $T\in\Lin(V,W)$, then $\range T$ is a subspace of $W$.
+\end{result}
+
+\begin{proof}
+Suppose $T\in\Lin(V,W)$. Then $T(0)=0$ (by \ref{ax:3.10}), which implies that
+$0\in\range T$.
+
+If $w_1,w_2\in\range T$, then there exist $v_1,v_2\in V$ such that $Tv_1=w_1$
+and $Tv_2=w_2$. Thus
+\[ T(v_1+v_2)=Tv_1+Tv_2=w_1+w_2. \]
+Hence $w_1+w_2\in\range T$. Thus $\range T$ is closed under addition.
+
+If $w\in\range T$ and $\lambda\in\F$, then there exists $v\in V$ such that
+$Tv=w$. Thus
+\[ T(\lambda v)=\lambda Tv=\lambda w. \]
+Hence $\lambda w\in\range T$. Thus $\range T$ is closed under scalar
+multiplication.
+
+We have shown that $\range T$ contains $0$ and is closed under addition and
+scalar multiplication. Thus $\range T$ is a subspace of $W$ (by
+\ref{ax:1.34}).
+\end{proof}
+
+\begin{definition}[Surjective]\label{ax:3.19}
+A function $T\colon V\to W$ is called \emph{surjective} if its range equals
+$W$.
+\end{definition}
+
+To illustrate the definition above, note that of the ranges we computed in
+\ref{ax:3.17}, only the differentiation map is surjective (except that the
+zero map is surjective in the special case $W=\{0\}$).
+
+\marginnote{Some people use the term \emph{onto}, which means the same as
+surjective.}%
+Whether a linear map is surjective depends on what we are thinking of as the
+vector space into which it maps.
+
+\begin{example}[Surjectivity depends on the target space]\label{ax:3.20}
+The differentiation map $D\in\Lin(\Poly_5(\R))$ defined by $Dp=p'$ is not
+surjective, because the polynomial $x^5$ is not in the range of $D$. However,
+the differentiation map $S\in\Lin(\Poly_5(\R),\Poly_4(\R))$ defined by
+$Sp=p'$ is surjective, because its range equals $\Poly_4(\R)$, which is the
+vector space into which $S$ maps.
+\end{example}
+
+\subsection{Fundamental Theorem of Linear Maps}
+
+The next result is so important that it gets a dramatic name.
+
+\begin{result}[Fundamental theorem of linear maps]\label{ax:3.21}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V,W)$. Then $\range T$ is
+finite-dimensional and
+\[ \dim V=\dim\nul T+\dim\range T. \]
+\end{result}
+
+\begin{proof}
+Let $u_1,\dots,u_m$ be a basis of $\nul T$; thus $\dim\nul T=m$. The linearly
+independent list $u_1,\dots,u_m$ can be extended to a basis
+\[ u_1,\dots,u_m,v_1,\dots,v_n \]
+of $V$ (by \ref{ax:2.32}). Thus $\dim V=m+n$. To complete the proof, we need to
+show that $\range T$ is finite-dimensional and $\dim\range T=n$. We will do
+this by proving that $Tv_1,\dots,Tv_n$ is a basis of $\range T$.
+
+Let $v\in V$. Because $u_1,\dots,u_m,v_1,\dots,v_n$ spans $V$, we can write
+\[ v=a_1u_1+\cdots+a_mu_m+b_1v_1+\cdots+b_nv_n, \]
+where the $a$'s and $b$'s are in $\F$. Applying $T$ to both sides of this
+equation, we get
+\[ Tv=b_1Tv_1+\cdots+b_nTv_n, \]
+where the terms of the form $Tu_k$ disappeared because each $u_k$ is in
+$\nul T$. The last equation implies that the list $Tv_1,\dots,Tv_n$ spans
+$\range T$. In particular, $\range T$ is finite-dimensional.
+
+To show $Tv_1,\dots,Tv_n$ is linearly independent, suppose
+$c_1,\dots,c_n\in\F$ and
+\[ c_1Tv_1+\cdots+c_nTv_n=0. \]
+Then
+\[ T(c_1v_1+\cdots+c_nv_n)=0. \]
+Hence
+\[ c_1v_1+\cdots+c_nv_n\in\nul T. \]
+Because $u_1,\dots,u_m$ spans $\nul T$, we can write
+\[ c_1v_1+\cdots+c_nv_n=d_1u_1+\cdots+d_mu_m, \]
+where the $d$'s are in $\F$. This equation implies that all the $c$'s (and
+$d$'s) are $0$ (because $u_1,\dots,u_m,v_1,\dots,v_n$ is linearly
+independent). Thus $Tv_1,\dots,Tv_n$ is linearly independent and hence is a
+basis of $\range T$, as desired.
+\end{proof}
+
+Now we can show that no linear map from a finite-dimensional vector space to a
+``smaller'' vector space can be injective, where ``smaller'' is measured by
+dimension.
+
+\begin{result}[Linear map to a lower-dimensional space is not injective]\label{ax:3.22}
+Suppose $V$ and $W$ are finite-dimensional vector spaces such that
+$\dim V>\dim W$. Then no linear map from $V$ to $W$ is injective.
+\end{result}
+
+\begin{proof}
+Let $T\in\Lin(V,W)$. Then
+\begin{align*}
+\dim\nul T &= \dim V-\dim\range T\\
+  &\ge \dim V-\dim W\\
+  &> 0,
+\end{align*}
+where the first line above comes from the fundamental theorem of linear maps
+(\ref{ax:3.21}) and the second line follows from \ref{ax:2.37}. The inequality
+above states that $\dim\nul T>0$. This means that $\nul T$ contains vectors
+other than $0$. Thus $T$ is not injective (by \ref{ax:3.15}).
+\end{proof}
+
+\begin{example}[Linear map from $\F^4$ to $\F^3$ is not injective]\label{ax:3.23}
+Define a linear map $T\colon\F^4\to\F^3$ by
+\[ T(z_1,z_2,z_3,z_4)=\bigl(\sqrt7z_1+\pi z_2+z_4,\,97z_1+3z_2+2z_3,\,
+   z_2+6z_3+7z_4\bigr). \]
+Because $\dim\F^4>\dim\F^3$, we can use \ref{ax:3.22} to assert that $T$ is
+not injective, without doing any calculations.
+\end{example}
+
+The next result shows that no linear map from a finite-dimensional vector
+space to a ``bigger'' vector space can be surjective, where ``bigger'' is
+measured by dimension.
+
+\begin{result}[Linear map to a higher-dimensional space is not surjective]\label{ax:3.24}
+Suppose $V$ and $W$ are finite-dimensional vector spaces such that
+$\dim V<\dim W$. Then no linear map from $V$ to $W$ is surjective.
+\end{result}
+
+\begin{proof}
+Let $T\in\Lin(V,W)$. Then
+\begin{align*}
+\dim\range T &= \dim V-\dim\nul T\\
+  &\le \dim V\\
+  &< \dim W,
+\end{align*}
+where the equality above comes from the fundamental theorem of linear maps
+(\ref{ax:3.21}). The inequality above states that $\dim\range T<\dim W$. This
+means that $\range T$ cannot equal $W$. Thus $T$ is not surjective.
+\end{proof}
+
+As we will soon see, \ref{ax:3.22} and \ref{ax:3.24} have important
+consequences in the theory of linear equations. The idea is to express
+questions about systems of linear equations in terms of linear maps. Let's
+begin by rephrasing in terms of linear maps the question of whether a
+homogeneous system of linear equations has a nonzero solution.
+
+\marginnote{\emph{Homogeneous}, in this context, means that the constant term
+on the right side of each equation below is $0$.}%
+Fix positive integers $m$ and $n$, and let $A_{j,k}\in\F$ for $j=1,\dots,m$
+and $k=1,\dots,n$. Consider the homogeneous system of linear equations
+\[ \begin{gathered}
+   \sum_{k=1}^n A_{1,k}x_k=0\\
+   \vdots\\
+   \sum_{k=1}^n A_{m,k}x_k=0.
+   \end{gathered} \]
+Clearly $x_1=\cdots=x_n=0$ is a solution of the system of equations above;
+the question here is whether any other solutions exist.
+
+Define $T\colon\F^n\to\F^m$ by
+\[ \refstepcounter{theorem}\tag*{\thetheorem}\label{ax:3.25}
+   T(x_1,\dots,x_n)=\Bigl(\sum_{k=1}^n A_{1,k}x_k,\dots,
+   \sum_{k=1}^n A_{m,k}x_k\Bigr). \]
+The equation $T(x_1,\dots,x_n)=0$ (the $0$ here is the additive identity in
+$\F^m$, namely, the list of length $m$ of all $0$'s) is the same as the
+homogeneous system of linear equations above.
+
+Thus we want to know if $\nul T$ is strictly bigger than $\{0\}$, which is
+equivalent to $T$ not being injective (by \ref{ax:3.15}). The next result
+gives an important condition for ensuring that $T$ is not injective.
+
+\begin{result}[Homogeneous system of linear equations]\label{ax:3.26}
+A homogeneous system of linear equations with more variables than equations
+has nonzero solutions.
+\end{result}
+
+\begin{proof}
+Use the notation and result from the discussion above. Thus $T$ is a linear
+map from $\F^n$ to $\F^m$, and we have a homogeneous system of $m$ linear
+equations with $n$ variables $x_1,\dots,x_n$. From \ref{ax:3.22} we see that
+$T$ is not injective if $n>m$.
+\end{proof}
+
+Example of the result above: a homogeneous system of four linear equations
+with five variables has nonzero solutions.
+
+Now we consider the question of whether a system of linear equations has no
+solutions for some choice of the constant terms. To rephrase this question in
+terms of a linear map, fix positive integers $m$ and $n$, and let
+$A_{j,k}\in\F$ for all $j=1,\dots,m$ and all $k=1,\dots,n$. For
+$c_1,\dots,c_m\in\F$, consider the system of linear equations
+\[ \refstepcounter{theorem}\tag*{\thetheorem}\label{ax:3.27}
+   \begin{gathered}
+   \sum_{k=1}^n A_{1,k}x_k=c_1\\
+   \vdots\\
+   \sum_{k=1}^n A_{m,k}x_k=c_m.
+   \end{gathered} \]
+With this notation, the question here is whether there is some choice of the
+constant terms $c_1,\dots,c_m\in\F$ such that no solution exists to the system
+above.
+
+\marginnote{The results \ref{ax:3.26} and \ref{ax:3.28}, which compare the
+number of variables and the number of equations, can also be proved using
+Gaussian elimination. The abstract approach taken here seems to provide
+cleaner proofs.}%
+Define $T\colon\F^n\to\F^m$ as in \ref{ax:3.25}. The equation
+$T(x_1,\dots,x_n)=(c_1,\dots,c_m)$ is the same as the system of equations
+\ref{ax:3.27}. Thus we want to know if $\range T\ne\F^m$. Hence we can
+rephrase our question about not having a solution for some choice of
+$c_1,\dots,c_m\in\F$ as follows: What condition ensures that $T$ is not
+surjective? The next result gives one such condition.
+
+\begin{result}[System of linear equations with more equations than variables]\label{ax:3.28}
+A system of linear equations with more equations than variables has no
+solution for some choice of the constant terms.
+\end{result}
+
+\begin{proof}
+Use the notation from the discussion above. Thus $T$ is a linear map from
+$\F^n$ to $\F^m$, and we have a system of $m$ equations with $n$ variables
+$x_1,\dots,x_n$; see \ref{ax:3.27}. If $n<m$, then \ref{ax:3.24} implies that
+$T$ is not surjective. As discussed above, this shows that if we have more
+equations than variables in a system of linear equations, then there is no
+solution for some choice of the constant terms.
+\end{proof}
+
+Example of the result above: a system of five linear equations with four
+variables has no solution for some choice of the constant terms.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{3B}
+
+\begin{exercise}
+Give an example of a linear map $T$ with $\dim\nul T=3$ and
+$\dim\range T=2$.
+\end{exercise}
+\begin{solution}
+Let $T\in\Lin(\R^5,\R^2)$ be defined by
+\[ T(x_1,x_2,x_3,x_4,x_5)=(x_1,x_2). \]
+Then $\nul T=\{(0,0,x_3,x_4,x_5)\mid x_3,x_4,x_5\in\R\}$, which has dimension
+$3$, and $\range T=\R^2$, which has dimension $2$.
+\end{solution}
+
+\begin{exercise}
+Suppose $S,T\in\Lin(V)$ are such that $\range S\subseteq\nul T$. Prove that
+$(ST)^2=0$.
+\end{exercise}
+\begin{solution}
+Let $v\in V$. Then
+\[ (ST)^2v=ST(STv)=S\bigl(T(STv)\bigr). \]
+Since $STv\in\range S$ and $\range S\subseteq\nul T$, we have $T(STv)=0$.
+Therefore,
+\[ (ST)^2v=S(0)=0. \]
+Since $v$ was arbitrary, it follows that $(ST)^2=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m$ is a list of vectors in $V$. Define
+$T\in\Lin(\F^m,V)$ by
+\[ T(z_1,\dots,z_m)=z_1v_1+\cdots+z_mv_m. \]
+\begin{parts}
+\item What property of $T$ corresponds to $v_1,\dots,v_m$ spanning $V$?
+\item What property of $T$ corresponds to the list $v_1,\dots,v_m$ being
+  linearly independent?
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item The list $v_1,\dots,v_m$ spans $V$ if and only if $\range T=V$, i.e.,
+  $T$ is surjective.
+\item The list $v_1,\dots,v_m$ is linearly independent if and only if
+  $\nul T=\{0\}$, i.e., $T$ is injective.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Show that $\{T\in\Lin(\R^5,\R^4) : \dim\nul T>2\}$ is not a subspace of
+$\Lin(\R^5,\R^4)$.
+\end{exercise}
+\begin{solution}
+Let $T_1,T_2\in\Lin(\R^5,\R^4)$ be defined by
+\[ T_1(x_1,x_2,x_3,x_4,x_5)=(x_1,x_2,0,0) \]
+and
+\[ T_2(x_1,x_2,x_3,x_4,x_5)=(0,0,x_3,x_4). \]
+Then $\nul T_1=\{(0,0,x_3,x_4,x_5)\mid x_3,x_4,x_5\in\R\}$ and
+$\nul T_2=\{(x_1,x_2,0,0,x_5)\mid x_1,x_2,x_5\in\R\}$ both have dimension
+$3$, so $T_1$ and $T_2$ are in the set
+$\{T\in\Lin(\R^5,\R^4)\mid\dim\nul T>2\}$. However,
+\[ (T_1+T_2)(x_1,x_2,x_3,x_4,x_5)=(x_1,x_2,x_3,x_4), \]
+which has null space $\nul(T_1+T_2)=\{(0,0,0,0,x_5)\mid x_5\in\R\}$ of
+dimension $1$. Therefore,
+\[ \dim\nul(T_1+T_2)=1<2, \]
+so $T_1+T_2$ is not in the set. Hence, the set is not closed under addition
+and is not a subspace of $\Lin(\R^5,\R^4)$.
+\end{solution}
+
+\begin{exercise}
+Give an example of $T\in\Lin(\R^4)$ such that $\range T=\nul T$.
+\end{exercise}
+\begin{solution}
+Let $v_1,v_2,v_3,v_4$ be the standard basis of $\R^4$. Define
+$T\in\Lin(\R^4)$ by
+\[ Tv_1=v_3, \quad Tv_2=v_4, \quad Tv_3=0, \quad Tv_4=0. \]
+Then for any $x=(x_1,x_2,x_3,x_4)\in\R^4$,
+\[ Tx=x_1Tv_1+x_2Tv_2+x_3Tv_3+x_4Tv_4=x_1v_3+x_2v_4. \]
+Then $\range T=\spn v_3,v_4$. If $Tx=0$, then $x_1v_3+x_2v_4=0$, which
+implies $x_1=x_2=0$. Therefore,
+$\nul T=\{(0,0,x_3,x_4)\mid x_3,x_4\in\R\}=\spn v_3,v_4$. Hence,
+$\range T=\nul T$.
+\end{solution}
+
+\begin{exercise}
+Prove that there does not exist $T\in\Lin(\R^5)$ such that
+$\range T=\nul T$.
+\end{exercise}
+\begin{solution}
+Suppose for contradiction that there exists $T\in\Lin(\R^5)$ such that
+$\range T=\nul T$. Then by the fundamental theorem of linear maps,
+\[ \dim\R^5=\dim\nul T+\dim\range T=2\dim\range T. \]
+Therefore, $5=2\dim\range T$, which is impossible since $5$ is odd and
+$2\dim\range T$ is even. Hence, no such $T$ exists.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional with $2\le\dim V\le\dim W$. Show
+that $\{T\in\Lin(V,W) : T \text{ is not injective}\}$ is not a subspace of
+$\Lin(V,W)$.
+\end{exercise}
+\begin{solution}
+Let $\dim V=n$ and $\dim W=m$ with $2\le n\le m$. Let $v_1,v_2,\dots,v_n$ be a
+basis of $V$, and let $w_1,w_2,\dots,w_m$ be a basis of $W$. Define
+$T_1,T_2\in\Lin(V,W)$ by
+\[ T_1v_1=w_1, \quad T_1v_k=0 \text{ for } k\ge2, \]
+and
+\[ T_2v_1=0, \quad T_2v_k=w_k \text{ for } k\ge2. \]
+Then $v_2\in\nul T_1$ and $v_1\in\nul T_2$, so both $T_1$ and $T_2$ are not
+injective. However,
+\[ (T_1+T_2)v_1=T_1v_1+T_2v_1=w_1+0=w_1\ne0, \]
+and for $k\ge2$,
+\[ (T_1+T_2)v_k=T_1v_k+T_2v_k=0+w_k=w_k\ne0. \]
+Suppose $v\in V$ is such that $(T_1+T_2)v=0$. Then $v$ can be expressed as a
+linear combination of the basis vectors:
+\[ v=\alpha_1v_1+\alpha_2v_2+\cdots+\alpha_nv_n. \]
+Then
+\[ (T_1+T_2)v=\alpha_1w_1+\alpha_2w_2+\cdots+\alpha_nw_n=0. \]
+Since $w_1,w_2,\dots,w_m$ are linearly independent, it follows that
+$\alpha_1=\alpha_2=\cdots=\alpha_n=0$, hence $v=0$. Therefore, $T_1+T_2$ is
+injective. Since $T_1$ and $T_2$ are not injective, but their sum is
+injective, the set $\{T\in\Lin(V,W)\mid T \text{ is not injective}\}$ is not
+closed under addition and thus is not a subspace of $\Lin(V,W)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional with $\dim V\ge\dim W\ge2$. Show
+that $\{T\in\Lin(V,W) : T \text{ is not surjective}\}$ is not a subspace of
+$\Lin(V,W)$.
+\end{exercise}
+\begin{solution}
+We proceed similarly to the previous exercise. Let $\dim V=n$ and $\dim W=m$
+with $n\ge m\ge2$. Let $v_1,v_2,\dots,v_n$ be a basis of $V$, and let
+$w_1,w_2,\dots,w_m$ be a basis of $W$. Define $T_1,T_2\in\Lin(V,W)$ by
+\[ T_1v_1=w_1, \quad T_1v_k=0 \text{ for } k\ge2, \]
+and
+\[ T_2v_1=0, \quad T_2v_k=w_k \text{ for } k=2,\dots,m, \quad
+   T_2v_k=0 \text{ for } k>m. \]
+Then $\range T_1=\spn w_1$ and $\range T_2=\spn w_2,\dots,w_m$, both of which
+are proper subspaces of $W$, so $T_1$ and $T_2$ are not surjective. However,
+\[ (T_1+T_2)v_1=T_1v_1+T_2v_1=w_1+0=w_1, \]
+and for $k=2,\dots,m$,
+\[ (T_1+T_2)v_k=T_1v_k+T_2v_k=0+w_k=w_k. \]
+Therefore, $\range(T_1+T_2)=\spn w_1,w_2,\dots,w_m=W$, so $T_1+T_2$ is
+surjective. Since $T_1$ and $T_2$ are not surjective, but their sum is
+surjective, the set $\{T\in\Lin(V,W)\mid T \text{ is not surjective}\}$ is not
+closed under addition and thus is not a subspace of $\Lin(V,W)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ is injective and $v_1,\dots,v_n$ is linearly
+independent in $V$. Prove that $Tv_1,\dots,Tv_n$ is linearly independent in
+$W$.
+\end{exercise}
+\begin{solution}
+Suppose $a_1,\dots,a_n\in\F$ are such that
+\[ a_1Tv_1+\cdots+a_nTv_n=0. \]
+By linearity of $T$, we have
+\[ T(a_1v_1+\cdots+a_nv_n)=0. \]
+Injectivity of $T$ implies that $\nul T=\{0\}$, so
+\[ a_1v_1+\cdots+a_nv_n=0. \]
+Since $v_1,\dots,v_n$ is linearly independent, it follows that
+$a_1=\cdots=a_n=0$. Therefore, $Tv_1,\dots,Tv_n$ is linearly independent in
+$W$.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_n$ spans $V$ and $T\in\Lin(V,W)$. Show that
+$Tv_1,\dots,Tv_n$ spans $\range T$.
+\end{exercise}
+\begin{solution}
+Let $w\in\range T$. Then there exists $v\in V$ such that $Tv=w$. Since
+$v_1,\dots,v_n$ spans $V$, we can write
+\[ v=a_1v_1+\cdots+a_nv_n \]
+for some scalars $a_1,\dots,a_n\in\F$. By linearity of $T$, we have
+\[ w=Tv=T(a_1v_1+\cdots+a_nv_n)=a_1Tv_1+\cdots+a_nTv_n. \]
+Therefore, $w$ is a linear combination of $Tv_1,\dots,Tv_n$. Since $w$ was
+arbitrary in $\range T$, it follows that $Tv_1,\dots,Tv_n$ spans $\range T$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V$ is finite-dimensional and that $T\in\Lin(V,W)$. Prove that
+there exists a subspace $U$ of $V$ such that
+\[ U\cap\nul T=\{0\} \quad\text{and}\quad \range T=\{Tu : u\in U\}. \]
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Note that this exercise proves the existence of a
+subspace $U$ of $V$ such that $V=U\oplus\nul T$.}
+
+Since $\nul T$ is a subspace of $V$, we can extend a basis of $\nul T$ to a
+basis of $V$. Let $n_1,\dots,n_k$ be a basis of $\nul T$, and extend this to
+a basis of $V$ by adding vectors $u_1,\dots,u_m$. Hence, a basis for $V$ is
+given by
+\[ n_1,\dots,n_k,u_1,\dots,u_m. \]
+Define $U=\spn(u_1,\dots,u_m)$. Suppose $v\in U\cap\nul T$. Then $v$ can be
+expressed as a linear combination of the basis vectors of $U$:
+\[ v=\alpha_1u_1+\cdots+\alpha_mu_m. \]
+Since $v\in\nul T$ as well, we can also express $v$ as a linear combination
+of the basis vectors of $\nul T$:
+\[ v=\beta_1n_1+\cdots+\beta_kn_k. \]
+Equating the two expressions for $v$, we have
+\[ \alpha_1u_1+\cdots+\alpha_mu_m=\beta_1n_1+\cdots+\beta_kn_k. \]
+Since $n_1,\dots,n_k,u_1,\dots,u_m$ is a basis for $V$, the only way this
+equality can hold is if all coefficients are zero, i.e.,
+$\alpha_1=\cdots=\alpha_m=0$ and $\beta_1=\cdots=\beta_k=0$. Therefore,
+$v=0$, and we conclude that $U\cap\nul T=\{0\}$.
+
+Now, let $w\in\range T$. Then there exists $v\in V$ such that $Tv=w$. We can
+express $v$ as a linear combination of the basis vectors of $V$:
+\[ v=\gamma_1n_1+\cdots+\gamma_kn_k+\delta_1u_1+\cdots+\delta_mu_m. \]
+Applying $T$ to both sides, we have
+\begin{align*}
+Tv &= T(\gamma_1n_1+\cdots+\gamma_kn_k+\delta_1u_1+\cdots+\delta_mu_m)\\
+   &= \gamma_1Tn_1+\cdots+\gamma_kTn_k+\delta_1Tu_1+\cdots+\delta_mTu_m.
+\end{align*}
+Since $n_1,\dots,n_k\in\nul T$, we have $Tn_i=0$ for all $i=1,\dots,k$.
+Therefore,
+\[ Tv=\delta_1Tu_1+\cdots+\delta_mTu_m. \]
+Let $u=\delta_1u_1+\cdots+\delta_mu_m\in U$. Then $Tu=w$. Since $w$ was
+arbitrary in $\range T$, it follows that $\range T=\{Tu\mid u\in U\}$. Thus,
+we have found a subspace $U$ of $V$ such that $U\cap\nul T=\{0\}$ and
+$\range T=\{Tu\mid u\in U\}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T$ is a linear map from $\F^4$ to $\F^2$ such that
+\[ \nul T=\{(x_1,x_2,x_3,x_4)\in\F^4 : x_1=5x_2 \text{ and } x_3=7x_4\}. \]
+Prove that $T$ is surjective.
+\end{exercise}
+\begin{solution}
+We may write the null space of $T$ as
+\[ \nul T=\{(5x_2,x_2,7x_4,x_4)\mid x_2,x_4\in\F\}. \]
+From this, we can see that $\nul T$ is spanned by the vectors $(5,1,0,0)$ and
+$(0,0,7,1)$. Therefore, $\dim\nul T=2$. By the fundamental theorem of linear
+maps, we have
+\[ \dim\F^4=\dim\nul T+\dim\range T\implies4=2+\dim\range T. \]
+Solving for $\dim\range T$, we find that $\dim\range T=2$. Since
+$\dim\F^2=2$, it follows that $\range T=\F^2$. Therefore, $T$ is surjective.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a three-dimensional subspace of $\R^8$ and that $T$ is a
+linear map from $\R^8$ to $\R^5$ such that $\nul T=U$. Prove that $T$ is
+surjective.
+\end{exercise}
+\begin{solution}
+By the fundamental theorem of linear maps, we have
+\[ \dim\R^8=\dim\nul T+\dim\range T\implies8=3+\dim\range T. \]
+Solving for $\dim\range T$, we find that $\dim\range T=5$. Since
+$\dim\R^5=5$, it follows that $\range T=\R^5$. Therefore, $T$ is surjective.
+\end{solution}
+
+\begin{exercise}
+Prove that there does not exist a linear map from $\F^5$ to $\F^2$ whose null
+space equals
+$\{(x_1,x_2,x_3,x_4,x_5)\in\F^5 : x_1=3x_2 \text{ and } x_3=x_4=x_5\}$.
+\end{exercise}
+\begin{solution}
+We can express the null space as
+\[ \nul T=\{(3x_2,x_2,x_4,x_4,x_4)\mid x_2,x_4\in\F\}. \]
+From this, we can see that $\nul T$ is spanned by the vectors $(3,1,0,0,0)$
+and $(0,0,1,1,1)$. Therefore, $\dim\nul T=2$. By the fundamental theorem of
+linear maps, we have
+\[ \dim\F^5=\dim\nul T+\dim\range T\implies5=2+\dim\range T. \]
+Solving for $\dim\range T$, we find that $\dim\range T=3$. However,
+$\dim\F^2=2$, which is less than $3$. This is a contradiction, as the
+dimension of the range cannot exceed the dimension of the target space.
+Therefore, no such linear map exists.
+\end{solution}
+
+\begin{exercise}
+Suppose there exists a linear map on $V$ whose null space and range are both
+finite-dimensional. Prove that $V$ is finite-dimensional.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{The spanning list in the solution is actually a basis
+of $V$.}
+
+Let $T\in\Lin(V)$ be such that $\nul T$ and $\range T$ are both
+finite-dimensional. Let $u_1,\dots,u_m$ be a basis of $\nul T$, and let
+$w_1,\dots,w_n$ be a basis of $\range T$. Select $v_j\in V$ be such that
+$Tv_j=w_j$ for $j=1,\dots,n$. We claim that the list
+$u_1,\dots,u_m,v_1,\dots,v_n$ spans $V$.
+
+Let $v\in V$. Then $Tv\in\range T$, so we may write
+\[ Tv=\alpha_1w_1+\cdots+\alpha_nw_n \]
+for some scalars $\alpha_1,\dots,\alpha_n\in\F$. Consider the vector
+\[ u=v-(\alpha_1v_1+\cdots+\alpha_nv_n). \]
+Then
+\[ Tu=Tv-(\alpha_1Tv_1+\cdots+\alpha_nTv_n)=Tv-(\alpha_1w_1+\cdots+\alpha_nw_n)
+   =0. \]
+Therefore, $u\in\nul T$, and we can write
+\[ u=\beta_1u_1+\cdots+\beta_mu_m \]
+for some scalars $\beta_1,\dots,\beta_m\in\F$. Thus,
+\[ v=u+(\alpha_1v_1+\cdots+\alpha_nv_n)
+   =\beta_1u_1+\cdots+\beta_mu_m+\alpha_1v_1+\cdots+\alpha_nv_n, \]
+which shows that the list spans $V$. Hence, $V$ is finite-dimensional.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are both finite-dimensional. Prove that there exists an
+injective linear map from $V$ to $W$ if and only if $\dim V\le\dim W$.
+\end{exercise}
+\begin{solution}
+Suppose there exists an injective linear map $T\in\Lin(V,W)$. By the
+fundamental theorem of linear maps, we have
+\[ \dim V=\dim\nul T+\dim\range T. \]
+Since $T$ is injective, $\nul T=\{0\}$, so $\dim\nul T=0$. Therefore,
+\[ \dim V=0+\dim\range T=\dim\range T. \]
+Since $\range T$ is a subspace of $W$, we have $\dim\range T\le\dim W$. Thus,
+\[ \dim V=\dim\range T\le\dim W. \]
+
+Conversely, suppose $\dim V\le\dim W$. Let $n=\dim V$ and $m=\dim W$. Choose
+a basis $\{v_1,\dots,v_n\}$ of $V$. Let $\{w_1,\dots,w_m\}$ be a basis of $W$.
+Define a linear map $T\in\Lin(V,W)$ by
+\[ Tv_i=w_i \quad\text{for } i=1,\dots,n. \]
+Since $n\le m$, we can assign each basis vector of $V$ to a distinct basis
+vector of $W$. To show that $T$ is injective, let
+$v=\alpha_1v_1+\cdots+\alpha_nv_n\in V$ such that $Tv=0$. Then
+\[ Tv=\alpha_1Tv_1+\cdots+\alpha_nTv_n=\alpha_1w_1+\cdots+\alpha_nw_n=0. \]
+Since $w_1,\dots,w_n$ are linearly independent, it follows that
+$\alpha_1=\cdots=\alpha_n=0$. Therefore, $v=0$, and $T$ is injective. Hence,
+there exists an injective linear map from $V$ to $W$ if and only if
+$\dim V\le\dim W$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are both finite-dimensional. Prove that there exists a
+surjective linear map from $V$ onto $W$ if and only if $\dim V\ge\dim W$.
+\end{exercise}
+\begin{solution}
+Suppose there exists a surjective linear map $T\in\Lin(V,W)$. By the
+fundamental theorem of linear maps, we have
+\[ \dim V=\dim\nul T+\dim\range T. \]
+Since $T$ is surjective, $\range T=W$, so $\dim\range T=\dim W$. Therefore,
+\[ \dim V=\dim\nul T+\dim W. \]
+Since $\dim\nul T\ge0$, it follows that
+\[ \dim V\ge\dim W. \]
+
+Conversely, suppose $\dim V\ge\dim W$. Let $n=\dim V$ and $m=\dim W$. Choose
+a basis $\{v_1,\dots,v_n\}$ of $V$. Let $\{w_1,\dots,w_m\}$ be a basis of $W$.
+Define a linear map $T\in\Lin(V,W)$ by
+\[ Tv_i=w_i \quad\text{for } i=1,\dots,m, \qquad
+   Tv_i=0 \quad\text{for } i=m+1,\dots,n. \]
+To show that $T$ is surjective, let $w\in W$. Then $w$ can be expressed as a
+linear combination of the basis vectors of $W$:
+\[ w=\beta_1w_1+\cdots+\beta_mw_m. \]
+Consider the vector $v=\beta_1v_1+\cdots+\beta_mv_m\in V$. Then
+\[ Tv=\beta_1Tv_1+\cdots+\beta_mTv_m=\beta_1w_1+\cdots+\beta_mw_m=w. \]
+Since $w$ was arbitrary in $W$, it follows that $\range T=W$. Therefore, $T$
+is surjective. Hence, there exists a surjective linear map from $V$ onto $W$
+if and only if $\dim V\ge\dim W$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional and that $U$ is a subspace of $V$.
+Prove that there exists $T\in\Lin(V,W)$ such that $\nul T=U$ if and only if
+$\dim U\ge\dim V-\dim W$.
+\end{exercise}
+\begin{solution}
+Suppose there exists $T\in\Lin(V,W)$ such that $\nul T=U$. By the
+fundamental theorem of linear maps, we have
+\[ \dim V=\dim\nul T+\dim\range T=\dim U+\dim\range T. \]
+Since $\range T$ is a subspace of $W$, we have $\dim\range T\le\dim W$.
+Therefore,
+\[ \dim V=\dim U+\dim\range T\le\dim U+\dim W. \]
+Rearranging this inequality gives
+\[ \dim U\ge\dim V-\dim W. \]
+
+Conversely, suppose $\dim U\ge\dim V-\dim W$. Let $n=\dim V$, $m=\dim W$, and
+$k=\dim U$. Let $u_1,\dots,u_k$ be a basis of $U$. Extend this basis to a
+basis of $V$ by adding vectors $v_1,\dots,v_{n-k}$. Define a linear map
+$T\in\Lin(V,W)$ by
+\[ Tu_i=0 \quad\text{for } i=1,\dots,k, \qquad
+   Tv_j=w_j \quad\text{for } j=1,\dots,n-k, \]
+where $w_1,\dots,w_{n-k}$ are linearly independent vectors in $W$. Since
+$\dim U=k$ and $\dim V-\dim W=n-m$, we have $k\ge n-m$, which implies that
+$n-k\le m$. Therefore, we can choose $w_1,\dots,w_{n-k}$ to be linearly
+independent in $W$. To show that $\nul T=U$, let $v\in\nul T$. Then $Tv=0$.
+Express $v$ as a linear combination of the basis vectors of $V$:
+\[ v=\alpha_1u_1+\cdots+\alpha_ku_k+\beta_1v_1+\cdots+\beta_{n-k}v_{n-k}. \]
+Applying $T$ to both sides, we have
+\begin{align*}
+Tv &= \alpha_1Tu_1+\cdots+\alpha_kTu_k+\beta_1Tv_1+\cdots+\beta_{n-k}Tv_{n-k}\\
+   &= 0+\beta_1w_1+\cdots+\beta_{n-k}w_{n-k}=0.
+\end{align*}
+Since $w_1,\dots,w_{n-k}$ are linearly independent, it follows that
+$\beta_1=\cdots=\beta_{n-k}=0$. Therefore,
+\[ v=\alpha_1u_1+\cdots+\alpha_ku_k\in U. \]
+Hence, $\nul T\subseteq U$. Conversely, if $v\in U$, then $Tv=0$ by the
+definition of $T$. Therefore, $U\subseteq\nul T$. Combining these two
+inclusions, we have $\nul T=U$. Thus, there exists $T\in\Lin(V,W)$ such that
+$\nul T=U$ if and only if $\dim U\ge\dim V-\dim W$.
+\end{solution}
+
+\begin{exercise}
+Suppose $W$ is finite-dimensional and $T\in\Lin(V,W)$. Prove that $T$ is
+injective if and only if there exists $S\in\Lin(W,V)$ such that $ST$ is the
+identity operator on $V$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is injective. Then $\nul T=\{0\}$. Also, $\range T$ is finite
+dimensional since it is a subspace of $W$. Since $T$ is injective, it is an
+isomorphism from $V$ onto $\range T$. Hence, $V$ is finite dimensional. Let
+$n=\dim V$ and $m=\dim W$. Since $T$ is injective, we have $\dim\range T=n$.
+Choose a basis $\{v_1,\dots,v_n\}$ of $V$. Then $\{Tv_1,\dots,Tv_n\}$ is
+linearly independent in $W$. Extend this set to a basis of $W$ by adding
+vectors $w_1,\dots,w_{m-n}$. Define a linear map $S\in\Lin(W,V)$ by
+\[ S(Tv_i)=v_i \quad\text{for } i=1,\dots,n, \qquad
+   S(w_j)=0 \quad\text{for } j=1,\dots,m-n. \]
+Then for any $v\in V$, we can express $v$ as a linear combination of the
+basis vectors:
+\[ v=\alpha_1v_1+\cdots+\alpha_nv_n. \]
+Applying $T$ to both sides, we have
+\[ Tv=\alpha_1Tv_1+\cdots+\alpha_nTv_n. \]
+Now, applying $S$ to $Tv$, we get
+\[ STv=S(\alpha_1Tv_1+\cdots+\alpha_nTv_n)=\alpha_1S(Tv_1)+\cdots
+   +\alpha_nS(Tv_n)=\alpha_1v_1+\cdots+\alpha_nv_n=v. \]
+Therefore, $ST$ is the identity operator on $V$.
+
+Conversely, suppose there exists $S\in\Lin(W,V)$ such that $ST$ is the
+identity operator on $V$. Let $v\in\nul T$. Then $Tv=0$, and applying $S$
+gives
+\[ STv=S(0)=0. \]
+Since $ST$ is the identity operator on $V$, we have $v=STv=0$. Therefore,
+$\nul T=\{0\}$, which means $T$ is injective.
+\end{solution}
+
+\begin{exercise}
+Suppose $W$ is finite-dimensional and $T\in\Lin(V,W)$. Prove that $T$ is
+surjective if and only if there exists $S\in\Lin(W,V)$ such that $TS$ is the
+identity operator on $W$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is surjective. Then $\range T=W$. Let $m=\dim W$ and choose a basis
+$\{w_1,\dots,w_m\}$ of $W$. Since $T$ is surjective, for each $w_i$, there
+exists $v_i\in V$ such that $Tv_i=w_i$. Define a linear map $S\in\Lin(W,V)$ by
+\[ S(w_i)=v_i \quad\text{for } i=1,\dots,m. \]
+Then for any $w\in W$, we can express $w$ as a linear combination of the basis
+vectors:
+\[ w=\alpha_1w_1+\cdots+\alpha_mw_m. \]
+Applying $S$ to both sides, we have
+\[ Sw=S(\alpha_1w_1+\cdots+\alpha_mw_m)=\alpha_1S(w_1)+\cdots+\alpha_mS(w_m)
+   =\alpha_1v_1+\cdots+\alpha_mv_m. \]
+Now, applying $T$ to $Sw$, we get
+\[ TSw=T(\alpha_1v_1+\cdots+\alpha_mv_m)=\alpha_1Tv_1+\cdots+\alpha_mTv_m
+   =\alpha_1w_1+\cdots+\alpha_mw_m=w. \]
+Therefore, $TS$ is the identity operator on $W$.
+
+Conversely, suppose there exists $S\in\Lin(W,V)$ such that $TS$ is the identity
+operator on $W$. Let $w\in W$. Then
+\[ TSw=w. \]
+This means that for every $w\in W$, there exists a vector $v=Sw\in V$ such that
+$Tv=T(Sw)=w$. Therefore, $\range T=W$, which means that $T$ is surjective.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V,W)$, and $U$ is a subspace of
+$W$. Prove that $\{v\in V : Tv\in U\}$ is a subspace of $V$ and
+\[ \dim\{v\in V : Tv\in U\}=\dim\nul T+\dim(U\cap\range T). \]
+\end{exercise}
+\begin{solution}
+Let $X=\{v\in V\mid Tv\in U\}$. We first show that $X$ is a subspace of $V$.
+Let $v_1,v_2\in X$ and $\alpha,\beta\in\F$. Then
+\[ T(\alpha v_1+\beta v_2)=\alpha Tv_1+\beta Tv_2. \]
+Since $Tv_1,Tv_2\in U$ and $U$ is a subspace of $W$, it follows that
+$\alpha Tv_1+\beta Tv_2\in U$. Therefore, $\alpha v_1+\beta v_2\in X$, and thus
+$X$ is a subspace of $V$.
+
+Now, we will compute the dimension of $X$. Let $Y=U\cap\range T$. Let
+$\dim T=k$ and $\dim Y=m$. Let $n_1,\dots,n_k$ be a basis of $\nul T$, and let
+$y_1,\dots,y_m$ be a basis of $Y$. Since $y_i\in\range T$, there exist vectors
+$v_i\in V$ such that $Tv_i=y_i$ for $i=1,\dots,m$. We claim that the set
+$\{n_1,\dots,n_k,v_1,\dots,v_m\}$ is a basis of $X$.
+
+First, we show that this set spans $X$. Let $v\in X$. Then $Tv\in U$, and since
+$Tv\in\range T$, we have $Tv\in Y$. Therefore, there exist scalars
+$\alpha_1,\dots,\alpha_m\in\F$ such that
+\[ Tv=\alpha_1y_1+\cdots+\alpha_my_m=\alpha_1Tv_1+\cdots+\alpha_mTv_m. \]
+Let $v'=v-(\alpha_1v_1+\cdots+\alpha_mv_m)$. Then
+\[ Tv'=Tv-T(\alpha_1v_1+\cdots+\alpha_mv_m)
+   =Tv-(\alpha_1Tv_1+\cdots+\alpha_mTv_m)=0. \]
+Therefore, $v'\in\nul T$, and we can express $v'$ as a linear combination of the
+basis vectors of $\nul T$:
+\[ v'=\beta_1n_1+\cdots+\beta_kn_k \]
+for some scalars $\beta_1,\dots,\beta_k\in\F$. Thus,
+\[ v=v'+(\alpha_1v_1+\cdots+\alpha_mv_m)
+   =\beta_1n_1+\cdots+\beta_kn_k+\alpha_1v_1+\cdots+\alpha_mv_m. \]
+This shows that $v$ is a linear combination of the vectors in
+$\{n_1,\dots,n_k,v_1,\dots,v_m\}$, and hence this set spans $X$.
+
+Next, we show that this set is linearly independent. Suppose
+\[ \gamma_1n_1+\cdots+\gamma_kn_k+\delta_1v_1+\cdots+\delta_mv_m=0 \]
+for some scalars $\gamma_1,\dots,\gamma_k,\delta_1,\dots,\delta_m\in\F$. Observe
+that $Tn_i=0$ for all $i=1,\dots,k$, and $Tv_j=y_j$ for all $j=1,\dots,m$.
+Therefore,
+\[ 0=T(\gamma_1n_1+\cdots+\gamma_kn_k+\delta_1v_1+\cdots+\delta_mv_m)
+   =\delta_1y_1+\cdots+\delta_my_m. \]
+Since $y_1,\dots,y_m$ are linearly independent, it follows that
+$\delta_1=\cdots=\delta_m=0$. Therefore,
+\[ \gamma_1n_1+\cdots+\gamma_kn_k=0. \]
+Since $n_1,\dots,n_k$ are linearly independent, $\gamma_1=\cdots=\gamma_k=0$.
+Thus, the set $\{n_1,\dots,n_k,v_1,\dots,v_m\}$ is linearly independent and a
+basis of $X$. Therefore,
+\[ \dim X=k+m=\dim\nul T+\dim(U\cap\range T). \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ and $V$ are finite-dimensional vector spaces and $S\in\Lin(V,W)$
+and $T\in\Lin(U,V)$. Prove that
+\[ \dim\nul ST\le\dim\nul S+\dim\nul T. \]
+\end{exercise}
+\begin{solution}
+Let $u\in U$ such that $u\in\nul ST$. Then $STu=0$, which implies that
+$Tu\in\nul S$. Therefore, we can express $\nul ST$ as
+\[ \nul ST=\{u\in U\mid Tu\in\nul S\}. \]
+Observe that this looks similar to the set in Exercise 3b21, where $T$ is a
+linear map from $U$ to $V$ and $\nul S$ is a subspace of $V$. By applying the
+result from Exercise 3b21, we have
+\[ \dim\nul ST=\dim\nul T+\dim(\nul S\cap\range T). \]
+Since $\nul S\cap\range T$ is a subspace of $\nul S$, we have
+\[ \dim(\nul S\cap\range T)\le\dim\nul S. \]
+Therefore,
+\[ \dim\nul ST=\dim\nul T+\dim(\nul S\cap\range T)\le\dim\nul T+\dim\nul S.
+   \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ and $V$ are finite-dimensional vector spaces and $S\in\Lin(V,W)$
+and $T\in\Lin(U,V)$. Prove that
+\[ \dim\range ST\le\min\{\dim\range S,\dim\range T\}. \]
+\end{exercise}
+\begin{solution}
+Let $u\in U$ such that $STu\in\range ST$. Then $STu=S(Tu)$, which implies that
+$Tu\in\range T$. Therefore, we can express $\range ST$ as
+\[ \range ST=\{S(Tu)\mid u\in U\}. \]
+Since $Tu\in\range T$, we can rewrite this as
+\[ \range ST=\{Sv\mid v\in\range T\}. \]
+This shows that $\range ST$ is a subset of $\range S$, and hence
+\[ \dim\range ST\le\dim\range S. \]
+Now let $v_1,\dots,v_m$ be a basis of $\range T$. Then for any $u\in U$, we can
+express $Tu$ as a linear combination of the basis vectors:
+\[ Tu=\alpha_1v_1+\cdots+\alpha_mv_m \]
+for some scalars $\alpha_1,\dots,\alpha_m\in\F$. Applying $S$ to both sides, we
+have
+\[ STu=S(Tu)=S(\alpha_1v_1+\cdots+\alpha_mv_m)=\alpha_1Sv_1+\cdots+\alpha_mSv_m. \]
+This shows that $\range ST$ is spanned by the vectors $Sv_1,\dots,Sv_m$.
+Therefore,
+\[ \dim\range ST\le m=\dim\range T. \]
+Combining the two inequalities, we have
+\[ \dim\range ST\le\min(\dim\range S,\dim\range T). \qedhere \]
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Suppose $\dim V=5$ and $S,T\in\Lin(V)$ are such that $ST=0$. Prove that
+  $\dim\range TS\le2$.
+\item Give an example of $S,T\in\Lin(\F^5)$ with $ST=0$ and
+  $\dim\range TS=2$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Since $ST=0$, then $S(Tv)=0$ for all $v\in V$. This implies that
+  $\range T\subseteq\nul S$. By the fundamental theorem of linear maps, we have
+  \[ 5=\dim\nul S+\dim\range S\ge\dim\range T+\dim\range S. \]
+  Now, by Exercise 3B23, we have
+  \[ \dim\range TS\le\min(\dim\range T,\dim\range S). \]
+  Suppose that $\dim\range TS>2$. Then both $\dim\range T$ and $\dim\range S$
+  must be greater than $2$, or equivalently, $\dim\range T\ge3$ and
+  $\dim\range S\ge3$. This implies that
+  \[ \dim\range T+\dim\range S\ge3+3=6>5, \]
+  which is a contradiction. Therefore, $\dim\range TS\le2$.
+\item Let $v_1,v_2,v_3,v_4,v_5$ be a basis of $\F^5$. Define
+  $S,T\in\Lin(\F^5)$ by
+  \[ Sv_1=v_1, \quad Sv_2=v_2, \quad Sv_3=Sv_4=Sv_5=0, \]
+  and
+  \[ Tv_1=v_3, \quad Tv_2=v_4, \quad Tv_3=Tv_4=Tv_5=0. \]
+  Then $ST=0$ since $S(Tv_i)=S(0)=0$ for all $i=1,\dots,5$. Now, we compute
+  $\range TS$. We have
+  \begin{gather*}
+  TSv_1=T(Sv_1)=Tv_1=v_3, \quad TSv_2=T(Sv_2)=Tv_2=v_4,\\
+  TSv_3=TSv_4=TSv_5=0.
+  \end{gather*}
+  Therefore, $\range TS=\spn(v_3,v_4)$, which has dimension $2$. Thus, we have
+  constructed an example of $S,T\in\Lin(\F^5)$ with $ST=0$ and
+  $\dim\range TS=2$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose that $W$ is finite-dimensional and $S,T\in\Lin(V,W)$. Prove that
+$\nul S\subseteq\nul T$ if and only if there exists $E\in\Lin(W)$ such that
+$T=ES$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{This exercise requires showing that some
+$R\in\Lin(\range S,W)$ is well-defined. An issue arises when $T$ is not
+injective: for some $w\in\range S$, there may be distinct $v_1,v_2\in V$ such
+that $Sv_1=Sv_2=w$. In this case, we must show that $Tv_1=Tv_2$.}
+
+Suppose $\nul S\subseteq\nul T$. Define a linear map $R\colon\range S\to W$ by
+$R(Sv)=Tv$ for all $v\in V$. We need to show that $R$ is well-defined. Suppose
+$Sv_1=Sv_2$ for some $v_1,v_2\in V$. Then $S(v_1-v_2)=0$, which implies that
+$v_1-v_2\in\nul S$. Since $\nul S\subseteq\nul T$, we have
+$v_1-v_2\in\nul T$, which means that $T(v_1-v_2)=0$. Therefore, $Tv_1=Tv_2$,
+and hence $R(Sv_1)=R(Sv_2)$. Thus, $R$ is well-defined.
+
+By Exercise 3A13, we can extend $R$ to some $E\in\Lin(W)$. Then for any
+$v\in V$, we have
+\[ Tv=R(Sv)=E(Sv), \]
+and hence $T=ES$.
+
+Conversely, suppose there exists $E\in\Lin(W)$ such that $T=ES$. Let
+$v\in\nul S$. Then $Sv=0$, and applying $E$ gives
+\[ Tv=E(Sv)=E(0)=0. \]
+Therefore, $v\in\nul T$, and hence $\nul S\subseteq\nul T$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V$ is finite-dimensional and $S,T\in\Lin(V,W)$. Prove that
+$\range S\subseteq\range T$ if and only if there exists $E\in\Lin(V)$ such
+that $S=TE$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{From the previous exercise, the reader may be tempted
+to show that a map is well-defined again. However, this is not necessary here,
+since we are defining a map on the entire space $V$, not just on $\range S$.}
+
+Suppose $\range S\subseteq\range T$. Let $v_1,\dots,v_n$ be a basis of $V$. For
+each $i=1,\dots,n$, since $Sv_i\in\range S\subseteq\range T$, there exists
+$u_i\in V$ such that $Tu_i=Sv_i$. Define a linear map $E\in\Lin(V)$ by
+\[ Ev_i=u_i \quad\text{for } i=1,\dots,n. \]
+Then for any $v\in V$, we can express $v$ as a linear combination of the basis
+vectors:
+\[ v=\alpha_1v_1+\cdots+\alpha_nv_n \]
+for some scalars $\alpha_1,\dots,\alpha_n\in\F$. Applying $S$ and $TE$ to both
+sides, we have
+\begin{align*}
+Sv &= \alpha_1Sv_1+\cdots+\alpha_nSv_n=\alpha_1Tu_1+\cdots+\alpha_nTu_n\\
+   &= T(\alpha_1u_1+\cdots+\alpha_nu_n)=TEv.
+\end{align*}
+Therefore, $S=TE$.
+
+Conversely, suppose there exists $E\in\Lin(V)$ such that $S=TE$. Let
+$w\in\range S$. Then there exists $v\in V$ such that $Sv=w$. Applying the
+definition of $S$, we have
+\[ w=Sv=TE(v)=T\bigl(E(v)\bigr). \]
+Therefore, $w\in\range T$, and hence $\range S\subseteq\range T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $P\in\Lin(V)$ and $P^2=P$. Prove that $V=\nul P\oplus\range P$.
+\end{exercise}
+\begin{solution}
+Let $v\in V$. We can express $v$ as
+\[ v=(v-Pv)+Pv. \]
+Observe that $Pv\in\range P$ by definition. Now, we need to show that
+$v-Pv\in\nul P$. Applying $P$ to $v-Pv$, we have
+\[ P(v-Pv)=Pv-P^2v=Pv-Pv=0. \]
+Therefore, $v-Pv\in\nul P$. This shows that every vector $v\in V$ can be
+expressed as a sum of a vector in $\nul P$ and a vector in $\range P$, which
+implies that
+\[ V=\nul P+\range P. \]
+
+Next, we need to show that the sum is direct. Suppose
+$u\in\nul P\cap\range P$. Then there exists some $w\in V$ such that $u=Pw$.
+Since $u\in\nul P$, we have
+\[ Pu=P(Pw)=P^2w=Pw=u. \]
+But since $u\in\nul P$, we also have $Pu=0$. Therefore, we have
+\[ u=Pu=0. \]
+This shows that the intersection of $\nul P$ and $\range P$ is trivial, i.e.,
+$\nul P\cap\range P=\{0\}$. Hence, the sum is direct, and we conclude that
+\[ V=\nul P\oplus\range P. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $D\in\Lin(\Poly(\R))$ is such that $\deg Dp=(\deg p)-1$ for every
+nonconstant polynomial $p\in\Poly(\R)$. Prove that $D$ is surjective.
+\exnote{The notation $D$ is used above to remind you of the differentiation map
+that sends a polynomial $p$ to $p'$.}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Note that $\Poly(\R)$ is infinite-dimensional, so we
+cannot use the fundamental theorem of linear maps directly. Instead, one should
+consider finite-dimensional subspaces of $\Poly(\R)$.}
+
+If $p=0$, then $p=D(0)\in\range D$ by linearity. Suppose $p\ne0$ and let
+$n=\deg p$. Consider the list $D(x),D(x^2),\dots,D(x^{n+1})$. Since $x^k$ is
+nonconstant for each $k\in\{1,\dots,n+1\}$, we have $\deg D(x^k)=k-1$. Thus,
+$D(x),D(x^2),\dots,D(x^{n+1})$ is a list of $n+1$ polynomials with pairwise
+distinct degrees, which implies linear independence. Since
+$\dim\Poly_n(\R)=n+1$, this list is a basis for $\Poly_n(\R)$. In particular,
+$p\in\Poly_n(\R)$, so there exist scalars $c_1,\dots,c_{n+1}\in\R$ such that
+\[ p=\sum_{k=1}^{n+1}c_kD(x^k)=D\Biggl(\sum_{k=1}^{n+1}c_kx^k\Biggr)\in\range D. \]
+Since $p$ was arbitrary, $D$ is surjective.
+\end{solution}
+
+\begin{exercise}
+Suppose $p\in\Poly(\R)$. Prove that there exists a polynomial $q\in\Poly(\R)$
+such that $5q''+3q'=p$.
+\exnote{This exercise can be done without linear algebra, but it's more fun to
+do it using linear algebra.}
+\end{exercise}
+\begin{solution}
+\solnote{Appendix}{See the alternate proof at the end of this solution for an
+explicit method of determining $q$ given a system of equations.}
+
+Define $D\in\Lin(\Poly(\R))$ by $Dq=5q''+3q'$ for all $q\in\Poly(\R)$. For
+nonconstant $q$, we have $\deg Dq=\deg q-1$. By Exercise 3B28, $D$ is
+surjective. Therefore, for any polynomial $p\in\Poly(\R)$, there exists a
+polynomial $q\in\Poly(\R)$ such that $Dq=p$, which means that $5q''+3q'=p$.
+
+\emph{Alternate proof.} \emph{Coolempire93.} Let
+$p(x)=a_0+a_1x+\cdots+a_nx^n$ and suppose there exists a polynomial
+$q(x)=b_0+b_1x+\cdots+b_mx^m$ satisfying $5q''+3q'=p$. If $\deg q=m\ge2$, we
+can say $q'$ has degree $m-1$ and $q''$ has degree $m-2$, so $5q''+3q'$ has
+degree $m-1$. To satisfy the given equation, then, we must have
+$m-1=n=\deg p$, and we may write $q(x)=b_0+b_1x+\cdots+b_{n+1}x^{n+1}$. Before
+we deal with the general case, we will quickly consider when $n=0$ (which would
+force $m<2$):
+
+If $p(x)=a_0$, then let $q(x)=b_0+b_1x$. Because $5q''+3q'=p$, we have
+$5q''+3q'=5(0)+3b_1=a_0$, so we set $b_1=a_0/3$ and we have a
+polynomial $q$ such that $5q''+3q'=p$ for any value of $b_0$. As we will see
+below, the constant term of $q$ never depends on $p$.
+
+For the remainder of this proof, we take $m=n+1$ and suppose $n\ge1$. We have
+\begin{align*}
+q'(x) &= b_1+2b_2x+\cdots+(n+1)b_{n+1}x^n\\
+q''(x) &= 2b_2+6b_3x+\cdots+n(n+1)b_{n+1}x^{n-1}
+\end{align*}
+Equating coefficients of $5q''+3q'$ with those of $p$, we obtain the system
+\[ \begin{cases}
+   a_0=3b_1+10b_2\\
+   a_1=6b_2+30b_3\\
+   \vdots\\
+   a_{n-1}=3nb_n+5n(n+1)b_{n+1}\\
+   a_n=3(n+1)b_{n+1}
+   \end{cases}. \]
+That is, $a_i=3(i+1)b_{i+1}+5(i+1)(i+2)b_{i+2}$ for $0\le i<n$ and
+$a_n=3(n+1)b_{n+1}$. Finally, we solve for the coefficients of $q$ by
+back-substitution. Noting that
+\[ b_j=\frac{a_{j-1}-5j(j+1)b_{j+1}}{3j}=\frac{a_{j-1}}{3j}-(5/3)(j+1)b_{j+1}, \]
+we have
+\[ \begin{cases}
+   b_{n+1}=\frac{a_n}{3(n+1)}\\[2pt]
+   b_n=\frac{a_{n-1}}{3n}-(5/3)(n+1)b_{n+1}=\frac{a_{n-1}}{3n}-5/9a_n\\[2pt]
+   b_{n-1}=\frac{a_{n-2}}{3(n-1)}-5/3nb_n
+     =\frac{a_{n-2}}{3(n-1)}-5/9a_{n-1}+25/27na_n\\
+   \vdots\\
+   b_1=\frac{a_0-10b_2}{3}
+   \end{cases} \]
+which has a valid solution$^\dagger$ since no division by $0$ occurs. Finally,
+we note that $b_0$ is a free variable, so there is an infinite family of
+polynomials $q\in\Poly(\R)$ with the given coefficients such that
+$5q''+3q'=p$.
+
+$^\dagger$\,Solving this recurrence is outside the scope of this course, but,
+specifically, the coefficients of $q$ are
+\begin{align*}
+b_j &= \frac{a_{j-1}}{3j}-5/9a_j+(25/27)(j+1)a_{j+1}
+       -(125/81)(j+1)(j+2)a_{j+2}\\
+    &\qquad+\cdots+(-1)^{n-j+1}\frac{5^{n-j+1}}{3^{n-j+2}}(j+1)(j+2)\cdots na_n\\
+    &= 1/3\Biggl(\frac{a_{j-1}}{j}
+       +\sum_{i=j}^n\Bigl(-5/3\Bigr)^{i-j+1}\frac{i!}{j!}a_i\Biggr).
+       \qedhere
+\end{align*}
+\end{solution}
+
+\begin{exercise}
+Suppose $\varphi\in\Lin(V,\F)$ and $\varphi\ne0$. Suppose $u\in V$ is not in
+$\nul\varphi$. Prove that
+\[ V=\nul\varphi\oplus\{au : a\in\F\}. \]
+\end{exercise}
+\begin{solution}
+Let $v\in V$. We want to show that $v$ can be expressed as a sum of a vector in
+$\nul\varphi$ and a scalar multiple of $u$. Since $\varphi(u)\ne0$, we can
+define a scalar
+\[ a=\frac{\varphi(v)}{\varphi(u)}. \]
+Then consider the vector
+\[ w=v-au. \]
+We have
+\[ \varphi(w)=\varphi(v-au)=\varphi(v)-a\varphi(u)
+   =\varphi(v)-\frac{\varphi(v)}{\varphi(u)}\varphi(u)=0. \]
+Therefore, $w\in\nul\varphi$. Thus, we can express $v$ as
+\[ v=w+au, \]
+where $w\in\nul\varphi$ and $au$ is a scalar multiple of $u$. This shows that
+every vector in $V$ can be expressed as a sum of a vector in $\nul\varphi$ and a
+scalar multiple of $u$, which implies that
+\[ V=\nul\varphi+\{au\mid a\in\F\}. \]
+
+Next, we need to show that the sum is direct. Suppose
+$w\in\nul\varphi\cap\{au\mid a\in\F\}$. Then there exists a scalar $a\in\F$
+such that $w=au$. Since $w\in\nul\varphi$, we have
+\[ 0=\varphi(w)=\varphi(au)=a\varphi(u). \]
+Since $\varphi(u)\ne0$, it follows that $a=0$. Therefore, $w=0$, which shows
+that the intersection of $\nul\varphi$ and $\{au\mid a\in\F\}$ is trivial.
+Hence, the sum is direct, and we conclude that
+\[ V=\nul\varphi\oplus\{au\mid a\in\F\}. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $X$ is a subspace of $V$, and $Y$ is a
+finite-dimensional subspace of $W$. Prove that there exists $T\in\Lin(V,W)$
+such that $\nul T=X$ and $\range T=Y$ if and only if $\dim X+\dim Y=\dim V$.
+\end{exercise}
+\begin{solution}
+Suppose there exists $T\in\Lin(V,W)$ such that $\nul T=X$ and $\range T=Y$. By
+the fundamental theorem of linear maps, we have
+\[ \dim V=\dim\nul T+\dim\range T=\dim X+\dim Y. \]
+
+Conversely, suppose $\dim X+\dim Y=\dim V$. Let $n=\dim V$, $k=\dim X$, and
+$m=\dim Y$. Then $n=k+m$. Choose a basis $\{x_1,\dots,x_k\}$ of $X$ and extend
+it to a basis $\{x_1,\dots,x_k,v_1,\dots,v_m\}$ of $V$. Let
+$\{y_1,\dots,y_m\}$ be a basis of $Y$. Define a linear map $T\in\Lin(V,W)$ by
+\[ Tx_i=0 \quad\text{for } i=1,\dots,k, \]
+and
+\[ Tv_j=y_j \quad\text{for } j=1,\dots,m. \]
+Then for any $v\in V$, we can express $v$ as a linear combination of the basis
+vectors:
+\[ v=\alpha_1x_1+\cdots+\alpha_kx_k+\beta_1v_1+\cdots+\beta_mv_m \]
+for some scalars $\alpha_1,\dots,\alpha_k,\beta_1,\dots,\beta_m\in\F$. Applying
+$T$ to both sides gives
+\begin{align*}
+Tv &= \alpha_1Tx_1+\cdots+\alpha_kTx_k+\beta_1Tv_1+\cdots+\beta_mTv_m\\
+   &= 0+\beta_1y_1+\cdots+\beta_my_m.
+\end{align*}
+Therefore, $Tv\in Y$. Now suppose $y=\gamma_1y_1+\cdots+\gamma_my_m\in Y$. Then
+\[ T(\gamma_1v_1+\cdots+\gamma_mv_m)=\gamma_1y_1+\cdots+\gamma_my_m=y. \]
+Hence, $\range T=Y$. Moreover, if $Tv=0$, then $\beta_1y_1+\cdots+\beta_my_m=0$.
+Since $y_1,\dots,y_m$ are linearly independent, it follows that
+$\beta_1=\cdots=\beta_m=0$. Thus, $v\in X$. Additionally, if $v\in X$, then
+$v=\alpha_1x_1+\cdots+\alpha_kx_k$ for some scalars
+$\alpha_1,\dots,\alpha_k\in\F$, and hence $Tv=0$. Therefore, $\nul T=X$. This
+shows that there exists a linear map $T\in\Lin(V,W)$ such that $\nul T=X$ and
+$\range T=Y$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional with $\dim V>1$. Show that if
+$\varphi\colon\Lin(V)\to\F$ is a linear map such that
+$\varphi(ST)=\varphi(S)\varphi(T)$ for all $S,T\in\Lin(V)$, then $\varphi=0$.
+\exnote{Hint: The description of the two-sided ideals of $\Lin(V)$ given by
+Exercise 17 in Section 3A might be useful.}
+\end{exercise}
+\begin{solution}
+Observe that $\nul\varphi$ is a two-sided ideal of $\Lin(V)$ as follows: if
+$X\in\nul\varphi$ and $Y\in\Lin(V)$, then
+\[ \varphi(XY)=\varphi(X)\varphi(Y)=0\cdot\varphi(Y)=0, \quad
+   \varphi(YX)=\varphi(Y)\varphi(X)=\varphi(Y)\cdot0=0. \]
+Since $\dim V>1$, then Exercise 3A16 gives the existence of $S,T\in\Lin(V)$
+such that $ST\ne TS$. Then we have
+\[ \varphi(ST-TS)=\varphi(S)\varphi(T)-\varphi(T)\varphi(S)=0. \]
+Therefore, $ST-TS\in\nul\varphi$. Since $\nul\varphi$ is a two-sided ideal of
+$\Lin(V)$, then by Exercise 3A17, we have $\nul\varphi=\Lin(V)$. Hence,
+$\varphi=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V$ and $W$ are real vector spaces and $T\in\Lin(V,W)$. Define
+$T_{\C}\colon V_{\C}\to W_{\C}$ by
+\[ T_{\C}(u+iv)=Tu+iTv \]
+for all $u,v\in V$.
+\begin{parts}
+\item Show that $T_{\C}$ is a (complex) linear map from $V_{\C}$ to $W_{\C}$.
+\item Show that $T_{\C}$ is injective if and only if $T$ is injective.
+\item Show that $\range T_{\C}=W_{\C}$ if and only if $\range T=W$.
+\end{parts}
+\exnote{See Exercise 8 in Section 1B for the definition of the complexification
+$V_{\C}$. The linear map $T_{\C}$ is called the \textbf{complexification} of the
+linear map $T$.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $u+vi$ and $w+xi\in V_{\C}$. Then for any $a+bi\in\C$, we have
+  \begin{align*}
+  T_{\C}\bigl((a+bi)(u+vi)+(w+xi)\bigr)
+    &= T_{\C}\bigl((au-bv+(av+bu)i)+(w+xi)\bigr)\\
+    &= T(au-bv+w)+iT(av+bu+x)\\
+    &= aTu-bTv+Tw+i(aTv+bTu+Tx)\\
+    &= (a+bi)(Tu+iTv)+(Tw+iTx)\\
+    &= (a+bi)T_{\C}(u+vi)+T_{\C}(w+xi).
+  \end{align*}
+  Therefore, $T_{\C}$ is a complex linear map from $V_{\C}$ to $W_{\C}$.
+\item Suppose $T_{\C}$ is injective. Let $v\in V$ be such that $Tv=0$. Then
+  \[ T_{\C}(v+i0)=Tv+iT0=0+i0=0. \]
+  Since $T_{\C}$ is injective, we have $v+i0=0$, which implies that $v=0$.
+  Therefore, $T$ is injective.
+
+  Conversely, suppose $T$ is injective. Let $u+iv\in V_{\C}$ be such that
+  $T_{\C}(u+iv)=0$. Then
+  \[ Tu+iTv=0. \]
+  This implies that $Tu=0$ and $Tv=0$. Since $T$ is injective, we have $u=0$
+  and $v=0$. Therefore, $u+iv=0$, and hence $T_{\C}$ is injective.
+\item Suppose $\range T_{\C}=W_{\C}$. Let $w\in W$. Then $w+i0\in W_{\C}$, and
+  since $\range T_{\C}=W_{\C}$, there exists $u+iv\in V_{\C}$ such that
+  \[ T_{\C}(u+iv)=Tu+iTv=w+i0. \]
+  This implies that $Tu=w$ and $Tv=0$. Therefore, $w\in\range T$, and hence
+  $\range T=W$.
+
+  Conversely, suppose $\range T=W$. Let $w_1+iw_2\in W_{\C}$. Since
+  $\range T=W$, there exist $u,v\in V$ such that $Tu=w_1$ and $Tv=w_2$. Then
+  \[ T_{\C}(u+iv)=Tu+iTv=w_1+iw_2. \]
+  Therefore, $w_1+iw_2\in\range T_{\C}$, and hence $\range T_{\C}=W_{\C}$.
+\end{parts}
+\end{solution}

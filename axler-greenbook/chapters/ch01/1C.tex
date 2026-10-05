@@ -1,0 +1,844 @@
+% Source: book pp. 18--26 (PDF 32--40); solutions pp. 14--24, 168.
+\section{Subspaces}
+
+By considering subspaces, we can greatly expand our examples of vector spaces.
+
+\begin{definition}[Subspace]\label{ax:1.33}
+A subset $U$ of $V$ is called a \emph{subspace} of $V$ if $U$ is also a vector
+space with the same additive identity, addition, and scalar multiplication as
+on $V$.
+\end{definition}
+
+\marginnote{Some people use the terminology \emph{linear subspace}, which means
+the same as subspace.}%
+The next result gives the easiest way to check whether a subset of a vector
+space is a subspace.
+
+\begin{result}[Conditions for a subspace]\label{ax:1.34}
+A subset $U$ of $V$ is a subspace of $V$ if and only if $U$ satisfies the
+following three conditions.
+\begin{axprops}
+\item[additive identity] $0\in U$.
+\item[closed under addition] $u,w\in U$ implies $u+w\in U$.
+\item[closed under scalar multiplication] $a\in\F$ and $u\in U$ implies
+  $au\in U$.
+\end{axprops}
+\end{result}
+
+\begin{proof}
+If $U$ is a subspace of $V$, then $U$ satisfies the three conditions above by
+the definition of vector space.
+
+Conversely, suppose $U$ satisfies the three conditions above. The first
+condition ensures that the additive identity of $V$ is in $U$. The second
+condition ensures that addition makes sense on $U$. The third condition ensures
+that scalar multiplication makes sense on $U$.
+
+\marginnote{The additive identity condition above could be replaced with the
+condition that $U$ is nonempty (because then taking $u\in U$ and multiplying it
+by $0$ would imply that $0\in U$). However, if a subset $U$ of $V$ is indeed a
+subspace, then usually the quickest way to show that $U$ is nonempty is to show
+that $0\in U$.}%
+If $u\in U$, then $-u$ [which equals $(-1)u$ by \ref{ax:1.32}] is also in $U$
+by the third condition above. Hence every element of $U$ has an additive
+inverse in $U$.
+
+The other parts of the definition of a vector space, such as associativity and
+commutativity, are automatically satisfied for $U$ because they hold on the
+larger space $V$. Thus $U$ is a vector space and hence is a subspace of $V$.
+\end{proof}
+
+The three conditions in the result above usually enable us to determine quickly
+whether a given subset of $V$ is a subspace of $V$. You should verify all
+assertions in the next example.
+
+\begin{example}[Subspaces]\label{ax:1.35}\leavevmode
+\begin{parts}
+\item If $b\in\F$, then
+  \[ \{(x_1,x_2,x_3,x_4)\in\F^4 : x_3=5x_4+b\} \]
+  is a subspace of $\F^4$ if and only if $b=0$.
+\item The set of continuous real-valued functions on the interval $[0,1]$ is a
+  subspace of $\R^{[0,1]}$.
+\item The set of differentiable real-valued functions on $\R$ is a subspace of
+  $\R^{\R}$.
+\item The set of differentiable real-valued functions $f$ on the interval
+  $(0,3)$ such that $f'(2)=b$ is a subspace of $\R^{(0,3)}$ if and only if
+  $b=0$.
+\item The set of all sequences of complex numbers with limit $0$ is a subspace
+  of $\C^\infty$.
+\end{parts}
+\end{example}
+
+\marginnote{The set $\{0\}$ is the smallest subspace of $V$, and $V$ itself is
+the largest subspace of $V$. The empty set is not a subspace of $V$ because a
+subspace must be a vector space and hence must contain at least one element,
+namely, an additive identity.}%
+Verifying some of the items above shows the linear structure underlying parts
+of calculus. For example, (b) above requires the result that the sum of two
+continuous functions is continuous. As another example, (d) above requires the
+result that for a constant $c$, the derivative of $cf$ equals $c$ times the
+derivative of $f$.
+
+The subspaces of $\R^2$ are precisely $\{0\}$, all lines in $\R^2$ containing
+the origin, and $\R^2$. The subspaces of $\R^3$ are precisely $\{0\}$, all lines
+in $\R^3$ containing the origin, all planes in $\R^3$ containing the origin, and
+$\R^3$. To prove that all these objects are indeed subspaces is
+straightforward---the hard part is to show that they are the only subspaces of
+$\R^2$ and $\R^3$. That task will be easier after we introduce some additional
+tools in the next chapter.
+
+\subsection{Sums of Subspaces}
+
+\marginnote{The union of subspaces is rarely a subspace (see Exercise~12),
+which is why we usually work with sums rather than unions.}%
+When dealing with vector spaces, we are usually interested only in subspaces,
+as opposed to arbitrary subsets. The notion of the sum of subspaces will be
+useful.
+
+\begin{definition}[Sum of subspaces]\label{ax:1.36}
+Suppose $V_1,\dots,V_m$ are subspaces of $V$. The \emph{sum} of
+$V_1,\dots,V_m$, denoted by $V_1+\cdots+V_m$, is the set of all possible sums
+of elements of $V_1,\dots,V_m$. More precisely,
+\[ V_1+\cdots+V_m = \{v_1+\cdots+v_m : v_1\in V_1,\dots,v_m\in V_m\}. \]
+\end{definition}
+
+Let's look at some examples of sums of subspaces.
+
+\begin{example}[A sum of subspaces of $\F^3$]\label{ax:1.37}
+Suppose $U$ is the set of all elements of $\F^3$ whose second and third
+coordinates equal $0$, and $W$ is the set of all elements of $\F^3$ whose first
+and third coordinates equal $0$:
+\[ U = \{(x,0,0)\in\F^3 : x\in\F\} \quad\text{and}\quad
+   W = \{(0,y,0)\in\F^3 : y\in\F\}. \]
+Then
+\[ U+W = \{(x,y,0)\in\F^3 : x,y\in\F\}, \]
+as you should verify.
+\end{example}
+
+\begin{example}[A sum of subspaces of $\F^4$]\label{ax:1.38}
+Suppose
+\[ U = \{(x,x,y,y)\in\F^4 : x,y\in\F\} \quad\text{and}\quad
+   W = \{(x,x,x,y)\in\F^4 : x,y\in\F\}. \]
+Using words rather than symbols, we could say that $U$ is the set of elements
+of $\F^4$ whose first two coordinates equal each other and whose third and
+fourth coordinates equal each other. Similarly, $W$ is the set of elements of
+$\F^4$ whose first three coordinates equal each other.
+
+To find a description of $U+W$, consider a typical element $(a,a,b,b)$ of $U$
+and a typical element $(c,c,c,d)$ of $W$, where $a,b,c,d\in\F$. We have
+\[ (a,a,b,b)+(c,c,c,d) = (a+c,a+c,b+c,b+d), \]
+which shows that every element of $U+W$ has its first two coordinates equal to
+each other. Thus\refstepcounter{theorem}
+\[ U+W \subseteq \{(x,x,y,z)\in\F^4 : x,y,z\in\F\}.
+   \tag*{\thetheorem}\label{ax:1.39} \]
+
+To prove the inclusion in the other direction, suppose $x,y,z\in\F$. Then
+\[ (x,x,y,z) = (x,x,y,y)+(0,0,0,z-y), \]
+where the first vector on the right is in $U$ and the second vector on the
+right is in $W$. Thus $(x,x,y,z)\in U+W$, showing that the inclusion
+\ref{ax:1.39} also holds in the opposite direction. Hence
+\[ U+W = \{(x,x,y,z)\in\F^4 : x,y,z\in\F\}, \]
+which shows that $U+W$ is the set of elements of $\F^4$ whose first two
+coordinates equal each other.
+\end{example}
+
+The next result states that the sum of subspaces is a subspace, and is in fact
+the smallest subspace containing all the summands (which means that every
+subspace containing all the summands also contains the sum).
+
+\begin{result}[Sum of subspaces is the smallest containing subspace]\label{ax:1.40}
+Suppose $V_1,\dots,V_m$ are subspaces of $V$. Then $V_1+\cdots+V_m$ is the
+smallest subspace of $V$ containing $V_1,\dots,V_m$.
+\end{result}
+
+\begin{proof}
+The reader can verify that $V_1+\cdots+V_m$ contains the additive identity $0$
+and is closed under addition and scalar multiplication. Thus \ref{ax:1.34}
+implies that $V_1+\cdots+V_m$ is a subspace of $V$.
+
+\marginnote{Sums of subspaces in the theory of vector spaces are analogous to
+unions of subsets in set theory. Given two subspaces of a vector space, the
+smallest subspace containing them is their sum. Analogously, given two subsets
+of a set, the smallest subset containing them is their union.}%
+The subspaces $V_1,\dots,V_m$ are all contained in $V_1+\cdots+V_m$ (to see
+this, consider sums $v_1+\cdots+v_m$ where all except one of the $v_k$'s are
+$0$). Conversely, every subspace of $V$ containing $V_1,\dots,V_m$ contains
+$V_1+\cdots+V_m$ (because subspaces must contain all finite sums of their
+elements). Thus $V_1+\cdots+V_m$ is the smallest subspace of $V$ containing
+$V_1,\dots,V_m$.
+\end{proof}
+
+\subsection{Direct Sums}
+
+Suppose $V_1,\dots,V_m$ are subspaces of $V$. Every element of
+$V_1+\cdots+V_m$ can be written in the form
+\[ v_1+\cdots+v_m, \]
+where each $v_k\in V_k$. Of special interest are cases in which each vector in
+$V_1+\cdots+V_m$ can be represented in the form above in only one way. This
+situation is so important that it gets a special name (direct sum) and a
+special symbol ($\oplus$).
+
+\begin{definition}[Direct sum, $\oplus$]\label{ax:1.41}
+Suppose $V_1,\dots,V_m$ are subspaces of $V$.
+\begin{itemize}
+\item The sum $V_1+\cdots+V_m$ is called a \emph{direct sum} if each element of
+  $V_1+\cdots+V_m$ can be written in only one way as a sum $v_1+\cdots+v_m$,
+  where each $v_k\in V_k$.
+\item If $V_1+\cdots+V_m$ is a direct sum, then $V_1\oplus\cdots\oplus V_m$
+  denotes $V_1+\cdots+V_m$, with the $\oplus$ notation serving as an indication
+  that this is a direct sum.
+\end{itemize}
+\end{definition}
+
+\begin{example}[A direct sum of two subspaces]\label{ax:1.42}
+Suppose $U$ is the subspace of $\F^3$ of those vectors whose last coordinate
+equals $0$, and $W$ is the subspace of $\F^3$ of those vectors whose first two
+coordinates equal $0$:
+\[ U = \{(x,y,0)\in\F^3 : x,y\in\F\} \quad\text{and}\quad
+   W = \{(0,0,z)\in\F^3 : z\in\F\}. \]
+Then $\F^3=U\oplus W$, as you should verify.
+\end{example}
+
+\marginnote[6mm]{To produce $\oplus$ in \TeX, type \texttt{\string\oplus}.}%
+\begin{example}[A direct sum of multiple subspaces]\label{ax:1.43}
+Suppose $V_k$ is the subspace of $\F^n$ of those vectors whose coordinates are
+all $0$, except possibly in the $k^{\text{th}}$ slot; for example,
+$V_2=\{(0,x,0,\dots,0)\in\F^n : x\in\F\}$. Then
+\[ \F^n = V_1\oplus\cdots\oplus V_n, \]
+as you should verify.
+\end{example}
+
+Sometimes nonexamples add to our understanding as much as examples.
+
+\begin{example}[A sum that is not a direct sum]\label{ax:1.44}
+Suppose
+\begin{align*}
+V_1 &= \{(x,y,0)\in\F^3 : x,y\in\F\},\\
+V_2 &= \{(0,0,z)\in\F^3 : z\in\F\},\\
+V_3 &= \{(0,y,y)\in\F^3 : y\in\F\}.
+\end{align*}
+Then $\F^3=V_1+V_2+V_3$ because every vector $(x,y,z)\in\F^3$ can be written as
+\[ (x,y,z) = (x,y,0)+(0,0,z)+(0,0,0), \]
+where the first vector on the right side is in $V_1$, the second vector is in
+$V_2$, and the third vector is in $V_3$.
+
+However, $\F^3$ does not equal the direct sum of $V_1,V_2,V_3$, because the
+vector $(0,0,0)$ can be written in more than one way as a sum $v_1+v_2+v_3$,
+with each $v_k\in V_k$. Specifically, we have
+\[ (0,0,0) = (0,1,0)+(0,0,1)+(0,-1,-1) \]
+and, of course,
+\[ (0,0,0) = (0,0,0)+(0,0,0)+(0,0,0), \]
+where the first vector on the right side of each equation above is in $V_1$,
+the second vector is in $V_2$, and the third vector is in $V_3$. Thus the sum
+$V_1+V_2+V_3$ is not a direct sum.
+\end{example}
+
+\marginnote[-8mm]{The symbol $\oplus$, which is a plus sign inside a circle, reminds
+us that we are dealing with a special type of sum of subspaces---each element
+in the direct sum can be represented in only one way as a sum of elements from
+the specified subspaces.}%
+The definition of direct sum requires every vector in the sum to have a unique
+representation as an appropriate sum. The next result shows that when deciding
+whether a sum of subspaces is a direct sum, we only need to consider whether
+$0$ can be uniquely written as an appropriate sum.
+
+\begin{result}[Condition for a direct sum]\label{ax:1.45}
+Suppose $V_1,\dots,V_m$ are subspaces of $V$. Then $V_1+\cdots+V_m$ is a direct
+sum if and only if the only way to write $0$ as a sum $v_1+\cdots+v_m$, where
+each $v_k\in V_k$, is by taking each $v_k$ equal to $0$.
+\end{result}
+
+\begin{proof}
+First suppose $V_1+\cdots+V_m$ is a direct sum. Then the definition of direct
+sum implies that the only way to write $0$ as a sum $v_1+\cdots+v_m$, where each
+$v_k\in V_k$, is by taking each $v_k$ equal to $0$.
+
+Now suppose that the only way to write $0$ as a sum $v_1+\cdots+v_m$, where
+each $v_k\in V_k$, is by taking each $v_k$ equal to $0$. To show that
+$V_1+\cdots+V_m$ is a direct sum, let $v\in V_1+\cdots+V_m$. We can write
+\[ v = v_1+\cdots+v_m \]
+for some $v_1\in V_1,\dots,v_m\in V_m$. To show that this representation is
+unique, suppose we also have
+\[ v = u_1+\cdots+u_m, \]
+where $u_1\in V_1,\dots,u_m\in V_m$. Subtracting these two equations, we have
+\[ 0 = (v_1-u_1)+\cdots+(v_m-u_m). \]
+Because $v_1-u_1\in V_1,\dots,v_m-u_m\in V_m$, the equation above implies that
+each $v_k-u_k$ equals $0$. Thus $v_1=u_1,\dots,v_m=u_m$, as desired.
+\end{proof}
+
+\marginnote{The symbol $\iff$ used below means ``if and only if''; this symbol
+could also be read to mean ``is equivalent to''.}%
+The next result gives a simple condition for testing whether a sum of two
+subspaces is a direct sum.
+
+\begin{result}[Direct sum of two subspaces]\label{ax:1.46}
+Suppose $U$ and $W$ are subspaces of $V$. Then
+\[ U+W \text{ is a direct sum} \iff U\cap W=\{0\}. \]
+\end{result}
+
+\begin{proof}
+First suppose that $U+W$ is a direct sum. If $v\in U\cap W$, then
+$0=v+(-v)$, where $v\in U$ and $-v\in W$. By the unique representation of $0$
+as the sum of a vector in $U$ and a vector in $W$, we have $v=0$. Thus
+$U\cap W=\{0\}$, completing the proof in one direction.
+
+To prove the other direction, now suppose $U\cap W=\{0\}$. To prove that $U+W$
+is a direct sum, suppose $u\in U$, $w\in W$, and
+\[ 0 = u+w. \]
+To complete the proof, we only need to show that $u=w=0$ (by \ref{ax:1.45}).
+The equation above implies that $u=-w\in W$. Thus $u\in U\cap W$. Hence $u=0$,
+which by the equation above implies that $w=0$, completing the proof.
+\end{proof}
+
+\marginnote{Sums of subspaces are analogous to unions of subsets. Similarly,
+direct sums of subspaces are analogous to disjoint unions of subsets. No two
+subspaces of a vector space can be disjoint, because both contain $0$. So
+disjointness is replaced, at least in the case of two subspaces, with the
+requirement that the intersection equal $\{0\}$.}%
+The result above deals only with the case of two subspaces. When asking about
+a possible direct sum with more than two subspaces, it is not enough to test
+that each pair of the subspaces intersect only at $0$. To see this, consider
+Example~\ref{ax:1.44}. In that nonexample of a direct sum, we have
+$V_1\cap V_2=V_1\cap V_3=V_2\cap V_3=\{0\}$.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{1C}
+
+\begin{exercise}
+For each of the following subsets of $\F^3$, determine whether it is a subspace
+of $\F^3$.
+\begin{parts}
+\item $\{(x_1,x_2,x_3)\in\F^3 : x_1+2x_2+3x_3=0\}$
+\item $\{(x_1,x_2,x_3)\in\F^3 : x_1+2x_2+3x_3=4\}$
+\item $\{(x_1,x_2,x_3)\in\F^3 : x_1x_2x_3=0\}$
+\item $\{(x_1,x_2,x_3)\in\F^3 : x_1=5x_3\}$
+\end{parts}
+\end{exercise}
+\begin{solution}
+Let $U$ be the subset of $\F^3$ in question.
+\begin{parts}
+\item Since the zero vector $(0,0,0)$ satisfies $0+2(0)+3(0)=0$, $U$ is
+  nonempty. Let $u=(u_1,u_2,u_3)$ and $v=(v_1,v_2,v_3)$ be elements of $U$.
+  Then
+  \[ (u_1+v_1)+2(u_2+v_2)+3(u_3+v_3)
+     = (u_1+2u_2+3u_3)+(v_1+2v_2+3v_3) = 0+0 = 0. \]
+  Hence, $u+v$ is in $U$. Let $a\in\F$. Then
+  \[ au_1+2(au_2)+3(au_3) = a(u_1+2u_2+3u_3) = a\cdot0 = 0. \]
+  Hence, $au$ is in $U$. Therefore, $U$ is a subspace of $\F^3$.
+\item The zero vector $(0,0,0)$ does not satisfy $0+2(0)+3(0)=4$, so $U$ does
+  not contain the zero vector. Hence, it is not a subspace of $\F^3$.
+\item Suppose $u=(1,0,0)$ and $v=(0,1,1)$. Then $u$ and $v$ are in $U$ since
+  $1\cdot0\cdot0=0$ and $0\cdot1\cdot1=0$. However, $u+v=(1,1,1)$ is not in $U$
+  since $1\cdot1\cdot1=1\ne0$. Hence, $U$ is not closed under addition and is
+  not a subspace of $\F^3$.
+\item Since the zero vector $(0,0,0)$ satisfies $0=5(0)$, $U$ is nonempty. Let
+  $u=(u_1,u_2,u_3)$ and $v=(v_1,v_2,v_3)$ be elements of $U$. Then
+  \[ u_1+v_1 = 5u_3+5v_3 = 5(u_3+v_3). \]
+  Hence, $u+v$ is in $U$. Let $a\in\F$. Then
+  \[ au_1 = a(5u_3) = 5(au_3). \]
+  Hence, $au$ is in $U$. Therefore, $U$ is a subspace of $\F^3$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Verify all assertions about subspaces in Example~\ref{ax:1.35}.
+\end{exercise}
+\begin{solution}
+Let $U$ be the subset of $\F^4$ in question.
+\begin{parts}
+\item Suppose $U$ is a subspace of $\F^4$. Then it must contain the zero vector
+  $(0,0,0,0)$. Then $0=5(0)+b$, which implies $b=0$.
+
+  Conversely, suppose $b=0$. Then
+  $U=\{(x_1,x_2,x_3,x_4)\in\F^4 \mid x_3=5x_4\}$. The proof is similar to that
+  of Exercise~1C1~(d), hence $U$ is a subspace of $\F^4$.
+\item Note that the $0$ function on $[0,1]$ is continuous, so $0\in U$. Let
+  $f,g\in U$ be continuous functions. Then $f+g$ is continuous, so $f+g\in U$.
+  Let $a\in\R$. Then $af$ is continuous, so $af\in U$. Therefore, $U$ is a
+  subspace of $\R^{[0,1]}$.
+\item Since the derivative of the $0$ function is the $0$ function, $0\in U$.
+  Let $f,g\in U$ be differentiable functions. Then $f+g$ is differentiable, so
+  $f+g\in U$. Let $a\in\R$. Then $af$ is differentiable, so $af\in U$.
+  Therefore, $U$ is a subspace of $\R^{\R}$.
+\item Suppose $U$ is a subspace of $\R^{(0,3)}$. Then it must contain the $0$
+  function on $(0,3)$. Then $0'=0=b$, which implies $b=0$.
+
+  Conversely, suppose $b=0$. Then $U=\{f\in\R^{(0,3)} \mid f'(2)=0\}$. Let
+  $f,g\in U$ be differentiable functions such that $f'(2)=g'(2)=0$. Then
+  \[ (f+g)'(2) = f'(2)+g'(2) = 0+0 = 0, \]
+  so $f+g\in U$. Let $a\in\R$. Then
+  \[ (af)'(2) = af'(2) = a\cdot0 = 0, \]
+  so $af\in U$. Therefore, $U$ is a subspace of $\R^{(0,3)}$.
+\item Let $U$ be the set of all sequences of complex numbers with limit $0$.
+  Then the zero sequence is in $U$. Let $(z_n),(w_n)\in U$ be sequences with
+  limit $0$. Then
+  \[ \lim_{n\to\infty}(z_n+w_n) = \lim_{n\to\infty}z_n+\lim_{n\to\infty}w_n
+     = 0+0 = 0, \]
+  so $(z_n)+(w_n)\in U$. Let $a\in\C$. Then
+  \[ \lim_{n\to\infty}(az_n) = a\lim_{n\to\infty}z_n = a\cdot0 = 0, \]
+  so $a(z_n)\in U$. Therefore, $U$ is a subspace of $\C^\infty$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Show that the set of differentiable real-valued functions $f$ on the interval
+$(-4,4)$ such that $f'(-1)=3f(2)$ is a subspace of $\R^{(-4,4)}$.
+\end{exercise}
+\begin{solution}
+Let $U$ be the set in question. Then the zero function is in $U$ since
+$0'(-1)=0=3\cdot0=3\cdot0(2)$. Let $f,g\in U$ be differentiable functions such
+that $f'(-1)=3f(2)$ and $g'(-1)=3g(2)$. Then
+\[ (f+g)'(-1) = f'(-1)+g'(-1) = 3f(2)+3g(2) = 3\bigl(f(2)+g(2)\bigr)
+   = 3(f+g)(2), \]
+so $f+g\in U$. Let $a\in\R$. Then
+\[ (af)'(-1) = af'(-1) = a\cdot3f(2) = 3(af)(2), \]
+so $af\in U$. Therefore, $U$ is a subspace of $\R^{(-4,4)}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $b\in\R$. Show that the set of continuous real-valued functions $f$ on
+the interval $[0,1]$ such that $\int_0^1 f=b$ is a subspace of $\R^{[0,1]}$ if
+and only if $b=0$.
+\end{exercise}
+\begin{solution}
+Let $U$ be the set in question. Suppose $U$ is a subspace of $\R^{[0,1]}$. Then
+it must contain the zero function on $[0,1]$. Then
+\[ \int_0^1 0 = 0 = b, \]
+which implies $b=0$.
+
+Conversely, suppose $b=0$. Then
+\[ U = \biggl\{f\in\R^{[0,1]} \biggm| \int_0^1 f=0\biggr\}. \]
+The zero function is in $U$ since $\int_0^1 0=0$. Let $f,g\in U$ be continuous
+functions such that $\int_0^1 f=\int_0^1 g=0$. Then
+\[ \int_0^1 (f+g) = \int_0^1 f+\int_0^1 g = 0+0 = 0, \]
+so $f+g\in U$. Let $a\in\R$. Then
+\[ \int_0^1 (af) = a\int_0^1 f = a\cdot0 = 0, \]
+so $af\in U$. Therefore, $U$ is a subspace of $\R^{[0,1]}$.
+\end{solution}
+
+\begin{exercise}
+Is $\R^2$ a subspace of the complex vector space $\C^2$?
+\end{exercise}
+\begin{solution}
+No, $\R^2$ is not a subspace of $\C^2$. Let $u=(1,0)\in\R^2$ and $a=i\in\C$.
+Then $au=(i,0)\notin\R^2$, so $\R^2$ is not closed under scalar multiplication
+and is not a subspace of $\C^2$.
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Is $\{(a,b,c)\in\R^3 : a^3=b^3\}$ a subspace of $\R^3$?
+\item Is $\{(a,b,c)\in\C^3 : a^3=b^3\}$ a subspace of $\C^3$?
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Here, I present an elementary argument that does not
+require the use of De Moivre's Theorem; rather, I arrive at the conclusion
+directly. However, readers who are familiar with it may find it easier to note
+that the complex number $1$ has three cube roots of unity. Other readers may
+also use Vieta's formulas to arrive at the same polynomial in $\omega$ to obtain
+$1+\omega=-\omega^2$.}
+Let $U$ be the subset in question.
+\begin{parts}
+\item Since the zero vector $(0,0,0)$ satisfies $0^3=0^3$, $U$ is nonempty. Let
+  $x=(x_1,x_2,x_3)$ and $y=(y_1,y_2,y_3)$ be elements of $U$. Then
+  $x_1^3=x_2^3$ and $y_1^3=y_2^3$ both imply that $x_1=x_2$ and $y_1=y_2$.
+  Hence,
+  \[ (x_1+y_1)^3 = (x_2+y_2)^3, \]
+  so $x+y\in U$. Let $a\in\R$. Then
+  \[ (ax_1)^3 = a^3x_1^3 = a^3x_2^3 = (ax_2)^3, \]
+  so $ax\in U$. Therefore, $U$ is a subspace of $\R^3$.
+\item No, $U$ is not a subspace of $\C^3$. To see this, consider the cubic
+  polynomial $x^3-1=0$. This polynomial has three distinct roots in $\C$ as
+  follows:
+  \[ x^3-1 = (x-1)(x^2+x+1) = 0 \]
+  Applying the quadratic formula to $x^2+x+1=0$, we get
+  \[ x = \frac{-1\pm\sqrt{(-1)^2-4(1)(1)}}{2(1)} = \frac{-1\pm i\sqrt3}{2}. \]
+  Let
+  \[ \omega = \frac{-1+i\sqrt3}{2}. \]
+  Then $\omega^3=1$, and
+  \[ \omega^2 = \frac{-1-i\sqrt3}{2}. \]
+  Moreover, it is not hard to see that $\omega+\omega^2=-1$. Let $u=(1,1,0)$
+  and $v=(\omega,1,0)$. Then $u,v\in U$ since $1^3=1^3$ and $\omega^3=1^3$.
+  Then $u+v=(1+\omega,2,0)$. However,
+  \[ (1+\omega)^3 = 1+3\omega+3\omega^2+\omega^3 = 1+3(-1)+1 = -1 \ne 2^3 = 8. \]
+  Hence, $u+v\notin U$, so $U$ is not closed under addition and is not a
+  subspace of $\C^3$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $U$ is a nonempty subset of $\R^2$ such that
+$U$ is closed under addition and under taking additive inverses (meaning
+$-u\in U$ whenever $u\in U$), then $U$ is a subspace of $\R^2$.
+\end{exercise}
+\begin{solution}
+Consider the subset $\Q^2$ of $\R^2$. Then $\Q^2$ is nonempty because
+$(0,0)\in\Q^2$, closed under addition since the sum of any two rational numbers
+is rational, and closed under taking additive inverses since the additive
+inverse of a rational number is rational. However, for any irrational number
+$r\in\R$, the vector $(r,0)=r(1,0)\in\R^2$ is not in $\Q^2$. Hence, $\Q^2$ is
+not closed under scalar multiplication and is not a subspace of $\R^2$.
+Therefore, the statement is false.
+\end{solution}
+
+\begin{exercise}
+Give an example of a nonempty subset $U$ of $\R^2$ such that $U$ is closed
+under scalar multiplication, but $U$ is not a subspace of $\R^2$.
+\end{exercise}
+\begin{solution}
+Consider the subset
+\[ U = \{(x,0) \mid x\in\R\}\cup\{(0,y) \mid y\in\R\}. \]
+Then $U$ is nonempty since $(1,0)\in U$, and it is closed under scalar
+multiplication since any scalar multiple of $(1,0)$ or $(0,1)$ is still in
+$U$. However, $U$ is not closed under addition since
+$(1,0)+(0,1)=(1,1)\notin U$. Hence, $U$ is not a subspace of $\R^2$.
+\end{solution}
+
+\begin{exercise}
+A function $f\colon\R\to\R$ is called \emph{periodic} if there exists a
+positive number $p$ such that $f(x)=f(x+p)$ for all $x\in\R$. Is the set of
+periodic functions from $\R$ to $\R$ a subspace of $\R^{\R}$? Explain.
+\end{exercise}
+\begin{solution}
+It is not a subspace of $\R^{\R}$. Consider the periodic functions
+$f(x)=\cos x$ and $g(x)=\cos\sqrt2\,x$. Then the sum $f+g$ attains a maximum
+value of $2$ at $0$. If $f+g$ were periodic with period $p$, then
+$(f+g)(p)=(f+g)(0)=2$. This implies $\cos p=\cos p\sqrt2=1$. Then $p=2\pi m$
+and $p\sqrt2=2\pi n$ for positive integers $m$ and $n$. Since $p\sqrt2=2\pi n$
+implies $p=\sqrt2\pi n$, we have
+\[ 2\pi m = \sqrt2\pi n \implies \sqrt2 = \frac nm, \]
+which is a contradiction, since $\sqrt2$ is irrational. Then $f+g$ is not
+periodic.
+\end{solution}
+
+\begin{exercise}
+Suppose $V_1$ and $V_2$ are subspaces of $V$. Prove that the intersection
+$V_1\cap V_2$ is a subspace of $V$.
+\end{exercise}
+\begin{solution}
+Let $U=V_1\cap V_2$. Since both $V_1$ and $V_2$ are subspaces of $V$, they both
+contain the zero vector of $V$. Hence, $0\in U$, so $U$ is nonempty. Let
+$u,v\in U$. Then $u,v\in V_1$ and $u,v\in V_2$. Since both $V_1$ and $V_2$ are
+subspaces, they are closed under addition. Therefore, $u+v\in V_1$ and
+$u+v\in V_2$, which implies that $u+v\in U$. Let $a\in\F$. Then since both
+$V_1$ and $V_2$ are closed under scalar multiplication, we have that
+$au\in V_1$ and $au\in V_2$, which implies that $au\in U$. Therefore, $U$ is a
+subspace of $V$.
+\end{solution}
+
+\begin{exercise}
+Prove that the intersection of every collection of subspaces of $V$ is a
+subspace of $V$.
+\end{exercise}
+\begin{solution}
+Let $\mathcal{C}$ be a collection of subspaces of $V$, and let
+\[ U = \bigcap_{W\in\mathcal{C}} W. \]
+Since each subspace in $\mathcal{C}$ contains the zero vector, $0\in U$, so $U$
+is nonempty. Let $u,v\in U$. Then $u,v\in W$ for all $W\in\mathcal{C}$. Since
+each $W$ is a subspace, they are closed under addition, so $u+v\in W$ for all
+$W\in\mathcal{C}$, which implies $u+v\in U$. Let $a\in\F$. Then $au\in W$ for
+all $W\in\mathcal{C}$, which implies $au\in U$. Therefore, $U$ is a subspace of
+$V$.
+\end{solution}
+
+\begin{exercise}
+Prove that the union of two subspaces of $V$ is a subspace of $V$ if and only
+if one of the subspaces is contained in the other.
+\end{exercise}
+\begin{solution}
+Let $U,W$ be subspaces of $V$. Suppose $U\subseteq W$. Then $U\cup W=W$, which
+is a subspace of $V$. Similarly, if $W\subseteq U$, then $U\cup W=U$, which is
+a subspace of $V$.
+
+Conversely, suppose $U\cup W$ is a subspace of $V$. If neither $U\subseteq W$
+nor $W\subseteq U$, then there exist $u\in U\setminus W$ and
+$w\in W\setminus U$. Since $U\cup W$ is a subspace, it must be closed under
+addition. Then $u+w\in U\cup W$. However, $u+w\notin U$ because if it were,
+then $w=(u+w)-u\in U$, which is a contradiction. Similarly, $u+w\notin W$
+because if it were, then $u=(u+w)-w\in W$, which is also a contradiction.
+Hence, $u+w\notin U\cup W$, which contradicts the assumption that $U\cup W$ is
+a subspace. Therefore, one of the subspaces must be contained in the other.
+\end{solution}
+
+\begin{exercise}
+Prove that the union of three subspaces of $V$ is a subspace of $V$ if and only
+if one of the subspaces contains the other two.
+\exnote{This exercise is surprisingly harder than Exercise~12, possibly because
+this exercise is not true if we replace $\F$ with a field containing only two
+elements.}
+\end{exercise}
+\begin{solution}
+\solnote{Axler Note}{This result fails when the field has only two elements.}
+\solnote{Manual Remark}{The proof of this exercise is more involved than the
+proof of Exercise~1C12 in that it requires a more careful analysis of the
+possible relationships between the three subspaces.}
+\solnote{Appendix}{See the alternate proof at the end of this solution for a
+more elegant proof of this result, which implicitly uses the result that
+$\operatorname{char}(\F)\ne2$.}
+Let $U_1,U_2,U_3$ be subspaces of $V$. Without loss of generality, suppose
+$U_2\subseteq U_1$ and $U_3\subseteq U_1$. Then $U_1\cup U_2\cup U_3=U_1$,
+which is a subspace of $V$.
+
+Conversely, suppose $U_1\cup U_2\cup U_3$ is a subspace of $V$. Suppose that
+some pair satisfies containment, say $U_3\subseteq U_2$. Let
+$W=U_2\cup U_3=U_2$. Then $U_1\cup W=U_1\cup U_2\cup U_3$. By Exercise~1C12,
+either $U_1\subseteq U_2$ or $U_2\subseteq U_1$. If the former occurs, then
+$U_1\cup U_2=U_2$, which contains $U_3$. If the latter occurs, then
+$U_1\cup U_2=U_1$. Since $U_3\subseteq U_2$, then $U_3\subseteq U_1$.
+Therefore, one of the subspaces must contain the other two.
+
+Now suppose no subspace is contained in another. Then there exist
+$u\in U_2\setminus U_3$ and $v\in U_3\setminus U_2$. Since
+$U_1\cup U_2\cup U_3$ is a subspace, $u+\alpha v\in U_1\cup U_2\cup U_3$ for
+any nonzero $\alpha\in\F$. If $u+\alpha v\in U_2$, then
+$\alpha v=(u+\alpha v)-u\in U_2$, which implies $v\in U_2$, a contradiction. If
+$u+\alpha v\in U_3$, then $u=(u+\alpha v)-\alpha v\in U_3$, a contradiction.
+Then $u+\alpha v\in U_1$ for all nonzero $\alpha\in\F$. Now choose nonzero
+$\beta,\gamma\in\F$ with $\beta\ne\gamma$. Then
+$u+\beta v,u+\gamma v\in U_1$, so
+\[ (u+\beta v)-(u+\gamma v) = (\beta-\gamma)v\in U_1. \]
+Since $\beta-\gamma\ne0$, we have $v\in U_1$. Similarly,
+$(u+\beta v)-\beta v=u\in U_1$. Since $u\in U_2\setminus U_3$ and
+$v\in U_3\setminus U_2$ were arbitrary, $U_2\setminus U_3\subseteq U_1$ and
+$U_3\setminus U_2\subseteq U_1$.
+
+Now let $w\in U_2\cap U_3$. Since $U_2\nsubseteq U_3$, there exists
+$x\in U_2\setminus U_3\subseteq U_1$. Then $w+x\in U_2$. If $w+x\in U_3$, then
+$x=(w+x)-w\in U_3$, a contradiction. Hence,
+$w+x\in U_2\setminus U_3\subseteq U_1$, so $w=(w+x)-x\in U_1$. Therefore,
+$U_2\cap U_3\subseteq U_1$, which gives
+$U_2=(U_2\setminus U_3)\cup(U_2\cap U_3)\subseteq U_1$ and similarly
+$U_3\subseteq U_1$, contradicting our assumption. Hence, one of the subspaces
+must contain the other two.
+
+\emph{Alternate proof.} \emph{Coolempire93.} Conversely, suppose that
+$U_1\cup U_2\cup U_3$ is a subspace of $V$ but none of the subspaces contains
+the other two. Let $W_1=U_2\cup U_3$ and $W_2=U_1\cup U_3$. By the assumption,
+we cannot have $W_1\subseteq U_1$ or $W_2\subseteq U_2$, so there exist
+$x\in U_1\setminus W_1$ and $y\in U_2\setminus W_2$. Now, since
+$U_1\cup U_2\cup U_3$ is a vector space, we have
+$x+\alpha y\in U_1\cup U_2\cup U_3$ for any nonzero $\alpha\in\F$. But if
+$x+\alpha y\in U_1$, then $(x+\alpha y)-x=\alpha y\in U_1$, and as $\alpha$ is
+nonzero, this means that $y\in U_1$, a contradiction. Similarly, if
+$x+\alpha y\in U_2$, then $(x+\alpha y)-\alpha y=x\in U_2$, a contradiction.
+Therefore, we must have $x+\alpha y\in U_3$ for all nonzero $\alpha$ to satisfy
+the closure of the vector space.
+
+As such, $x+y\in U_3$ and $x-y\in U_3$; that is, $(x+y)+(x-y)=2x\in U_3$ and
+$(x+y)-(x-y)=2y\in U_3$, contradicting the original definitions of $x$ and
+$y^\dagger$. Therefore, one of the subspaces must contain the other two.
+
+$^\dagger$\,\emph{Final remark}. This is why the field must have more than two
+elements. Since part of the field axioms is that $0\ne1$, if the field only has
+two elements, it must be that $1=-1$ (consider addition mod $2$ as the addition
+operation), so $2x\in U_3$ would not mean that $x\in U_3$, as $2x=0x=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose
+\[ U = \{(x,-x,2x)\in\F^3 : x\in\F\} \quad\text{and}\quad
+   W = \{(x,x,2x)\in\F^3 : x\in\F\}. \]
+Describe $U+W$ using symbols, and also give a description of $U+W$ that uses no
+symbols.
+\end{exercise}
+\begin{solution}
+Let $u=(x,-x,2x)\in U$ and $w=(y,y,2y)\in W$. Then
+\[ u+w = (x+y,-x+y,2x+2y) = \bigl(x+y,y-x,2(x+y)\bigr). \]
+Observe that $x+y$ can take any value in $\F$, and $y-x$ can also take any value
+in $\F$. Hence, we can write
+\[ U+W = \{(a,b,2a)\in\F^3 \mid a,b\in\F\}. \]
+In words, $U+W$ is the set of all vectors in $\F^3$ whose third component is
+twice the first component, and whose second component can be any value in
+$\F$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$. What is $U+U$?
+\end{exercise}
+\begin{solution}
+Let $u_1,u_2\in U$. Then $u_1+u_2\in U$ since $U$ is closed under addition.
+Hence, $U+U\subseteq U$. Conversely, let $u\in U$. Then $u=u+0$, where $0$ is
+the additive identity in $U$. Since $0\in U$, we have that $u\in U+U$. Hence,
+$U\subseteq U+U$. Therefore, $U+U=U$.
+\end{solution}
+
+\begin{exercise}
+Is the operation of addition on the subspaces of $V$ commutative? In other
+words, if $U$ and $W$ are subspaces of $V$, is $U+W=W+U$?
+\end{exercise}
+\begin{solution}
+Yes, the operation of addition on subspaces of $V$ is commutative. Let $u\in U$
+and $w\in W$. Then $u+w\in U+W$. Because addition in $V$ is commutative, we
+have that $u+w=w+u$, where $w\in W$ and $u\in U$. Hence, $w+u\in W+U$.
+Therefore, every element of $U+W$ is also an element of $W+U$, which implies
+that $U+W\subseteq W+U$. By a similar argument, we can show that
+$W+U\subseteq U+W$. Hence, $U+W=W+U$.
+\end{solution}
+
+\begin{exercise}
+Is the operation of addition on the subspaces of $V$ associative? In other
+words, if $V_1,V_2,V_3$ are subspaces of $V$, is
+\[ (V_1+V_2)+V_3 = V_1+(V_2+V_3)? \]
+\end{exercise}
+\begin{solution}
+Yes, the operation of addition on subspaces of $V$ is associative. Let
+$u_1\in V_1$, $u_2\in V_2$, and $u_3\in V_3$. Then
+$(u_1+u_2)+u_3\in(V_1+V_2)+V_3$. Because addition in $V$ is associative, we
+have that $(u_1+u_2)+u_3=u_1+(u_2+u_3)$, where $u_1\in V_1$, $u_2\in V_2$, and
+$u_3\in V_3$. Hence, $u_1+(u_2+u_3)\in V_1+(V_2+V_3)$. Therefore, every element
+of $(V_1+V_2)+V_3$ is also an element of $V_1+(V_2+V_3)$, which implies that
+$(V_1+V_2)+V_3\subseteq V_1+(V_2+V_3)$. By a similar argument, we can show that
+$V_1+(V_2+V_3)\subseteq(V_1+V_2)+V_3$. Hence, $(V_1+V_2)+V_3=V_1+(V_2+V_3)$.
+\end{solution}
+
+\begin{exercise}
+Does the operation of addition on the subspaces of $V$ have an additive
+identity? Which subspaces have additive inverses?
+\end{exercise}
+\begin{solution}
+Yes, the operation of addition on the subspaces of $V$ has an additive
+identity. The additive identity is the zero subspace $\{0\}$, which contains
+only the zero vector of $V$. For any subspace $U$ of $V$, we have that
+$U+\{0\}=U$.
+
+If a subspace $U$ of $V$ had an additive inverse $W$, then we would have that
+$U+W=\{0\}$. However, $U\subseteq U+W$ since $u=u+0$ for any $u\in U$. Hence,
+$U+W=\{0\}$ implies that $U=\{0\}$. Therefore, the only subspace of $V$ that has
+an additive inverse is the zero subspace $\{0\}$.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $V_1,V_2,U$ are subspaces of $V$ such that
+\[ V_1+U = V_2+U, \]
+then $V_1=V_2$.
+\end{exercise}
+\begin{solution}
+The statement is false. Consider the vector space $\R^2$ and let
+\[ V_1 = \{(x,0)\in\R^2 \mid x\in\R\}, \quad
+   V_2 = \{(0,y)\in\R^2 \mid y\in\R\}, \quad
+   U = \{(x,x)\in\R^2 \mid x\in\R\}. \]
+Then $V_1+U=\R^2$ and $V_2+U=\R^2$, but $V_1\ne V_2$. Therefore, the statement
+is false.
+\end{solution}
+
+\begin{exercise}
+Suppose
+\[ U = \{(x,x,y,y)\in\F^4 : x,y\in\F\}. \]
+Find a subspace $W$ of $\F^4$ such that $\F^4=U\oplus W$.
+\end{exercise}
+\begin{solution}
+Let
+\[ W = \{(0,z,0,w)\in\F^4 \mid z,w\in\F\}. \]
+If $(x,x,y,y)\in U$ and $(0,z,0,w)\in W$, then $(x,x,y,y)=(0,z,0,w)$ if and
+only if $x=0$, $y=0$, $z=0$, and $w=0$. Hence, $U\cap W=\{0\}$. Moreover, for
+any $(a,b,c,d)\in\F^4$, we can write
+\[ (a,b,c,d) = (x,x,y,y)+(0,z,0,w), \]
+where
+\[ x=a,\quad y=c,\quad z=b-x=b-a,\quad w=d-y=d-c. \]
+Hence, every vector in $\F^4$ can be written as a sum of a vector in $U$ and a
+vector in $W$. Therefore, $\F^4=U\oplus W$.
+\end{solution}
+
+\begin{exercise}
+Suppose
+\[ U = \{(x,y,x+y,x-y,2x)\in\F^5 : x,y\in\F\}. \]
+Find a subspace $W$ of $\F^5$ such that $\F^5=U\oplus W$.
+\end{exercise}
+\begin{solution}
+Let
+\[ W = \{(0,0,z,w,v)\in\F^5 \mid z,w,v\in\F\}. \]
+If $(x,y,x+y,x-y,2x)\in U$ and $(0,0,z,w,v)\in W$, then
+$(x,y,x+y,x-y,2x)=(0,0,z,w,v)$ if and only if $x=0$, $y=0$, $z=0$, $w=0$, and
+$v=0$. Hence, $U\cap W=\{0\}$. Moreover, for any $(a,b,c,d,e)\in\F^5$, we can
+write
+\[ (a,b,c,d,e) = (x,y,x+y,x-y,2x)+(0,0,z,w,v), \]
+which implies
+\[ \begin{cases} a=x+0\\ b=y+0\\ c=(x+y)+z\\ d=(x-y)+w\\ e=2x+v \end{cases}
+   \implies
+   \begin{cases} x=a\\ y=b\\ z=c-(x+y)=c-(a+b)\\ w=d-(x-y)=d-(a-b)\\
+     v=e-2x=e-2a \end{cases} \]
+Hence, every vector in $\F^5$ can be written as a sum of a vector in $U$ and a
+vector in $W$. Therefore, $\F^5=U\oplus W$.
+\end{solution}
+
+\begin{exercise}
+Suppose
+\[ U = \{(x,y,x+y,x-y,2x)\in\F^5 : x,y\in\F\}. \]
+Find three subspaces $W_1,W_2,W_3$ of $\F^5$, none of which equals $\{0\}$, such
+that $\F^5=U\oplus W_1\oplus W_2\oplus W_3$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{The derivation of $z,w,e$ is from Exercise~1C21.}
+Observe that $U$ can be expressed as
+\[ U = \{(x,0,x,x,2x)\in\F^5 \mid x\in\F\}+\{(0,y,y,-y,0)\in\F^5 \mid y\in\F\}. \]
+Define the subspaces
+\begin{align*}
+W_1 &= \{(0,0,z,0,0)\in\F^5 \mid z\in\F\},\\
+W_2 &= \{(0,0,0,w,0)\in\F^5 \mid w\in\F\},\\
+W_3 &= \{(0,0,0,0,v)\in\F^5 \mid v\in\F\}.
+\end{align*}
+Consider $(a,b,c,d,e)\in\F^5$. We can write
+\begin{multline*}
+(a,b,c,d,e) = (x,0,x,x,2x)+(0,y,y,-y,0)\\
+  +(0,0,z,0,0)+(0,0,0,w,0)+(0,0,0,0,v),
+\end{multline*}
+where
+\begin{align*}
+x &= a,\\
+y &= b,\\
+z &= c-a-b,\\
+w &= d-a+b,\\
+v &= e-2a.
+\end{align*}
+Hence, every vector in $\F^5$ can be written as a sum of a vector in $U$ and
+vectors in $W_1,W_2,W_3$. Moreover, if $a=b=c=d=e=0$, then $x=y=z=w=v=0$ so
+that the only way to write the zero vector as a sum of vectors in
+$U,W_1,W_2,W_3$ is to take all of them to be the zero vector. Therefore,
+$\F^5=U\oplus W_1\oplus W_2\oplus W_3$.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $V_1,V_2,U$ are subspaces of $V$ such that
+\[ V=V_1\oplus U \quad\text{and}\quad V=V_2\oplus U, \]
+then $V_1=V_2$.
+\exnote{Hint: When trying to discover whether a conjecture in linear algebra is
+true or false, it is often useful to start by experimenting in $\F^2$.}
+\end{exercise}
+\begin{solution}
+See Exercise~1C19 for a counterexample. For $V_1\oplus U$, observe that
+$V_1\cap U=\{0\}$. Moreover, for any $(a,b)\in\R^2$, we can write
+\[ (a,b) = (a-b,0)+(b,b)\in V_1\oplus U. \]
+The proof for $V_2\oplus U$ is similar. Hence, $V=V_1\oplus U=V_2\oplus U$, but
+$V_1\ne V_2$. Therefore, the statement is false.
+\end{solution}
+
+\begin{exercise}
+A function $f\colon\R\to\R$ is called \emph{even} if
+\[ f(-x) = f(x) \]
+for all $x\in\R$. A function $f\colon\R\to\R$ is called \emph{odd} if
+\[ f(-x) = -f(x) \]
+for all $x\in\R$. Let $V_{\mathrm{e}}$ denote the set of real-valued even
+functions on $\R$ and let $V_{\mathrm{o}}$ denote the set of real-valued odd
+functions on $\R$. Show that $\R^{\R}=V_{\mathrm{e}}\oplus V_{\mathrm{o}}$.
+\end{exercise}
+\begin{solution}
+Let $f\in\R^{\R}$. Define
+\[ f_e(x) = \frac{f(x)+f(-x)}{2} \quad\text{and}\quad
+   f_o(x) = \frac{f(x)-f(-x)}{2}. \]
+Then $f_e$ is even since
+\[ f_e(-x) = \frac{f(-x)+f(x)}{2} = f_e(x), \]
+and $f_o$ is odd since
+\[ f_o(-x) = \frac{f(-x)-f(x)}{2} = -\frac{f(x)-f(-x)}{2} = -f_o(x). \]
+Moreover, we have that
+\[ f(x) = f_e(x)+f_o(x). \]
+Hence, every function in $\R^{\R}$ can be written as a sum of an even function
+and an odd function.
+
+Now, suppose $g\in V_e\cap V_o$. Then $g$ is both even and odd. Then for any
+$x\in\R$, we have
+\[ g(x) = g\bigl(-(-x)\bigr) = -g(-x) = -g(x), \]
+which implies that $2g(x)=0$, or $g(x)=0$. Hence, the only function in the
+intersection of $V_e$ and $V_o$ is the zero function. Therefore,
+$\R^{\R}=V_e\oplus V_o$.
+\end{solution}

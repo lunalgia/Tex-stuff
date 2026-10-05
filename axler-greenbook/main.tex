@@ -1,0 +1,69 @@
+% Linear Algebra Done Right (4th ed.), Sheldon Axler, set in greenbook.sty.
+% Text: CC BY-NC 4.0, (c) 2024 Sheldon Axler.  Solutions (Ch. 1 to 5B): blanketism.
+% Compile with latexmk (lualatex); .latexmkrc finds ../greenbook.sty.
+\documentclass[a4paper, 10pt, twoside, openany]{memoir}
+
+% xsim writes each exercise and solution to its own file in xsim-files/
+% (keeping them all inside main.xsim overflows TeX's input buffer)
+\PassOptionsToPackage{use-files}{xsim}
+\usepackage{greenbook}
+\xsimsetup{path=xsim-files}
+\usetikzlibrary{arrows.meta,calc}
+
+\input{ladr-macros.tex}
+% the author photo is cropped from the original PDF, wherever it is kept
+\graphicspath{{originals/}{src/}}
+
+\title{Linear Algebra Done Right}
+\author{Sheldon Axler}
+\date{October 2026}
+
+\hypersetup{pdftitle={Linear Algebra Done Right},
+  pdfauthor={Sheldon Axler; solutions by blanketism},bookmarksdepth=2}
+
+% build only some chapters:  \includeonly{chapters/ch01}
+% \includeonly{chapters/ch01}
+
+% ======================================================================
+\begin{document}
+
+\frontmatter
+\pagestyle{empty}
+\begin{titlingpage}
+\maketitle
+\end{titlingpage}
+
+\newgeometry{left=4cm, right=2cm}
+\tableofcontents
+\restoregeometry
+
+\include{chapters/frontmatter}
+
+\mainmatter
+\pagestyle{fullwidth}
+
+\spart{Foundations}
+\include{chapters/ch01}
+\include{chapters/ch02}
+\include{chapters/ch03}
+
+\spart{Eigenvalues}
+\include{chapters/ch04}
+\include{chapters/ch05}
+
+\spart{Inner Products}
+\include{chapters/ch06}
+\include{chapters/ch07}
+
+\spart{Structure}
+\include{chapters/ch08}
+\include{chapters/ch09}
+
+\backmatter
+\chapter*{Solutions}
+\addcontentsline{toc}{chapter}{Solutions}
+\markboth{Solutions}{Solutions}
+\include{chapters/solutions-preface}
+\printsolutionsbysection
+\include{chapters/backmatter}
+\end{document}

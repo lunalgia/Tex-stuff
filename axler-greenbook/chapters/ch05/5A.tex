@@ -1,0 +1,1261 @@
+% Source: book pp. 133--142 (PDF 147--156); solutions pp. 135--151, 175.
+\section{Invariant Subspaces}
+
+\subsection{Eigenvalues}
+
+\begin{definition}[Operator]\label{ax:5.1}
+A linear map from a vector space to itself is called an \emph{operator}.
+\end{definition}
+
+\marginnote{Recall that we defined the notation $\Lin(V)$ to mean
+$\Lin(V,V)$.}%
+Suppose $T\in\Lin(V)$. If $m\ge2$ and
+\[ V = V_1\oplus\cdots\oplus V_m, \]
+where each $V_k$ is a nonzero subspace of $V$, then to understand the behavior
+of $T$ we only need to understand the behavior of each $T|_{V_k}$; here
+$T|_{V_k}$ denotes the restriction of $T$ to the smaller domain $V_k$. Dealing
+with $T|_{V_k}$ should be easier than dealing with $T$ because $V_k$ is a
+smaller vector space than $V$.
+
+However, if we intend to apply tools useful in the study of operators (such as
+taking powers), then we have a problem: $T|_{V_k}$ may not map $V_k$ into
+itself; in other words, $T|_{V_k}$ may not be an operator on $V_k$. Thus we are
+led to consider only decompositions of $V$ of the form above in which $T$ maps
+each $V_k$ into itself. Hence we now give a name to subspaces of $V$ that get
+mapped into themselves by $T$.
+
+\begin{definition}[Invariant subspace]\label{ax:5.2}
+Suppose $T\in\Lin(V)$. A subspace $U$ of $V$ is called \emph{invariant} under
+$T$ if $Tu\in U$ for every $u\in U$.
+\end{definition}
+
+Thus $U$ is invariant under $T$ if $T|_U$ is an operator on $U$.
+
+\begin{example}[Subspace invariant under differentiation operator]\label{ax:5.3}
+Suppose that $T\in\Lin(\Poly(\R))$ is defined by $Tp=p'$. Then $\Poly_4(\R)$,
+which is a subspace of $\Poly(\R)$, is invariant under $T$ because if
+$p\in\Poly(\R)$ has degree at most $4$, then $p'$ also has degree at most $4$.
+\end{example}
+
+\begin{example}[Four invariant subspaces, not necessarily all different]\label{ax:5.4}
+If $T\in\Lin(V)$, then the following subspaces of $V$ are all invariant under
+$T$.
+\begin{description}[font=\normalfont,align=right,labelwidth=3.4em,
+  labelsep=.8em,leftmargin=4.2em,itemsep=1pt,topsep=3pt]
+\item[$\{0\}$] The subspace $\{0\}$ is invariant under $T$ because if
+  $u\in\{0\}$, then $u=0$ and hence $Tu=0\in\{0\}$.
+\item[$V$] The subspace $V$ is invariant under $T$ because if $u\in V$, then
+  $Tu\in V$.
+\item[$\nul T$] The subspace $\nul T$ is invariant under $T$ because if
+  $u\in\nul T$, then $Tu=0$, and hence $Tu\in\nul T$.
+\item[$\range T$] The subspace $\range T$ is invariant under $T$ because if
+  $u\in\range T$, then $Tu\in\range T$.
+\end{description}
+\end{example}
+
+Must an operator $T\in\Lin(V)$ have any invariant subspaces other than $\{0\}$
+and $V$? Later we will see that this question has an affirmative answer if $V$
+is finite-dimensional and $\dim V>1$ (for $\F=\C$) or $\dim V>2$ (for
+$\F=\R$); see \ref{ax:5.19} and Exercise~29 in Section~5B.
+
+The previous example noted that $\nul T$ and $\range T$ are invariant under
+$T$. However, these subspaces do not necessarily provide easy answers to the
+question above about the existence of invariant subspaces other than $\{0\}$
+and $V$, because $\nul T$ may equal $\{0\}$ and $\range T$ may equal $V$ (this
+happens when $T$ is invertible).
+
+We will return later to a deeper study of invariant subspaces. Now we turn to
+an investigation of the simplest possible nontrivial invariant
+subspaces---invariant subspaces of dimension one.
+
+Take any $v\in V$ with $v\ne0$ and let $U$ equal the set of all scalar
+multiples of $v$:
+\[ U = \{\lambda v : \lambda\in\F\} = \spn(v). \]
+Then $U$ is a one-dimensional subspace of $V$ (and every one-dimensional
+subspace of $V$ is of this form for an appropriate choice of $v$). If $U$ is
+invariant under an operator $T\in\Lin(V)$, then $Tv\in U$, and hence there is
+a scalar $\lambda\in\F$ such that
+\[ Tv = \lambda v. \]
+Conversely, if $Tv=\lambda v$ for some $\lambda\in\F$, then $\spn(v)$ is a
+one-dimensional subspace of $V$ invariant under $T$.
+
+The equation $Tv=\lambda v$, which we have just seen is intimately connected
+with one-dimensional invariant subspaces, is important enough that the scalars
+$\lambda$ and vectors $v$ satisfying it are given special names.
+
+\begin{definition}[Eigenvalue]\label{ax:5.5}
+Suppose $T\in\Lin(V)$. A number $\lambda\in\F$ is called an \emph{eigenvalue}
+of $T$ if there exists $v\in V$ such that $v\ne0$ and $Tv=\lambda v$.
+\end{definition}
+
+\marginnote{The word \textbf{eigenvalue} is half-German, half-English. The
+German prefix \textbf{eigen} means ``own'' in the sense of characterizing an
+intrinsic property.}%
+In the definition above, we require that $v\ne0$ because every scalar
+$\lambda\in\F$ satisfies $T0=\lambda0$.
+
+The comments above show that $V$ has a one-dimensional subspace invariant under
+$T$ if and only if $T$ has an eigenvalue.
+
+\begin{example}[Eigenvalue]\label{ax:5.6}
+Define an operator $T\in\Lin(\F^3)$ by
+\[ T(x,y,z) = (7x+3z,\,3x+6y+9z,\,-6y) \]
+for $(x,y,z)\in\F^3$. Then $T(3,1,-1)=(18,6,-6)=6(3,1,-1)$. Thus $6$ is an
+eigenvalue of $T$.
+\end{example}
+
+\marginnote[-4mm]{Reminder: $I\in\Lin(V)$ is the identity operator. Thus $Iv=v$
+for all $v\in V$.}%
+The equivalences in the next result, along with many deep results in linear
+algebra, are valid only in the context of finite-dimensional vector spaces.
+
+\begin{result}[Equivalent conditions to be an eigenvalue]\label{ax:5.7}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $\lambda\in\F$. Then the
+following are equivalent.
+\begin{parts}
+\item $\lambda$ is an eigenvalue of $T$.
+\item $T-\lambda I$ is not injective.
+\item $T-\lambda I$ is not surjective.
+\item $T-\lambda I$ is not invertible.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Conditions (a) and (b) are equivalent because the equation $Tv=\lambda v$ is
+equivalent to the equation $(T-\lambda I)v=0$. Conditions (b), (c), and (d) are
+equivalent by \ref{ax:3.65}.
+\end{proof}
+
+\begin{definition}[Eigenvector]\label{ax:5.8}
+Suppose $T\in\Lin(V)$ and $\lambda\in\F$ is an eigenvalue of $T$. A vector
+$v\in V$ is called an \emph{eigenvector} of $T$ corresponding to $\lambda$ if
+$v\ne0$ and $Tv=\lambda v$.
+\end{definition}
+
+In other words, a nonzero vector $v\in V$ is an eigenvector of an operator
+$T\in\Lin(V)$ if and only if $Tv$ is a scalar multiple of $v$. Because
+$Tv=\lambda v$ if and only if $(T-\lambda I)v=0$, a vector $v\in V$ with
+$v\ne0$ is an eigenvector of $T$ corresponding to $\lambda$ if and only if
+$v\in\nul(T-\lambda I)$.
+
+\begin{example}[Eigenvalues and eigenvectors]\label{ax:5.9}
+Suppose $T\in\Lin(\F^2)$ is defined by $T(w,z)=(-z,w)$.
+\begin{parts}
+\item First consider the case $\F=\R$. Then $T$ is a counterclockwise rotation
+  by $90^\circ$ about the origin in $\R^2$. An operator has an eigenvalue if and
+  only if there exists a nonzero vector in its domain that gets sent by the
+  operator to a scalar multiple of itself. A $90^\circ$ counterclockwise
+  rotation of a nonzero vector in $\R^2$ cannot equal a scalar multiple of
+  itself. Conclusion: if $\F=\R$, then $T$ has no eigenvalues (and thus has no
+  eigenvectors).
+\item Now consider the case $\F=\C$. To find eigenvalues of $T$, we must find
+  the scalars $\lambda$ such that $T(w,z)=\lambda(w,z)$ has some solution other
+  than $w=z=0$. The equation $T(w,z)=\lambda(w,z)$ is equivalent to the
+  simultaneous equations\refstepcounter{theorem}%
+  \[ -z=\lambda w,\qquad w=\lambda z. \tag*{\thetheorem}\label{ax:5.10} \]
+  Substituting the value for $w$ given by the second equation into the first
+  equation gives
+  \[ -z = \lambda^2 z. \]
+  Now $z$ cannot equal $0$ [otherwise \ref{ax:5.10} implies that $w=0$; we are
+  looking for solutions to \ref{ax:5.10} such that $(w,z)$ is not the $0$
+  vector], so the equation above leads to the equation
+  \[ -1 = \lambda^2. \]
+  The solutions to this equation are $\lambda=i$ and $\lambda=-i$.
+
+  You can verify that $i$ and $-i$ are eigenvalues of $T$. Indeed, the
+  eigenvectors corresponding to the eigenvalue $i$ are the vectors of the form
+  $(w,-wi)$, with $w\in\C$ and $w\ne0$. Furthermore, the eigenvectors
+  corresponding to the eigenvalue $-i$ are the vectors of the form $(w,wi)$,
+  with $w\in\C$ and $w\ne0$.
+\end{parts}
+\end{example}
+
+In the next proof, we again use the equivalence
+\[ Tv=\lambda v \iff (T-\lambda I)v=0. \]
+
+\begin{result}[Linearly independent eigenvectors]\label{ax:5.11}
+Suppose $T\in\Lin(V)$. Then every list of eigenvectors of $T$ corresponding to
+distinct eigenvalues of $T$ is linearly independent.
+\end{result}
+
+\begin{proof}
+Suppose the desired result is false. Then there exists a smallest positive
+integer $m$ such that there exists a linearly dependent list $v_1,\dots,v_m$ of
+eigenvectors of $T$ corresponding to distinct eigenvalues
+$\lambda_1,\dots,\lambda_m$ of $T$ (note that $m\ge2$ because an eigenvector
+is, by definition, nonzero). Thus there exist $a_1,\dots,a_m\in\F$, none of
+which are $0$ (because of the minimality of $m$), such that
+\[ a_1v_1+\cdots+a_mv_m = 0. \]
+Apply $T-\lambda_mI$ to both sides of the equation above, getting
+\[ a_1(\lambda_1-\lambda_m)v_1+\cdots+a_{m-1}(\lambda_{m-1}-\lambda_m)v_{m-1}
+   = 0. \]
+Because the eigenvalues $\lambda_1,\dots,\lambda_m$ are distinct, none of the
+coefficients above equal $0$. Thus $v_1,\dots,v_{m-1}$ is a linearly dependent
+list of $m-1$ eigenvectors of $T$ corresponding to distinct eigenvalues,
+contradicting the minimality of $m$. This contradiction completes the proof.
+\end{proof}
+
+The result above leads to a short proof of the result below, which puts an
+upper bound on the number of distinct eigenvalues that an operator can have.
+
+\begin{result}[Operator cannot have more eigenvalues than dimension of vector
+space]\label{ax:5.12}
+Suppose $V$ is finite-dimensional. Then each operator on $V$ has at most
+$\dim V$ distinct eigenvalues.
+\end{result}
+
+\begin{proof}
+Let $T\in\Lin(V)$. Suppose $\lambda_1,\dots,\lambda_m$ are distinct eigenvalues
+of $T$. Let $v_1,\dots,v_m$ be corresponding eigenvectors. Then \ref{ax:5.11}
+implies that the list $v_1,\dots,v_m$ is linearly independent. Thus
+$m\le\dim V$ (see \ref{ax:2.22}), as desired.
+\end{proof}
+
+\subsection{Polynomials Applied to Operators}
+
+The main reason that a richer theory exists for operators (which map a vector
+space into itself) than for more general linear maps is that operators can be
+raised to powers. In this subsection we define that notion and the concept of
+applying a polynomial to an operator. This concept will be the key tool that
+we use in the next section when we prove that every operator on a nonzero
+finite-dimensional complex vector space has an eigenvalue.
+
+If $T$ is an operator, then $TT$ makes sense (see \ref{ax:3.7}) and is also an
+operator on the same vector space as $T$. We usually write $T^2$ instead of
+$TT$. More generally, we have the following definition of $T^m$.
+
+\begin{notation}[$T^m$]\label{ax:5.13}
+Suppose $T\in\Lin(V)$ and $m$ is a positive integer.
+\begin{itemize}
+\item $T^m\in\Lin(V)$ is defined by $T^m=\ftimes{T\cdots T}{m\text{ times}}$.
+\item $T^0$ is defined to be the identity operator $I$ on $V$.
+\item If $T$ is invertible with inverse $T^{-1}$, then $T^{-m}\in\Lin(V)$ is
+  defined by
+  \[ T^{-m} = (T^{-1})^m. \]
+\end{itemize}
+\end{notation}
+
+You should verify that if $T$ is an operator, then
+\[ T^mT^n = T^{m+n} \quad\text{and}\quad (T^m)^n = T^{mn}, \]
+where $m$ and $n$ are arbitrary integers if $T$ is invertible and are
+nonnegative integers if $T$ is not invertible.
+
+Having defined powers of an operator, we can now define what it means to apply
+a polynomial to an operator.
+
+\begin{notation}[$p(T)$]\label{ax:5.14}
+Suppose $T\in\Lin(V)$ and $p\in\Poly(\F)$ is a polynomial given by
+\[ p(z) = a_0+a_1z+a_2z^2+\cdots+a_mz^m \]
+for all $z\in\F$. Then $p(T)$ is the operator on $V$ defined by
+\[ p(T) = a_0I+a_1T+a_2T^2+\cdots+a_mT^m. \]
+\end{notation}
+
+This is a new use of the symbol $p$ because we are applying $p$ to operators,
+not just elements of $\F$. The idea here is that to evaluate $p(T)$, we simply
+replace $z$ with $T$ in the expression defining $p$. Note that the constant
+term $a_0$ in $p(z)$ becomes the operator $a_0I$ (which is a reasonable choice
+because $a_0=a_0z^0$ and thus we should replace $a_0$ with $a_0T^0$, which
+equals $a_0I$).
+
+\begin{example}[A polynomial applied to the differentiation
+operator]\label{ax:5.15}
+Suppose $D\in\Lin(\Poly(\R))$ is the differentiation operator defined by
+$Dq=q'$ and $p$ is the polynomial defined by $p(x)=7-3x+5x^2$. Then
+$p(D)=7I-3D+5D^2$. Thus
+\[ \bigl(p(D)\bigr)q = 7q-3q'+5q'' \]
+for every $q\in\Poly(\R)$.
+\end{example}
+
+If we fix an operator $T\in\Lin(V)$, then the function from $\Poly(\F)$ to
+$\Lin(V)$ given by $p\mapsto p(T)$ is linear, as you should verify.
+
+\begin{definition}[Product of polynomials]\label{ax:5.16}
+If $p,q\in\Poly(\F)$, then $pq\in\Poly(\F)$ is the polynomial defined by
+\[ (pq)(z) = p(z)q(z) \]
+for all $z\in\F$.
+\end{definition}
+
+\marginnote[-12mm]{Informal proof: When a product of polynomials is expanded
+using the distributive property, it does not matter whether the symbol is $z$
+or $T$.}%
+The order does not matter in taking products of polynomials of a single
+operator, as shown by (b) in the next result.
+
+\begin{result}[Multiplicative properties]\label{ax:5.17}
+Suppose $p,q\in\Poly(\F)$ and $T\in\Lin(V)$. Then
+\begin{parts}
+\item $(pq)(T)=p(T)q(T)$;
+\item $p(T)q(T)=q(T)p(T)$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+\begin{parts}
+\item Suppose $p(z)=\sum_{j=0}^m a_jz^j$ and $q(z)=\sum_{k=0}^n b_kz^k$ for
+  all $z\in\F$. Then
+  \[ (pq)(z) = \sum_{j=0}^m\sum_{k=0}^n a_jb_kz^{j+k}. \]
+  Thus
+  \begin{align*}
+  (pq)(T) &= \sum_{j=0}^m\sum_{k=0}^n a_jb_kT^{j+k}\\
+          &= \Bigl(\sum_{j=0}^m a_jT^j\Bigr)\Bigl(\sum_{k=0}^n b_kT^k\Bigr)\\
+          &= p(T)q(T).
+  \end{align*}
+\item Using (a) twice, we have $p(T)q(T)=(pq)(T)=(qp)(T)=q(T)p(T)$.
+  \qedhere
+\end{parts}
+\end{proof}
+
+We observed earlier that if $T\in\Lin(V)$, then the subspaces $\nul T$ and
+$\range T$ are invariant under $T$ (see \ref{ax:5.4}). Now we show that the
+null space and the range of every polynomial of $T$ are also invariant under
+$T$.
+
+\begin{result}[Null space and range of $p(T)$ are invariant under
+$T$]\label{ax:5.18}
+Suppose $T\in\Lin(V)$ and $p\in\Poly(\F)$. Then $\nul p(T)$ and
+$\range p(T)$ are invariant under $T$.
+\end{result}
+
+\begin{proof}
+Suppose $u\in\nul p(T)$. Then $p(T)u=0$. Thus
+\[ \bigl(p(T)\bigr)(Tu) = \bigl(p(T)\,T\bigr)(u) = \bigl(T\,p(T)\bigr)(u)
+   = T\bigl(p(T)u\bigr) = T(0) = 0. \]
+Hence $Tu\in\nul p(T)$. Thus $\nul p(T)$ is invariant under $T$, as desired.
+
+Suppose $u\in\range p(T)$. Then there exists $v\in V$ such that $u=p(T)v$.
+Thus
+\[ Tu = T\bigl(p(T)v\bigr) = p(T)(Tv). \]
+Hence $Tu\in\range p(T)$. Thus $\range p(T)$ is invariant under $T$, as
+desired.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{5A}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $U$ is a subspace of $V$.
+\begin{parts}
+\item Prove that if $U\subseteq\nul T$, then $U$ is invariant under $T$.
+\item Prove that if $\range T\subseteq U$, then $U$ is invariant under $T$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item If $U\subseteq\nul T$, then for any $u\in U$, we have $T(u)=0\in U$, so
+  $U$ is invariant under $T$.
+\item If $\range T\subseteq U$, then for any $u\in U$,
+  $T(u)\in\range T\subseteq U$, so $U$ is invariant under $T$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V)$ and $V_1,\dots,V_m$ are subspaces of $V$ invariant
+under $T$. Prove that $V_1+\cdots+V_m$ is invariant under $T$.
+\end{exercise}
+\begin{solution}
+Let $v\in V_1+\cdots+V_m$. Then $v=v_1+\cdots+v_m$ for some $v_i\in V_i$. Since
+each $V_i$ is invariant under $T$, we have $T(v_i)\in V_i$ for each $i$.
+Therefore,
+\[ T(v) = T(v_1+\cdots+v_m) = T(v_1)+\cdots+T(v_m) \in V_1+\cdots+V_m, \]
+so $V_1+\cdots+V_m$ is invariant under $T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that the intersection of every collection of
+subspaces of $V$ invariant under $T$ is invariant under $T$.
+\end{exercise}
+\begin{solution}
+Let $\{U_i\}_{i\in I}$ be a collection of subspaces of $V$ invariant under $T$,
+and let
+\[ U = \bigcap_{i\in I} U_i. \]
+Let $u\in U$. Then $u\in U_i$ for all $i\in I$. Since each $U_i$ is invariant
+under $T$, we have $T(u)\in U_i$ for all $i\in I$. Therefore, $T(u)\in U$, so
+$U$ is invariant under $T$.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $V$ is finite-dimensional and $U$ is a
+subspace of $V$ that is invariant under every operator on $V$, then $U=\{0\}$
+or $U=V$.
+\end{exercise}
+\begin{solution}
+If $U=\{0\}$, then we are done. Now suppose $U\ne\{0\}$ so that there exists
+nonzero $v_1\in U$. Extend $v_1$ to a basis $v_1,\dots,v_m$ of $V$, and let
+$v\in V$. Define the linear operator $T\in\Lin(V)$ by $T(v_1)=v$ and
+$T(v_i)=0$ for $i=2,\dots,m$. Since $U$ is invariant under $T$, we have
+$T(v_1)=v\in U$. But $v$ was an arbitrary element of $V$, so $U=V$. Therefore,
+$U=\{0\}$ or $U=V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(\R^2)$ is defined by $T(x,y)=(-3y,x)$. Find the eigenvalues
+of $T$.
+\end{exercise}
+\begin{solution}
+If $(x,y)$ is an eigenvector of $T$ with eigenvalue $\lambda$, then we have the
+system of equations
+\[ \begin{cases} -3y=\lambda x,\\ x=\lambda y \end{cases} \]
+Solving the system, we get $\lambda^2=-3$ which has no real solutions.
+Therefore, $T$ has no real eigenvalues.
+\end{solution}
+
+\begin{exercise}
+Define $T\in\Lin(\F^2)$ by $T(w,z)=(z,w)$. Find all eigenvalues and
+eigenvectors of $T$.
+\end{exercise}
+\begin{solution}
+If $(w,z)$ is an eigenvector of $T$ with eigenvalue $\lambda$, then we have
+\[ (z,w) = \lambda(w,z), \]
+which gives the system
+\[ \begin{cases} z=\lambda w,\\ w=\lambda z. \end{cases} \]
+Solving, we get $\lambda^2=1$, so $\lambda=1$ or $\lambda=-1$. If $\lambda=1$,
+then $z=w$, so the eigenvectors are of the form $(w,w)$. If $\lambda=-1$, then
+$z=-w$, so the eigenvectors are of the form $(w,-w)$.
+\end{solution}
+
+\begin{exercise}
+Define $T\in\Lin(\F^3)$ by $T(z_1,z_2,z_3)=(2z_2,0,5z_3)$. Find all eigenvalues
+and eigenvectors of $T$.
+\end{exercise}
+\begin{solution}
+If $(z_1,z_2,z_3)$ is an eigenvector of $T$ with eigenvalue $\lambda$, then we
+have
+\[ (2z_2,0,5z_3) = \lambda(z_1,z_2,z_3), \]
+which gives the system
+\[ \begin{cases} 2z_2=\lambda z_1,\\ 0=\lambda z_2,\\ 5z_3=\lambda z_3.
+   \end{cases} \]
+Solving, we get the eigenvalues $\lambda=0$ and $\lambda=5$. For $\lambda=0$,
+the eigenvectors are of the form $(z_1,0,0)$. For $\lambda=5$, the eigenvectors
+are of the form $(0,0,z_3)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $P\in\Lin(V)$ is such that $P^2=P$. Prove that if $\lambda$ is an
+eigenvalue of $P$, then $\lambda=0$ or $\lambda=1$.
+\end{exercise}
+\begin{solution}
+If $v$ is an eigenvector of $P$ with eigenvalue $\lambda$, then $Pv=\lambda v$.
+Applying $P$ again, we get $P^2v=P(\lambda v)=\lambda Pv=\lambda^2v$. But
+$P^2=P$, so $P^2v=Pv=\lambda v$. Therefore, $\lambda^2v=\lambda v$, which gives
+$(\lambda^2-\lambda)v=0$. Since $v\ne0$, we must have $\lambda^2-\lambda=0$, so
+$\lambda(\lambda-1)=0$. Hence, $\lambda=0$ or $\lambda=1$.
+\end{solution}
+
+\begin{exercise}
+Define $T\colon\Poly(\R)\to\Poly(\R)$ by $Tp=p'$. Find all eigenvalues and
+eigenvectors of $T$.
+\end{exercise}
+\begin{solution}
+Let $p\in\Poly(\R)$ such that $p'=\lambda p$ for some $\lambda\in\R$.
+\begin{itemize}
+\item If $\lambda\ne0$, then $\deg p'=\deg p$, which is a contradiction since
+  $\deg p'=\deg p-1$. Therefore, there are no eigenvectors corresponding to
+  nonzero eigenvalues.
+\item If $\lambda=0$, then $p'=0$, which implies that $p$ is a constant
+  polynomial. Therefore, the eigenvectors corresponding to the eigenvalue
+  $\lambda=0$ are all nonzero constant polynomials. \qedhere
+\end{itemize}
+\end{solution}
+
+\begin{exercise}
+Define $T\in\Lin(\Poly_4(\R))$ by $(Tp)(x)=xp'(x)$ for all $x\in\R$. Find all
+eigenvalues and eigenvectors of $T$.
+\end{exercise}
+\begin{solution}
+Let $p(x)=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4$ be an eigenvector of $T$ with
+eigenvalue $\lambda$. Then
+\[ (Tp)(x) = xp'(x) = x(a_1+2a_2x+3a_3x^2+4a_4x^3)
+   = a_1x+2a_2x^2+3a_3x^3+4a_4x^4. \]
+Equating coefficients with
+$\lambda p(x)=\lambda a_0+\lambda a_1x+\lambda a_2x^2+\lambda a_3x^3
++\lambda a_4x^4$ yields the system:
+\[ \lambda a_0=0,\quad \lambda a_1=a_1,\quad \lambda a_2=2a_2,\quad
+   \lambda a_3=3a_3,\quad \lambda a_4=4a_4. \]
+For each $n\in\{0,1,2,3,4\}$, the equation $\lambda a_n=na_n$ is satisfied
+with $a_n\ne0$ if and only if $\lambda=n$. When $\lambda=n$, all other
+coefficients must be zero, so the eigenvector is a nonzero scalar multiple of
+$x^n$. Therefore, the eigenvalues of $T$ are $0,1,2,3,4$, with corresponding
+eigenvectors being nonzero scalar multiples of $1,x,x^2,x^3,x^4$,
+respectively.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $\alpha\in\F$. Prove that
+there exists $\delta>0$ such that $T-\lambda I$ is invertible for all
+$\lambda\in\F$ such that $0<\abs{\alpha-\lambda}<\delta$.
+\end{exercise}
+\begin{solution}
+Since $V$ is finite-dimensional, the set of eigenvalues of $T$ is finite. If
+$T$ has no eigenvalues, then $T-\lambda I$ is invertible for all
+$\lambda\in\F$, and we can choose any $\delta>0$. Otherwise, let
+$\lambda_1,\dots,\lambda_m$ be the eigenvalues of $T$. Define
+\[ \delta = \min_{\lambda_j\ne\alpha}\abs{\alpha-\lambda_j}. \]
+If $\alpha$ is the only eigenvalue, then we can select any $\delta>0$ since any
+$\lambda$ satisfying $0<\abs{\alpha-\lambda}<\delta$ will not be equal to
+$\alpha$, and hence $T-\lambda I$ will be invertible. Otherwise, we have for
+any $\lambda\in\F$ such that $0<\abs{\alpha-\lambda}<\delta$, we have
+$\lambda\ne\lambda_j$ for all $j=1,\dots,m$, so $\lambda$ is not an eigenvalue
+of $T$. Hence, $T-\lambda I$ is invertible for all such $\lambda$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V=U\oplus W$, where $U$ and $W$ are nonzero subspaces of $V$. Define
+$P\in\Lin(V)$ by $P(u+w)=u$ for each $u\in U$ and each $w\in W$. Find all
+eigenvalues and eigenvectors of $P$.
+\end{exercise}
+\begin{solution}
+Let $v=u+w\in V$ be an eigenvector of $P$ with eigenvalue $\lambda$. Then
+$P(v)=P(u+w)=u=\lambda v=\lambda(u+w)$. Comparing the $U$ and $W$ components,
+we get $u=\lambda u$ and $0=\lambda w$. If $\lambda\ne0$, then $w=0$ and
+$u=\lambda u$ implies $\lambda=1$. If $\lambda=0$, then $u=0$ and $w$ can be
+any nonzero vector in $W$. Therefore, the eigenvalues are $\lambda=1$ and
+$\lambda=0$, with corresponding eigenvectors being the nonzero vectors in $U$
+for $\lambda=1$ and the nonzero vectors in $W$ for $\lambda=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Suppose $S\in\Lin(V)$ is invertible.
+\begin{parts}
+\item Prove that $T$ and $S^{-1}TS$ have the same eigenvalues.
+\item What is the relationship between the eigenvectors of $T$ and the
+  eigenvectors of $S^{-1}TS$?
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item Let $\lambda$ be an eigenvalue of $T$ with eigenvector $v\in V$, so
+  $T(v)=\lambda v$. Then
+  \[ (S^{-1}TS)(S^{-1}v) = S^{-1}T(v) = S^{-1}(\lambda v)
+     = \lambda(S^{-1}v). \]
+  Thus, $S^{-1}v$ is an eigenvector of $S^{-1}TS$ with eigenvalue $\lambda$.
+  This shows that every eigenvalue of $T$ is an eigenvalue of $S^{-1}TS$.
+  Conversely, if $\lambda$ is an eigenvalue of $S^{-1}TS$ with eigenvector $u$,
+  then $Su$ is an eigenvector of $T$ with eigenvalue $\lambda$. Therefore, $T$
+  and $S^{-1}TS$ have the same eigenvalues.
+\item The relation between the eigenvectors of $T$ and the eigenvectors of
+  $S^{-1}TS$ is given by $v\mapsto S^{-1}v$. Specifically, if $v$ is an
+  eigenvector of $T$ with eigenvalue $\lambda$, then $S^{-1}v$ is an
+  eigenvector of $S^{-1}TS$ with the same eigenvalue $\lambda$. Conversely, if
+  $u$ is an eigenvector of $S^{-1}TS$ with eigenvalue $\lambda$, then $Su$ is
+  an eigenvector of $T$ with eigenvalue $\lambda$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Give an example of an operator on $\R^4$ that has no (real) eigenvalues.
+\end{exercise}
+\begin{solution}
+Consider the linear operator on $\R^4$ given by the matrix
+\[ T = \begin{pmatrix} 0&-1&0&0\\ 1&0&0&0\\ 0&0&0&-1\\ 0&0&1&0 \end{pmatrix}.
+\]
+Letting $T$ act on $(x_1,x_2,x_3,x_4)\in\R^4$, we have
+\[ T(x_1,x_2,x_3,x_4) = (-x_2,x_1,-x_4,x_3). \]
+Then any eigenvector $(x_1,x_2,x_3,x_4)\in\R^4$ with eigenvalue $\lambda$ must
+satisfy
+\[ (-x_2,x_1,-x_4,x_3) = \lambda(x_1,x_2,x_3,x_4). \]
+This yields $\lambda^2+1=0$, which has no solution in $\R$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $\lambda\in\F$. Show that
+$\lambda$ is an eigenvalue of $T$ if and only if $\lambda$ is an eigenvalue of
+the dual operator $T'\in\Lin(V')$.
+\end{exercise}
+\begin{solution}
+\begin{align*}
+\lambda\text{ is an eigenvalue of }T
+  &\iff T-\lambda I\text{ is not invertible}\\
+  &\iff (T-\lambda I)'\text{ is not invertible}\\
+  &\iff T'-\lambda I\text{ is not invertible}\\
+  &\iff \lambda\text{ is an eigenvalue of }T'. \qedhere
+\end{align*}
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $T\in\Lin(V)$. Prove that if
+$\lambda$ is an eigenvalue of $T$, then
+\[ \abs{\lambda} \le n\max\bigl\{\abs{\Mat(T)_{j,k}} : 1\le j,k\le n\bigr\}, \]
+where $\Mat(T)_{j,k}$ denotes the entry in row $j$, column $k$ of the matrix of
+$T$ with respect to the basis $v_1,\dots,v_n$.
+\exnote{See Exercise~19 in Section~6A for a different bound on
+$\abs{\lambda}$.}
+\end{exercise}
+\begin{solution}
+Let $\lambda$ be an eigenvalue of $T$ with eigenvector $u\in V$, so
+$Tu=\lambda u$. Let $\Mat(T)$ be the matrix of $T$ with respect to the basis
+$v_1,\dots,v_n$. Then
+\[ \lambda u_j = \bigl(\Mat(T)u\bigr)_j = \sum_{k=1}^n\Mat(T)_{j,k}u_k
+   \quad\text{for each } j=1,\dots,n. \]
+Taking absolute values, we get
+\begin{align*}
+\abs{\lambda}\abs{u_j}
+  &= \biggl\lvert\sum_{k=1}^n\Mat(T)_{j,k}u_k\biggr\rvert
+   \le \sum_{k=1}^n\abs{\Mat(T)_{j,k}}\abs{u_k}\\
+  &\le n\max\bigl\{\abs{\Mat(T)_{j,k}} : 1\le j,k\le n\bigr\}
+   \max\bigl\{\abs{u_k} : 1\le k\le n\bigr\}.
+\end{align*}
+Choosing $j$ such that $\abs{u_j}=\max\{\abs{u_k} : 1\le k\le n\}$, we obtain
+\[ \abs{\lambda} \le n\max\bigl\{\abs{\Mat(T)_{j,k}} : 1\le j,k\le n\bigr\}.
+   \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $\F=\R$, $T\in\Lin(V)$, and $\lambda\in\R$. Prove that $\lambda$ is an
+eigenvalue of $T$ if and only if $\lambda$ is an eigenvalue of the
+complexification $T_{\C}$.
+\exnote{See Exercise~33 in Section~3B for the definition of $T_{\C}$.}
+\end{exercise}
+\begin{solution}
+Suppose $\lambda$ is an eigenvalue of $T$ with eigenvector $v\in V$, so
+$Tv=\lambda v$. Then in the complexification, we have
+$T_{\C}(v+i0)=Tv+iT0=\lambda v+i0=\lambda(v+i0)$, showing that $\lambda$ is an
+eigenvalue of $T_{\C}$ with eigenvector $v+i0$.
+
+Conversely, suppose $\lambda$ is an eigenvalue of $T_{\C}$ with eigenvector
+$v+iw\in V_{\C}$, where $v,w\in V$. Then
+\[ T_{\C}(v+iw) = Tv+iTw = \lambda(v+iw) = \lambda v+i\lambda w. \]
+Equating real and imaginary parts, we get
+\[ Tv=\lambda v \quad\text{and}\quad Tw=\lambda w. \]
+Since $\lambda\in\R$, if $v\ne0$, then $v$ is an eigenvector of $T$
+corresponding to $\lambda$. If $v=0$, then $w\ne0$ and $Tw=\lambda w$, so $w$
+is an eigenvector of $T$ corresponding to $\lambda$. This shows that $\lambda$
+is an eigenvalue of $T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $\F=\R$, $T\in\Lin(V)$, and $\lambda\in\C$. Prove that $\lambda$ is an
+eigenvalue of the complexification $T_{\C}$ if and only if $\overline{\lambda}$
+is an eigenvalue of $T_{\C}$.
+\end{exercise}
+\begin{solution}
+Suppose $\lambda$ is an eigenvalue of $T_{\C}$ with eigenvector
+$v+iw\in V_{\C}$, where $v,w\in V$. Then
+\[ T_{\C}(v+iw) = Tv+iTw = \lambda(v+iw) = \lambda v+i\lambda w. \]
+Moreover, we have
+\[ T_{\C}(v-iw) = Tv-iTw. \]
+Note that $v+iw=0$ if and only if both $v=w=0$. Then $v+iw\ne0$ implies
+$v-iw\ne0$. Let $\lambda=a+bi$ with $a,b\in\R$. Then equating real and
+imaginary parts, we have
+\[ Tv=av-bw \quad\text{and}\quad Tw=bv+aw. \]
+Then
+\begin{align*}
+T_{\C}(v-iw) &= Tv-iTw\\
+  &= (av-bw)-i(bv+aw)\\
+  &= av-ibv-bw-iaw\\
+  &= (a-ib)(v-iw)\\
+  &= \overline{\lambda}(v-iw).
+\end{align*}
+Since $v-iw\ne0$, this shows that $\overline{\lambda}$ is an eigenvalue of
+$T_{\C}$ with eigenvector $v-iw$.
+
+Conversely, if $\overline{\lambda}$ is an eigenvalue of $T_{\C}$, then by the
+same argument, $\lambda$ is an eigenvalue of $T_{\C}$. This completes the
+proof.
+\end{solution}
+
+\begin{exercise}
+Show that the forward shift operator $T\in\Lin(\F^\infty)$ defined by
+\[ T(z_1,z_2,\dots) = (0,z_1,z_2,\dots) \]
+has no eigenvalues.
+\end{exercise}
+\begin{solution}
+Suppose $\lambda\in\F$ is an eigenvalue of $T$ with eigenvector
+$(z_1,z_2,\dots)\in\F^\infty$. Then
+\[ T(z_1,z_2,\dots) = (0,z_1,z_2,\dots) = \lambda(z_1,z_2,\dots). \]
+Equating the first component, we get $0=\lambda z_1$, so either $\lambda=0$ or
+$z_1=0$. If $\lambda=0$, then the second component gives $z_1=0$, and the third
+component gives $z_2=0$, and so on. By induction, all $z_k=0$, contradicting
+that the eigenvector is nonzero. If $\lambda\ne0$, then $z_1=0$, and the second
+component gives $z_2=0$, and so on. Again, all $z_k=0$, a contradiction.
+Therefore, $T$ has no eigenvalues.
+\end{solution}
+
+\begin{exercise}
+Define the backward shift operator $S\in\Lin(\F^\infty)$ by
+\[ S(z_1,z_2,z_3,\dots) = (z_2,z_3,\dots). \]
+\begin{parts}
+\item Show that every element of $\F$ is an eigenvalue of $S$.
+\item Find all eigenvectors of $S$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item Let $\alpha\in\F$. Consider the vector $(1,\alpha,\alpha^2,\dots)\in
+  \F^\infty$. Then
+  \[ S(1,\alpha,\alpha^2,\dots) = (\alpha,\alpha^2,\alpha^3,\dots)
+     = \alpha(1,\alpha,\alpha^2,\dots), \]
+  showing that $\alpha$ is an eigenvalue of $S$ with eigenvector
+  $(1,\alpha,\alpha^2,\dots)$. Since $\alpha\in\F$ was arbitrary, every
+  element of $\F$ is an eigenvalue of $S$.
+\item Let $\alpha\in\F$ and consider the eigenvalue $\alpha$ of $S$. Any
+  eigenvector corresponding to $\alpha$ must satisfy
+  \[ S(z_1,z_2,z_3,\dots) = \alpha(z_1,z_2,z_3,\dots), \]
+  which gives
+  \[ (z_2,z_3,z_4,\dots) = (\alpha z_1,\alpha z_2,\alpha z_3,\dots). \]
+  Equating components, we get $z_2=\alpha z_1$,
+  $z_3=\alpha z_2=\alpha^2z_1$, and in general $z_k=\alpha^{k-1}z_1$ for
+  $k\ge1$. Therefore, all eigenvectors corresponding to $\alpha$ are of the
+  form
+  $(z_1,\alpha z_1,\alpha^2z_1,\dots)=z_1(1,\alpha,\alpha^2,\dots)$ with
+  $z_1\ne0$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is invertible.
+\begin{parts}
+\item Suppose $\lambda\in\F$ with $\lambda\ne0$. Prove that $\lambda$ is an
+  eigenvalue of $T$ if and only if $1/\lambda$ is an eigenvalue of
+  $T^{-1}$.
+\item Prove that $T$ and $T^{-1}$ have the same eigenvectors.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item Suppose $\lambda\in\F$ with $\lambda\ne0$ is an eigenvalue of $T$ with
+  eigenvector $v\in V$. Then
+  \[ Tv = \lambda v. \]
+  Since $T$ is invertible, we can apply $T^{-1}$ to both sides to get
+  \[ v = T^{-1}(\lambda v) = \lambda T^{-1}v. \]
+  Dividing both sides by $\lambda$ (which is nonzero), we obtain
+  \[ T^{-1}v = \frac{1}{\lambda}v. \]
+  This shows that $1/\lambda$ is an eigenvalue of $T^{-1}$ with the
+  same eigenvector $v$.
+
+  Conversely, suppose $\mu\in\F$ with $\mu\ne0$ is an eigenvalue of $T^{-1}$
+  with eigenvector $v\in V$. Then
+  \[ T^{-1}v = \mu v. \]
+  Applying $T$ to both sides gives
+  \[ v = \mu Tv \implies Tv = \frac{1}{\mu}v. \]
+  This shows that $1/\mu$ is an eigenvalue of $T$ with the same
+  eigenvector $v$.
+
+  Therefore, $\lambda$ is an eigenvalue of $T$ if and only if
+  $1/\lambda$ is an eigenvalue of $T^{-1}$.
+\item Part (a) shows that if $\lambda$ is an eigenvalue of $T$, then
+  $1/\lambda$ is an eigenvalue of $T^{-1}$ with the same eigenvector.
+  Conversely, if $\mu$ is an eigenvalue of $T^{-1}$, then $1/\mu$ is an
+  eigenvalue of $T$ with the same eigenvector. Therefore, $T$ and $T^{-1}$ have
+  the same eigenvectors. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and there exist nonzero vectors $u$ and $w$ in $V$ such
+that
+\[ Tu=3w \quad\text{and}\quad Tw=3u. \]
+Prove that $3$ or $-3$ is an eigenvalue of $T$.
+\end{exercise}
+\begin{solution}
+Consider the vectors $u+w$ and $u-w$. Since $u$ and $w$ are both nonzero, at
+least one of $u+w$ or $u-w$ is nonzero. We have
+\[ T(u+w) = Tu+Tw = 3w+3u = 3(u+w), \]
+and
+\[ T(u-w) = Tu-Tw = 3w-3u = -3(u-w). \]
+Hence, one of $u+w$ or $u-w$ is an eigenvector with eigenvalue $3$ or $-3$,
+respectively.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $S,T\in\Lin(V)$. Prove that $ST$ and
+$TS$ have the same eigenvalues.
+\end{exercise}
+\begin{solution}
+Let $\lambda$ be an eigenvalue of $ST$ with eigenvector $v\in V$, so that
+\[ STv = \lambda v. \]
+Let $w=Tv$. Then
+\[ TSw = T(STv) = T(\lambda v) = \lambda Tv = \lambda w. \]
+If $\lambda w=0$, then either $\lambda=0$ or $w=0$. If $w=0$, then $Tv=0$,
+which implies $STv=S(Tv)=S0=0$. But $STv=\lambda v$, so $\lambda v=0$. Since
+$v\ne0$, we must have $\lambda=0$. Then this implies $ST$ is not invertible so
+that $TS$ is also not invertible, meaning $0$ is an eigenvalue of $TS$.
+Therefore, every eigenvalue of $ST$ is an eigenvalue of $TS$. By symmetry, the
+converse also holds, so $ST$ and $TS$ have the same eigenvalues.
+\end{solution}
+
+\begin{exercise}
+Suppose $A$ is an $n$-by-$n$ matrix with entries in $\F$. Define
+$T\in\Lin(\F^n)$ by $Tx=Ax$, where elements of $\F^n$ are thought of as
+$n$-by-$1$ column vectors.
+\begin{parts}
+\item Suppose the sum of the entries in each row of $A$ equals $1$. Prove that
+  $1$ is an eigenvalue of $T$.
+\item Suppose the sum of the entries in each column of $A$ equals $1$. Prove
+  that $1$ is an eigenvalue of $T$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item Suppose the sum of the entries in each row of $A$ equals $1$. Let
+  $v=(1,1,\dots,1)^t\in\F^n$. Then
+  \[ Tv = Av = v, \]
+  showing that $v$ is an eigenvector of $T$ corresponding to the eigenvalue
+  $1$.
+\item Suppose the sum of the entries in each column of $A$ equals $1$. By part
+  (a), this is equivalent to saying that the sum of the entries in each row of
+  $A^t$ equals $1$, hence $1$ is an eigenvalue of the linear operator defined
+  by $A^t$. But the eigenvalues of $A^t$ are the same as the eigenvalues of $A$
+  because $A-\lambda I$ is not invertible if and only if $A^t-\lambda I$ is not
+  invertible. Therefore, $1$ is an eigenvalue of $T$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $u,w$ are eigenvectors of $T$ such that $u+w$ is
+also an eigenvector of $T$. Prove that $u$ and $w$ are eigenvectors of $T$
+corresponding to the same eigenvalue.
+\end{exercise}
+\begin{solution}
+Let $Tu=\lambda u$ and $Tw=\mu w$ for some scalars $\lambda,\mu\in\F$. Since
+$u+w$ is also an eigenvector of $T$, we have $T(u+w)=\nu(u+w)$ for some scalar
+$\nu\in\F$. Then
+\[ \lambda u+\mu w = Tu+Tw = T(u+w) = \nu(u+w) = \nu u+\nu w. \]
+Since $u$ and $w$ are eigenvectors, they are nonzero. If $u$ and $w$ were
+linearly dependent, let $u=\alpha w$ for some scalar $\alpha\in\F$. Then
+$Tu=\lambda u=\lambda\alpha w$, and $Tu=T(\alpha w)=\alpha Tw=\alpha\mu w$.
+Equating these, we get $\lambda\alpha w=\alpha\mu w$, and since $\alpha\ne0$
+and $w\ne0$, it follows that $\lambda=\mu$. Hence, $u$ and $w$ correspond to
+the same eigenvalue.
+
+If $u$ and $w$ are linearly independent, we can equate coefficients of $u$ and
+$w$ in $\lambda u+\mu w=\nu u+\nu w$ to get $\lambda=\nu=\mu$. Therefore, in
+either case, $u$ and $w$ are eigenvectors corresponding to the same
+eigenvalue.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is such that every nonzero vector in $V$ is an
+eigenvector of $T$. Prove that $T$ is a scalar multiple of the identity
+operator.
+\end{exercise}
+\begin{solution}
+Let $v\in V$ be any nonzero vector. By assumption, $v$ is an eigenvector of
+$T$, so $Tv=\lambda_vv$ for some scalar $\lambda_v\in\F$. Now, let $u\in V$ be
+another nonzero vector. Consider the vector $u+v$. If $u$ and $v$ are linearly
+dependent, then without loss of generality, let $u=\alpha v$ for some scalar
+$\alpha\in\F$. Then $Tu=\lambda_uu=\lambda_u\alpha v$, and
+$Tu=T(\alpha v)=\alpha Tv=\alpha\lambda_vv$. Equating these, we get
+$\lambda_u\alpha v=\alpha\lambda_vv$, and since $\alpha\ne0$ and $v\ne0$, it
+follows that $\lambda_u=\lambda_v$.
+
+The remaining case is when $u+v$ is nonzero such that they are linearly
+independent. In this case, $u+v$ is an eigenvector of $T$, so
+$T(u+v)=\lambda_{u+v}(u+v)$ for some scalar $\lambda_{u+v}\in\F$. On the other
+hand, $T(u+v)=Tu+Tv=\lambda_uu+\lambda_vv$. Equating these, we get
+$\lambda_{u+v}u+\lambda_{u+v}v=\lambda_uu+\lambda_vv$. Since $u$ and $v$ are
+linearly independent, we can equate coefficients to get
+$\lambda_{u+v}=\lambda_u=\lambda_v$.
+
+Since $u$ and $v$ were arbitrary nonzero vectors, it follows that there exists
+a scalar $\lambda\in\F$ such that $Tv=\lambda v$ for all nonzero $v\in V$.
+Hence, $T=\lambda I$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V$ is finite-dimensional and $k\in\{1,\dots,\dim V-1\}$. Suppose
+$T\in\Lin(V)$ is such that every subspace of $V$ of dimension $k$ is invariant
+under $T$. Prove that $T$ is a scalar multiple of the identity operator.
+\end{exercise}
+\begin{solution}
+Let $v_1\in V$ be nonzero. Our goal is to intersect enough $k$-dimensional
+subspaces to isolate $\spn v_1$. We proceed as follows. Let $\dim V=n$, and
+extend $v_1$ to a basis $v_1,\dots,v_n$ of $V$. For each $i=2,\dots,n$, let
+\[ U_i = \spn(v_1,w_2,\dots,w_k),\quad
+   w_2,\dots,w_k\in\{v_2,\dots,v_n\}\setminus\{v_i\}, \]
+i.e., each $U_i$ must contain $v_1$ as well as $k-1$ vectors from the basis
+except $v_i$. This choice is possible, since $k\le n-1$, so there are enough
+vectors in $\{v_2,\dots,v_n\}\setminus\{v_i\}$ to choose $k-1$ of them. The
+intersection of all such $U_i$ will be exactly $\spn v_1$. Since each $U_i$ is
+invariant under $T$, we have $Tv_1\in U_i$ for all $i$. Therefore,
+$Tv_1\in\spn v_1$, which means $Tv_1$ is a scalar multiple of $v_1$. Since
+$v_1$ was arbitrary, it follows that $T$ is a scalar multiple of the identity
+operator.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that $T$ has at
+most $1+\dim\range T$ distinct eigenvalues.
+\end{exercise}
+\begin{solution}
+Let $\lambda_1,\dots,\lambda_m$ be distinct eigenvalues of $T$ with
+corresponding eigenvectors $v_1,\dots,v_m$. Since the eigenvalues are
+distinct, at most one eigenvalue must be $0$. Without loss of generality,
+assume $\lambda_1=0$ if $0$ is an eigenvalue. Then $v_2,\dots,v_m$ are $m-1$
+eigenvectors corresponding to nonzero eigenvalues. Since
+$Tv_i=\lambda_iv_i\ne0$ for $i=2,\dots,m$, it follows that $v_i\in\range T$.
+Therefore, $v_2,\dots,v_m$ are linearly independent vectors in $\range T$,
+which implies that $m-1\le\dim\range T$. Hence, the total number of distinct
+eigenvalues is at most $1+\dim\range T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(\R^3)$ and $-4$, $5$, and $\sqrt7$ are eigenvalues of $T$.
+Prove that there exists $x\in\R^3$ such that $Tx-9x=(-4,5,\sqrt7)$.
+\end{exercise}
+\begin{solution}
+Since $\dim\R^3=3$, the eigenvalues of $T$ are exactly $-4$, $5$, and
+$\sqrt7$. It follows that $9$ is not an eigenvalue of $T$, and
+$\nul(T-9I)=\{0\}$. Then $T-9I$ is injective, and since $\R^3$ is
+finite-dimensional, $T-9I$ is also surjective. Therefore, for any vector in
+$\R^3$, there exists $x\in\R^3$ such that $(T-9I)x=(-4,5,\sqrt7)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $(T-2I)(T-3I)(T-4I)=0$. Suppose $\lambda$ is an
+eigenvalue of $T$. Prove that $\lambda=2$ or $\lambda=3$ or $\lambda=4$.
+\end{exercise}
+\begin{solution}
+Let $v$ be an eigenvector of $T$ corresponding to the eigenvalue $\lambda$.
+Then
+\begin{align*}
+(T-2I)(T-3I)(T-4I)v &= (T-2I)(T-3I)(\lambda-4)v\\
+  &= (T-2I)(\lambda-3)(\lambda-4)v\\
+  &= (\lambda-2)(\lambda-3)(\lambda-4)v = 0.
+\end{align*}
+Since $v\ne0$, it must be that $(\lambda-2)(\lambda-3)(\lambda-4)=0$.
+Therefore, $\lambda=2$, $\lambda=3$, or $\lambda=4$.
+\end{solution}
+
+\begin{exercise}
+Give an example of $T\in\Lin(\R^2)$ such that $T^4=-I$.
+\end{exercise}
+\begin{solution}
+Consider the rotation matrix by $\pi/4$ radians:
+\[ T = \begin{pmatrix} \cos(\pi/4) & -\sin(\pi/4)\\
+   \sin(\pi/4) & \cos(\pi/4) \end{pmatrix}. \]
+Then
+\[ T^4 = \begin{pmatrix} \cos(\pi) & -\sin(\pi)\\ \sin(\pi) & \cos(\pi)
+   \end{pmatrix} = \begin{pmatrix} -1&0\\ 0&-1 \end{pmatrix} = -I. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ has no eigenvalues and $T^4=I$. Prove that $T^2=-I$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{The proof of this is a little easier if we may use
+minimal polynomials.}
+Note that
+\[ T^4-I = (T^2-I)(T^2+I) = (T-I)(T+I)(T^2+I) = 0. \]
+Applying $T^4-I$ to any nonzero $v\in V$, we get
+\[ (T-I)(T+I)(T^2+I)v = 0. \]
+Let $(T^2+I)v=w$. If $w\ne0$, then $(T-I)(T+I)w=0$. If $(T+I)w\ne0$, then
+\[ (T-I)(T+I)w = T(T+I)w-I(T+I)w = 0, \]
+which implies $T(T+I)w=(T+I)w$. Then $(T+I)w$ would have to be an eigenvector
+of $T$ corresponding to the eigenvalue $1$, contradicting the assumption that
+$T$ has no eigenvalues. If $(T+I)w=0$, then $Tw=-w$, which would make $w$ an
+eigenvector of $T$ corresponding to the eigenvalue $-1$, again contradicting
+the assumption that $T$ has no eigenvalues. Hence, we must have $w=0$, i.e.,
+$(T^2+I)v=0$. Since $v$ was arbitrary and nonzero, we conclude that
+$T^2+I=0$, i.e., $T^2=-I$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $m$ is a positive integer.
+\begin{parts}
+\item Prove that $T$ is injective if and only if $T^m$ is injective.
+\item Prove that $T$ is surjective if and only if $T^m$ is surjective.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item Suppose $T$ is injective. Then if $T^mv=0$, we have $T(T^{m-1}v)=0$,
+  which implies $T^{m-1}v=0$ since $T$ is injective. Repeating this argument,
+  we eventually get $v=0$. Hence, $T^m$ is injective.
+
+  Conversely, suppose $T^m$ is injective. If $Tv=0$, then $T^mv=0$, which
+  implies $v=0$. Hence, $T$ is injective.
+\item Suppose $T$ is surjective. Then for any $v\in V$, there exists $w\in V$
+  such that $Tw=v$. Similarly, there exists $w_2\in V$ such that $Tw_2=w$, and
+  so on. Repeating this $m$ times, we find $u\in V$ such that $T^mu=v$. Hence,
+  $T^m$ is surjective.
+
+  Conversely, suppose $T^m$ is surjective. Then for any $v\in V$, there exists
+  $u\in V$ such that $T^mu=v$. Let $w=T^{m-1}u$. Then
+  $Tw=T(T^{m-1}u)=T^mu=v$. Hence, $T$ is surjective. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $v_1,\dots,v_m\in V$. Prove that the list
+$v_1,\dots,v_m$ is linearly independent if and only if there exists
+$T\in\Lin(V)$ such that $v_1,\dots,v_m$ are eigenvectors of $T$ corresponding
+to distinct eigenvalues.
+\end{exercise}
+\begin{solution}
+Suppose $v_1,\dots,v_m$ is linearly independent. Since $V$ is
+finite-dimensional, we can extend this list to a basis
+$v_1,\dots,v_m,v_{m+1},\dots,v_n$ of $V$. Define $T\in\Lin(V)$ by setting
+$Tv_i=\lambda_iv_i$ for $i=1,\dots,m$, where $\lambda_1,\dots,\lambda_m$ are
+distinct scalars, and choose $\lambda_{m+1},\dots,\lambda_n$ arbitrarily
+(distinct from each other and from $\lambda_1,\dots,\lambda_m$). Then
+$v_1,\dots,v_m$ are eigenvectors of $T$ corresponding to distinct
+eigenvalues.
+
+Conversely, suppose there exists $T\in\Lin(V)$ such that $v_1,\dots,v_m$ are
+eigenvectors corresponding to distinct eigenvalues
+$\lambda_1,\dots,\lambda_m$. By \ref{ax:5.11}, eigenvectors corresponding to
+distinct eigenvalues are linearly independent. Hence, $v_1,\dots,v_m$ are
+linearly independent.
+\end{solution}
+
+\begin{exercise}
+Suppose that $\lambda_1,\dots,\lambda_n$ is a list of distinct real numbers.
+Prove that the list $e^{\lambda_1x},\dots,e^{\lambda_nx}$ is linearly
+independent in the vector space of real-valued functions on $\R$.
+\exnote{Hint: Let $V=\spn(e^{\lambda_1x},\dots,e^{\lambda_nx})$, and define an
+operator $D\in\Lin(V)$ by $Df=f'$. Find eigenvalues and eigenvectors of $D$.}
+\end{exercise}
+\begin{solution}
+Suppose there exists a linear combination
+\[ a_1e^{\lambda_1x}+\cdots+a_ne^{\lambda_nx} = 0 \]
+for all $x\in\R$. Let $V=\spn(e^{\lambda_1x},\dots,e^{\lambda_nx})$ and define
+$D\in\Lin(V)$ by $Df=f'$. Then $De^{\lambda_ix}=\lambda_ie^{\lambda_ix}$, so
+$e^{\lambda_ix}$ is an eigenvector of $D$ corresponding to the eigenvalue
+$\lambda_i$. Since the $\lambda_i$ are distinct, by \ref{ax:5.11}, the
+eigenvectors corresponding to distinct eigenvalues are linearly independent.
+Hence, $a_1=\cdots=a_n=0$, proving that $e^{\lambda_1x},\dots,e^{\lambda_nx}$
+are linearly independent.
+\end{solution}
+
+\begin{exercise}
+Suppose that $\lambda_1,\dots,\lambda_n$ is a list of distinct positive
+numbers. Prove that the list $\cos(\lambda_1x),\dots,\cos(\lambda_nx)$ is
+linearly independent in the vector space of real-valued functions on $\R$.
+\end{exercise}
+\begin{solution}
+Suppose there exists a linear combination
+\[ a_1\cos(\lambda_1x)+\cdots+a_n\cos(\lambda_nx) = 0 \]
+for all $x\in\R$. Let
+$V=\spn\bigl(\cos(\lambda_1x),\sin(\lambda_1x),\dots,\cos(\lambda_nx),
+\sin(\lambda_nx)\bigr)$ and define $D\in\Lin(V)$ by $Df=f'$. Then
+$D^2\cos(\lambda_ix)=-\lambda_i^2\cos(\lambda_ix)$, so $\cos(\lambda_ix)$ is an
+eigenvector of $D^2$ corresponding to the eigenvalue $-\lambda_i^2$. Since the
+$\lambda_i$ are distinct and positive, the $-\lambda_i^2$ are distinct, and by
+\ref{ax:5.11}, the eigenvectors corresponding to distinct eigenvalues are
+linearly independent. Hence, $a_1=\cdots=a_n=0$, proving that
+$\cos(\lambda_1x),\dots,\cos(\lambda_nx)$ are linearly independent.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Define
+$\mathcal{A}\in\Lin(\Lin(V))$ by
+\[ \mathcal{A}(S) = TS \]
+for each $S\in\Lin(V)$. Prove that the set of eigenvalues of $T$ equals the
+set of eigenvalues of $\mathcal{A}$.
+\end{exercise}
+\begin{solution}
+Suppose $\lambda$ is an eigenvalue of $T$ with corresponding eigenvector
+$v\in V$, so $Tv=\lambda v$. Consider a nonzero $\varphi\in V'$ and consider
+$S\in\Lin(V)$ defined by $Sw=\varphi(w)v$ for all $w\in V$. Then $S\ne0$ and
+for all $w\in V$,
+\[ TSw = T\bigl(\varphi(w)v\bigr) = \varphi(w)Tv = \varphi(w)\lambda v
+   = \lambda\varphi(w)v = \lambda Sw. \]
+Hence, $\lambda$ is an eigenvalue of $\mathcal{A}$.
+
+Conversely, if $\lambda$ is an eigenvalue of $\mathcal{A}$ with corresponding
+eigenvector $S\in\Lin(V)$, then $\mathcal{A}(S)=TS=\lambda S$. Since $S\ne0$,
+there exists $v\in V$ such that $Sv\ne0$. Then $TSv=\lambda Sv$, so $\lambda$
+is an eigenvalue of $T$. Therefore, the set of eigenvalues of $T$ equals the
+set of eigenvalues of $\mathcal{A}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $U$ is a subspace of $V$
+invariant under $T$. The \emph{quotient operator} $T/U\in\Lin(V/U)$ is defined
+by
+\[ (T/U)(v+U) = Tv+U \]
+for each $v\in V$.
+\begin{parts}
+\item Show that the definition of $T/U$ makes sense (which requires using the
+  condition that $U$ is invariant under $T$) and show that $T/U$ is an
+  operator on $V/U$.
+\item Show that each eigenvalue of $T/U$ is an eigenvalue of $T$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\begin{parts}
+\item To show that the definition of $T/U$ makes sense, suppose
+  $v+U=v'+U$ for some $v,v'\in V$. Then $v-v'\in U$, and since $U$ is
+  invariant under $T$, we have $T(v-v')\in U$, so $Tv-Tv'\in U$, which implies
+  $Tv+U=Tv'+U$. Hence, the definition of $T/U$ is well-defined.
+
+  To show that $T/U$ is an operator on $V/U$, note that for any
+  $v+U\in V/U$, $(T/U)(v+U)=Tv+U\in V/U$. Linearity follows from the linearity
+  of $T$: for any $\alpha,\beta\in\F$ and $v+U,w+U\in V/U$,
+  \begin{align*}
+  (T/U)\bigl(\alpha(v+U)+\beta(w+U)\bigr) &= (T/U)(\alpha v+\beta w+U)\\
+    &= T(\alpha v+\beta w)+U\\
+    &= \alpha Tv+\beta Tw+U\\
+    &= \alpha(T/U)(v+U)+\beta(T/U)(w+U)
+  \end{align*}
+\item Suppose $\lambda$ is an eigenvalue of $T/U$ with corresponding
+  eigenvector $v+U\in V/U$, so
+  $(T/U)(v+U)=Tv+U=\lambda(v+U)=\lambda v+U$. This means $Tv-\lambda v\in U$.
+  Suppose now that $T-\lambda I$ has no eigenvector in $V$ corresponding to
+  $\lambda$. Since $U$ is invariant under $T-\lambda I$, then its restriction
+  $(T-\lambda I)|_U$ is an operator on $U$. By the fundamental theorem of
+  linear maps, we have
+  \[ \dim U = \dim\nul(T-\lambda I)|_U+\dim\range(T-\lambda I)|_U. \]
+  Now for any $v+U\ne U$ with $(T-\lambda I)v\in U$, then surjectivity of
+  $(T-\lambda I)|_U$ would imply that there exists $u\in U$ such that
+  $(T-\lambda I)u=(T-\lambda I)v$. By injectivity, we get that $u=v$, which is
+  a contradiction since $v\notin U$. Therefore, our assumption that
+  $T-\lambda I$ has no eigenvector corresponding to $\lambda$ must be false,
+  and $\lambda$ is indeed an eigenvalue of $T$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that $T$ has an
+eigenvalue if and only if there exists a subspace of $V$ of dimension
+$\dim V-1$ that is invariant under $T$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ has an eigenvalue $\lambda$ with corresponding eigenvector
+$v\in V$. Consider $\range(T-\lambda I)$. Then
+$\dim\range(T-\lambda I)\le\dim V-1$. Extend to a subspace $U$ of $V$ of
+dimension $\dim V-1$ that contains $\range(T-\lambda I)$. Then $U$ is invariant
+under $T$ because for any $u\in U$, $Tu=(T-\lambda I)u+\lambda u\in U$. Hence,
+there exists a subspace of $V$ of dimension $\dim V-1$ that is invariant under
+$T$.
+
+Conversely, suppose there exists a subspace $U$ of $V$ of dimension
+$\dim V-1$ that is invariant under $T$. Then $V/U$ is one-dimensional, and the
+induced operator $T/U$ on $V/U$ must have an eigenvalue $\lambda$. By
+Exercise~5A38~(b), any eigenvalue of $T/U$ is also an eigenvalue of $T$. Hence,
+$T$ has an eigenvalue.
+\end{solution}
+
+\begin{exercise}
+Suppose $S,T\in\Lin(V)$ and $S$ is invertible. Suppose $p\in\Poly(\F)$ is a
+polynomial. Prove that
+\[ p(STS^{-1}) = Sp(T)S^{-1}. \]
+\end{exercise}
+\begin{solution}
+We first prove by induction that $(STS^{-1})^k=ST^kS^{-1}$ for all
+non-negative integers $k$. For $k=0$, we have $(STS^{-1})^0=I=ST^0S^{-1}$.
+Suppose the result holds for some $k=n$, so that $(STS^{-1})^n=ST^nS^{-1}$.
+Then
+\begin{align*}
+(STS^{-1})^{n+1} &= (STS^{-1})^n(STS^{-1})\\
+  &= (ST^nS^{-1})(STS^{-1})\\
+  &= ST^n(S^{-1}S)TS^{-1}\\
+  &= ST^nTS^{-1}\\
+  &= ST^{n+1}S^{-1}.
+\end{align*}
+By induction, the result holds for all non-negative integers $k$.
+
+Now let $p(z)=a_0+a_1z+\cdots+a_mz^m$ be any polynomial. Then
+\begin{align*}
+p(STS^{-1}) &= a_0I+a_1(STS^{-1})+\cdots+a_m(STS^{-1})^m\\
+  &= a_0I+a_1(STS^{-1})+\cdots+a_m(ST^mS^{-1})\\
+  &= S(a_0I+a_1T+\cdots+a_mT^m)S^{-1}\\
+  &= Sp(T)S^{-1}.
+\end{align*}
+Hence, the result holds for all polynomials $p$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $U$ is a subspace of $V$ invariant under $T$. Prove
+that $U$ is invariant under $p(T)$ for every polynomial $p\in\Poly(\F)$.
+\end{exercise}
+\begin{solution}
+Let $u\in U$. Since $U$ is invariant under $T$, we have $T(u)\in U$. By
+induction, suppose $T^k(u)\in U$ for some non-negative integer $k$. Then
+$T^{k+1}(u)=T\bigl(T^k(u)\bigr)\in U$ since $U$ is invariant under $T$. Hence,
+$T^k(u)\in U$ for all non-negative integers $k$. Now let
+$p(z)=a_0+a_1z+\cdots+a_mz^m$ be any polynomial. Then
+\[ p(T)(u) = a_0u+a_1T(u)+\cdots+a_mT^m(u) \in U, \]
+since each term is in $U$. Therefore, $U$ is invariant under $p(T)$ for every
+polynomial $p\in\Poly(\F)$.
+\end{solution}
+
+\begin{exercise}
+Define $T\in\Lin(\F^n)$ by
+$T(x_1,x_2,x_3,\dots,x_n)=(x_1,2x_2,3x_3,\dots,nx_n)$.
+\begin{parts}
+\item Find all eigenvalues and eigenvectors of $T$.
+\item Find all subspaces of $\F^n$ that are invariant under $T$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Appendix}{See the alternate proof at the end of this solution for a
+generalization to any diagonal operator. The solution here remains as to show
+the student the mechanism.}
+\begin{parts}
+\item Let $\lambda$ be an eigenvalue of $T$ with corresponding eigenvector
+  $v=(x_1,x_2,\dots,x_n)\in\F^n$. Then $T(v)=\lambda v$, which means
+  \[ (x_1,2x_2,3x_3,\dots,nx_n) = (\lambda x_1,\lambda x_2,\dots,\lambda x_n).
+  \]
+  Comparing components, we get $\lambda x_i=ix_i$ for each $i=1,2,\dots,n$.
+  Hence, if $x_i\ne0$, then $\lambda=i$. Therefore, the eigenvalues of $T$ are
+  $1,2,\dots,n$, and the corresponding eigenvectors are nonzero multiples of
+  the standard basis vectors $e_1,e_2,\dots,e_n$.
+\item Let $U$ be an invariant subspace of $\F^n$ under $T$. Let
+  \[ u = \sum_{i=1}^n\alpha_ie_i \in U, \]
+  where $e_i$ are the standard basis vectors of $\F^n$ and $\alpha_i\in\F$.
+  Since $U$ is invariant under $T$, we have
+  \[ Tu = \sum_{i=1}^n\alpha_iT(e_i) = \sum_{i=1}^n\alpha_iie_i \in U. \]
+  Consider some index $i$ such that $\alpha_i\ne0$. Then
+  \[ u_1 = Tu-iu = \sum_{j=1}^n\alpha_jje_j-i\sum_{j=1}^n\alpha_je_j
+     = \sum_{j=1}^n\alpha_j(j-i)e_j \in U. \]
+  The $i$-th term in this sum is $\alpha_i(i-i)e_i=0$, and $u_1$ now has all
+  terms except the $i$-th term. Consider another index $j$ of $u_1$ such that
+  $\alpha_j\ne0$. Then we can form
+  \begin{align*}
+  u_2 = Tu_1-ju_1
+    &= \sum_{k=1}^n\alpha_k(k-i)ke_k-j\sum_{k=1}^n\alpha_k(k-i)e_k\\
+    &= \sum_{k=1}^n\alpha_k(k-i)(k-j)e_k \in U.
+  \end{align*}
+  The $j$-th term in this sum is $\alpha_j(j-i)(j-j)e_j=0$, and $u_2$ now has
+  all terms except the $i$-th and $j$-th terms. By repeating this process for
+  each index with a nonzero coefficient, we can isolate each $\alpha_ie_i$ in
+  $U$ whenever $\alpha_i\ne0$. Therefore, $U$ must be the span of some subset
+  of the standard basis vectors $\{e_1,e_2,\dots,e_n\}$.
+\end{parts}
+
+\emph{Alternate proof.} \emph{Civil Service Pigeon.} Let $e_1,\dots,e_n$ be
+the standard basis of $\F^n$.
+\begin{parts}
+\item For each $k\in\{1,\dots,n\}$, we have $Te_k=ke_k$. Hence, the eigenvalues
+  of $T$ are $1,2,\dots,n$ and the eigenvectors corresponding to $k$ are the
+  nonzero scalar multiples of $e_k$. Note that this list of eigenvalues (and
+  eigenvectors) is exhaustive because $\dim(\F^n)=n$.
+\item Let $U\subseteq\F^n$ be an invariant subspace under $T$. Take any
+  $u=\sum_{i=1}^n\alpha_ie_i\in U$ and suppose $\alpha_k\ne0$ for some $k$. By
+  Lagrange interpolation, there exists a polynomial $p$ such that
+  $p(i)=\delta_{i,k}$ for all $i\in\{1,\dots,n\}$. Since $U$ is invariant under
+  $T$, it is also invariant under $p(T)$, and so
+  \[ p(T)u = \sum_{i=1}^n\alpha_ip(T)e_i = \sum_{i=1}^n\alpha_ip(i)e_i
+     = \alpha_ke_k\in U \implies e_k\in U. \]
+  Repeating this argument for every index with a nonzero coefficient in some
+  element of $U$ shows that $U$ contains each of the basis vectors
+  $e_1,\dots,e_n$. Hence, $U=\spn\{e_i : i\in S\}$ for some
+  $S\subseteq\{1,\dots,n\}$.
+
+  Conversely, any such span is invariant because $Te_i=ie_i$ belongs to that
+  span. There are $2^n$ such subspaces, and they exhaust all invariant
+  subspaces of $T$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose that $V$ is finite-dimensional, $\dim V>1$, and $T\in\Lin(V)$. Prove
+that
+$\{p(T) : p\in\Poly(\F)\}\ne\Lin(V)$.
+\end{exercise}
+\begin{solution}
+Note that $\dim\Lin(V)\ge4$. Let $v_1,\dots,v_n$ be a basis for $V$. Consider
+the operators $T_1,T_2\in\Lin(V)$ defined by
+\[ T_1v_1=v_2,\quad T_1v_i=0\text{ for } i=2,\dots,n, \]
+and
+\[ T_2v_1=v_1,\quad T_2v_i=0\text{ for } i=2,\dots,n. \]
+Then $T_2T_1v_1=T_2(T_1v_1)=T_2v_2=0$, and $T_1T_2v_1=T_1(T_2v_1)=T_1v_1=v_2$.
+Hence, $T_2T_1\ne T_1T_2$, so $T_1$ and $T_2$ do not commute. Now let $S$ be
+the set in question, and let $p,q\in\Poly(\F)$ where
+\[ p(T)=a_0I+a_1T+\cdots+a_mT^m,\quad q(T)=b_0I+b_1T+\cdots+b_nT^n. \]
+Observe that $p(T)q(T)$ consists of linear combinations of powers of $T$ with
+coefficients $a_ib_j$. By commutativity of $\F$, we see that
+$q(T)p(T)=p(T)q(T)$, so elements of $S$ commute. Since $T_1$ and $T_2$ do not
+commute, they cannot both be in $S$. Hence, $S\ne\Lin(V)$.
+\end{solution}
