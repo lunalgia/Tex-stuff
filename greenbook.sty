@@ -735,6 +735,14 @@ urlcolor=hkgreen,
   \declaretheorem[style=thmexample,name=Corollary,sibling=theorem]{corollary}
   \declaretheorem[style=basehead,name=Claim,numbered=no]{claim}
 
+  %examples and remarks may break across pages, but not right after their head:
+  %start them on the next page unless there is room for the head and a few lines
+  \newcommand*\gb@boxneedspace{\par\Needspace*{7\baselineskip}}
+  \AddToHook{env/example/before}{\gb@boxneedspace}
+  \AddToHook{env/corollary/before}{\gb@boxneedspace}
+  \AddToHook{env/corollary*/before}{\gb@boxneedspace}
+  \AddToHook{env/remark/before}{\gb@boxneedspace}
+
 
 
 
@@ -805,7 +813,10 @@ urlcolor=hkgreen,
     }%
   }
   \newenvironment{exc}{%
-      \par\noindent~\\ \rule[0cm]{\textwidth-4cm}{0.01cm}\rule[-0.11cm]{4cm}{0.12cm} \vskip2pt \noindent{\hspace*{\textwidth-3.8cm}\Large\textbf{Exercises}}}%
+      %the heading and the start of the first exercise stay on one page
+      \par\Needspace*{9\baselineskip}%
+      \noindent~\\ \rule[0cm]{\textwidth-4cm}{0.01cm}\rule[-0.11cm]{4cm}{0.12cm}\par\nobreak
+      \vskip2pt \noindent{\hspace*{\textwidth-3.8cm}\Large\textbf{Exercises}}\par\nobreak}%
       {\bigskip \hrule \medskip}
 
 

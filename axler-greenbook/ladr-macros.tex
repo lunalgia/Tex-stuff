@@ -62,12 +62,26 @@
 \newcommand\axcaption[1]{\refstepcounter{theorem}%
   \addtocounter{figure}{-1}\caption{#1}}
 
-% The chapters use artbook's \marginnote[offset]{text}; the marginnote
-% package (loaded by greenbook) takes \marginnote{text}[offset].  Accept both.
-\let\gb@marginnote\marginnote
+% Margin notes are ordinary \marginpar's, placed by marginfix: a note starts
+% level with the line it belongs to, moves down to clear the note above it,
+% and moves up when it would run off the foot of the page.  The offsets of
+% the artbook edition (\marginnote[offset]{text}, or the marginnote
+% package's \marginnote{text}[offset]) are accepted and ignored.
+\RequirePackage{marginfix}
 \RenewDocumentCommand\marginnote{O{0pt} +m o}{%
-  \IfNoValueTF{#3}{\gb@marginnote{\footnotesize #2}[#1]}%
-                  {\gb@marginnote{\footnotesize #2}[#3]}}
+  \marginpar{\footnotesize\raggedright #2\par}}
+% The name and number of a boxed theorem (Definition 1.18) stand in the
+% margin too, but are set by the theorem head, which marginfix does not see:
+% reserve their place before the box, so that notes move around them.
+% (when the page is almost full the box goes to the next page; a phantom left
+% at the foot of this page would keep the notes above it from moving up)
+\newcommand*\ax@labelroom{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax<\dimexpr 21pt+3.4\baselineskip\relax
+  \else\marginphantom{\dimexpr 21pt+1.4\baselineskip\relax}\fi}
+% (added in the preamble, so that it runs before the hook that opens the box)
+\@for\ax@env:={definition,definition*,result,result*,notation,theorem,lemma}\do{%
+    \edef\ax@hook{env/\ax@env/before}%
+    \expandafter\AddToHook\expandafter{\ax@hook}{\ax@labelroom}}
 \makeatother
 
 % ------------------------------------------------- lists inside the text
@@ -88,8 +102,18 @@
 
 % a small unnumbered figure in the label column, as Axler's margin figures:
 %   \marginfig{<tikz or \includegraphics>}{caption}
-\newcommand\marginfig[3][0pt]{\marginnote[#1]{\vskip0pt\centering #2\par\smallskip
-  {\itshape #3}\par}}
+% The drawing is set once to measure it, then again with its coordinates
+% scaled so that it fills the margin (at most 1.8 times its own scale); the
+% text of its labels keeps its size.
+\makeatletter
+\newsavebox\ax@figbox
+\newcommand\marginfig[3][0pt]{%
+  \sbox\ax@figbox{#2}%
+  \edef\ax@figscale{\fpeval{min(1.8,(\the\marginparwidth)/(\the\wd\ax@figbox))}}%
+  \marginnote{\vskip0pt\centering
+    {\tikzset{every picture/.append style={scale=\ax@figscale}}#2}\par\smallskip
+    {\itshape #3}\par}}
+\makeatother
 
 % the quotation that closes some exercise sets
 \newcommand\axquote[2]{\par\bigskip\begingroup\raggedleft\small\itshape
