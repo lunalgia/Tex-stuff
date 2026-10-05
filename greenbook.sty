@@ -684,9 +684,10 @@ urlcolor=hkgreen,
   \declaretheoremstyle[
     headfont=\bfseries\sffamily\color{coolbeige}\normalsize,
     headformat={%
-    \tcbox{\hspace{-2.3mm}\textcolor{coolbeige}{\ \ \ \scshape \NAME\ \NUMBER}}
+    \tcbox{\hspace{-2.3mm}\textcolor{coolbeige}{\ \ \ \scshape \NAME\ \NUMBER}}\NOTE
     },          % Title font and color
-    notefont=\normalfont,                    % Font for the optional note
+    notefont=\normalfont\bfseries\color{black},  % the title, after the tab
+    notebraces={}{},                         % no parentheses around it
     headpunct={~\\ ~\\ },                            % No punctuation after the title
     headindent=-10.1pt,                          % No indentation for the title
     postheadspace=10pt,                       % No space after the title
