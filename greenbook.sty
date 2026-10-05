@@ -48,6 +48,11 @@
 \RequirePackage{amsthm}
 %\RequirePackage[lite, subscriptcorrection]{mtpro2}
 \RequirePackage[lite, zswash, subscriptcorrection]{mtpro2}
+%mtpro2's wide accents are fragile; theorem notes get written to files
+\let\gb@widetilde\widetilde
+\DeclareRobustCommand{\widetilde}{\gb@widetilde}
+\let\gb@widehat\widehat
+\DeclareRobustCommand{\widehat}{\gb@widehat}
 \DeclareMathSizes{9 }{9}{6}{4}
 
 \setSingleSpace{1.1}
@@ -519,6 +524,7 @@ urlcolor=hkgreen,
 \pgfplotsset{compat=1.18}
 %theorem related packages
 \RequirePackage{thmtools}
+
 \RequirePackage{import}
 \RequirePackage{xifthen}
 \RequirePackage{pdfpages}
