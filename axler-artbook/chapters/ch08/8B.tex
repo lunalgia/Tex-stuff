@@ -1,0 +1,591 @@
+% Source: book pp. 308--318 (PDF 322--332). No solutions.
+% numbered displays (Axler's 8.32, ...): see 8A.tex
+\DeclareRobustCommand\axeqnum[1]{\refstepcounter{theorem}\label{ax:#1}}
+\section{Generalized Eigenspace Decomposition}
+
+\subsection{Generalized Eigenspaces}
+
+\begin{definition}[Generalized eigenspace, $G(\lambda,T)$]\label{ax:8.19}
+Suppose $T\in\Lin(V)$ and $\lambda\in\F$. The \emph{generalized eigenspace} of
+$T$ corresponding to $\lambda$, denoted by $G(\lambda,T)$, is defined by
+\[ G(\lambda,T) = \{v\in V : (T-\lambda I)^kv=0 \text{ for some positive
+   integer } k\}. \]
+Thus $G(\lambda,T)$ is the set of generalized eigenvectors of $T$ corresponding
+to $\lambda$, along with the $0$ vector.
+\end{definition}
+
+Because every eigenvector of $T$ is a generalized eigenvector of $T$ (take
+$k=1$ in the definition of generalized eigenvector), each eigenspace is
+contained in the corresponding generalized eigenspace. In other words, if
+$T\in\Lin(V)$ and $\lambda\in\F$, then $E(\lambda,T)\subseteq G(\lambda,T)$.
+
+The next result implies that if $T\in\Lin(V)$ and $\lambda\in\F$, then the
+generalized eigen\-space $G(\lambda,T)$ is a subspace of $V$ (because the null
+space of each linear map on $V$ is a subspace of $V$).
+
+\begin{result}[Description of generalized eigenspaces]\label{ax:8.20}
+Suppose $T\in\Lin(V)$ and $\lambda\in\F$. Then
+$G(\lambda,T)=\nul(T-\lambda I)^{\dim V}$.
+\end{result}
+
+\begin{proof}
+Suppose $v\in\nul(T-\lambda I)^{\dim V}$. The definitions imply
+$v\in G(\lambda,T)$. Thus $G(\lambda,T)\supseteq\nul(T-\lambda I)^{\dim V}$.
+
+Conversely, suppose $v\in G(\lambda,T)$. Thus there is a positive integer $k$
+such that $v\in\nul(T-\lambda I)^k$. From \ref{ax:8.1} and \ref{ax:8.3} (with
+$T-\lambda I$ replacing $T$), we get $v\in\nul(T-\lambda I)^{\dim V}$. Thus
+$G(\lambda,T)\subseteq\nul(T-\lambda I)^{\dim V}$, completing the proof.
+\end{proof}
+
+\begin{example}[Generalized eigenspaces of an operator on $\C^3$]\label{ax:8.21}
+Define $T\in\Lin(\C^3)$ by
+\[ T(z_1,z_2,z_3) = (4z_2,0,5z_3). \]
+
+In Example \ref{ax:8.10}, we saw that the eigenvalues of $T$ are $0$ and $5$,
+and we found the corresponding sets of generalized eigenvectors. Taking the
+union of those sets with $\{0\}$, we have
+\[ G(0,T) = \{(z_1,z_2,0) : z_1,z_2\in\C\} \quad\text{and}\quad
+   G(5,T) = \{(0,0,z_3) : z_3\in\C\}. \]
+Note that $\C^3=G(0,T)\oplus G(5,T)$.
+\end{example}
+
+In Example \ref{ax:8.21}, the domain space $\C^3$ is the direct sum of the
+generalized eigenspaces of the operator $T$ in that example. Our next result
+shows that this behavior holds in general. Specifically, the following major
+result shows that if $\F=\C$ and $T\in\Lin(V)$, then $V$ is the direct sum of
+the generalized eigenspaces of $T$, each of which is invariant under $T$ and on
+which $T$ is a nilpotent operator plus a scalar multiple of the identity. Thus
+the next result achieves our goal of decomposing $V$ into invariant subspaces on
+which $T$ has a known behavior.
+
+As we will see, the proof follows from putting together what we have learned
+about generalized eigenspaces and then using our result that for each operator
+$T\in\Lin(V)$, there exists a basis of $V$ consisting of generalized
+eigenvectors of $T$.
+
+\begin{result}[Generalized eigenspace decomposition]\label{ax:8.22}\emergencystretch=1.5em
+Suppose $\F=\C$ and $T\in\Lin(V)$. Let $\lambda_1,\dots,\lambda_m$ be the
+distinct eigenvalues of $T$. Then
+\begin{parts}
+\item $G(\lambda_k,T)$ is invariant under $T$ for each $k=1,\dots,m$;
+\item $(T-\lambda_kI)|_{G(\lambda_k,T)}$ is nilpotent for each
+  $k=1,\dots,m$;
+\item $V=G(\lambda_1,T)\oplus\cdots\oplus G(\lambda_m,T)$.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item Suppose $k\in\{1,\dots,m\}$. Then \ref{ax:8.20} shows that
+  \[ G(\lambda_k,T) = \nul(T-\lambda_kI)^{\dim V}. \]
+  Thus \ref{ax:5.18}, with $p(z)=(z-\lambda_k)^{\dim V}$, implies that
+  $G(\lambda_k,T)$ is invariant under $T$, proving (a).
+\item Suppose $k\in\{1,\dots,m\}$. If $v\in G(\lambda_k,T)$, then
+  $(T-\lambda_kI)^{\dim V}v=0$ (by \ref{ax:8.20}). Thus
+  $\bigl((T-\lambda_kI)|_{G(\lambda_k,T)}\bigr)^{\dim V}=0$. Hence
+  $(T-\lambda_kI)|_{G(\lambda_k,T)}$ is nilpotent, proving (b).
+\item To show that $G(\lambda_1,T)+\cdots+G(\lambda_m,T)$ is a direct sum,
+  suppose
+  \[ v_1+\cdots+v_m = 0, \]
+  where each $v_k$ is in $G(\lambda_k,T)$. Because generalized eigenvectors of
+  $T$ corresponding to distinct eigenvalues are linearly independent (by
+  \ref{ax:8.12}), this implies that each $v_k$ equals $0$. Thus
+  $G(\lambda_1,T)+\cdots+G(\lambda_m,T)$ is a direct sum (by \ref{ax:1.45}).
+
+  Finally, each vector in $V$ can be written as a finite sum of generalized
+  eigenvectors of $T$ (by \ref{ax:8.9}). Thus
+  \[ V = G(\lambda_1,T)\oplus\cdots\oplus G(\lambda_m,T), \]
+  proving (c).\qedhere
+\end{parts}
+\end{proof}
+
+For the analogous result when $\F=\R$, see Exercise 8.
+
+\subsection{Multiplicity of an Eigenvalue}
+
+If $V$ is a complex vector space and $T\in\Lin(V)$, then the decomposition of
+$V$ provided by the generalized eigenspace decomposition (\ref{ax:8.22}) can be
+a powerful tool. The dimensions of the subspaces involved in this decomposition
+are sufficiently important to get a name, which is given in the next
+definition.
+
+\begin{definition}[Multiplicity]\label{ax:8.23}\leavevmode
+\begin{itemize}
+\item Suppose $T\in\Lin(V)$. The \emph{multiplicity} of an eigenvalue $\lambda$
+  of $T$ is defined to be the dimension of the corresponding generalized
+  eigenspace $G(\lambda,T)$.
+\item In other words, the multiplicity of an eigenvalue $\lambda$ of $T$ equals
+  \[ \dim\nul(T-\lambda I)^{\dim V}. \]
+\end{itemize}
+\end{definition}
+
+The second bullet point above holds because
+$G(\lambda,T)=\nul(T-\lambda I)^{\dim V}$ (see \ref{ax:8.20}).
+
+\begin{example}[Multiplicity of each eigenvalue of an operator]\label{ax:8.24}
+Suppose $T\in\Lin(\C^3)$ is defined by
+\[ T(z_1,z_2,z_3) = (6z_1+3z_2+4z_3,6z_2+2z_3,7z_3). \]
+The matrix of $T$ (with respect to the standard basis) is
+\[ \begin{pmatrix} 6 & 3 & 4\\ 0 & 6 & 2\\ 0 & 0 & 7 \end{pmatrix}. \]
+The eigenvalues of $T$ are the diagonal entries $6$ and $7$, as follows from
+\ref{ax:5.41}. You can verify that the generalized eigenspaces of $T$ are as
+follows:
+\[ G(6,T) = \spn\bigl((1,0,0),(0,1,0)\bigr) \quad\text{and}\quad
+   G(7,T) = \spn\bigl((10,2,1)\bigr). \]
+
+Thus the eigenvalue $6$ has multiplicity $2$ and the eigenvalue $7$ has
+multiplicity $1$. The direct sum $\C^3=G(6,T)\oplus G(7,T)$ is the generalized
+eigenspace decomposition promised by \ref{ax:8.22}. A basis of $\C^3$
+consisting of generalized eigenvectors of $T$, as promised by \ref{ax:8.9}, is
+$(1,0,0),(0,1,0),(10,2,1)$. There does not exist a basis of $\C^3$ consisting
+of eigenvectors of this operator.
+\end{example}
+
+\marginnote[-24mm]{In this example, the multiplicity of each eigenvalue equals the
+number of times that eigenvalue appears on the diagonal of an upper-triangular
+matrix representing the operator. This behavior always happens, as we will see
+in \ref{ax:8.31}.}%
+In the example above, the sum of the multiplicities of the eigenvalues of $T$
+equals $3$, which is the dimension of the domain of $T$. The next result shows
+that this holds for all operators on finite-dimensional complex vector spaces.
+
+\begin{result}[Sum of the multiplicities equals $\dim V$]\label{ax:8.25}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then the sum of the multiplicities of all
+eigenvalues of $T$ equals $\dim V$.
+\end{result}
+
+\begin{proof}
+The desired result follows from the generalized eigenspace decomposition
+(\ref{ax:8.22}) and the formula for the dimension of a direct sum (see
+\ref{ax:3.94}).
+\end{proof}
+
+The terms \emph{algebraic multiplicity} and \emph{geometric multiplicity} are
+used in some books. In case you encounter this terminology, be aware that the
+algebraic multiplicity is the same as the multiplicity defined here and the
+geometric multiplicity is the dimension of the corresponding eigenspace. In
+other words, if $T\in\Lin(V)$ and $\lambda$ is an eigenvalue of $T$, then
+\begin{align*}
+\text{algebraic multiplicity of } \lambda
+  &= \dim\nul(T-\lambda I)^{\dim V} = \dim G(\lambda,T),\\
+\text{geometric multiplicity of } \lambda
+  &= \dim\nul(T-\lambda I) = \dim E(\lambda,T).
+\end{align*}
+Note that as defined above, the algebraic multiplicity also has a geometric
+meaning as the dimension of a certain null space. The definition of
+multiplicity given here is cleaner than the traditional definition that
+involves determinants; \ref{ax:9.62} implies that these definitions are
+equivalent.
+
+If $V$ is an inner product space, $T\in\Lin(V)$ is normal, and $\lambda$ is an
+eigenvalue of $T$, then the algebraic multiplicity of $\lambda$ equals the
+geometric multiplicity of $\lambda$, as can be seen from applying Exercise 27
+in Section 7A to the normal operator $T-\lambda I$. As a special case, the
+singular values of $S\in\Lin(V,W)$ (here $V$ and $W$ are both
+finite-dimensional inner product spaces) depend on the multiplicities (either
+algebraic or geometric) of the eigenvalues of the self-adjoint operator
+$S^*S$.
+
+The next definition associates a monic polynomial with each operator on a
+finite-dimensional complex vector space.
+
+\begin{definition}[Characteristic polynomial]\label{ax:8.26}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Let $\lambda_1,\dots,\lambda_m$ denote the
+distinct eigenvalues of $T$, with multiplicities $d_1,\dots,d_m$. The
+polynomial
+\[ (z-\lambda_1)^{d_1}\cdots(z-\lambda_m)^{d_m} \]
+is called the \emph{characteristic polynomial} of $T$.
+\end{definition}
+
+\begin{example}[The characteristic polynomial of an operator]\label{ax:8.27}
+Suppose $T\in\Lin(\C^3)$ is defined as in Example \ref{ax:8.24}. Because the
+eigenvalues of $T$ are $6$, with multiplicity $2$, and $7$, with multiplicity
+$1$, we see that the characteristic polynomial of $T$ is $(z-6)^2(z-7)$.
+\end{example}
+
+\begin{result}[Degree and zeros of characteristic polynomial]\label{ax:8.28}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then
+\begin{parts}
+\item the characteristic polynomial of $T$ has degree $\dim V$;
+\item the zeros of the characteristic polynomial of $T$ are the eigenvalues of
+  $T$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Our result about the sum of the multiplicities (\ref{ax:8.25}) implies (a). The
+definition of the characteristic polynomial implies (b).
+\end{proof}
+
+Most texts define the characteristic polynomial using determinants (the two
+definitions are equivalent by \ref{ax:9.62}). The approach taken here, which is
+considerably simpler, leads to the following nice proof of the Cayley--Hamilton
+theorem.
+
+\begin{result}[Cayley--Hamilton theorem]\label{ax:8.29}
+Suppose $\F=\C$, $T\in\Lin(V)$, and $q$ is the characteristic polynomial of
+$T$. Then $q(T)=0$.
+\end{result}
+
+\begin{proof}
+Let $\lambda_1,\dots,\lambda_m$ be the distinct eigenvalues of $T$, and let
+$d_k=\dim G(\lambda_k,T)$. For each $k\in\{1,\dots,m\}$, we know that
+$(T-\lambda_kI)|_{G(\lambda_k,T)}$ is nilpotent. Thus we have
+\[ (T-\lambda_kI)^{d_k}|_{G(\lambda_k,T)} = 0 \]
+(by \ref{ax:8.16}) for each $k\in\{1,\dots,m\}$.
+
+\marginnote{Arthur Cayley (1821--1895) published three mathematics
+papers before completing his undergraduate degree.}%
+The generalized eigenspace decomposition (\ref{ax:8.22}) states that every
+vector in $V$ is a sum of vectors in $G(\lambda_1,T),\dots,G(\lambda_m,T)$.
+Thus to prove that $q(T)=0$, we only need to show that
+$q(T)|_{G(\lambda_k,T)}=0$ for each $k$.
+
+Fix $k\in\{1,\dots,m\}$. We have
+\[ q(T) = (T-\lambda_1I)^{d_1}\cdots(T-\lambda_mI)^{d_m}. \]
+The operators on the right side of the equation above all commute, so we can
+move the factor $(T-\lambda_kI)^{d_k}$ to be the last term in the expression on
+the right. Because $(T-\lambda_kI)^{d_k}|_{G(\lambda_k,T)}=0$, we have
+$q(T)|_{G(\lambda_k,T)}=0$, as desired.
+\end{proof}
+
+The next result implies that if the minimal polynomial of an operator
+$T\in\Lin(V)$ has degree $\dim V$ (as happens almost always---see the
+paragraphs following \ref{ax:5.24}), then the characteristic polynomial of $T$
+equals the minimal polynomial of $T$.
+
+\begin{result}[Characteristic polynomial is a multiple of minimal
+polynomial]\label{ax:8.30}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then the characteristic polynomial of $T$ is
+a polynomial multiple of the minimal polynomial of $T$.
+\end{result}
+
+\begin{proof}
+The desired result follows immediately from the Cayley--Hamilton theorem
+(\ref{ax:8.29}) and \ref{ax:5.29}.
+\end{proof}
+
+Now we can prove that the result suggested by Example \ref{ax:8.24} holds for
+all operators on finite-dimensional complex vector spaces.
+
+\begin{result}[Multiplicity of an eigenvalue equals number of times on
+diagonal]\label{ax:8.31}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Suppose $v_1,\dots,v_n$ is a basis of $V$
+such that $\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ is upper triangular. Then the
+number of times that each eigenvalue $\lambda$ of $T$ appears on the diagonal of
+$\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ equals the multiplicity of $\lambda$ as an
+eigenvalue of $T$.
+\end{result}
+
+\begin{proof}
+Let $A=\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$. Thus $A$ is an upper-triangular
+matrix. Let $\lambda_1,\dots,\lambda_n$ denote the entries on the diagonal of
+$A$. Thus for each $k\in\{1,\dots,n\}$, we have
+\[ Tv_k = u_k+\lambda_kv_k \]
+for some $u_k\in\spn(v_1,\dots,v_{k-1})$. Hence if $k\in\{1,\dots,n\}$ and
+$\lambda_k\ne0$, then $Tv_k$ is not a linear combination of
+$Tv_1,\dots,Tv_{k-1}$. The linear dependence lemma (\ref{ax:2.19}) now implies
+that the list of those $Tv_k$ such that $\lambda_k\ne0$ is linearly
+independent.
+
+Let $d$ denote the number of indices $k\in\{1,\dots,n\}$ such that
+$\lambda_k=0$. The conclusion of the previous paragraph implies that
+\[ \dim\range T \ge n-d. \]
+Because $n=\dim V=\dim\nul T+\dim\range T$, the inequality above implies
+that\axeqnum{8.32}%
+\[ \dim\nul T \le d. \tag*{\thetheorem} \]
+
+The matrix of the operator $T^n$ with respect to the basis $v_1,\dots,v_n$ is
+the upper-triangular matrix $A^n$, which has diagonal entries
+$\lambda_1^n,\dots,\lambda_n^n$ $\bigl[$see Exercise 2(b) in Section 5C$\bigr]$.
+Because $\lambda_k^n=0$ if and only if $\lambda_k=0$, the number of times that
+$0$ appears on the diagonal of $A^n$ equals $d$. Thus applying \ref{ax:8.32}
+with $T$ replaced with $T^n$, we have\axeqnum{8.33}%
+\[ \dim\nul T^n \le d. \tag*{\thetheorem} \]
+
+For $\lambda$ an eigenvalue of $T$, let $m_\lambda$ denote the multiplicity of
+$\lambda$ as an eigenvalue of $T$ and let $d_\lambda$ denote the number of
+times that $\lambda$ appears on the diagonal of $A$. Replacing $T$ in
+\ref{ax:8.33} with $T-\lambda I$, we see that\axeqnum{8.34}%
+\[ m_\lambda \le d_\lambda \tag*{\thetheorem} \]
+for each eigenvalue $\lambda$ of $T$. The sum of the multiplicities $m_\lambda$
+over all eigenvalues $\lambda$ of $T$ equals $n$, the dimension of $V$ (by
+\ref{ax:8.25}). The sum of the numbers $d_\lambda$ over all eigenvalues
+$\lambda$ of $T$ also equals $n$, because the diagonal of $A$ has length $n$.
+
+Thus summing both sides of \ref{ax:8.34} over all eigenvalues $\lambda$ of $T$
+produces an equality. Hence \ref{ax:8.34} must actually be an equality for each
+eigenvalue $\lambda$ of $T$. Thus the multiplicity of $\lambda$ as an
+eigenvalue of $T$ equals the number of times that $\lambda$ appears on the
+diagonal of $A$, as desired.
+\end{proof}
+
+\subsection{Block Diagonal Matrices}
+
+\marginnote{Often we can understand a matrix better by thinking of it as
+composed of smaller matrices.}%
+To interpret our results in matrix form, we make the following definition,
+generalizing the notion of a diagonal matrix. If each matrix $A_k$ in the
+definition below is a $1$-by-$1$ matrix, then we actually have a diagonal
+matrix.
+
+\begin{definition}[Block diagonal matrix]\label{ax:8.35}
+A \emph{block diagonal matrix} is a square matrix of the form
+\[ \begin{pmatrix} A_1 & & 0\\ & \ddots & \\ 0 & & A_m \end{pmatrix}, \]
+where $A_1,\dots,A_m$ are square matrices lying along the diagonal and all
+other entries of the matrix equal $0$.
+\end{definition}
+
+\begin{example}[A block diagonal matrix]\label{ax:8.36}
+The $5$-by-$5$ matrix
+\[ A = \begin{pmatrix}
+  \begin{pmatrix} 4 \end{pmatrix} & \begin{matrix} 0 & 0 \end{matrix}
+    & \begin{matrix} 0 & 0 \end{matrix}\\
+  \begin{matrix} 0\\ 0 \end{matrix}
+    & \begin{pmatrix} 2 & -3\\ 0 & 2 \end{pmatrix}
+    & \begin{matrix} 0 & 0\\ 0 & 0 \end{matrix}\\
+  \begin{matrix} 0\\ 0 \end{matrix}
+    & \begin{matrix} 0 & 0\\ 0 & 0 \end{matrix}
+    & \begin{pmatrix} 1 & 7\\ 0 & 1 \end{pmatrix}
+\end{pmatrix} \]
+is a block diagonal matrix with
+\[ A = \begin{pmatrix} A_1 & & 0\\ & A_2 & \\ 0 & & A_3 \end{pmatrix}, \]
+where
+\[ A_1 = \begin{pmatrix} 4 \end{pmatrix}, \quad
+   A_2 = \begin{pmatrix} 2 & -3\\ 0 & 2 \end{pmatrix}, \quad
+   A_3 = \begin{pmatrix} 1 & 7\\ 0 & 1 \end{pmatrix}. \]
+Here the inner matrices in the $5$-by-$5$ matrix above are blocked off to show
+how we can think of it as a block diagonal matrix.
+\end{example}
+
+Note that in the example above, each of $A_1,A_2,A_3$ is an upper-triangular
+matrix whose diagonal entries are all equal. The next result shows that with
+respect to an appropriate basis, every operator on a finite-dimensional complex
+vector space has a matrix of this form. Note that this result gives us many
+more zeros in the matrix than are needed to make it upper triangular.
+
+\begin{result}[Block diagonal matrix with upper-triangular blocks]\label{ax:8.37}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Let $\lambda_1,\dots,\lambda_m$ be the
+distinct eigenvalues of $T$, with multiplicities $d_1,\dots,d_m$. Then there is
+a basis of $V$ with respect to which $T$ has a block diagonal matrix of the
+form
+\[ \begin{pmatrix} A_1 & & 0\\ & \ddots & \\ 0 & & A_m \end{pmatrix}, \]
+where each $A_k$ is a $d_k$-by-$d_k$ upper-triangular matrix of the form
+\[ A_k = \begin{pmatrix} \lambda_k & & *\\ & \ddots & \\ 0 & & \lambda_k
+   \end{pmatrix}. \]
+\end{result}
+
+\begin{proof}
+Each $(T-\lambda_kI)|_{G(\lambda_k,T)}$ is nilpotent (see \ref{ax:8.22}). For
+each $k$, choose a basis of $G(\lambda_k,T)$, which is a vector space of
+dimension $d_k$, such that the matrix of $(T-\lambda_kI)|_{G(\lambda_k,T)}$
+with respect to this basis is as in \ref{ax:8.18}(c). Thus with respect to this
+basis, the matrix of $T|_{G(\lambda_k,T)}$, which equals
+$(T-\lambda_kI)|_{G(\lambda_k,T)}+\lambda_kI|_{G(\lambda_k,T)}$, looks like the
+desired form shown above for $A_k$.
+
+The generalized eigenspace decomposition (\ref{ax:8.22}) shows that putting
+together the bases of the $G(\lambda_k,T)$'s chosen above gives a basis of $V$.
+The matrix of $T$ with respect to this basis has the desired form.
+\end{proof}
+
+\begin{example}[Block diagonal matrix via generalized eigenvectors]\label{ax:8.38}
+Let $T\in\Lin(\C^3)$ be defined by
+$T(z_1,z_2,z_3)=(6z_1+3z_2+4z_3,6z_2+2z_3,7z_3)$. The matrix of $T$ (with
+respect to the standard basis) is
+\[ \begin{pmatrix} 6 & 3 & 4\\ 0 & 6 & 2\\ 0 & 0 & 7 \end{pmatrix}, \]
+which is an upper-triangular matrix but is not of the form promised by
+\ref{ax:8.37}.
+
+As we saw in Example \ref{ax:8.24}, the eigenvalues of $T$ are $6$ and $7$;
+also,
+\[ G(6,T) = \spn\bigl((1,0,0),(0,1,0)\bigr) \quad\text{and}\quad
+   G(7,T) = \spn\bigl((10,2,1)\bigr). \]
+We also saw that a basis of $\C^3$ consisting of generalized eigenvectors of
+$T$ is
+\[ (1,0,0),(0,1,0),(10,2,1). \]
+The matrix of $T$ with respect to this basis is
+\[ \begin{pmatrix}
+  \begin{pmatrix} 6 & 3\\ 0 & 6 \end{pmatrix} & \begin{matrix} 0\\ 0 \end{matrix}\\
+  \begin{matrix} 0 & 0 \end{matrix} & \begin{pmatrix} 7 \end{pmatrix}
+\end{pmatrix}, \]
+which is a matrix of the block diagonal form promised by \ref{ax:8.37}.
+\end{example}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{8B}
+
+\begin{exercise}
+Define $T\in\Lin(\C^2)$ by $T(w,z)=(-z,w)$. Find the generalized eigenspaces
+corresponding to the distinct eigenvalues of $T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is invertible. Prove that
+$G(\lambda,T)=G(1/\lambda,T^{-1})$ for every $\lambda\in\F$
+with $\lambda\ne0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Suppose $S\in\Lin(V)$ is invertible. Prove that $T$ and
+$S^{-1}TS$ have the same eigenvalues with the same multiplicities.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\dim V\ge2$ and $T\in\Lin(V)$ is such that
+$\nul T^{\dim V-2}\ne\nul T^{\dim V-1}$. Prove that $T$ has at most two
+distinct eigenvalues.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $3$ and $8$ are eigenvalues of $T$. Let $n=\dim V$.
+Prove that $V=(\nul T^{n-2})\oplus(\range T^{n-2})$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $\lambda$ is an eigenvalue of $T$. Explain why the
+exponent of $z-\lambda$ in the factorization of the minimal polynomial of $T$
+is the smallest positive integer $m$ such that
+$(T-\lambda I)^m|_{G(\lambda,T)}=0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $\lambda$ is an eigenvalue of $T$ with multiplicity
+$d$. Prove that $G(\lambda,T)=\nul(T-\lambda I)^d$.
+\exnote{If $d<\dim V$, then this exercise improves \ref{ax:8.20}.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $\lambda_1,\dots,\lambda_m$ are the distinct
+eigenvalues of $T$. Prove that
+\[ V = G(\lambda_1,T)\oplus\cdots\oplus G(\lambda_m,T) \]
+if and only if the minimal polynomial of $T$ equals
+$(z-\lambda_1)^{k_1}\cdots(z-\lambda_m)^{k_m}$ for some positive integers
+$k_1,\dots,k_m$.
+\exnote{The case $\F=\C$ follows immediately from
+\ref{ax:5.27}\textup{(b)} and the generalized eigenspace decomposition
+\textup{(\ref{ax:8.22})}; thus this exercise is interesting only when
+$\F=\R$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Prove that there exist $D,N\in\Lin(V)$ such
+that $T=D+N$, the operator $D$ is diagonalizable, $N$ is nilpotent, and
+$DN=ND$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a complex inner product space, $e_1,\dots,e_n$ is an orthonormal
+basis of $V$, and $T\in\Lin(V)$. Let $\lambda_1,\dots,\lambda_n$ be the
+eigenvalues of $T$, each included as many times as its multiplicity. Prove that
+\[ \abs{\lambda_1}^2+\cdots+\abs{\lambda_n}^2
+   \le \norm{Te_1}^2+\cdots+\norm{Te_n}^2. \]
+\exnote{See the comment after Exercise 5 in Section 7A.}
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator on $\C^4$ whose characteristic polynomial equals
+$(z-7)^2(z-8)^2$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator on $\C^4$ whose characteristic polynomial equals
+$(z-1)(z-5)^3$ and whose minimal polynomial equals $(z-1)(z-5)^2$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator on $\C^4$ whose characteristic and minimal
+polynomials both equal $z(z-1)^2(z-3)$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator on $\C^4$ whose characteristic polynomial equals
+$z(z-1)^2(z-3)$ and whose minimal polynomial equals $z(z-1)(z-3)$.
+\end{exercise}
+
+\begin{exercise}
+Let $T$ be the operator on $\C^4$ defined by
+$T(z_1,z_2,z_3,z_4)=(0,z_1,z_2,z_3)$. Find the characteristic polynomial and
+the minimal polynomial of $T$.
+\end{exercise}
+
+\begin{exercise}
+Let $T$ be the operator on $\C^6$ defined by
+\[ T(z_1,z_2,z_3,z_4,z_5,z_6) = (0,z_1,z_2,0,z_4,0). \]
+Find the characteristic polynomial and the minimal polynomial of $T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $P\in\Lin(V)$ is such that $P^2=P$. Prove that the
+characteristic polynomial of $P$ is $z^m(z-1)^n$, where $m=\dim\nul P$ and
+$n=\dim\range P$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $\lambda$ is an eigenvalue of $T$. Explain why the
+following four numbers equal each other.
+\begin{parts}
+\item The exponent of $z-\lambda$ in the factorization of the minimal
+  polynomial of $T$.
+\item The smallest positive integer $m$ such that
+  $(T-\lambda I)^m|_{G(\lambda,T)}=0$.
+\item The smallest positive integer $m$ such that
+  \[ \nul(T-\lambda I)^m = \nul(T-\lambda I)^{m+1}. \]
+\item The smallest positive integer $m$ such that
+  \[ \range(T-\lambda I)^m = \range(T-\lambda I)^{m+1}. \]
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $S\in\Lin(V)$ is a unitary operator. Prove that the
+constant term in the characteristic polynomial of $S$ has absolute value $1$.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $\F=\C$ and $V_1,\dots,V_m$ are nonzero subspaces of $V$ such
+that
+\[ V = V_1\oplus\cdots\oplus V_m. \]
+Suppose $T\in\Lin(V)$ and each $V_k$ is invariant under $T$. For each $k$, let
+$p_k$ denote the characteristic polynomial of $T|_{V_k}$. Prove that the
+characteristic polynomial of $T$ equals $p_1\cdots p_m$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $p,q\in\Poly(\C)$ are monic polynomials with the same zeros and $q$ is
+a polynomial multiple of $p$. Prove that there exists
+$T\in\Lin(\C^{\deg q})$ such that the characteristic polynomial of $T$ is $q$
+and the minimal polynomial of $T$ is $p$.
+\exnote{This exercise implies that every monic polynomial is the characteristic
+polynomial of some operator.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $A$ and $B$ are block diagonal matrices of the form
+\[ A = \begin{pmatrix} A_1 & & 0\\ & \ddots & \\ 0 & & A_m \end{pmatrix},
+   \quad
+   B = \begin{pmatrix} B_1 & & 0\\ & \ddots & \\ 0 & & B_m \end{pmatrix}, \]
+where $A_k$ and $B_k$ are square matrices of the same size for each
+$k=1,\dots,m$. Show that $AB$ is a block diagonal matrix of the form
+\[ AB = \begin{pmatrix} A_1B_1 & & 0\\ & \ddots & \\ 0 & & A_mB_m
+   \end{pmatrix}. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\R$, $T\in\Lin(V)$, and $\lambda\in\C$.
+\begin{parts}
+\item Show that $u+iv\in G(\lambda,T_{\C})$ if and only if
+  $u-iv\in G(\overline{\lambda},T_{\C})$.
+\item Show that the multiplicity of $\lambda$ as an eigenvalue of $T_{\C}$
+  equals the multiplicity of $\overline{\lambda}$ as an eigenvalue of
+  $T_{\C}$.
+\item Use (b) and the result about the sum of the multiplicities
+  (\ref{ax:8.25}) to show that if $\dim V$ is an odd number, then $T_{\C}$ has
+  a real eigenvalue.
+\item Use (c) and the result about real eigenvalues of $T_{\C}$ (Exercise 17 in
+  Section 5A) to show that if $\dim V$ is an odd number, then $T$ has an
+  eigenvalue (thus giving an alternative proof of \ref{ax:5.34}).
+\end{parts}
+\exnote{See Exercise 33 in Section 3B for the definition of the
+complexification $T_{\C}$.}
+\end{exercise}

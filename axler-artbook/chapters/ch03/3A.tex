@@ -1,0 +1,740 @@
+% Source: book pp. 52--58 (PDF 66--72); solutions pp. 54--64, A3.
+\section{Vector Space of Linear Maps}
+
+\subsection{Definition and Examples of Linear Maps}
+
+Now we are ready for one of the key definitions in linear algebra.
+
+\begin{definition}[Linear map]\label{ax:3.1}
+A \emph{linear map} from $V$ to $W$ is a function $T\colon V\to W$ with the
+following properties.
+\begin{axprops}
+\item[additivity] $T(u+v)=Tu+Tv$ for all $u,v\in V$.
+\item[homogeneity] $T(\lambda v)=\lambda(Tv)$ for all $\lambda\in\F$ and all
+  $v\in V$.
+\end{axprops}
+\end{definition}
+
+\marginnote{Some mathematicians use the phrase \emph{linear transformation},
+which means the same as linear map.}%
+Note that for linear maps we often use the notation $Tv$ as well as the usual
+function notation $T(v)$.
+
+\begin{notation}[$\Lin(V,W)$, $\Lin(V)$]\label{ax:3.2}\leavevmode
+\begin{itemize}
+\item The set of linear maps from $V$ to $W$ is denoted by $\Lin(V,W)$.
+\item The set of linear maps from $V$ to $V$ is denoted by $\Lin(V)$. In other
+  words, $\Lin(V)=\Lin(V,V)$.
+\end{itemize}
+\end{notation}
+
+Let's look at some examples of linear maps. Make sure you verify that each of
+the functions defined in the next example is indeed a linear map:
+
+\begin{example}[Linear maps]\label{ax:3.3}\leavevmode
+\begin{axprops}
+\item[zero] In addition to its other uses, we let the symbol $0$ denote the
+  linear map that takes every element of some vector space to the additive
+  identity of another (or possibly the same) vector space. To be specific,
+  $0\in\Lin(V,W)$ is defined by
+  \[ 0v=0. \]
+  The $0$ on the left side of the equation above is a function from $V$ to
+  $W$, whereas the $0$ on the right side is the additive identity in $W$. As
+  usual, the context should allow you to distinguish between the many uses of
+  the symbol $0$.
+\item[identity operator] The \emph{identity operator}, denoted by $I$, is the
+  linear map on some vector space that takes each element to itself. To be
+  specific, $I\in\Lin(V)$ is defined by
+  \[ Iv=v. \]
+\item[differentiation] Define $D\in\Lin(\Poly(\R))$ by
+  \[ Dp=p'. \]
+  The assertion that this function is a linear map is another way of stating
+  a basic result about differentiation: $(f+g)'=f'+g'$ and
+  $(\lambda f)'=\lambda f'$ whenever $f,g$ are differentiable and $\lambda$ is
+  a constant.
+\item[integration] Define $T\in\Lin(\Poly(\R),\R)$ by
+  \[ Tp=\int_0^1 p. \]
+  The assertion that this function is linear is another way of stating a basic
+  result about integration: the integral of the sum of two functions equals
+  the sum of the integrals, and the integral of a constant times a function
+  equals the constant times the integral of the function.
+\item[multiplication by $x^2$] Define a linear map $T\in\Lin(\Poly(\R))$ by
+  \[ (Tp)(x)=x^2p(x) \]
+  for each $x\in\R$.
+\item[backward shift] Recall that $\F^\infty$ denotes the vector space of all
+  sequences of elements of $\F$. Define a linear map $T\in\Lin(\F^\infty)$ by
+  \[ T(x_1,x_2,x_3,\dots)=(x_2,x_3,\dots). \]
+\item[from $\R^3$ to $\R^2$] Define a linear map $T\in\Lin(\R^3,\R^2)$ by
+  \[ T(x,y,z)=(2x-y+3z,\,7x+5y-6z). \]
+\item[from $\F^n$ to $\F^m$] To generalize the previous example, let $m$ and
+  $n$ be positive integers, let $A_{j,k}\in\F$ for each $j=1,\dots,m$ and each
+  $k=1,\dots,n$, and define a linear map $T\in\Lin(\F^n,\F^m)$ by
+  \[ T(x_1,\dots,x_n)=(A_{1,1}x_1+\cdots+A_{1,n}x_n,\dots,
+     A_{m,1}x_1+\cdots+A_{m,n}x_n). \]
+  Actually every linear map from $\F^n$ to $\F^m$ is of this form.
+\item[composition] Fix a polynomial $q\in\Poly(\R)$. Define a linear map
+  $T\in\Lin(\Poly(\R))$ by
+  \[ (Tp)(x)=p\bigl(q(x)\bigr). \]
+\end{axprops}
+\end{example}
+
+The existence part of the next result means that we can find a linear map that
+takes on whatever values we wish on the vectors in a basis. The uniqueness part
+of the next result means that a linear map is completely determined by its
+values on a basis.
+
+\begin{result}[Linear map lemma]\label{ax:3.4}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $w_1,\dots,w_n\in W$. Then there
+exists a unique linear map $T\colon V\to W$ such that
+\[ Tv_k=w_k \]
+for each $k=1,\dots,n$.
+\end{result}
+
+\begin{proof}
+First we show the existence of a linear map $T$ with the desired property.
+Define $T\colon V\to W$ by
+\[ T(c_1v_1+\cdots+c_nv_n)=c_1w_1+\cdots+c_nw_n, \]
+where $c_1,\dots,c_n$ are arbitrary elements of $\F$. The list
+$v_1,\dots,v_n$ is a basis of $V$. Thus the equation above does indeed define a
+function $T$ from $V$ to $W$ (because each element of $V$ can be uniquely
+written in the form $c_1v_1+\cdots+c_nv_n$).
+
+For each $k$, taking $c_k=1$ and the other $c$'s equal to $0$ in the equation
+above shows that $Tv_k=w_k$.
+
+If $u,v\in V$ with $u=a_1v_1+\cdots+a_nv_n$ and $v=c_1v_1+\cdots+c_nv_n$, then
+\begin{align*}
+T(u+v) &= T\bigl((a_1+c_1)v_1+\cdots+(a_n+c_n)v_n\bigr)\\
+       &= (a_1+c_1)w_1+\cdots+(a_n+c_n)w_n\\
+       &= (a_1w_1+\cdots+a_nw_n)+(c_1w_1+\cdots+c_nw_n)\\
+       &= Tu+Tv.
+\end{align*}
+Similarly, if $\lambda\in\F$ and $v=c_1v_1+\cdots+c_nv_n$, then
+\begin{align*}
+T(\lambda v) &= T(\lambda c_1v_1+\cdots+\lambda c_nv_n)\\
+             &= \lambda c_1w_1+\cdots+\lambda c_nw_n\\
+             &= \lambda(c_1w_1+\cdots+c_nw_n)\\
+             &= \lambda Tv.
+\end{align*}
+Thus $T$ is a linear map from $V$ to $W$.
+
+To prove uniqueness, now suppose that $T\in\Lin(V,W)$ and that $Tv_k=w_k$ for
+each $k=1,\dots,n$. Let $c_1,\dots,c_n\in\F$. Then the homogeneity of $T$
+implies that $T(c_kv_k)=c_kw_k$ for each $k=1,\dots,n$. The additivity of $T$
+now implies that
+\[ T(c_1v_1+\cdots+c_nv_n)=c_1w_1+\cdots+c_nw_n. \]
+Thus $T$ is uniquely determined on $\spn(v_1,\dots,v_n)$ by the equation above.
+Because $v_1,\dots,v_n$ is a basis of $V$, this implies that $T$ is uniquely
+determined on $V$, as desired.
+\end{proof}
+
+\subsection{\texorpdfstring{Algebraic Operations on $\Lin(V,W)$}{Algebraic
+Operations on L(V,W)}}
+
+We begin by defining addition and scalar multiplication on $\Lin(V,W)$.
+
+\begin{definition}[Addition and scalar multiplication on $\Lin(V,W)$]\label{ax:3.5}
+Suppose $S,T\in\Lin(V,W)$ and $\lambda\in\F$. The \emph{sum} $S+T$ and the
+\emph{product} $\lambda T$ are the linear maps from $V$ to $W$ defined by
+\[ (S+T)(v)=Sv+Tv \quad\text{and}\quad (\lambda T)(v)=\lambda(Tv) \]
+for all $v\in V$.
+\end{definition}
+
+\marginnote[-7mm]{Linear maps are pervasive throughout mathematics. However, they
+are not as ubiquitous as imagined by people who seem to think $\cos$ is a
+linear map from $\R$ to $\R$ when they incorrectly write that $\cos(x+y)$
+equals $\cos x+\cos y$ and that $\cos 2x$ equals $2\cos x$.}%
+You should verify that $S+T$ and $\lambda T$ as defined above are indeed linear
+maps. In other words, if $S,T\in\Lin(V,W)$ and $\lambda\in\F$, then
+$S+T\in\Lin(V,W)$ and $\lambda T\in\Lin(V,W)$.
+
+Because we took the trouble to define addition and scalar multiplication on
+$\Lin(V,W)$, the next result should not be a surprise.
+
+\begin{result}[{$\Lin(V,W)$ is a vector space}]\label{ax:3.6}
+With the operations of addition and scalar multiplication as defined above,
+$\Lin(V,W)$ is a vector space.
+\end{result}
+
+The routine proof of the result above is left to the reader. Note that the
+additive identity of $\Lin(V,W)$ is the zero linear map defined in
+Example~\ref{ax:3.3}.
+
+Usually it makes no sense to multiply together two elements of a vector space,
+but for some pairs of linear maps a useful product exists, as in the next
+definition.
+
+\begin{definition}[Product of linear maps]\label{ax:3.7}
+If $T\in\Lin(U,V)$ and $S\in\Lin(V,W)$, then the \emph{product}
+$ST\in\Lin(U,W)$ is defined by
+\[ (ST)(u)=S(Tu) \]
+for all $u\in U$.
+\end{definition}
+
+Thus $ST$ is just the usual composition $S\circ T$ of two functions, but when
+both functions are linear, we usually write $ST$ instead of $S\circ T$. The
+product notation $ST$ helps make the distributive properties (see next result)
+seem natural.
+
+Note that $ST$ is defined only when $T$ maps into the domain of $S$. You should
+verify that $ST$ is indeed a linear map from $U$ to $W$ whenever
+$T\in\Lin(U,V)$ and $S\in\Lin(V,W)$.
+
+\begin{result}[Algebraic properties of products of linear maps]\label{ax:3.8}\leavevmode
+\begin{axprops}
+\item[associativity] $(T_1T_2)T_3=T_1(T_2T_3)$ whenever $T_1$, $T_2$, and
+  $T_3$ are linear maps such that the products make sense (meaning $T_3$ maps
+  into the domain of $T_2$, and $T_2$ maps into the domain of $T_1$).
+\item[identity] $TI=IT=T$ whenever $T\in\Lin(V,W)$; here the first $I$ is the
+  identity operator on $V$, and the second $I$ is the identity operator on
+  $W$.
+\item[distributive properties] $(S_1+S_2)T=S_1T+S_2T$ and
+  $S(T_1+T_2)=ST_1+ST_2$ whenever $T,T_1,T_2\in\Lin(U,V)$ and
+  $S,S_1,S_2\in\Lin(V,W)$.
+\end{axprops}
+\end{result}
+
+The routine proof of the result above is left to the reader.
+
+Multiplication of linear maps is not commutative. In other words, it is not
+necessarily true that $ST=TS$, even if both sides of the equation make sense.
+
+\begin{example}[Two noncommuting linear maps from $\Poly(\R)$ to $\Poly(\R)$]\label{ax:3.9}
+Suppose $D\in\Lin(\Poly(\R))$ is the differentiation map defined in
+Example~\ref{ax:3.3} and $T\in\Lin(\Poly(\R))$ is the multiplication by $x^2$
+map defined earlier in this section. Then
+\[ \bigl((TD)p\bigr)(x)=x^2p'(x) \quad\text{but}\quad
+   \bigl((DT)p\bigr)(x)=x^2p'(x)+2xp(x). \]
+Thus $TD\ne DT$---differentiating and then multiplying by $x^2$ is not the
+same as multiplying by $x^2$ and then differentiating.
+\end{example}
+
+\begin{result}[Linear maps take $0$ to $0$]\label{ax:3.10}
+Suppose $T$ is a linear map from $V$ to $W$. Then $T(0)=0$.
+\end{result}
+
+\begin{proof}
+By additivity, we have
+\[ T(0)=T(0+0)=T(0)+T(0). \]
+Add the additive inverse of $T(0)$ to each side of the equation above to
+conclude that $T(0)=0$.
+\end{proof}
+
+Suppose $m,b\in\R$. The function $f\colon\R\to\R$ defined by
+\[ f(x)=mx+b \]
+is a linear map if and only if $b=0$ (use \ref{ax:3.10}). Thus the linear
+functions of high school algebra are not the same as linear maps in the
+context of linear algebra.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{3A}
+
+\begin{exercise}
+Suppose $b,c\in\R$. Define $T\colon\R^3\to\R^2$ by
+\[ T(x,y,z)=(2x-4y+3z+b,\,6x+cxyz). \]
+Show that $T$ is linear if and only if $b=c=0$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is linear. Then
+\[ T(0,0,0)=(b,0), \]
+which implies that $b=0$. Now consider the vector $(1,1,1)\in\R^3$. Then
+\[ T(2,2,2)=2T(1,1,1)\implies(2,12+8c)=(2,12+2c). \]
+Then $12+8c=12+2c$, or $c=0$.
+
+Conversely, if $b=c=0$, then $T(x,y,z)=(2x-4y+3z,6x)$. Let
+$(x_1,y_1,z_1),\allowbreak(x_2,y_2,z_2)\in\R^3$ and $\alpha\in\R$. Then
+\begin{align*}
+T(x_1+x_2,y_1+y_2,z_1+z_2)
+  &= \bigl(2(x_1+x_2)-4(y_1+y_2)+3(z_1+z_2),6(x_1+x_2)\bigr)\\
+  &= (2x_1+2x_2-4y_1-4y_2+3z_1+3z_2,6x_1+6x_2)\\
+  &= (2x_1-4y_1+3z_1,6x_1)+(2x_2-4y_2+3z_2,6x_2)\\
+  &= T(x_1,y_1,z_1)+T(x_2,y_2,z_2),
+\end{align*}
+and
+\begin{align*}
+T(\alpha x_1,\alpha y_1,\alpha z_1)
+  &= \bigl(2(\alpha x_1)-4(\alpha y_1)+3(\alpha z_1),6(\alpha x_1)\bigr)\\
+  &= \bigl(\alpha(2x_1-4y_1+3z_1),\alpha(6x_1)\bigr)\\
+  &= \alpha(2x_1-4y_1+3z_1,6x_1)\\
+  &= \alpha T(x_1,y_1,z_1).
+\end{align*}
+Therefore, $T$ is linear if and only if $b=c=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose $b,c\in\R$. Define $T\colon\Poly(\R)\to\R^2$ by
+\[ Tp=\Bigl(3p(4)+5p'(6)+bp(1)p(2),\,\int_{-1}^2x^3p(x)\,dx+c\sin p(0)\Bigr). \]
+Show that $T$ is linear if and only if $b=c=0$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is linear. Then for any $p\in\Poly(\R)$, we have $T(2p)=2Tp$.
+Looking at the first component of $T(2p)$, we have
+\[ 3(2p)(4)+5(2p)'(6)+b(2p)(1)(2p)(2)=6p(4)+10p'(6)+4bp(1)p(2). \]
+On the other hand, the first component of $2Tp$ is
+\[ 2\bigl(3p(4)+5p'(6)+bp(1)p(2)\bigr)=6p(4)+10p'(6)+2bp(1)p(2). \]
+Comparing the two expressions, we get $4bp(1)p(2)=2bp(1)p(2)$ for all
+$p\in\Poly(\R)$. Since there exist polynomials $p$ such that $p(1)p(2)\ne0$,
+we must have $b=0$.
+
+The second component of $T(2p)$ must be equal to the second component of
+$2Tp$. We have
+\[ \int_{-1}^2x^3(2p)(x)\,dx+c\sin\bigl(2p(0)\bigr)
+   =2\int_{-1}^2x^3p(x)\,dx+2c\sin\bigl(p(0)\bigr). \]
+The integral terms may be subtracted, so we get
+$c\sin\bigl(2p(0)\bigr)=2c\sin\bigl(p(0)\bigr)$ for all $p\in\Poly(\R)$.
+Consider $p(x)=\pi/2$. Then $\sin\bigl(2p(0)\bigr)=\sin(\pi)=0$ and
+$2\sin\bigl(p(0)\bigr)=2\sin(\pi/2)=2$. Therefore, $c=0$.
+
+Conversely, if $b=c=0$, let $p,q\in\Poly(\R)$ and $\alpha\in\R$. Then
+\begin{align*}
+T(p+q) &= \Bigl(3(p+q)(4)+5(p+q)'(6),\,\int_{-1}^2x^3(p+q)(x)\,dx\Bigr)\\
+  &= \Bigl(3p(4)+3q(4)+5p'(6)+5q'(6),\,
+     \int_{-1}^2x^3p(x)\,dx+\int_{-1}^2x^3q(x)\,dx\Bigr)\\
+  &= \Bigl(3p(4)+5p'(6),\,\int_{-1}^2x^3p(x)\,dx\Bigr)
+     +\Bigl(3q(4)+5q'(6),\,\int_{-1}^2x^3q(x)\,dx\Bigr)\\
+  &= Tp+Tq,
+\end{align*}
+and
+\begin{align*}
+T(\alpha p) &= \Bigl(3(\alpha p)(4)+5(\alpha p)'(6),\,
+     \int_{-1}^2x^3(\alpha p)(x)\,dx\Bigr)\\
+  &= \Bigl(\alpha\bigl(3p(4)+5p'(6)\bigr),\,\alpha\int_{-1}^2x^3p(x)\,dx\Bigr)\\
+  &= \alpha\Bigl(3p(4)+5p'(6),\,\int_{-1}^2x^3p(x)\,dx\Bigr)\\
+  &= \alpha Tp.
+\end{align*}
+Therefore, $T$ is linear if and only if $b=c=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $T\in\Lin(\F^n,\F^m)$. Show that there exist scalars
+$A_{j,k}\in\F$ for $j=1,\dots,m$ and $k=1,\dots,n$ such that
+\[ T(x_1,\dots,x_n)=(A_{1,1}x_1+\cdots+A_{1,n}x_n,\dots,
+   A_{m,1}x_1+\cdots+A_{m,n}x_n) \]
+for every $(x_1,\dots,x_n)\in\F^n$.
+\exnote{This exercise shows that the linear map $T$ has the form promised in
+the second to last item of Example~\ref{ax:3.3}.}
+\end{exercise}
+\begin{solution}
+Let $e_1,\dots,e_n$ be the standard basis of $\F^n$. Then for each
+$k=1,\dots,n$, we have
+\[ T(e_k)=(A_{1,k},A_{2,k},\dots,A_{m,k}) \]
+for some scalars $A_{j,k}\in\F$. Now let $(x_1,\dots,x_n)\in\F^n$. Then
+\begin{align*}
+T(x_1,\dots,x_n) &= T(x_1e_1+\cdots+x_ne_n)\\
+  &= x_1T(e_1)+\cdots+x_nT(e_n)\\
+  &= x_1(A_{1,1},A_{2,1},\dots,A_{m,1})+\cdots+x_n(A_{1,n},A_{2,n},\dots,A_{m,n})\\
+  &= (A_{1,1}x_1+\cdots+A_{1,n}x_n,A_{2,1}x_1+\cdots+A_{2,n}x_n,\\
+  &\qquad\dots,A_{m,1}x_1+\cdots+A_{m,n}x_n).
+\end{align*}
+Therefore,
+\begin{multline*}
+T(x_1,\dots,x_n)=(A_{1,1}x_1+\cdots+A_{1,n}x_n,A_{2,1}x_1+\cdots+A_{2,n}x_n,\\
+  \dots,A_{m,1}x_1+\cdots+A_{m,n}x_n). \qedhere
+\end{multline*}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ and $v_1,\dots,v_m$ is a list of vectors in $V$ such
+that $Tv_1,\dots,Tv_m$ is a linearly independent list in $W$. Prove that
+$v_1,\dots,v_m$ is linearly independent.
+\end{exercise}
+\begin{solution}
+Suppose that $a_1v_1+\cdots+a_mv_m=0$ for some scalars $a_1,\dots,a_m\in\F$.
+Applying $T$ to both sides, we get
+\[ a_1Tv_1+\cdots+a_mTv_m=T(0)=0. \]
+Since $Tv_1,\dots,Tv_m$ is linearly independent, it follows that
+$a_1=\cdots=a_m=0$. Therefore, $v_1,\dots,v_m$ is linearly independent.
+\end{solution}
+
+\begin{exercise}
+Prove that $\Lin(V,W)$ is a vector space, as was asserted in \ref{ax:3.6}.
+\end{exercise}
+\begin{solution}
+We must first ensure that the operations of addition and scalar
+multiplication are well-defined, i.e., if $S,T\in\Lin(V,W)$ and
+$\alpha\in\F$, then $S+T\in\Lin(V,W)$ and $\alpha T\in\Lin(V,W)$. We first
+show that $S+T$ is linear. Let $v,u\in V$. Then
+\begin{align*}
+(S+T)(v+u) &= S(v+u)+T(v+u)\\
+  &= (Sv+Su)+(Tv+Tu)\\
+  &= (Sv+Tv)+(Su+Tu)\\
+  &= (S+T)v+(S+T)u.
+\end{align*}
+Moreover, for any $v\in V$ and $\alpha\in\F$,
+\begin{align*}
+(S+T)(\alpha v) &= S(\alpha v)+T(\alpha v)\\
+  &= \alpha Sv+\alpha Tv\\
+  &= \alpha(Sv+Tv)\\
+  &= \alpha(S+T)v.
+\end{align*}
+This shows that $S+T$ is linear. Now we show that $\alpha T$ is linear. Let
+$v,u\in V$. Then
+\begin{align*}
+(\alpha T)(v+u) &= \alpha T(v+u)\\
+  &= \alpha(Tv+Tu)\\
+  &= \alpha Tv+\alpha Tu\\
+  &= (\alpha T)v+(\alpha T)u.
+\end{align*}
+Also, for any $v\in V$ and $\beta\in\F$,
+\begin{align*}
+(\alpha T)(\beta v) &= \alpha T(\beta v)\\
+  &= \alpha(\beta Tv)\\
+  &= (\alpha\beta)Tv\\
+  &= (\beta\alpha)Tv\\
+  &= \beta(\alpha Tv)\\
+  &= \beta(\alpha T)v.
+\end{align*}
+Therefore, $S+T\in\Lin(V,W)$ and $\alpha T\in\Lin(V,W)$. We now check the
+vector space axioms:
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Commutativity}: Let $S,T\in\Lin(V,W)$. Then for any $v\in V$,
+  \begin{align*}
+  (S+T)v &= Sv+Tv\\
+    &= Tv+Sv\\
+    &= (T+S)v.
+  \end{align*}
+\item \textbf{Associativity}: Let $R,S,T\in\Lin(V,W)$. Then for any $v\in V$,
+  \begin{align*}
+  \bigl((R+S)+T\bigr)v &= (R+S)v+Tv\\
+    &= (Rv+Sv)+Tv\\
+    &= Rv+(Sv+Tv)\\
+    &= Rv+(S+T)v\\
+    &= \bigl(R+(S+T)\bigr)v.
+  \end{align*}
+  Similarly, for any $\alpha,\beta\in\F$ and $T\in\Lin(V,W)$,
+  \begin{align*}
+  \bigl((\alpha\beta)T\bigr)v &= (\alpha\beta)(Tv)\\
+    &= \alpha(\beta Tv)\\
+    &= \alpha\bigl((\beta T)v\bigr)\\
+    &= \bigl(\alpha(\beta T)\bigr)v.
+  \end{align*}
+\item \textbf{Additive identity}: Let $0\in\Lin(V,W)$ be the zero map defined
+  by $0v=0$ for all $v\in V$. Then for any $T\in\Lin(V,W)$ and $v\in V$,
+  \[ (T+0)v=Tv+0v=Tv+0=Tv. \]
+\item \textbf{Inverse}: Let $T\in\Lin(V,W)$. Define $-T\in\Lin(V,W)$ by
+  $(-T)v=-Tv$ for all $v\in V$. Then for any $v\in V$,
+  \[ \bigl(T+(-T)\bigr)v=Tv+(-T)v=Tv-Tv=0=0v. \]
+\item \textbf{Multiplicative identity}: Let $1\in\F$ be the multiplicative
+  identity. Then for any $T\in\Lin(V,W)$ and $v\in V$,
+  \[ (1T)v=1(Tv)=Tv. \]
+\item \textbf{Distributive properties}: Let $T,S\in\Lin(V,W)$ and
+  $\alpha,\beta\in\F$. Then for any $v\in V$,
+  \begin{align*}
+  \bigl(\alpha(T+S)\bigr)v &= \alpha\bigl((T+S)v\bigr)\\
+    &= \alpha(Tv+Sv)\\
+    &= \alpha Tv+\alpha Sv\\
+    &= (\alpha T)v+(\alpha S)v\\
+    &= \bigl((\alpha T)+(\alpha S)\bigr)v,
+  \end{align*}
+  and
+  \begin{align*}
+  \bigl((\alpha+\beta)T\bigr)v &= (\alpha+\beta)(Tv)\\
+    &= \alpha Tv+\beta Tv\\
+    &= (\alpha T)v+(\beta T)v\\
+    &= \bigl((\alpha T)+(\beta T)\bigr)v. \qedhere
+  \end{align*}
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}
+Prove that multiplication of linear maps has the associative, identity, and
+distributive properties asserted in \ref{ax:3.8}.
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $T_1\in\Lin(V,W)$, $T_2\in\Lin(U,V)$, and $T_3\in\Lin(X,U)$. Then
+  for any $x\in X$,
+  \begin{align*}
+  \bigl((T_1T_2)T_3\bigr)x &= (T_1T_2)(T_3x)\\
+    &= T_1\bigl(T_2(T_3x)\bigr)\\
+    &= T_1\bigl((T_2T_3)x\bigr)\\
+    &= \bigl(T_1(T_2T_3)\bigr)x.
+  \end{align*}
+\item Let $T\in\Lin(V,W)$. Then for any $v\in V$,
+  \[ (TI)v=T(Iv)=Tv \quad\text{and}\quad (IT)v=I(Tv)=Tv. \]
+\item Let $T,T_1,T_2\in\Lin(U,V)$ and $S,S_1,S_2\in\Lin(V,W)$. Then for any
+  $u\in U$,
+  \begin{align*}
+  \bigl((S_1+S_2)T\bigr)u &= (S_1+S_2)(Tu)\\
+    &= S_1(Tu)+S_2(Tu)\\
+    &= (S_1T)u+(S_2T)u\\
+    &= (S_1T+S_2T)u,
+  \end{align*}
+  and
+  \begin{align*}
+  \bigl(S(T_1+T_2)\bigr)u &= S\bigl((T_1+T_2)u\bigr)\\
+    &= S(T_1u+T_2u)\\
+    &= S(T_1u)+S(T_2u)\\
+    &= (ST_1)u+(ST_2)u\\
+    &= (ST_1+ST_2)u. \qedhere
+  \end{align*}
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Show that every linear map from a one-dimensional vector space to itself is
+multiplication by some scalar. More precisely, prove that if $\dim V=1$ and
+$T\in\Lin(V)$, then there exists $\lambda\in\F$ such that $Tv=\lambda v$ for
+all $v\in V$.
+\end{exercise}
+\begin{solution}
+Suppose $\dim V=1$ and let $v\in V$ be a nonzero vector. Then $\{v\}$ is a
+basis of $V$. Let $T\in\Lin(V)$. Since $Tv\in V$, there exists $\lambda\in\F$
+such that $Tv=\lambda v$. Now let $u\in V$. Then there exists $\alpha\in\F$
+such that $u=\alpha v$. Therefore,
+\[ Tu=T(\alpha v)=\alpha Tv=\alpha(\lambda v)=\lambda(\alpha v)=\lambda u.
+   \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Give an example of a function $\varphi\colon\R^2\to\R$ such that
+\[ \varphi(av)=a\varphi(v) \]
+for all $a\in\R$ and all $v\in\R^2$ but $\varphi$ is not linear.
+\exnote{This exercise and the next exercise show that neither homogeneity nor
+additivity alone is enough to imply that a function is a linear map.}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{This was a particularly difficult exercise because all
+obvious examples of functions that are homogeneous are also additive. The key
+idea is to utilize composition of functions.}
+
+Let $\varphi\colon\R^2\to\R$ be defined by
+\[ \varphi(x,y)=\sqrt[3]{x^3+y^3}. \]
+Then for any $a\in\R$ and $(x,y)\in\R^2$,
+\[ \varphi\bigl(a(x,y)\bigr)=\varphi(ax,ay)=\sqrt[3]{(ax)^3+(ay)^3}
+   =\sqrt[3]{a^3(x^3+y^3)}=a\sqrt[3]{x^3+y^3}=a\varphi(x,y). \]
+However, $\varphi$ is not additive. For example, let $v=(1,0)$ and $w=(0,1)$.
+Then
+\[ \varphi(v+w)=\varphi(1,1)=\sqrt[3]{1^3+1^3}=\sqrt[3]{2}, \]
+but
+\[ \varphi(v)+\varphi(w)=\varphi(1,0)+\varphi(0,1)
+   =\sqrt[3]{1^3+0^3}+\sqrt[3]{0^3+1^3}=1+1=2. \]
+Therefore, $\varphi$ is not linear.
+\end{solution}
+
+\begin{exercise}
+Give an example of a function $\varphi\colon\C\to\C$ such that
+\[ \varphi(w+z)=\varphi(w)+\varphi(z) \]
+for all $w,z\in\C$ but $\varphi$ is not linear. (Here $\C$ is thought of as a
+complex vector space.)
+\exnote{There also exists a function $\varphi\colon\R\to\R$ such that
+$\varphi$ satisfies the additivity condition above but $\varphi$ is not
+linear. However, showing the existence of such a function involves
+considerably more advanced tools.}
+\end{exercise}
+\begin{solution}
+Let $\varphi\colon\C\to\C$ be defined by
+\[ \varphi(x+iy)=x. \]
+Then for any $w=x_1+iy_1$ and $z=x_2+iy_2$ in $\C$,
+\[ \varphi(w+z)=\varphi\bigl((x_1+x_2)+i(y_1+y_2)\bigr)=x_1+x_2
+   =\varphi(w)+\varphi(z). \]
+However, $\varphi$ is not homogeneous. For example, let $a=i$ and $z=1$. Then
+\[ \varphi(iz)=\varphi(i)=0, \]
+but
+\[ i\varphi(z)=i\varphi(1)=i(1)=i. \]
+Therefore, $\varphi$ is not linear.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $q\in\Poly(\R)$ and
+$T\colon\Poly(\R)\to\Poly(\R)$ is defined by $Tp=q\circ p$, then $T$ is a
+linear map.
+\exnote{The function $T$ defined here differs from the function $T$ defined
+in the last bullet point of \ref{ax:3.3} by the order of the functions in the
+compositions.}
+\end{exercise}
+\begin{solution}
+This is false. Let $q(x)=x^2$ and define $T\colon\Poly(\R)\to\Poly(\R)$ by
+$Tp=q\circ p$. Then for any $p_1,p_2\in\Poly(\R)$,
+\[ T(p_1+p_2)=q\circ(p_1+p_2)=(p_1+p_2)^2=p_1^2+2p_1p_2+p_2^2
+   \ne p_1^2+p_2^2=Tp_1+Tp_2. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that $T$ is a
+scalar multiple of the identity if and only if $ST=TS$ for every
+$S\in\Lin(V)$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is a scalar multiple of the identity, i.e., $T=\lambda I$ for some
+$\lambda\in\F$. Then for any $S\in\Lin(V)$,
+\[ ST=S(\lambda I)=\lambda S=(\lambda I)S=TS. \]
+
+Conversely, suppose $ST=TS$ for every $S\in\Lin(V)$. We claim that $v$ and
+$Tv$ are linearly dependent for every $v\in V$. Suppose not. Then there exists
+$v\in V$ such that $v$ and $Tv$ are linearly independent. Extend $\{v,Tv\}$ to
+a basis of $V$. Define $S\in\Lin(V)$ by sending $v$ to itself and sending
+$Tv,v_3,\dots,v_n$ to $0$. Then
+\[ STv=S(Tv)=0, \quad TSv=Tv\ne0, \]
+which contradicts the assumption that $ST=TS$. Therefore, $v$ and $Tv$ are
+linearly dependent for every $v\in V$.
+
+Now let $v\in V$ be nonzero. Then there exists $\lambda_v\in\F$ such that
+$Tv=\lambda_vv$. We claim that $\lambda_v$ is independent of the choice of
+$v$. Let $v_1,\dots,v_n$ be a basis of $V$.
+\begin{itemize}
+\item If $n=1$, then the claim is immediate, since $Tv_1=\lambda_{v_1}v_1$.
+\item If $n\ge2$, let $v_i,v_j$ be two distinct basis vectors. Then their
+  linear independence implies
+  \[ \lambda_{v_i+v_j}v_i+\lambda_{v_i+v_j}v_j=T(v_i+v_j)=Tv_i+Tv_j
+     =\lambda_{v_i}v_i+\lambda_{v_j}v_j. \]
+  Since $v_i$ and $v_j$ are linearly independent, it follows that
+  $\lambda_{v_i+v_j}=\lambda_{v_i}=\lambda_{v_j}$. Therefore, $\lambda_v$ is
+  independent of the choice of $v$, and we may denote it by $\lambda$.
+\end{itemize}
+Let $v=\alpha_1v_1+\cdots+\alpha_nv_n$ be any vector in $V$. Then
+\begin{align*}
+Tv &= T(\alpha_1v_1+\cdots+\alpha_nv_n)=\alpha_1Tv_1+\cdots+\alpha_nTv_n\\
+   &= \alpha_1\lambda v_1+\cdots+\alpha_n\lambda v_n
+    =\lambda(\alpha_1v_1+\cdots+\alpha_nv_n)=\lambda v.
+\end{align*}
+Therefore, $T$ is a scalar multiple of the identity.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$ with $U\ne V$. Suppose $S\in\Lin(U,W)$ and
+$S\ne0$ (which means that $Su\ne0$ for some $u\in U$). Define
+$T\colon V\to W$ by
+\[ Tv=\begin{cases} Sv & \text{if } v\in U,\\
+   0 & \text{if } v\in V \text{ and } v\notin U. \end{cases} \]
+Prove that $T$ is not a linear map on $V$.
+\end{exercise}
+\begin{solution}
+Since $U\ne V$, there exists $v\in V$ such that $v\notin U$. Let $u\in U$ be
+such that $Su\ne0$. Then
+\[ T(u+v)=0, \]
+since $u+v\in U$ would imply $v=(v+u)-u\in U$, which is a contradiction.
+However,
+\[ Tu+Tv=Su+0=Su\ne0. \]
+Therefore, $T$ is not linear.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional. Prove that every linear map on a subspace
+of $V$ can be extended to a linear map on $V$. In other words, show that if
+$U$ is a subspace of $V$ and $S\in\Lin(U,W)$, then there exists
+$T\in\Lin(V,W)$ such that $Tu=Su$ for all $u\in U$.
+\exnote{The result in this exercise is used in the proof of \ref{ax:3.125}.}
+\end{exercise}
+\begin{solution}
+Let $u_1,\dots,u_m$ be a basis of $U$. Since $U$ is a subspace of $V$, we can
+extend this basis to a basis of $V$, say $u_1,\dots,u_m,v_1,\dots,v_n$. Define
+$T\colon V\to W$ by
+\[ Tu_i=Su_i \quad\text{for all } i=1,\dots,m, \]
+and
+\[ Tv_k=0 \quad\text{for all } k=1,\dots,n. \]
+Then $T$ is well-defined on the basis of $V$, and we can extend it linearly to
+all of $V$. For any $u\in U$, we may write
+\[ u=\alpha_1u_1+\cdots+\alpha_mu_m \]
+for some scalars $\alpha_1,\dots,\alpha_m\in\F$, and $0$ as the coefficients
+for $v_1,\dots,v_n$. Then
+\[ Tu=\alpha_1Tu_1+\cdots+\alpha_mTu_m+0\cdot Tv_1+\cdots+0\cdot Tv_n
+   =\alpha_1Su_1+\cdots+\alpha_mSu_m=Su. \]
+Therefore, $T$ extends $S$ to all of $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional with $\dim V>0$, and suppose $W$ is
+infinite-dimensional. Prove that $\Lin(V,W)$ is infinite-dimensional.
+\end{exercise}
+\begin{solution}
+Let $v_1,\dots,v_n$ be a basis of $V$. Since $W$ is infinite-dimensional,
+there exists an infinite linearly independent list of vectors
+$w_1,w_2,\dots$ in $W$. For each $k\in\N$, define $T_k\in\Lin(V,W)$ by
+\[ T_kv_j=\begin{cases} w_k & \text{if } j=1,\\
+   0 & \text{if } j\ne1. \end{cases} \]
+In other words, $T_k$ sends the first basis vector $v_1$ to $w_k$ and all
+other basis vectors to $0$. We claim that the list $T_1,T_2,\dots$ is linearly
+independent in $\Lin(V,W)$. Suppose that
+\[ a_1T_1+a_2T_2+\cdots+a_mT_m=0 \]
+for some scalars $a_1,\dots,a_m\in\F$. Evaluating both sides at $v_1$, we get
+\[ a_1T_1v_1+a_2T_2v_1+\cdots+a_mT_mv_1=a_1w_1+a_2w_2+\cdots+a_mw_m=0. \]
+Since $w_1,\dots,w_m$ is linearly independent in $W$, it follows that
+$a_1=\cdots=a_m=0$. Therefore, $T_1,T_2,\dots$ is linearly independent in
+$\Lin(V,W)$, and hence $\Lin(V,W)$ is infinite-dimensional.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m$ is a linearly dependent list of vectors in $V$.
+Suppose also that $W\ne\{0\}$. Prove that there exist $w_1,\dots,w_m\in W$
+such that no $T\in\Lin(V,W)$ satisfies $Tv_k=w_k$ for each $k=1,\dots,m$.
+\end{exercise}
+\begin{solution}
+Since $v_1,\dots,v_m$ is linearly dependent, there exist scalars
+$a_1,\dots,\allowbreak a_m\in\F$, not all zero, such that
+\[ a_1v_1+\cdots+a_mv_m=0. \]
+Fix some nonzero $a_i$ among $a_1,\dots,a_m$. Let $w_1,\dots,w_m\in W$ be
+defined by
+\[ w_k=\begin{cases} 0 & \text{if } k\ne i,\\
+   w & \text{if } k=i, \end{cases} \]
+where $w$ is any nonzero vector in $W$. Suppose for contradiction that there
+exists $T\in\Lin(V,W)$ such that $Tv_k=w_k$ for each $k=1,\dots,m$. Then
+\[ T(a_1v_1+\cdots+a_mv_m)=a_1Tv_1+\cdots+a_mTv_m=a_1w_1+\cdots+a_mw_m. \]
+Since $a_1v_1+\cdots+a_mv_m=0$, we have $T(0)=0$, so
+\[ 0=a_1w_1+\cdots+a_mw_m. \]
+However, by definition of $w_k$, we have $a_kw_k=a_iw$ if $k=i$ and
+$a_kw_k=0$ if $k\ne i$. Therefore, the sum $a_1w_1+\cdots+a_mw_m$ is a
+nonzero scalar multiple of $w$, which is nonzero since $w\ne0$. This is a
+contradiction. Therefore, no such $T\in\Lin(V,W)$ exists.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional with $\dim V>1$. Prove that there exist
+$S,T\in\Lin(V)$ such that $ST\ne TS$.
+\end{exercise}
+\begin{solution}
+Let $v_1,v_2$ be linearly independent vectors in $V$. We may extend this list
+to a basis of $V$, say $v_1,v_2,\dots,v_n$. Define $S,T\in\Lin(V)$ by
+\[ Sv_1=v_2, \quad Sv_2=v_1, \quad Sv_k=0 \text{ for } k>2, \]
+and
+\[ Tv_1=v_1, \quad Tv_2=0, \quad Tv_k=0 \text{ for } k>2. \]
+Then
+\[ STv_1=S(Tv_1)=Sv_1=v_2, \]
+but
+\[ TSv_1=T(Sv_1)=Tv_2=0. \]
+Therefore, $ST\ne TS$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional. Show that the only two-sided ideals of
+$\Lin(V)$ are $\{0\}$ and $\Lin(V)$.
+\exnote{A subspace $\mathcal{E}$ of $\Lin(V)$ is called a \textbf{two-sided
+ideal} of $\Lin(V)$ if $TE\in\mathcal{E}$ and $ET\in\mathcal{E}$ for all
+$E\in\mathcal{E}$ and all $T\in\Lin(V)$.}
+\end{exercise}
+\begin{solution}
+Let $\mathcal{E}$ be a two-sided ideal of $\Lin(V)$. If $\mathcal{E}=\{0\}$,
+then we are done. Otherwise, there exists $E\in\mathcal{E}$ such that $E\ne0$.
+Then there exists $v_1\in V$ such that $Ev_1\ne0$. Since $V$ is
+finite-dimensional, we may extend the list $\{v\}_1$ to a basis of $V$, say
+$v_1,v_2,\dots,v_n$. Let $w_1=Ev_1\ne0$. We may also extend the list
+$\{w\}_1$ to a basis of $V$, say $w_1,w_2,\dots,w_n$. Define
+$T_1\in\Lin(V)$ by
+\[ T_1w_1=v_1, \quad T_1w_k=0 \text{ for } k>1. \]
+Then $T_1E\in\mathcal{E}$ since $\mathcal{E}$ is a two-sided ideal. Observe
+that $T_1Ev_1=T_1(Ev_1)=T_1w_1=v_1\ne0$. Therefore, $T_1E\ne0$. Consider
+$S_1\in\Lin(V)$ defined by
+\[ S_1v_1=v_1, \quad S_1v_k=0 \text{ for } k>1. \]
+Then $T_1ES_1\in\mathcal{E}$ since $\mathcal{E}$ is a two-sided ideal.
+Observe that $T_1ES_1v_1=T_1Ev_1=T_1w_1=v_1\ne0$. Therefore, $T_1ES_1\ne0$.
+We now discuss the construction of the identity map $I\in\Lin(V)$.
+
+Construct $T_i,S_i\in\Lin(V)$ for each $i=1,\dots,n$ as follows:
+\[ T_iw_1=v_i, \quad T_iw_k=0 \text{ for } k\ne1, \]
+and
+\[ S_iv_i=v_1, \quad S_iv_k=0 \text{ for } k\ne i. \]
+Then $T_iES_i\in\mathcal{E}$ and $T_iES_iv_i=v_i\ne0$. Since $\mathcal{E}$ is
+a subspace, it contains all linear combinations of these maps. In particular,
+for any $v\in V$, we can write $v=\alpha_1v_1+\alpha_2v_2+\cdots+\alpha_nv_n$
+for some scalars $\alpha_1,\alpha_2,\dots,\alpha_n\in\F$. Observe that
+\[ T_iES_iv=T_iES_i(\alpha_1v_1)+\cdots+T_iES_i(\alpha_iv_i)+\cdots
+   +T_iES_i(\alpha_nv_n)=\alpha_iv_i. \]
+Consider the map
+\[ E^*=T_1ES_1+T_2ES_2+\cdots+T_nES_n\in\mathcal{E}, \]
+Then for any $v=\alpha_1v_1+\cdots+\alpha_nv_n\in V$,
+\[ E^*v=T_1ES_1v+T_2ES_2v+\cdots+T_nES_nv
+   =\alpha_1v_1+\alpha_2v_2+\cdots+\alpha_nv_n=v. \]
+Hence, $E^*=I\in\mathcal{E}$. Since $\mathcal{E}$ is a two-sided ideal,
+$I=E^*\in\mathcal{E}$ implies that for any $T\in\Lin(V)$, we have
+$TI=T\in\mathcal{E}$. Therefore, $\mathcal{E}=\Lin(V)$.
+\end{solution}

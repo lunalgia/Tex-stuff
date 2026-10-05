@@ -1,0 +1,1043 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{2}\setcounter{theorem}{28}
+\fi % TEST-ONLY-END
+% Source: book pp. 69--81 (PDF 83--95); solutions pp. 83--92.
+\section{Matrices}
+
+\subsection{Representing a Linear Map by a Matrix}
+
+We know that if $v_1,\dots,v_n$ is a basis of $V$ and $T\colon V\to W$ is
+linear, then the values of $Tv_1,\dots,Tv_n$ determine the values of $T$ on
+arbitrary vectors in $V$---see the linear map lemma (\ref{ax:3.4}). As we will
+soon see, matrices provide an efficient method of recording the values of the
+$Tv_k$'s in terms of a basis of $W$.
+
+\begin{definition}[Matrix, $A_{j,k}$]\label{ax:3.29}
+Suppose $m$ and $n$ are nonnegative integers. An \emph{$m$-by-$n$ matrix} $A$
+is a rectangular array of elements of $\F$ with $m$ rows and $n$ columns:
+\[ A = \begin{pmatrix} A_{1,1} & \cdots & A_{1,n}\\ \vdots & & \vdots\\
+   A_{m,1} & \cdots & A_{m,n} \end{pmatrix}. \]
+The notation $A_{j,k}$ denotes the entry in row $j$, column $k$ of $A$.
+\end{definition}
+
+\marginnote{When dealing with matrices, the first index refers to the row
+number; the second index refers to the column number.}%
+\begin{example}[$A_{j,k}$ equals entry in row $j$, column $k$ of $A$]\label{ax:3.30}
+Suppose $A = \begin{pmatrix} 8 & 4 & 5-3i\\ 1 & 9 & 7 \end{pmatrix}$.
+Thus $A_{2,3}$ refers to the entry in the second row, third column of $A$,
+which means that $A_{2,3}=7$.
+\end{example}
+
+Now we come to the key definition in this section.
+
+\begin{definition}[Matrix of a linear map, $\Mat(T)$]\label{ax:3.31}
+Suppose $T\in\Lin(V,W)$ and $v_1,\dots,v_n$ is a basis of $V$ and
+$w_1,\dots,w_m$ is a basis of $W$. The \emph{matrix of $T$} with respect to
+these bases is the $m$-by-$n$ matrix $\Mat(T)$ whose entries $A_{j,k}$ are
+defined by
+\[ Tv_k = A_{1,k}w_1+\cdots+A_{m,k}w_m. \]
+If the bases $v_1,\dots,v_n$ and $w_1,\dots,w_m$ are not clear from the
+context, then the notation $\Mat\bigl(T,(v_1,\dots,v_n),(w_1,\dots,w_m)\bigr)$
+is used.
+\end{definition}
+
+The matrix $\Mat(T)$ of a linear map $T\in\Lin(V,W)$ depends on the basis
+$v_1,\dots,v_n$ of $V$ and the basis $w_1,\dots,w_m$ of $W$, as well as on $T$.
+However, the bases should be clear from the context, and thus they are often
+not included in the notation.
+
+To remember how $\Mat(T)$ is constructed from $T$, you might write across the
+top of the matrix the basis vectors $v_1,\dots,v_n$ for the domain and along
+the left the basis vectors $w_1,\dots,w_m$ for the vector space into which $T$
+maps, as follows:
+\[ \Mat(T) = \bordermatrix{
+      & v_1 & \cdots & v_k & \cdots & v_n \cr
+  w_1 &     &        & A_{1,k} &    &     \cr
+  \vdots &  &        & \vdots  &    &     \cr
+  w_m &     &        & A_{m,k} &    &     \cr}. \]
+
+\marginnote{The $k^{\text{th}}$ column of $\Mat(T)$ consists of the scalars
+needed to write $Tv_k$ as a linear combination of $w_1,\dots,w_m$:
+\[ Tv_k = \sum_{j=1}^m A_{j,k}w_j. \]}%
+In the matrix above only the $k^{\text{th}}$ column is shown. Thus the second
+index of each displayed entry of the matrix above is $k$. The picture above
+should remind you that $Tv_k$ can be computed from $\Mat(T)$ by multiplying
+each entry in the $k^{\text{th}}$ column by the corresponding $w_j$ from the
+left column, and then adding up the resulting vectors.
+
+\marginnote{If $T$ is a linear map from an $n$-dimensional vector space to an
+$m$-dimensional vector space, then $\Mat(T)$ is an $m$-by-$n$ matrix.}%
+If $T$ is a linear map from $\F^n$ to $\F^m$, then unless stated otherwise,
+assume the bases in question are the standard ones (where the
+$k^{\text{th}}$ basis vector is $1$ in the $k^{\text{th}}$ slot and $0$ in all
+other slots). If you think of elements of $\F^m$ as columns of $m$ numbers,
+then you can think of the $k^{\text{th}}$ column of $\Mat(T)$ as $T$ applied
+to the $k^{\text{th}}$ standard basis vector.
+
+\begin{example}[The matrix of a linear map from $\F^2$ to $\F^3$]\label{ax:3.32}
+Suppose $T\in\Lin(\F^2,\F^3)$ is defined by
+\[ T(x,y) = (x+3y,\,2x+5y,\,7x+9y). \]
+Because $T(1,0)=(1,2,7)$ and $T(0,1)=(3,5,9)$, the matrix of $T$ with respect
+to the standard bases is the $3$-by-$2$ matrix below:
+\[ \Mat(T) = \begin{pmatrix} 1 & 3\\ 2 & 5\\ 7 & 9 \end{pmatrix}. \]
+\end{example}
+
+When working with $\Poly_m(\F)$, use the standard basis
+$1,x,x^2,\dots,x^m$ unless the context indicates otherwise.
+
+\begin{example}[Matrix of the differentiation map from $\Poly_3(\R)$ to
+$\Poly_2(\R)$]\label{ax:3.33}
+Suppose $D\in\Lin\bigl(\Poly_3(\R),\allowbreak\Poly_2(\R)\bigr)$ is the differentiation
+map defined by $Dp=p'$. Because $(x^n)'=nx^{n-1}$, the matrix of $D$ with
+respect to the standard bases is the $3$-by-$4$ matrix below:
+\[ \Mat(D) = \begin{pmatrix} 0 & 1 & 0 & 0\\ 0 & 0 & 2 & 0\\ 0 & 0 & 0 & 3
+   \end{pmatrix}. \]
+\end{example}
+
+\subsection{Addition and Scalar Multiplication of Matrices}
+
+For the rest of this section, assume that $U$, $V$, and $W$ are
+finite-dimensional and that a basis has been chosen for each of these vector
+spaces. Thus for each linear map from $V$ to $W$, we can talk about its matrix
+(with respect to the chosen bases).
+
+Is the matrix of the sum of two linear maps equal to the sum of the matrices of
+the two maps? Right now this question does not yet make sense because although
+we have defined the sum of two linear maps, we have not defined the sum of two
+matrices. Fortunately, the natural definition of the sum of two matrices has
+the right properties. Specifically, we make the following definition.
+
+\begin{definition}[Matrix addition]\label{ax:3.34}
+The \emph{sum of two matrices of the same size} is the matrix obtained by
+adding corresponding entries in the matrices:
+\begin{multline*}
+\begin{pmatrix} A_{1,1} & \cdots & A_{1,n}\\ \vdots & & \vdots\\
+   A_{m,1} & \cdots & A_{m,n} \end{pmatrix}
+ + \begin{pmatrix} C_{1,1} & \cdots & C_{1,n}\\ \vdots & & \vdots\\
+   C_{m,1} & \cdots & C_{m,n} \end{pmatrix}\\
+ = \begin{pmatrix} A_{1,1}+C_{1,1} & \cdots & A_{1,n}+C_{1,n}\\
+   \vdots & & \vdots\\
+   A_{m,1}+C_{m,1} & \cdots & A_{m,n}+C_{m,n} \end{pmatrix}.
+\end{multline*}
+\end{definition}
+
+In the next result, the assumption is that the same bases are used for all
+three linear maps $S+T$, $S$, and $T$.
+
+\begin{result}[Matrix of the sum of linear maps]\label{ax:3.35}
+Suppose $S,T\in\Lin(V,W)$. Then $\Mat(S+T)=\Mat(S)+\Mat(T)$.
+\end{result}
+
+The verification of the result above follows from the definitions and is left
+to the reader.
+
+Still assuming that we have some bases in mind, is the matrix of a scalar times
+a linear map equal to the scalar times the matrix of the linear map? Again, the
+question does not yet make sense because we have not defined scalar
+multiplication on matrices. Fortunately, the natural definition again has the
+right properties.
+
+\begin{definition}[Scalar multiplication of a matrix]\label{ax:3.36}
+The product of a scalar and a matrix is the matrix obtained by multiplying each
+entry in the matrix by the scalar:
+\[ \lambda\begin{pmatrix} A_{1,1} & \cdots & A_{1,n}\\ \vdots & & \vdots\\
+   A_{m,1} & \cdots & A_{m,n} \end{pmatrix}
+ = \begin{pmatrix} \lambda A_{1,1} & \cdots & \lambda A_{1,n}\\
+   \vdots & & \vdots\\
+   \lambda A_{m,1} & \cdots & \lambda A_{m,n} \end{pmatrix}. \]
+\end{definition}
+
+\begin{example}[Addition and scalar multiplication of matrices]\label{ax:3.37}
+\leavevmode
+\[ 2\begin{pmatrix} 3 & 1\\ -1 & 5 \end{pmatrix}
+   + \begin{pmatrix} 4 & 2\\ 1 & 6 \end{pmatrix}
+ = \begin{pmatrix} 6 & 2\\ -2 & 10 \end{pmatrix}
+   + \begin{pmatrix} 4 & 2\\ 1 & 6 \end{pmatrix}
+ = \begin{pmatrix} 10 & 4\\ -1 & 16 \end{pmatrix} \]
+\end{example}
+
+In the next result, the assumption is that the same bases are used for both the
+linear maps $\lambda T$ and $T$.
+
+\begin{result}[The matrix of a scalar times a linear map]\label{ax:3.38}
+Suppose $\lambda\in\F$ and $T\in\Lin(V,W)$. Then
+$\Mat(\lambda T)=\lambda\Mat(T)$.
+\end{result}
+
+The verification of the result above is also left to the reader.
+
+Because addition and scalar multiplication have now been defined for matrices,
+you should not be surprised that a vector space is about to appear. First we
+introduce a bit of notation so that this new vector space has a name, and then
+we find the dimension of this new vector space.
+
+\begin{notation}[$\F^{m,n}$]\label{ax:3.39}
+For $m$ and $n$ positive integers, the set of all $m$-by-$n$ matrices with
+entries in $\F$ is denoted by $\F^{m,n}$.
+\end{notation}
+
+\begin{result}[$\dim\F^{m,n}=mn$]\label{ax:3.40}
+Suppose $m$ and $n$ are positive integers. With addition and scalar
+multiplication defined as above, $\F^{m,n}$ is a vector space of dimension
+$mn$.
+\end{result}
+
+\begin{proof}
+The verification that $\F^{m,n}$ is a vector space is left to the reader. Note
+that the additive identity of $\F^{m,n}$ is the $m$-by-$n$ matrix all of whose
+entries equal $0$.
+
+The reader should also verify that the list of distinct $m$-by-$n$ matrices
+that have $0$ in all entries except for a $1$ in one entry is a basis of
+$\F^{m,n}$. There are $mn$ such matrices, so the dimension of $\F^{m,n}$ equals
+$mn$.
+\end{proof}
+
+\subsection{Matrix Multiplication}
+
+Suppose, as previously, that $v_1,\dots,v_n$ is a basis of $V$ and
+$w_1,\dots,w_m$ is a basis of $W$. Suppose also that $u_1,\dots,u_p$ is a basis
+of $U$.
+
+Consider linear maps $T\colon U\to V$ and $S\colon V\to W$. The composition
+$ST$ is a linear map from $U$ to $W$. Does $\Mat(ST)$ equal $\Mat(S)\Mat(T)$?
+This question does not yet make sense because we have not defined the product
+of two matrices. We will choose a definition of matrix multiplication that
+forces this question to have a positive answer. Let's see how to do this.
+
+Suppose $\Mat(S)=A$ and $\Mat(T)=B$. For $1\le k\le p$, we have
+\begin{align*}
+(ST)u_k &= S\Bigl(\sum_{r=1}^n B_{r,k}v_r\Bigr)\\
+        &= \sum_{r=1}^n B_{r,k}Sv_r\\
+        &= \sum_{r=1}^n B_{r,k}\sum_{j=1}^m A_{j,r}w_j\\
+        &= \sum_{j=1}^m\Bigl(\sum_{r=1}^n A_{j,r}B_{r,k}\Bigr)w_j.
+\end{align*}
+Thus $\Mat(ST)$ is the $m$-by-$p$ matrix whose entry in row $j$, column $k$,
+equals
+\[ \sum_{r=1}^n A_{j,r}B_{r,k}. \]
+
+Now we see how to define matrix multiplication so that the desired equation
+$\Mat(ST)=\Mat(S)\Mat(T)$ holds.
+
+\begin{definition}[Matrix multiplication]\label{ax:3.41}
+Suppose $A$ is an $m$-by-$n$ matrix and $B$ is an $n$-by-$p$ matrix. Then $AB$
+is defined to be the $m$-by-$p$ matrix whose entry in row $j$, column $k$, is
+given by the equation
+\[ (AB)_{j,k} = \sum_{r=1}^n A_{j,r}B_{r,k}. \]
+Thus the entry in row $j$, column $k$, of $AB$ is computed by taking row $j$ of
+$A$ and column $k$ of $B$, multiplying together corresponding entries, and then
+summing.
+\end{definition}
+
+\marginnote{You may have learned this definition of matrix multiplication in
+an earlier course, although you may not have seen this motivation for it.}%
+Note that we define the product of two matrices only when the number of columns
+of the first matrix equals the number of rows of the second matrix.
+
+\begin{example}[Matrix multiplication]\label{ax:3.42}
+Here we multiply together a $3$-by-$2$ matrix and a $2$-by-$4$ matrix,
+obtaining a $3$-by-$4$ matrix:
+\[ \begin{pmatrix} 1 & 2\\ 3 & 4\\ 5 & 6 \end{pmatrix}
+   \begin{pmatrix} 6 & 5 & 4 & 3\\ 2 & 1 & 0 & -1 \end{pmatrix}
+ = \begin{pmatrix} 10 & 7 & 4 & 1\\ 26 & 19 & 12 & 5\\ 42 & 31 & 20 & 9
+   \end{pmatrix}. \]
+\end{example}
+
+Matrix multiplication is not commutative---$AB$ is not necessarily equal to
+$BA$ even if both products are defined (see Exercise~10). Matrix multiplication
+is distributive and associative (see Exercises 11 and~12).
+
+In the next result, we assume that the same basis of $V$ is used in considering
+$T\in\Lin(U,V)$ and $S\in\Lin(V,W)$, the same basis of $W$ is used in
+considering $S\in\Lin(V,W)$ and $ST\in\Lin(U,W)$, and the same basis of $U$ is
+used in considering $T\in\Lin(U,V)$ and $ST\in\Lin(U,W)$.
+
+\begin{result}[Matrix of product of linear maps]\label{ax:3.43}
+If $T\in\Lin(U,V)$ and $S\in\Lin(V,W)$, then $\Mat(ST)=\Mat(S)\Mat(T)$.
+\end{result}
+
+The proof of the result above is the calculation that was done as motivation
+before the definition of matrix multiplication.
+
+In the next piece of notation, note that as usual the first index refers to a
+row and the second index refers to a column, with a vertically centered dot
+used as a placeholder.
+
+\begin{notation}[$A_{j,\cdot}$, $A_{\cdot,k}$]\label{ax:3.44}
+Suppose $A$ is an $m$-by-$n$ matrix.
+\begin{itemize}
+\item If $1\le j\le m$, then $A_{j,\cdot}$ denotes the $1$-by-$n$ matrix
+  consisting of row $j$ of $A$.
+\item If $1\le k\le n$, then $A_{\cdot,k}$ denotes the $m$-by-$1$ matrix
+  consisting of column $k$ of $A$.
+\end{itemize}
+\end{notation}
+
+\begin{example}[$A_{j,\cdot}$ equals $j^{\text{th}}$ row of $A$ and
+$A_{\cdot,k}$ equals $k^{\text{th}}$ column of $A$]\label{ax:3.45}
+The notation $A_{2,\cdot}$ denotes the second row of $A$ and $A_{\cdot,2}$
+denotes the second column of $A$. Thus if
+$A=\begin{pmatrix} 8 & 4 & 5\\ 1 & 9 & 7 \end{pmatrix}$, then
+\[ A_{2,\cdot} = \begin{pmatrix} 1 & 9 & 7 \end{pmatrix}
+   \quad\text{and}\quad
+   A_{\cdot,2} = \begin{pmatrix} 4\\ 9 \end{pmatrix}. \]
+\end{example}
+
+The product of a $1$-by-$n$ matrix and an $n$-by-$1$ matrix is a $1$-by-$1$
+matrix. However, we will frequently identify a $1$-by-$1$ matrix with its
+entry. For example,
+\[ \begin{pmatrix} 3 & 4 \end{pmatrix}\begin{pmatrix} 6\\ 2 \end{pmatrix}
+   = \begin{pmatrix} 26 \end{pmatrix} \]
+because $3\cdot6+4\cdot2=26$. However, we can identify
+$\begin{pmatrix} 26 \end{pmatrix}$ with $26$, writing
+$\begin{pmatrix} 3 & 4 \end{pmatrix}\begin{pmatrix} 6\\ 2 \end{pmatrix}=26$.
+
+The next result uses the convention discussed in the paragraph above to give
+another way to think of matrix multiplication. For example, the next result and
+the calculation in the paragraph above explain why the entry in row $2$,
+column $1$, of the product in Example~\ref{ax:3.42} equals $26$.
+
+\begin{result}[Entry of matrix product equals row times column]\label{ax:3.46}
+Suppose $A$ is an $m$-by-$n$ matrix and $B$ is an $n$-by-$p$ matrix. Then
+\[ (AB)_{j,k} = A_{j,\cdot}B_{\cdot,k} \]
+if $1\le j\le m$ and $1\le k\le p$. In other words, the entry in row $j$,
+column $k$, of $AB$ equals (row $j$ of $A$) times (column $k$ of $B$).
+\end{result}
+
+\begin{proof}
+Suppose $1\le j\le m$ and $1\le k\le p$. The definition of matrix
+multiplication states that
+\begin{equation*}
+(AB)_{j,k} = A_{j,1}B_{1,k}+\cdots+A_{j,n}B_{n,k}.
+\refstepcounter{theorem}\tag*{\thetheorem}\label{ax:3.47}
+\end{equation*}
+The definition of matrix multiplication also implies that the product of the
+$1$-by-$n$ matrix $A_{j,\cdot}$ and the $n$-by-$1$ matrix $B_{\cdot,k}$ is the
+$1$-by-$1$ matrix whose entry is the number on the right side of the equation
+above. Thus the entry in row $j$, column $k$, of $AB$ equals (row $j$ of $A$)
+times (column $k$ of $B$).
+\end{proof}
+
+The next result gives yet another way to think of matrix multiplication. In the
+result below, $(AB)_{\cdot,k}$ is column $k$ of the $m$-by-$p$ matrix $AB$.
+Thus $(AB)_{\cdot,k}$ is an $m$-by-$1$ matrix. Also, $AB_{\cdot,k}$ is an
+$m$-by-$1$ matrix because it is the product of an $m$-by-$n$ matrix and an
+$n$-by-$1$ matrix. Thus the two sides of the equation in the result below have
+the same size, making it reasonable that they might be equal.
+
+\begin{result}[Column of matrix product equals matrix times column]\label{ax:3.48}
+Suppose $A$ is an $m$-by-$n$ matrix and $B$ is an $n$-by-$p$ matrix. Then
+\[ (AB)_{\cdot,k} = AB_{\cdot,k} \]
+if $1\le k\le p$. In other words, column $k$ of $AB$ equals $A$ times column
+$k$ of $B$.
+\end{result}
+
+\begin{proof}
+As discussed above, $(AB)_{\cdot,k}$ and $AB_{\cdot,k}$ are both $m$-by-$1$
+matrices. If $1\le j\le m$, then the entry in row $j$ of $(AB)_{\cdot,k}$ is
+the left side of \ref{ax:3.47} and the entry in row $j$ of $AB_{\cdot,k}$ is
+the right side of \ref{ax:3.47}. Thus $(AB)_{\cdot,k}=AB_{\cdot,k}$.
+\end{proof}
+
+Our next result will give another way of thinking about the product of an
+$m$-by-$n$ matrix and an $n$-by-$1$ matrix, motivated by the next example.
+
+\begin{example}[Product of a $3$-by-$2$ matrix and a $2$-by-$1$
+matrix]\label{ax:3.49}
+Use our definitions and basic arithmetic to verify that
+\[ \begin{pmatrix} 1 & 2\\ 3 & 4\\ 5 & 6 \end{pmatrix}
+   \begin{pmatrix} 5\\ 1 \end{pmatrix}
+ = \begin{pmatrix} 7\\ 19\\ 31 \end{pmatrix}
+ = 5\begin{pmatrix} 1\\ 3\\ 5 \end{pmatrix}
+   + 1\begin{pmatrix} 2\\ 4\\ 6 \end{pmatrix}. \]
+Thus in this example, the product of a $3$-by-$2$ matrix and a $2$-by-$1$
+matrix is a linear combination of the columns of the $3$-by-$2$ matrix, with
+the scalars ($5$ and $1$) that multiply the columns coming from the $2$-by-$1$
+matrix.
+\end{example}
+
+The next result generalizes the example above.
+
+\begin{result}[Linear combination of columns]\label{ax:3.50}
+Suppose $A$ is an $m$-by-$n$ matrix and
+$b=\begin{pmatrix} b_1\\ \vdots\\ b_n \end{pmatrix}$ is an $n$-by-$1$ matrix.
+Then
+\[ Ab = b_1A_{\cdot,1}+\cdots+b_nA_{\cdot,n}. \]
+In other words, $Ab$ is a linear combination of the columns of $A$, with the
+scalars that multiply the columns coming from $b$.
+\end{result}
+
+\begin{proof}
+If $k\in\{1,\dots,m\}$, then the definition of matrix multiplication implies
+that the entry in row $k$ of the $m$-by-$1$ matrix $Ab$ is
+\[ A_{k,1}b_1+\cdots+A_{k,n}b_n. \]
+The entry in row $k$ of $b_1A_{\cdot,1}+\cdots+b_nA_{\cdot,n}$ also equals the
+number displayed above.
+
+Because $Ab$ and $b_1A_{\cdot,1}+\cdots+b_nA_{\cdot,n}$ have the same entry in
+row $k$ for each $k\in\{1,\dots,m\}$, we conclude that
+$Ab=b_1A_{\cdot,1}+\cdots+b_nA_{\cdot,n}$.
+\end{proof}
+
+Our two previous results focus on the columns of a matrix. Analogous results
+hold for the rows of a matrix. Specifically, see Exercises 8 and~9, which can
+be proved using appropriate modifications of the proofs of \ref{ax:3.48} and
+\ref{ax:3.50}.
+
+The next result is the main tool used in the next subsection to prove the
+column--row factorization (\ref{ax:3.56}) and to prove that the column rank of
+a matrix equals the row rank (\ref{ax:3.57}). To be consistent with the
+notation often used with the column--row factorization, including in the next
+subsection, the matrices in the next result are called $C$ and $R$ instead of
+$A$ and $B$.
+
+\begin{result}[Matrix multiplication as linear combinations of columns or
+rows]\label{ax:3.51}
+Suppose $C$ is an $m$-by-$c$ matrix and $R$ is a $c$-by-$n$ matrix.
+\begin{parts}
+\item If $k\in\{1,\dots,n\}$, then column $k$ of $CR$ is a linear combination
+  of the columns of $C$, with the coefficients of this linear combination
+  coming from column $k$ of $R$.
+\item If $j\in\{1,\dots,m\}$, then row $j$ of $CR$ is a linear combination of
+  the rows of $R$, with the coefficients of this linear combination coming
+  from row $j$ of $C$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Suppose $k\in\{1,\dots,n\}$. Then column $k$ of $CR$ equals $CR_{\cdot,k}$ (by
+\ref{ax:3.48}), which equals the linear combination of the columns of $C$ with
+coefficients coming from $R_{\cdot,k}$ (by \ref{ax:3.50}). Thus (a) holds.
+
+To prove (b), follow the pattern of the proof of (a) but use rows instead of
+columns and use Exercises 8 and~9 instead of \ref{ax:3.48} and \ref{ax:3.50}.
+\end{proof}
+
+\subsection{Column--Row Factorization and Rank of a Matrix}
+
+We begin by defining two nonnegative integers associated with each matrix.
+
+\begin{definition}[Column rank, row rank]\label{ax:3.52}
+Suppose $A$ is an $m$-by-$n$ matrix with entries in $\F$.
+\begin{itemize}
+\item The \emph{column rank} of $A$ is the dimension of the span of the columns
+  of $A$ in $\F^{m,1}$.
+\item The \emph{row rank} of $A$ is the dimension of the span of the rows of
+  $A$ in $\F^{1,n}$.
+\end{itemize}
+\end{definition}
+
+If $A$ is an $m$-by-$n$ matrix, then the column rank of $A$ is at most $n$
+(because $A$ has $n$ columns) and the column rank of $A$ is also at most $m$
+(because $\dim\F^{m,1}=m$). Similarly, the row rank of $A$ is also at most
+$\min\{m,n\}$.
+
+\begin{example}[Column rank and row rank of a $2$-by-$4$ matrix]\label{ax:3.53}
+Suppose
+\[ A = \begin{pmatrix} 4 & 7 & 1 & 8\\ 3 & 5 & 2 & 9 \end{pmatrix}. \]
+
+The column rank of $A$ is the dimension of
+\[ \spn\biggl(\begin{pmatrix} 4\\ 3 \end{pmatrix},
+   \begin{pmatrix} 7\\ 5 \end{pmatrix},
+   \begin{pmatrix} 1\\ 2 \end{pmatrix},
+   \begin{pmatrix} 8\\ 9 \end{pmatrix}\biggr) \]
+in $\F^{2,1}$. Neither of the first two vectors listed above in $\F^{2,1}$ is a
+scalar multiple of the other. Thus the span of this list of length four has
+dimension at least two. The span of this list of vectors in $\F^{2,1}$ cannot
+have dimension larger than two because $\dim\F^{2,1}=2$. Thus the span of this
+list has dimension two, which means that the column rank of $A$ is two.
+
+The row rank of $A$ is the dimension of
+\[ \spn\Bigl(\begin{pmatrix} 4 & 7 & 1 & 8 \end{pmatrix},
+   \begin{pmatrix} 3 & 5 & 2 & 9 \end{pmatrix}\Bigr) \]
+in $\F^{1,4}$. Neither of the two vectors listed above in $\F^{1,4}$ is a
+scalar multiple of the other. Thus the span of this list of length two has
+dimension two, which means that the row rank of $A$ is two.
+\end{example}
+
+We now define the transpose of a matrix.
+
+\begin{definition}[Transpose, $A^{\mathrm{t}}$]\label{ax:3.54}
+The \emph{transpose} of a matrix $A$, denoted by $A^{\mathrm{t}}$, is the
+matrix obtained from $A$ by interchanging rows and columns. Specifically, if
+$A$ is an $m$-by-$n$ matrix, then $A^{\mathrm{t}}$ is the $n$-by-$m$ matrix
+whose entries are given by the equation
+\[ (A^{\mathrm{t}})_{k,j} = A_{j,k}. \]
+\end{definition}
+
+\begin{example}[Transpose of a matrix]\label{ax:3.55}
+If $A=\begin{pmatrix} 5 & -7\\ 3 & 8\\ -4 & 2 \end{pmatrix}$, then
+$A^{\mathrm{t}}=\begin{pmatrix} 5 & 3 & -4\\ -7 & 8 & 2 \end{pmatrix}$.
+
+Note that here $A$ is a $3$-by-$2$ matrix and $A^{\mathrm{t}}$ is a
+$2$-by-$3$ matrix.
+\end{example}
+
+The transpose has nice algebraic properties:
+$(A+B)^{\mathrm{t}}=A^{\mathrm{t}}+B^{\mathrm{t}}$,
+$(\lambda A)^{\mathrm{t}}=\lambda A^{\mathrm{t}}$, and
+$(AC)^{\mathrm{t}}=C^{\mathrm{t}}A^{\mathrm{t}}$ for all $m$-by-$n$ matrices
+$A,B$, all $\lambda\in\F$, and all $n$-by-$p$ matrices $C$ (see Exercises 14
+and~15).
+
+The next result will be the main tool used to prove that the column rank equals
+the row rank (see \ref{ax:3.57}).
+
+\begin{result}[Column--row factorization]\label{ax:3.56}
+Suppose $A$ is an $m$-by-$n$ matrix with entries in $\F$ and column rank
+$c\ge1$. Then there exist an $m$-by-$c$ matrix $C$ and a $c$-by-$n$ matrix $R$,
+both with entries in $\F$, such that $A=CR$.
+\end{result}
+
+\begin{proof}
+Each column of $A$ is an $m$-by-$1$ matrix. The list
+$A_{\cdot,1},\dots,A_{\cdot,n}$ of columns of $A$ can be reduced to a basis of
+the span of the columns of $A$ (by \ref{ax:2.30}). This basis has length $c$,
+by the definition of the column rank. The $c$ columns in this basis can be put
+together to form an $m$-by-$c$ matrix $C$.
+
+If $k\in\{1,\dots,n\}$, then column $k$ of $A$ is a linear combination of the
+columns of $C$. Make the coefficients of this linear combination into column
+$k$ of a $c$-by-$n$ matrix that we call $R$. Then $A=CR$, as follows from
+\ref{ax:3.51}(a).
+\end{proof}
+
+In Example~\ref{ax:3.53}, the column rank and row rank turned out to equal each
+other. The next result states that this happens for all matrices.
+
+\begin{result}[Column rank equals row rank]\label{ax:3.57}
+Suppose $A\in\F^{m,n}$. Then the column rank of $A$ equals the row rank of $A$.
+\end{result}
+
+\begin{proof}
+Let $c$ denote the column rank of $A$. If $c=0$, then $A=0$ and hence the row
+rank of $A$ also equals $0$. Thus we can assume that $c\ge1$.
+
+Let $A=CR$ be the column--row factorization of $A$ given by \ref{ax:3.56},
+where $C$ is an $m$-by-$c$ matrix and $R$ is a $c$-by-$n$ matrix. Then
+\ref{ax:3.51}(b) tells us that every row of $A$ is a linear combination of the
+rows of $R$. Because $R$ has $c$ rows, this implies that the row rank of $A$ is
+less than or equal to the column rank $c$ of $A$.
+
+To prove the inequality in the other direction, apply the previous paragraph
+result to $A^{\mathrm{t}}$, getting
+\begin{align*}
+\text{column rank of } A &= \text{row rank of } A^{\mathrm{t}}\\
+  &\le \text{column rank of } A^{\mathrm{t}}\\
+  &= \text{row rank of } A.
+\end{align*}
+Thus the column rank of $A$ equals the row rank of $A$.
+\end{proof}
+
+Because the column rank equals the row rank, the last result allows us to
+dispense with the terms ``column rank'' and ``row rank'' and just use the
+simpler term ``rank''.
+
+\begin{definition}[Rank]\label{ax:3.58}
+The \emph{rank} of a matrix $A\in\F^{m,n}$ is the column rank of $A$.
+\end{definition}
+
+See \ref{ax:3.133} and Exercise~8 in Section~7A for alternative proofs that the
+column rank equals the row rank.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{3C}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Show that with respect to each choice of bases of $V$
+and $W$, the matrix of $T$ has at least $\dim\range T$ nonzero entries.
+\end{exercise}
+\begin{solution}
+Let $v_1,\dots,v_n$ be a basis of $V$ and $w_1,\dots,w_m$ be a basis of $W$.
+Let $A=\Mat(T)$ be the matrix with respect to these bases. Then the $j$-th
+column of $A$ is the coordinate vector of $Tv_j$ with respect to the basis for
+$W$.
+
+Suppose $A$ had fewer than $\dim\range T$ nonzero columns. Since zero columns
+do not contribute to the span, the columns of $A$ would then span a space of
+dimension less than $\dim\range T$. This is a contradiction, since fewer than
+$\dim\range T$ vectors cannot span $\range T$. Therefore, $A$ must have at
+least $\dim\range T$ nonzero columns, and hence at least $\dim\range T$ nonzero
+entries.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$, where $V$ and $W$ are finite-dimensional and nonzero.
+Prove that $\dim\range T=1$ if and only if there exist a basis of $V$ and a
+basis of $W$ such that with respect to these bases, all entries of $\Mat(T)$
+equal $1$.
+\end{exercise}
+\begin{solution}
+Suppose $\dim\range T=1$. Then there exists a nonzero vector $y_1\in W$ such
+that $\range T=\spn y_1$. Let $\dim V=n$ and $\dim W=m$. Extend $y_1$ to a
+basis $y_1,\dots,y_m$ of $W$, and define the following vectors in $W$:
+\[ w_1 = y_1-(y_2+\cdots+y_m), \quad w_k = y_k \text{ for } k=2,\dots,m. \]
+It is clear that $w_1+w_2+\cdots+w_m=y_1$, and hence $w_1,\dots,w_m$ spans $W$.
+Now suppose for scalars $\alpha_1,\dots,\alpha_m\in\F$, we have
+\[ \alpha_1w_1+\alpha_2w_2+\cdots+\alpha_mw_m = 0. \]
+Then we can express this as
+\[ \alpha_1\bigl(y_1-(y_2+\cdots+y_m)\bigr)+\alpha_2y_2+\cdots+\alpha_my_m = 0. \]
+Simplifying, we get
+\[ (\alpha_1)y_1+(-\alpha_1+\alpha_2)y_2+\cdots+(-\alpha_1+\alpha_m)y_m = 0. \]
+Since $y_1,\dots,y_m$ are linearly independent, we must have
+$\alpha_1=\alpha_2=\cdots=\alpha_m=0$. Therefore, $w_1,\dots,w_m$ are linearly
+independent and hence form a basis of $W$.
+
+We now construct a basis of $V$. By the fundamental theorem of linear maps, we
+have
+\[ \dim V = \dim T+\dim\range T = \dim T+1. \]
+Let $u_2,\dots,u_n$ be a basis of $T$. Then we can extend this to a basis
+$u_1,u_2,\dots,u_n$ of $V$, where $u_1\notin T$. Since $\range T=\spn y_1$, we
+have
+\[ Tu_1 = \beta y_1 \]
+for some nonzero scalar $\beta\in\F$. If $\beta\ne1$, we may replace $u_1$ with
+$\beta^{-1}u_1$ to ensure that $Tu_1=y_1$. We construct the following vectors
+in $V$:
+\[ v_1 = u_1, \quad v_k = u_1+u_k \text{ for } k=2,\dots,n. \]
+Note that for every $j=1,\dots,n$, we have $Tv_j=Tu_1+Tu_j=y_1+0=y_1$. We
+claim that $v_1,\dots,v_n$ form a basis of $V$. Suppose for scalars
+$\alpha_1,\dots,\alpha_n\in\F$, we have
+\[ \alpha_1v_1+\alpha_2v_2+\cdots+\alpha_nv_n = 0. \]
+Then we can express this as
+\[ (\alpha_1+\alpha_2+\cdots+\alpha_n)u_1+\alpha_2u_2+\cdots+\alpha_nu_n = 0. \]
+Since $u_1,\dots,u_n$ are linearly independent, we must have
+$\alpha_1+\alpha_2+\cdots+\alpha_n=0$ and $\alpha_2=\cdots=\alpha_n=0$. This
+implies that $\alpha_1=0$, and hence $v_1,\dots,v_n$ are linearly independent
+and form a basis of $V$. Then with respect to the bases $v_1,\dots,v_n$ of $V$
+and $w_1,\dots,w_m$ of $W$, we have that $Tv_j=y_1=w_1+w_2+\cdots+w_m$ for each
+$j=1,\dots,n$. Therefore, the matrix of $T$ with respect to these bases has all
+entries equal to $1$.
+
+Conversely, suppose there exist a basis of $V$ and a basis of $W$ such that
+with respect to these bases, all entries of $\Mat(T)$ equal $1$. Then for each
+basis vector $v_j$ of $V$, we have
+\[ Tv_j = w \]
+for some fixed nonzero vector $w\in W$, where $w=w_1+\cdots+w_m$ is the sum of
+the basis vectors of $W$. Since $\range T$ is spanned by the images of the basis
+vectors of $V$, then any sum of $Tv_j$ is a scalar multiple of $w$. Therefore,
+$\range T=\spn w$, and hence $\dim\range T=1$.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $w_1,\dots,w_m$ is a basis of
+$W$.
+\begin{parts}
+\item Show that if $S,T\in\Lin(V,W)$, then $\Mat(S+T)=\Mat(S)+\Mat(T)$.
+\item Show that if $\lambda\in\F$ and $T\in\Lin(V,W)$, then
+  $\Mat(\lambda T)=\lambda\Mat(T)$.
+\end{parts}
+\exnote{This exercise asks you to verify \ref{ax:3.35} and \ref{ax:3.38}.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $v_1,\dots,v_n$ be a basis of $V$ and $w_1,\dots,w_m$ be a basis of
+  $W$. Then the matrix of $S+T$ with respect to these bases is given by
+  \begin{align*}
+  \Mat(S+T) &= \begin{pmatrix} (S+T)v_1 & (S+T)v_2 & \cdots & (S+T)v_n
+               \end{pmatrix}\\
+   &= \begin{pmatrix} Sv_1+Tv_1 & Sv_2+Tv_2 & \cdots & Sv_n+Tv_n
+      \end{pmatrix}\\
+   &= \begin{pmatrix} Sv_1 & Sv_2 & \cdots & Sv_n \end{pmatrix}
+      + \begin{pmatrix} Tv_1 & Tv_2 & \cdots & Tv_n \end{pmatrix}\\
+   &= \Mat(S)+\Mat(T).
+  \end{align*}
+\item Let $v_1,\dots,v_n$ be a basis of $V$ and $w_1,\dots,w_m$ be a basis of
+  $W$. Then the matrix of $\lambda T$ with respect to these bases is given by
+  \begin{align*}
+  \Mat(\lambda T) &= \begin{pmatrix} (\lambda T)v_1 & (\lambda T)v_2 & \cdots
+                     & (\lambda T)v_n \end{pmatrix}\\
+   &= \begin{pmatrix} \lambda Tv_1 & \lambda Tv_2 & \cdots & \lambda Tv_n
+      \end{pmatrix}\\
+   &= \lambda\begin{pmatrix} Tv_1 & Tv_2 & \cdots & Tv_n \end{pmatrix}\\
+   &= \lambda\Mat(T). \qedhere
+  \end{align*}
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose that $D\in\Lin\bigl(\Poly_3(\R),\Poly_2(\R)\bigr)$ is the
+differentiation map defined by $Dp=p'$. Find a basis of $\Poly_3(\R)$ and a
+basis of $\Poly_2(\R)$ such that the matrix of $D$ with respect to these bases
+is
+\[ \begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0
+   \end{pmatrix}. \]
+\exnote{Compare with Example~\ref{ax:3.33}. The next exercise generalizes this
+exercise.}
+\end{exercise}
+\begin{solution}
+Consider the standard basis of $\Poly_3(\R)$. Reorder it to obtain the basis
+$x^3,x^2,x,1$. Consider the standard basis of $\Poly_2(\R)$. Reorder it to
+obtain the basis $x^2,x,1$. Observe that $D(x^3)=3x^2$, $D(x^2)=2x$, $D(x)=1$,
+and $D(1)=0$. However, we need the matrix of $D$ to have the desired form. To
+achieve this, we can scale the basis vectors of $\Poly_3(\R)$ and $\Poly_2(\R)$
+appropriately. Then we may define the basis for $\Poly_3(\R)$ as
+\[ 1/3x^3,\,1/2x^2,\,x,\,1 \]
+while maintaining the standard basis for $\Poly_2(\R)$ as $x^2,x,1$. Then we
+have
+\[ D\Bigl(1/3x^3\Bigr)=x^2, \quad D\Bigl(1/2x^2\Bigr)=x, \quad
+   D(x)=1, \quad D(1)=0. \]
+Therefore, with respect to the bases, we get the desired matrix representation
+of $D$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Prove that
+there exist a basis of $V$ and a basis of $W$ such that with respect to these
+bases, all entries of $\Mat(T)$ are $0$ except that the entries in row $k$,
+column $k$, equal $1$ if $1\le k\le\dim\range T$.
+\end{exercise}
+\begin{solution}
+Let $n=\dim V$ and $m=\dim W$. By the fundamental theorem of linear maps, we
+have
+\[ \dim V = \dim\nul T+\dim\range T. \]
+Let $r=\dim\range T$. Let $u_1,\dots,u_{n-r}$ be a basis of $\nul T$. Extend
+this to a basis $v_1,\dots,v_r,u_1,\dots,u_{n-r}$ of $V$. We claim that
+$Tv_1,\dots,Tv_r$ are linearly independent. Suppose for scalars
+$\alpha_1,\dots,\alpha_r\in\F$, we have
+\[ \alpha_1Tv_1+\cdots+\alpha_rTv_r = 0. \]
+Then
+\[ T(\alpha_1v_1+\cdots+\alpha_rv_r) = 0, \]
+which implies that $\alpha_1v_1+\cdots+\alpha_rv_r\in\nul T$. Since
+$v_1,\dots,v_r,u_1,\dots,u_{n-r}$ is a basis of $V$, it follows that
+$\alpha_1=\cdots=\alpha_r=0$. Therefore, $Tv_1,\dots,Tv_r$ are linearly
+independent and form a basis of $\range T$. Extend this to a basis
+$Tv_1,\dots,Tv_r,w_1,\dots,w_{m-r}$ of $W$. Then with respect to these bases,
+$Tv_k$ is the $k$-th basis vector of $W$ for each $k=1,\dots,r$, and
+\[ Tu_j = 0, \quad\text{for } j=1,\dots,n-r. \]
+Therefore, the matrix of $T$ with respect to these bases has $1$'s in the
+diagonal entries corresponding to $Tv_k$ and $0$'s elsewhere, as desired.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m$ is a basis of $V$ and $W$ is finite-dimensional.
+Suppose $T\in\Lin(V,W)$. Prove that there exists a basis $w_1,\dots,w_n$ of $W$
+such that all entries in the first column of $\Mat(T)$ [with respect to the
+bases $v_1,\dots,v_m$ and $w_1,\dots,w_n$] are $0$ except for possibly a $1$ in
+the first row, first column.
+\exnote{In this exercise, unlike Exercise~5, you are given the basis of $V$
+instead of being able to choose a basis of $V$.}
+\end{exercise}
+\begin{solution}
+Let $n=\dim W$. If $Tv_1=0$, then we can choose any basis of $W$ and the first
+column of $\Mat(T)$ will be all zeros. If $Tv_1\ne0$, then we can extend $Tv_1$
+to a basis of $W$. Let $w_1=Tv_1$ and extend it to a basis
+$w_1,w_2,\dots,w_n$ of $W$. Then with respect to the bases $v_1,\dots,v_m$ of
+$V$ and $w_1,\dots,w_n$ of $W$, we have
+\[ Tv_1 = w_1 \]
+and for each $j=2,\dots,m$, we can express
+\[ Tv_j = \alpha_{j1}w_1+\alpha_{j2}w_2+\cdots+\alpha_{jn}w_n \]
+for some scalars $\alpha_{j1},\alpha_{j2},\dots,\alpha_{jn}\in\F$. Therefore,
+the first column of $\Mat(T)$ has a $1$ in the first row and zeros in all other
+rows, as desired.
+\end{solution}
+
+\begin{exercise}
+Suppose $w_1,\dots,w_n$ is a basis of $W$ and $V$ is finite-dimensional.
+Suppose $T\in\Lin(V,W)$. Prove that there exists a basis $v_1,\dots,v_m$ of $V$
+such that all entries in the first row of $\Mat(T)$ [with respect to the bases
+$v_1,\dots,v_m$ and $w_1,\dots,w_n$] are $0$ except for possibly a $1$ in the
+first row, first column.
+\exnote{In this exercise, unlike Exercise~5, you are given the basis of $W$
+instead of being able to choose a basis of $W$.}
+\end{exercise}
+\begin{solution}
+Let $m=\dim V$ and $u_1,\dots,u_m$ be a basis for $V$. If $T$ has trivial $w_1$
+component, meaning that the coefficient of $w_1$ in $Tv$ is zero for all
+$v\in V$, then choose any basis of $V$ and the first row of $\Mat(T)$ will be
+all zeros. Otherwise, reorder the basis so that $Tu_1$ has non-trivial $w_1$
+component. Then we can express
+\[ Tu_1 = \alpha w_1+\beta_2w_2+\cdots+\beta_nw_n \]
+for some scalars $\alpha,\beta_2,\dots,\beta_n\in\F$ such that $\alpha\ne0$. We
+can scale $u_1$ by $\alpha^{-1}$ to obtain a new vector $v_1=\alpha^{-1}u_1$
+such that
+\[ Tv_1 = w_1+\frac{\beta_2}{\alpha}w_2+\cdots+\frac{\beta_n}{\alpha}w_n. \]
+With the remaining $u_2,\dots,u_m$ basis vectors of $V$, note that they can be
+expressed as
+\[ Tu_j = \alpha_{j1}w_1+\alpha_{j2}w_2+\cdots+\alpha_{jn}w_n \]
+for some scalars $\alpha_{j1},\alpha_{j2},\dots,\alpha_{jn}\in\F$. Consider the
+set of vectors of $V$ given by
+\[ v_1 = \alpha^{-1}u_1, \quad v_j = u_j-\alpha_{j1}v_1 \text{ for }
+   j=2,\dots,m. \]
+Note that $Tv_j=Tu_j-\alpha_{j1}Tv_1$ is just a combination of
+$w_2,\dots,w_n$. We now claim that $v_1,v_2,\dots,v_m$ are linearly
+independent. Suppose for scalars $\gamma_1,\dots,\gamma_m\in\F$, we have
+\[ \gamma_1v_1+\gamma_2v_2+\cdots+\gamma_mv_m = 0. \]
+Then we can express this as
+\[ \gamma_1v_1+\gamma_2(u_2-\alpha_{21}v_1)+\cdots+\gamma_m(u_m-\alpha_{m1}v_1)
+   = 0. \]
+Simplifying, we get
+\[ (\gamma_1-\gamma_2\alpha_{21}-\cdots-\gamma_m\alpha_{m1})v_1
+   +\gamma_2u_2+\cdots+\gamma_mu_m = 0. \]
+Since $v_1,u_2,\dots,u_m$ are linearly independent, we must have
+$\gamma_1-\gamma_2\alpha_{21}-\cdots-\gamma_m\alpha_{m1}=0$ and
+$\gamma_2=\cdots=\gamma_m=0$. This implies that $\gamma_1=0$, and hence
+$v_1,v_2,\dots,v_m$ are linearly independent. Then $v_1,v_2,\dots,v_m$ form a
+basis of $V$. It follows that $Tv_1$ has a $1$ in the first row, while $Tv_j$
+for $j=2,\dots,m$ have zeros in the first row.
+\end{solution}
+
+\begin{exercise}
+Suppose $A$ is an $m$-by-$n$ matrix and $B$ is an $n$-by-$p$ matrix. Prove
+that
+\[ (AB)_{j,\cdot} = A_{j,\cdot}B \]
+for each $1\le j\le m$. In other words, show that row $j$ of $AB$ equals (row
+$j$ of $A$) times $B$.
+\exnote{This exercise gives the row version of \ref{ax:3.48}.}
+\end{exercise}
+\begin{solution}
+Let $A$ be an $m$-by-$n$ matrix and $B$ be an $n$-by-$p$ matrix. The entry in
+row $j$, column $k$, of the product $AB$ is given by
+\[ (AB)_{j,k} = \sum_{r=1}^n A_{j,r}B_{r,k}. \]
+The row vector $A_{j,\cdot}$ is the $j$-th row of $A$, which can be expressed
+as
+\[ A_{j,\cdot} = (A_{j,1},A_{j,2},\dots,A_{j,n}). \]
+When we multiply this row vector by the matrix $B$, we get a new row vector
+whose entries are given by
+\[ (A_{j,\cdot}B)_k = \sum_{r=1}^n A_{j,r}B_{r,k}. \]
+Comparing this with the expression for $(AB)_{j,k}$, we see that
+\[ (AB)_{j,k} = (A_{j,\cdot}B)_k \]
+for each column index $k$. Therefore, the entire row vector $(AB)_{j,\cdot}$ is
+equal to the row vector $A_{j,\cdot}B$. This proves that row $j$ of $AB$ equals
+(row $j$ of $A$) times $B$.
+\end{solution}
+
+\begin{exercise}
+Suppose $a=\begin{pmatrix} a_1 & \cdots & a_n \end{pmatrix}$ is a $1$-by-$n$
+matrix and $B$ is an $n$-by-$p$ matrix. Prove that
+\[ aB = a_1B_{1,\cdot}+\cdots+a_nB_{n,\cdot}. \]
+In other words, show that $aB$ is a linear combination of the rows of $B$, with
+the scalars that multiply the rows coming from $a$.
+\exnote{This exercise gives the row version of \ref{ax:3.50}.}
+\end{exercise}
+\begin{solution}
+Let $a=\begin{pmatrix} a_1 & \cdots & a_n \end{pmatrix}$ be a $1$-by-$n$
+matrix and $B$ be an $n$-by-$p$ matrix. The product $aB$ is a $1$-by-$p$
+matrix, and its entries are given by
+\[ (aB)_{1,k} = \sum_{j=1}^n a_jB_{j,k} \]
+for each column index $k$.
+
+Now, consider the linear combination of the rows of $B$ given by
+\[ a_1B_{1,\cdot}+a_2B_{2,\cdot}+\cdots+a_nB_{n,\cdot}. \]
+The entry in row $1$, column $k$, of this linear combination is
+\begin{multline*}
+(a_1B_{1,\cdot}+a_2B_{2,\cdot}+\cdots+a_nB_{n,\cdot})_k\\
+  = a_1B_{1,k}+a_2B_{2,k}+\cdots+a_nB_{n,k} = \sum_{j=1}^n a_jB_{j,k}.
+\end{multline*}
+
+Comparing this with the expression for $(aB)_{1,k}$, we see that
+\[ (aB)_{1,k} = (a_1B_{1,\cdot}+a_2B_{2,\cdot}+\cdots+a_nB_{n,\cdot})_k \]
+for each column index $k$. Therefore, we conclude that
+\[ aB = a_1B_{1,\cdot}+a_2B_{2,\cdot}+\cdots+a_nB_{n,\cdot}, \]
+which shows that $aB$ is indeed a linear combination of the rows of $B$, with
+the scalars coming from the entries of $a$.
+\end{solution}
+
+\begin{exercise}
+Give an example of $2$-by-$2$ matrices $A$ and $B$ such that $AB\ne BA$.
+\end{exercise}
+\begin{solution}
+Let
+\[ A = \begin{pmatrix} 1 & 2\\ 3 & 4 \end{pmatrix} \quad\text{and}\quad
+   B = \begin{pmatrix} 0 & 1\\ 1 & 0 \end{pmatrix}. \]
+Then we compute the products $AB$ and $BA$:
+\[ AB = \begin{pmatrix} 1 & 2\\ 3 & 4 \end{pmatrix}
+        \begin{pmatrix} 0 & 1\\ 1 & 0 \end{pmatrix}
+      = \begin{pmatrix} 1\cdot0+2\cdot1 & 1\cdot1+2\cdot0\\
+                        3\cdot0+4\cdot1 & 3\cdot1+4\cdot0 \end{pmatrix}
+      = \begin{pmatrix} 2 & 1\\ 4 & 3 \end{pmatrix}, \]
+and
+\[ BA = \begin{pmatrix} 0 & 1\\ 1 & 0 \end{pmatrix}
+        \begin{pmatrix} 1 & 2\\ 3 & 4 \end{pmatrix}
+      = \begin{pmatrix} 0\cdot1+1\cdot3 & 0\cdot2+1\cdot4\\
+                        1\cdot1+0\cdot3 & 1\cdot2+0\cdot4 \end{pmatrix}
+      = \begin{pmatrix} 3 & 4\\ 1 & 2 \end{pmatrix}. \]
+By comparing the two products, we see that $AB\ne BA$.
+\end{solution}
+
+\begin{exercise}
+Prove that the distributive property holds for matrix addition and matrix
+multiplication. In other words, suppose $A$, $B$, $C$, $D$, $E$, and $F$ are
+matrices whose sizes are such that $A(B+C)$ and $(D+E)F$ make sense. Explain
+why $AB+AC$ and $DF+EF$ both make sense and prove that
+\[ A(B+C) = AB+AC \quad\text{and}\quad (D+E)F = DF+EF. \]
+\end{exercise}
+\begin{solution}
+Let $A$ be an $m$-by-$n$ matrix, and let $B$ and $C$ be $n$-by-$p$ matrices.
+Then $B+C$ is an $n$-by-$p$ matrix, and hence $A(B+C)$ is an $m$-by-$p$
+matrix. The products $AB$ and $AC$ are also defined, and both are $m$-by-$p$
+matrices. Therefore, the sum $AB+AC$ is defined and is also an $m$-by-$p$
+matrix. By Exercise 3C8 and Exercise 3C9, we have
+\begin{multline*}
+A(B+C)_{j,\cdot} = A_{j,\cdot}(B+C) = A_{j,\cdot}B+A_{j,\cdot}C\\
+  = (AB)_{j,\cdot}+(AC)_{j,\cdot} = (AB+AC)_{j,\cdot}
+\end{multline*}
+for all $j=1,\dots,m$. Therefore, $A(B+C)=AB+AC$.
+
+Similarly, let $D$ and $E$ be $m$-by-$n$ matrices, and let $F$ be an $n$-by-$p$
+matrix. Then $D+E$ is an $m$-by-$n$ matrix, and hence $(D+E)F$ is an
+$m$-by-$p$ matrix. The products $DF$ and $EF$ are also defined, and both are
+$m$-by-$p$ matrices. Therefore, the sum $DF+EF$ is defined and is also an
+$m$-by-$p$ matrix. Then the product $(D+E)F$ is defined. By Exercise 3C8 and
+Exercise 3C9, we have
+\begin{multline*}
+(D+E)F_{j,\cdot} = (D+E)_{j,\cdot}F = D_{j,\cdot}F+E_{j,\cdot}F\\
+  = (DF)_{j,\cdot}+(EF)_{j,\cdot} = (DF+EF)_{j,\cdot}
+\end{multline*}
+for all $j=1,\dots,m$. Therefore, $(D+E)F=DF+EF$.
+\end{solution}
+
+\begin{exercise}
+Prove that matrix multiplication is associative. In other words, suppose $A$,
+$B$, and $C$ are matrices whose sizes are such that $(AB)C$ makes sense.
+Explain why $A(BC)$ makes sense and prove that
+\[ (AB)C = A(BC). \]
+\exnote{Try to find a clean proof that illustrates the following quote from Emil
+Artin: ``It is my experience that proofs involving matrices can be shortened
+by 50\% if one throws the matrices out.''}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Unfortunately, we cannot use the same trick as in
+Exercise 3C11 to prove this result.}
+
+Let $A$ be an $m$-by-$n$ matrix, $B$ be an $n$-by-$p$ matrix, and $C$ be a
+$p$-by-$q$ matrix. Then the product $AB$ is defined and is an $m$-by-$p$
+matrix. Therefore, the product $(AB)C$ is also defined and is an $m$-by-$q$
+matrix. Going by the definition of matrix multiplication, we have
+\[ \bigl((AB)C\bigr)_{j,k} = \sum_{r=1}^p (AB)_{j,r}C_{r,k}
+   = \sum_{r=1}^p\Bigl(\sum_{s=1}^n A_{j,s}B_{s,r}\Bigr)C_{r,k}
+   = \sum_{r=1}^p\sum_{s=1}^n A_{j,s}B_{s,r}C_{r,k}. \]
+On the other hand, the product $BC$ is defined and is an $n$-by-$q$ matrix.
+Therefore, the product $A(BC)$ is also defined and is an $m$-by-$q$ matrix.
+Again, by the definition of matrix multiplication, we have
+\[ \bigl(A(BC)\bigr)_{j,k} = \sum_{s=1}^n A_{j,s}(BC)_{s,k}
+   = \sum_{s=1}^n A_{j,s}\Bigl(\sum_{r=1}^p B_{s,r}C_{r,k}\Bigr)
+   = \sum_{s=1}^n\sum_{r=1}^p A_{j,s}B_{s,r}C_{r,k}. \]
+Since the order of summation does not matter, we can interchange the order of
+the sums in the last expression to get
+\[ \bigl(A(BC)\bigr)_{j,k} = \sum_{r=1}^p\sum_{s=1}^n A_{j,s}B_{s,r}C_{r,k}. \]
+Comparing the expressions for $\bigl((AB)C\bigr)_{j,k}$ and
+$\bigl(A(BC)\bigr)_{j,k}$, we see that they are equal for all $j$ and $k$.
+Therefore, $(AB)C=A(BC)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $A$ is an $n$-by-$n$ matrix and $1\le j,k\le n$. Show that the entry
+in row $j$, column $k$, of $A^3$ (which is defined to mean $AAA$) is
+\[ \sum_{p=1}^n\sum_{r=1}^n A_{j,p}A_{p,r}A_{r,k}. \]
+\end{exercise}
+\begin{solution}
+Note that $A^3=(AA)A=A^2A$. By the definition of matrix multiplication, we have
+\[ (A^3)_{j,k} = (A^2A)_{j,k} = \sum_{p=1}^n (A^2)_{j,p}A_{p,k}. \]
+Now, we can express $(A^2)_{j,p}$ as
+\[ (A^2)_{j,p} = (AA)_{j,p} = \sum_{r=1}^n A_{j,r}A_{r,p}. \]
+Substituting this back into the expression for $(A^3)_{j,k}$, we get
+\[ (A^3)_{j,k} = \sum_{p=1}^n\Bigl(\sum_{r=1}^n A_{j,r}A_{r,p}\Bigr)A_{p,k}
+   = \sum_{p=1}^n\sum_{r=1}^n A_{j,r}A_{r,p}A_{p,k}. \]
+By renaming the indices $r$ and $p$, we can rewrite this as
+\[ (A^3)_{j,k} = \sum_{p=1}^n\sum_{r=1}^n A_{j,p}A_{p,r}A_{r,k}, \]
+which is the desired expression.
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ and $n$ are positive integers. Prove that the function
+$A\mapsto A^{\mathrm{t}}$ is a linear map from $\F^{m,n}$ to $\F^{n,m}$.
+\end{exercise}
+\begin{solution}
+Let $A,B\in\F^{m,n}$ and let $\lambda\in\F$. We need to show that
+$(A+B)^t=A^t+B^t$ and $(\lambda A)^t=\lambda A^t$.
+
+First, consider the sum $A+B$. The entry in row $j$, column $k$, of $A+B$ is
+given by
+\[ (A+B)_{j,k} = A_{j,k}+B_{j,k}. \]
+Taking the transpose, we have
+\[ \bigl((A+B)^t\bigr)_{k,j} = (A+B)_{j,k} = A_{j,k}+B_{j,k}
+   = (A^t)_{k,j}+(B^t)_{k,j} = (A^t+B^t)_{k,j}. \]
+Therefore, $(A+B)^t=A^t+B^t$.
+
+Next, consider the scalar multiplication $\lambda A$. The entry in row $j$,
+column $k$, of $\lambda A$ is given by
+\[ (\lambda A)_{j,k} = \lambda A_{j,k}. \]
+Taking the transpose, we have
+\[ \bigl((\lambda A)^t\bigr)_{k,j} = (\lambda A)_{j,k} = \lambda A_{j,k}
+   = \lambda(A^t)_{k,j} = (\lambda A^t)_{k,j}. \]
+Therefore, $(\lambda A)^t=\lambda A^t$.
+
+Since both properties hold, we conclude that the function $A\mapsto A^t$ is a
+linear map from $\F^{m,n}$ to $\F^{n,m}$.
+\end{solution}
+
+\begin{exercise}
+Prove that if $A$ is an $m$-by-$n$ matrix and $C$ is an $n$-by-$p$ matrix,
+then
+\[ (AC)^{\mathrm{t}} = C^{\mathrm{t}}A^{\mathrm{t}}. \]
+\exnote{This exercise shows that the transpose of the product of two matrices is
+the product of the transposes in the opposite order.}
+\end{exercise}
+\begin{solution}
+Let $A$ be an $m$-by-$n$ matrix and $C$ be an $n$-by-$p$ matrix. The entry in
+row $j$, column $k$, of the product $AC$ is given by
+\[ (AC)_{j,k} = \sum_{r=1}^n A_{j,r}C_{r,k}. \]
+Taking the transpose, we have
+\[ \bigl((AC)^t\bigr)_{k,j} = (AC)_{j,k} = \sum_{r=1}^n A_{j,r}C_{r,k}. \]
+
+Now, consider the product $C^tA^t$. The entry in row $k$, column $j$, of this
+product is given by
+\[ (C^tA^t)_{k,j} = \sum_{r=1}^n (C^t)_{k,r}(A^t)_{r,j}
+   = \sum_{r=1}^n C_{r,k}A_{j,r}. \]
+
+Since multiplication in the field $\F$ is commutative, we can rewrite this as
+\[ (C^tA^t)_{k,j} = \sum_{r=1}^n A_{j,r}C_{r,k}, \]
+which is exactly the same as the expression for $\bigl((AC)^t\bigr)_{k,j}$.
+
+Therefore, we conclude that
+\[ (AC)^t = C^tA^t. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $A$ is an $m$-by-$n$ matrix with $A\ne0$. Prove that the rank of $A$
+is $1$ if and only if there exist $(c_1,\dots,c_m)\in\F^m$ and
+$(d_1,\dots,d_n)\in\F^n$ such that $A_{j,k}=c_jd_k$ for every $j=1,\dots,m$
+and every $k=1,\dots,n$.
+\end{exercise}
+\begin{solution}
+Suppose the rank of $A$ is $1$. Then the column rank of $A$ is $1$, which means
+that all columns of $A$ are scalar multiples of a single non-zero column
+vector. Let $c=(c_1,\dots,c_m)^t$ be this non-zero column vector. Then for each
+column $k$ of $A$, there exists a scalar $d_k\in\F$ such that the $k$-th column
+of $A$ is given by $d_kc$. Therefore, we can express the entries of $A$ as
+\[ A_{j,k} = c_jd_k \]
+for all $j=1,\dots,m$ and $k=1,\dots,n$.
+
+Conversely, suppose there exist $(c_1,\dots,c_m)\in\F^m$ and
+$(d_1,\dots,d_n)\in\F^n$ such that $A_{j,k}=c_jd_k$ for all $j$ and $k$. Since
+$A\ne0$, then $(c_1,\dots,c_m)\ne0$ and $(d_1,\dots,d_n)\ne0$. This means that
+all columns of $A$ are scalar multiples of the column vector $c$, and hence the
+column rank of $A$ is $1$. Therefore, the rank of $A$ is $1$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$, and $u_1,\dots,u_n$ and $v_1,\dots,v_n$ are bases of
+$V$. Prove that the following are equivalent.
+\begin{parts}
+\item $T$ is injective.
+\item The columns of $\Mat(T)$ are linearly independent in $\F^{n,1}$.
+\item The columns of $\Mat(T)$ span $\F^{n,1}$.
+\item The rows of $\Mat(T)$ span $\F^{1,n}$.
+\item The rows of $\Mat(T)$ are linearly independent in $\F^{1,n}$.
+\end{parts}
+Here $\Mat(T)$ means $\Mat\bigl(T,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr)$.
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{itemize}
+\item (a) $\iff$ (b): (a) $\iff$ $\dim\nul T=0$ $\iff$ $\dim\range T=n$
+  $\iff$ $\operatorname{column\,rank}\Mat(T)=n$. For $n$ column vectors,
+  rank $n$ implies linear independence $\iff$ (b).
+\item (b) $\iff$ (c): $n$ columns of $\Mat(T)$ are linearly independent in
+  $\F^{n,1}$ $\iff$ $n$ columns of $\Mat(T)$ span $\F^{n,1}$.
+\item (c) $\iff$ (d): columns span $\F^{n,1}$ $\iff$ $\rank\Mat(T)=n$ by
+  (b) $\iff$ (c). By Theorem~\ref{ax:3.57},
+  $\rank\Mat(T)=\operatorname{row\,rank}\Mat(T)$ $\iff$ rows span $\F^{1,n}$.
+\item (d) $\iff$ (e): $n$ rows of $\Mat(T)$ span $\F^{1,n}$ $\iff$ $n$ rows of
+  $\Mat(T)$ are linearly independent in $\F^{1,n}$.
+\end{itemize}
+\end{solution}

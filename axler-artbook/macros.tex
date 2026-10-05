@@ -11,10 +11,7 @@
 %fix qty issue due to physics package
 \AtBeginDocument{\RenewCommandCopy\qty\SI}
 \usepackage{siunitx}
-\usepackage{marginnote}
-\makeatletter
-\@twosidefalse   % marginnote will now always use the same (odd-page) side
-\makeatother
+
 %fixing some physics issues
 \renewcommand{\cross}{\times}
 \renewcommand{\curl}[1]{\nabla\hspace{-0.1em} \times #1}
@@ -27,11 +24,6 @@
 %
 %For spacing around f after nabla
 % PATCHED OUT: luacode block (luacode.sty unavailable)
-
-%better typography
-\usepackage[activate={true,nocompatibility},factor=1100,stretch=10,shrink=10]{microtype}
-\microtypecontext{spacing=nonfrench}  % silence warning
-\tcbuselibrary{skins}
 
 %for testing font, math
 \usepackage[math]{blindtext}
@@ -251,3 +243,19 @@
 \patchcmd{\PEX@}{\dp\Pbox@>\dp\z@}{\ht\Pbox@>\dp\z@}{}{}
 \patchcmd{\SQEX@}{\dp\Sbox@>\dp0}{\ht\Sbox@>\dp0}{}{}
 \makeatother
+
+
+%%%%fullwidth
+\usepackage{changepage}   % provides adjustwidth / adjustwidth*
+\strictpagecheck          % reliable odd/even detection (needs 2 runs)
+
+\newlength{\fullwidthlen}
+\AtBeginDocument{%
+  \setlength{\fullwidthlen}{\dimexpr\marginparwidth+\marginparsep\relax}}
+
+\newenvironment{fullwidth}
+  {\begin{adjustwidth*}{}{-\fullwidthlen}}
+  {\end{adjustwidth*}}
+  \newenvironment{exc}{%
+      ~\\ \rule[0cm]{\textwidth-4cm}{0.01cm}\rule[-0.11cm]{4cm}{0.12cm} \vskip2pt {\hspace*{\textwidth-3.8cm}\Large\textbf{Exercises}}}%
+      {\bigskip \hrule \medskip}

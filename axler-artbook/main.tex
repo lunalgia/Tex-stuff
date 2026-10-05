@@ -1,0 +1,175 @@
+% Linear Algebra Done Right (4th ed.), Sheldon Axler, set in artbook.sty.
+% Text: CC BY-NC 4.0, (c) 2024 Sheldon Axler.  Solutions (Ch. 1 to 5B): blanketism.
+% Compile with latexmk (lualatex); .latexmkrc finds ../artbook.sty.
+\documentclass[9pt,openany,oneside]{book}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[paperwidth=200mm,paperheight=250mm,
+            top=10mm,bottom=10mm,left=10mm,right=8mm,
+            headheight=4mm,headsep=0pt,footskip=5mm]{geometry}
+
+\usepackage{caption,subcaption}
+% xsim writes each exercise and solution to its own file in xsim-files/
+% (keeping them all inside main.xsim overflows TeX's input buffer)
+\PassOptionsToPackage{use-files}{xsim}
+\usepackage[exercises]{../artbook}
+\xsimsetup{path=xsim-files}
+\usepackage{hyperref}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+
+\setmainfont{Sabon}          % document text font
+
+\usepackage[lite, zswash]{mtpro2}
+%\DeclareMathSizes{9 }{9}{6}{4}
+%
+%\setSingleSpace{1.1}
+%\SingleSpacing
+%
+%
+%\DeclareFontFamily{U} {cmsy}{}
+%\DeclareFontShape{U}{cmsy}{m}{n}{
+%  <-8> cmsy7
+%  <8-9> cmsy8
+%  <9-10> cmsy9
+%  <10-> cmsy10}{}
+%
+%\DeclareSymbolFont{Xcmsy} {U} {cmsy}{m}{n}
+%
+%\DeclareMathSymbol{\times}{\mathord}{Xcmsy}{2}
+%%for fixing the font that operators like \lim use
+\DeclareSymbolFont{operators}{TU}{\rmdefault}{m}{n}
+\SetSymbolFont{operators}{bold}{TU}{\rmdefault}{b}{n}
+
+% the operators font is now a TU text font, which has no accent glyphs in the
+% slots \bar, \hat, \tilde, \dot ... point to: take the accents from a
+% Times-like OT1 text font instead
+% \mathbf (Axler's bold R, C, F) from the text font: otherwise it falls back
+% to a non-bold Computer Modern
+%\DeclareMathAlphabet{\mathbf}{TU}{\rmdefault}{b}{n}
+%\DeclareSymbolFont{Xaccents}{OT1}{ntxtlf}{m}{n}
+%\DeclareMathAccent{\bar}{\mathalpha}{Xaccents}{"16}
+%\DeclareMathAccent{\hat}{\mathalpha}{Xaccents}{"5E}
+%\DeclareMathAccent{\tilde}{\mathalpha}{Xaccents}{"7E}
+%\DeclareMathAccent{\dot}{\mathalpha}{Xaccents}{"5F}
+%\DeclareMathAccent{\ddot}{\mathalpha}{Xaccents}{"7F}
+%\DeclareMathAccent{\check}{\mathalpha}{Xaccents}{"14}
+%\DeclareMathAccent{\breve}{\mathalpha}{Xaccents}{"15}
+%\DeclareMathAccent{\acute}{\mathalpha}{Xaccents}{"13}
+%\DeclareMathAccent{\grave}{\mathalpha}{Xaccents}{"12}
+
+\definecolor{niceblue}{HTML}{53A2BE}
+\definecolor{paleyellow}{HTML}{FFE324}
+\input{macros.tex}
+\input{ladr-macros.tex}
+% the author photo is cropped from the original PDF, wherever it is kept
+\graphicspath{{originals/}{src/}}
+
+% ------------------------------------------------------------------ cover
+\title{Linear Algebra Done Right}
+\subtitle{Fourth edition, set in artbook.}
+\author{Sheldon Axler}
+\date{October 2026}
+\covermark{L}
+\coverfield{Solutions}{blanketism (Ch.\ 1 to 5B)}
+\coverfield{License}{CC BY-NC 4.0}
+
+\artbooksetup{
+  accent         = niceblue,          % part pages, TOC headings, chapter numbers
+  ink            = black,
+  link color     = artbook@accent,    % colour of all hyperlinks
+  contents label = Table of Contents,
+  part shift=-1.2mm,
+  % rule gap     = 0.8mm,               % break of the rules at vertical lines
+  %
+  % ---- fonts: any code that switches font -------------------------------
+  part font       = {\fontspec{PP Mori}\bfseries\fontsize{22pt}{22pt}\selectfont},
+  part title font = {\fontspec{PP Mori}\bfseries\fontsize{52pt}{50pt}\selectfont},
+  label font  = {\fontspec{Jetbrains Mono Light}\fontsize{8pt}{12pt}\selectfont},
+  title font  = {\fontspec{Sabon}\fontsize{9pt}{11pt}\selectfont},
+  %
+  % the round badge and the chapter titles next to it on the part pages
+  badge font  = {\fontspec{PP Mori}\bfseries\fontsize{8pt}{8pt}\selectfont},
+  mini font   = {\fontspec{PP Mori}\bfseries\fontsize{17pt}{19pt}\selectfont},
+  % badge size = 5.6mm,
+  %
+  % ---- chapter pages -----------------------------------------------------
+   chapter title font  = {\fontspec{EB Garamond}\itshape\fontsize{34pt}{36pt}\selectfont},
+   chapter number font = {\fontspec{PP Mori}\bfseries\fontsize{500pt}{500pt}\selectfont},
+    chapter number x    = -5mm,
+    chapter shift       = -10mm,
+    chapter drop        = 8mm,
+    % ---- ordinary pages ------------------------------------------------------
+    % The divider sits where the chapter page's divider sits (chapter split);
+    % to move it: body split = 40mm, body gap = 5mm.
+    body top            = 6mm,
+    body bottom         = 10mm,
+    section font        = {\fontspec{EB Garamond}\itshape\fontsize{17pt}{19pt}\selectfont},
+    subsection font     = {\fontspec{EB Garamond}\bfseries\fontsize{11pt}{14pt}\selectfont},
+    % section pad = 2.2mm,  section before = {2.4\baselineskip plus ...},
+    % footnotes = margin | normal,  footnote font = \itshape,
+    % ---- theorems, lemmas, ... (names in the label column) ------------------
+    % theorem head font  = {...},   % default: the label font
+    % theorem title font = {\bfseries},
+    % theorem box sep = 2mm,  theorem skip = {9pt plus 2pt minus 2pt},
+    % theorems = off,               % use your own \newtheorem instead
+    % ---- \begin{fullwidth}[top=2mm,bottom=2mm,above=..,below=..,fill=white]
+    % fullwidth top = 2mm,  fullwidth bottom = 2mm,   % rule-to-content offsets
+    % fullwidth above = ..,  fullwidth below = ..,  fullwidth fill = white,
+    % ---- cover ---------------------------------------------------------------
+    % cover color = none,           % or a colour: then set cover mark color
+    % cover rule = 0.52\textheight, % the hairline the big letter stands on
+    % cover mark font = {...}, cover mark color = artbook@accent,
+    % cover mark x = -5mm, cover mark shift = 0pt,
+    % cover title font = {...}, cover subtitle font = {...},
+    % cover author label = Author, cover date label = Date,
+  % chapter split = 0.25\textwidth,  chapter rule 1 = 0.30\textheight,
+  % chapter rule 2 = 0.58\textheight, epigraph x = 0.5\textwidth,
+  %
+  % ---- page number and running text in the outer margin -------------------
+  % margin text = \rightmark,           % section title instead of chapter title
+  % margin gap  = 6mm,  margin shift = 0pt,
+  % margin font = {...},  margin page font = {...},
+}
+\makeatletter
+\artbooksetup{number font={\artbook@opt@fontlabel\fontsize{6pt}{8pt}\selectfont}}
+\makeatother
+
+\hypersetup{pdftitle={Linear Algebra Done Right},
+  pdfauthor={Sheldon Axler; solutions by blanketism},bookmarksdepth=2}
+  \usepackage[cal=boondoxo,calscaled=.94,bb=dsfontserif,frak=esstix,frakscaled=.97,scr=dutchcal]{mathalpha} % PATCHED OUT
+% build only some chapters:  \includeonly{chapters/ch01}
+% \includeonly{chapters/ch01}
+
+% ======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+
+\include{chapters/frontmatter}
+
+\part{Foundations}
+\include{chapters/ch01}
+\include{chapters/ch02}
+\include{chapters/ch03}
+
+\part{Eigenvalues}
+\include{chapters/ch04}
+\include{chapters/ch05}
+
+\part{Inner Products}
+\include{chapters/ch06}
+\include{chapters/ch07}
+
+\part{Structure}
+\include{chapters/ch08}
+\include{chapters/ch09}
+
+\backmatter
+\part{Backmatter}
+\chapter{Solutions}
+\include{chapters/solutions-preface}
+\printsolutionsbysection
+\include{chapters/backmatter}
+\end{document}

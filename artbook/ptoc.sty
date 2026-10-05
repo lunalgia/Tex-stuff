@@ -1,0 +1,1400 @@
+%% ======================================================================
+%%  ptoc.sty  v2.7  --  print-on-demand-catalogue style book structure
+%%
+%%  Requires LuaLaTeX or XeLaTeX (fontspec), graphicx, and the book (or
+%%  report) class.  Build three times: .toc, then the part / chapter pages
+%%  (they read the .toc), then hyperlinks.
+%%
+%%  Structure           in the table of contents         on its own page
+%%  ------------------  -------------------------------  ---------------------
+%%  \part{...}          big coloured heading, full rule  full-colour part page
+%%                      (title only, no part number)     with a mini contents
+%%                                                       listing its chapters
+%%  \chapter{...}       "1  TITLE" label, middle column  opener: huge number,
+%%                                                       grid, section list,
+%%                                                       epigraph, title
+%%  \section{...}       row: "SECTION 1.2" above the title + page number
+%%
+%%  In the TOC only the divider between chapters and sections breaks the
+%%  horizontal rules; the other two vertical lines run through unbroken.
+%%  The TOC may run over several pages.  On ordinary pages the page number
+%%  and a running text (chapter title) stand vertically in the outer margin,
+%%  on a solid bar of the accent colour.
+%%
+%%  Ordinary pages use the grid of the chapter openers: a hairline divider
+%%  (at the same x as on the chapter page) with a column of small labels to
+%%  its left and the text to its right.  The column holds the section label
+%%  (SECTION 1.2), the names of theorems, and the margin notes and footnotes.
+%%  A section starts with a hairline across the page, broken around the
+%%  divider like the rules of the TOC; the label sits under it, the title
+%%  to the right.  A footer rule closes the page.
+%%
+%%  Commands
+%%     \ptocsetup{key=value, ...}   configure (keys below)
+%%     \sectionpages{34--37}        before a \section: override its page number
+%%     \chapterepigraph{quote}{source}   before a \chapter: epigraph on its page
+%%     \marginnote[offset]{text}    unnumbered note in the right margin
+%%     \sidenote[offset]{text}      numbered note in the right margin
+%%                                  (offset: + moves down, - moves up)
+%%
+%%  Theorem-like environments (amsthm, defined at \begin{document})
+%%     theorem  lemma  definition      plain amsthm style, in a square box
+%%     example  remark                 plain amsthm style, in a rule-only box:
+%%                                     top and bottom rule, no right side,
+%%                                     running out to the margin bar
+%%     proposition  corollary  question  proof
+%%                                     plain amsthm style, no box
+%%     Each also exists unnumbered:  theorem*  lemma*  definition*  ...
+%%     All numbered ones share one counter, reset in every \section.
+%%     The name and number (THEOREM 1.2.3) stand in the label column left
+%%     of the divider; the optional title  \begin{theorem}[Title]  stays in
+%%     the text, in bold.  A box hangs on the divider like a cell of the TOC.
+%%     `theorems = off' skips all of this (use it if the document defines
+%%     its own theorems).
+%%
+%%  Keys (defaults in brackets)
+%%   TOC layout   split          x of the main divider           [0.5\textwidth]
+%%                sub split      x of the chapter-column divider [0.25\textwidth]
+%%                page width     width of the page-number column [10mm]
+%%                padding        space next to rules             [2mm]
+%%                chapter pad    space between the chapter name  [4mm]
+%%                               in the TOC and the vertical rules
+%%                rule           rule thickness                  [0.5pt]
+%%                rule gap       white gap on each side of the   [0.8mm]
+%%                               chapter/section divider (0pt = no break)
+%%                top padding    row with number: space above    [2.6mm]
+%%                bottom padding row with number: space below    [2.2mm]
+%%                plain padding  row without number: centred     [2.6mm]
+%%                top space      space above the first rule      [8mm]
+%%                part shift     raise (+) / lower (-) heading   [-0.3mm]
+%%                label shift    raise running label             [1mm]
+%%   TOC text     contents label text of the small top label     [Table of Contents]
+%%                section label  word before the section number  [Section]
+%%                               (empty = number only)
+%%                footer text    text left of the page number    [the \title]
+%%                               (the job name if there is no \title)
+%%                label case     \MakeUppercase, or empty        [\MakeUppercase]
+%%                body page style page style after the TOC       [ptocbody]
+%%   links        link toc       hyperref: page | all | none     [page]
+%%                link style     code run inside the TOC         [no boxes/colours]
+%%   part pages   part logo      any code (empty = none)         [concentric squares]
+%%                part label     word before the part number on  [empty = none]
+%%                               the part page, e.g. "Part"
+%%                mini width     width of the chapter list       [0.5\textwidth]
+%%                mini rule      thickness of its two rules      [1.5pt]
+%%                mini gap       space between chapters          [3.5mm]
+%%                badge size     diameter of the number badge    [5.6mm]
+%%   chapter      chapter label  word before the chapter number  [Chapter]
+%%   pages        chapter split  x of the divider                [0.25\textwidth]
+%%                chapter rule 1 y of the upper rule (from the   [0.30\textheight]
+%%                               top of the text block)
+%%                chapter rule 2 y of the rule above the title;  [0.58\textheight]
+%%                               the number stands on it
+%%                chapter drop   lowers rules, number, section   [8mm]
+%%                               list, title and epigraph together
+%%                chapter shift  raise (+) / lower (-) the       [-0.3mm]
+%%                               number relative to rule 2
+%%                chapter number x
+%%                               left edge of the number, measured from
+%%                               the PAPER edge; negative = cut off by
+%%                               the page edge                   [-2mm]
+%%                epigraph x     x of the epigraph               [0.5\textwidth]
+%%   ordinary     The TOC, part pages and chapter openers use the full text
+%%   pages        block set in the geometry.  Ordinary pages are set in a
+%%                smaller block inside it:
+%%                body split     x of the divider (= the label     [= chapter split]
+%%                               column's width)
+%%                body gap       space between divider and text  [5mm]
+%%                body right     space between text and the      [6mm]
+%%                               outer margin strip
+%%                body top       extra space above the text      [6mm]
+%%                body bottom    extra space below the text      [10mm]
+%%                body leading   \linespread of ordinary pages   [1.2]
+%%   sections     section label  word before the section number  [Section]
+%%                               (shared with the TOC)
+%%                section before / section after   vertical space
+%%                               [2.4\baselineskip plus .. / 1.2\baselineskip]
+%%                section pad    space between the hairline and  [2.2mm]
+%%                               the title
+%%                section font   the title (complete font        [serif 15/18pt]
+%%                               switch: family, size, shape)
+%%                section number font  the label in the column   [label font]
+%%                               (complete font switch)
+%%                subsection font  the title of a \subsection     [bold serif 10pt]
+%%   margin       margin text    running text, any code          [\leftmark = chapter
+%%                               (\rightmark = section)           title, or the part
+%%                                                                title, or the
+%%                                                                document title]
+%%                margin gap     space between number and text   [6mm]
+%%                margin shift   move both towards the paper     [0pt]
+%%                               edge (+) or the text block (-)
+%%                margin bar width  width of the accent-coloured [auto]
+%%                               bar behind number and text:
+%%                               auto = the whole outer margin,
+%%                               a length, or none
+%%   notes        note gap       space between notes and the     [4mm]
+%%                               divider; the notes fill the
+%%                               column left of it
+%%                note font      font of the notes               [8pt serif]
+%%                footnotes      margin | normal  (margin turns  [margin]
+%%                               \footnote into \sidenote)
+%%                footnote font  applied to the text of          [\itshape]
+%%                               footnotes (not to \marginnote)
+%%   theorems     theorems       on | off                        [on]
+%%                theorem head font   name and number in the     [label font]
+%%                               label column (complete switch)
+%%                theorem title font  the [Title] in the text    [\bfseries]
+%%                theorem box sep     space between box and text [2.5mm]
+%%                theorem skip   space above and below           [9pt plus 2pt
+%%                                                                 minus 2pt]
+%%   colours      accent         background of part pages, TOC headings,
+%%                               chapter numbers, margin bar
+%%                ink            text colour on part pages
+%%   fonts        part font        big heading in the TOC
+%%                label font       small mono labels (TOC, footer, chapter pages)
+%%                number font      section number above a title in the TOC
+%%                title font       section titles in the TOC
+%%                page font        page numbers
+%%                part label font  "Part I" on the part page
+%%                part title font  huge title on the part page
+%%                mini font        chapter titles in the mini contents
+%%                badge font       number inside the round badge next to them
+%%                chapter number font  huge number on a chapter page
+%%                chapter title font   title on a chapter page
+%%                epigraph font        epigraph on a chapter page
+%%                section font         section title on ordinary pages
+%%                section number font  section number on ordinary pages
+%%                margin font          running text in the margin
+%%                margin page font     page number in the margin
+%%                note font            margin notes
+%%                -- each is arbitrary code that switches font, usually
+%%                   \fontspec[Ligatures=TeX]{...} then \fontsize{..}{..}\selectfont
+%% ======================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ptoc}[2026/10/02 v2.7 print-on-demand style book structure]
+
+\RequirePackage{fontspec}
+\RequirePackage{xcolor}
+\RequirePackage{pgfkeys}
+\RequirePackage{pict2e}
+\RequirePackage{graphicx}   % \rotatebox for the margin text, \raisebox
+\RequirePackage{amsthm}     % theorem-like environments (section 12)
+\RequirePackage{mdframed}   % the boxes around theorems, lemmas, definitions
+
+% the report class has no front/main matter switch: treat it as main matter
+\@ifundefined{if@mainmatter}{\newif\if@mainmatter \@mainmattertrue}{}
+
+
+%% ----------------------------------------------------------------------
+%%  1. Options and their defaults
+%% ----------------------------------------------------------------------
+\definecolor{ptoc@default}{HTML}{FFC400}
+\definecolor{ptoc@inkdefault}{HTML}{1F1B1D}
+
+% Default fonts (TeX Gyre ships with TeX Live; fall back to the standard
+% families if it is missing).  Replace them freely via the font keys.
+\newcommand*\ptoc@sans{%
+  \IfFontExistsTF{TeX Gyre Heros}{\fontspec[Ligatures=TeX]{TeX Gyre Heros}}{\sffamily}%
+  \bfseries}
+\newcommand*\ptoc@serif{%
+  \IfFontExistsTF{TeX Gyre Pagella}{\fontspec[Ligatures=TeX]{TeX Gyre Pagella}}{\rmfamily}}
+\newcommand*\ptoc@mono{%
+  \IfFontExistsTF{TeX Gyre Cursor}%
+    {\fontspec[Ligatures=TeX,LetterSpace=12]{TeX Gyre Cursor}}{\ttfamily}}
+
+\pgfkeys{/ptoc/.cd,
+  % --- TOC layout (lengths are evaluated when the TOC is typeset)
+  split/.store in          = \ptoc@opt@split,
+  sub split/.store in      = \ptoc@opt@subsplit,
+  page width/.store in     = \ptoc@opt@pagewidth,
+  padding/.store in        = \ptoc@opt@padding,
+  chapter pad/.store in    = \ptoc@opt@chpad,
+  rule/.store in           = \ptoc@opt@rule,
+  top padding/.store in    = \ptoc@opt@toppad,
+  bottom padding/.store in = \ptoc@opt@botpad,
+  plain padding/.store in  = \ptoc@opt@plainpad,
+  top space/.store in      = \ptoc@opt@topspace,
+  part shift/.store in     = \ptoc@opt@partshift,
+  label shift/.store in    = \ptoc@opt@labelshift,
+  rule gap/.store in       = \ptoc@opt@rulegap,
+  % --- TOC text
+  contents label/.store in = \ptoc@opt@contentslabel,
+  section label/.store in  = \ptoc@opt@sectionlabel,
+  footer text/.store in    = \ptoc@opt@footertext,
+  label case/.store in     = \ptoc@opt@case,
+  body page style/.store in= \ptoc@opt@bodystyle,
+  % --- links
+  link toc/.store in       = \ptoc@opt@linktoc,
+  link style/.store in     = \ptoc@opt@linkstyle,
+  % --- part pages
+  part logo/.store in      = \ptoc@opt@partlogo,
+  part label/.store in     = \ptoc@opt@partlabel,
+  mini width/.store in     = \ptoc@opt@miniwidth,
+  mini rule/.store in      = \ptoc@opt@minirule,
+  mini gap/.store in       = \ptoc@opt@minigap,
+  badge size/.store in     = \ptoc@opt@badgesize,
+  % --- chapter pages
+  chapter label/.store in  = \ptoc@opt@chapterlabel,
+  chapter split/.store in  = \ptoc@opt@chapsplit,
+  chapter rule 1/.store in = \ptoc@opt@chapruleone,
+  chapter rule 2/.store in = \ptoc@opt@chapruletwo,
+  chapter shift/.store in  = \ptoc@opt@chapshift,
+  chapter drop/.store in   = \ptoc@opt@chapdrop,
+  chapter number x/.store in = \ptoc@opt@chapnumx,
+  epigraph x/.store in     = \ptoc@opt@epix,
+  % --- airy body pages
+  body split/.store in     = \ptoc@opt@bodysplit,
+  body gap/.store in       = \ptoc@opt@bodygap,
+  body right/.store in     = \ptoc@opt@bodyright,
+  body top/.store in       = \ptoc@opt@bodytop,
+  body bottom/.store in    = \ptoc@opt@bodybottom,
+  body leading/.store in   = \ptoc@opt@bodyleading,
+  % --- sections on ordinary pages
+  section pad/.store in    = \ptoc@opt@secpad,
+  section before/.store in = \ptoc@opt@secbefore,
+  section after/.store in  = \ptoc@opt@secafter,
+  section font/.store in   = \ptoc@opt@fontsection,
+  section number font/.store in = \ptoc@opt@fontsecnum,
+  subsection font/.store in = \ptoc@opt@fontsubsection,
+  % --- margin text on ordinary pages
+  margin text/.store in    = \ptoc@opt@margintext,
+  margin gap/.store in     = \ptoc@opt@margingap,
+  margin shift/.store in   = \ptoc@opt@marginshift,
+  margin bar width/.store in = \ptoc@opt@barwidth,
+  % --- margin notes
+  note gap/.store in       = \ptoc@opt@notegap,
+  footnotes/.store in      = \ptoc@opt@footnotes,
+  footnote font/.store in  = \ptoc@opt@fontfootnote,
+  % --- theorem-like environments
+  theorems/.store in       = \ptoc@opt@theorems,
+  theorem head font/.store in  = \ptoc@opt@fontthmhead,
+  theorem title font/.store in = \ptoc@opt@fontthmtitle,
+  theorem box sep/.store in    = \ptoc@opt@thmboxsep,
+  theorem skip/.store in       = \ptoc@opt@thmskip,
+  % --- colours
+  accent/.code             = {\colorlet{ptoc@accent}{#1}},
+  ink/.code                = {\colorlet{ptoc@ink}{#1}},
+  % --- fonts
+  part font/.store in      = \ptoc@opt@fontpart,
+  label font/.store in     = \ptoc@opt@fontlabel,
+  number font/.store in    = \ptoc@opt@fontnumber,
+  title font/.store in     = \ptoc@opt@fonttitle,
+  page font/.store in      = \ptoc@opt@fontpage,
+  part label font/.store in= \ptoc@opt@fontpartlabel,
+  part title font/.store in= \ptoc@opt@fontparttitle,
+  mini font/.store in      = \ptoc@opt@fontmini,
+  badge font/.store in     = \ptoc@opt@fontbadge,
+  chapter number font/.store in = \ptoc@opt@fontchapnum,
+  chapter title font/.store in  = \ptoc@opt@fontchaptitle,
+  epigraph font/.store in       = \ptoc@opt@fontepigraph,
+  margin font/.store in         = \ptoc@opt@fontmargin,
+  margin page font/.store in    = \ptoc@opt@fontmarginpage,
+  note font/.store in           = \ptoc@opt@fontnote,
+  %
+  % ---- defaults ----
+  split            = 0.5\textwidth,
+  sub split        = 0.25\textwidth,
+  page width       = 10mm,
+  padding          = 2mm,
+  chapter pad      = 4mm,
+  rule             = 0.5pt,
+  top padding      = 2.6mm,
+  bottom padding   = 2.2mm,
+  plain padding    = 2.6mm,
+  top space        = 8mm,
+  part shift       = -0.3mm,
+  label shift      = 1mm,
+  rule gap         = 0.8mm,
+  contents label   = Table of Contents,
+  section label    = Section,
+  footer text      = \ptoc@doctitle,
+  label case       = \MakeUppercase,
+  body page style  = ptocbody,
+  link toc         = page,
+  link style       = {\hypersetup{colorlinks=false,pdfborder={0 0 0}}},
+  part logo        = \ptoc@logo,
+  part label       = {},
+  chapter label    = Chapter,
+  chapter split    = 0.25\textwidth,
+  chapter rule 1   = 0.30\textheight,
+  chapter rule 2   = 0.58\textheight,
+  chapter shift    = -0.3mm,
+  chapter drop     = 8mm,
+  chapter number x = -2mm,
+  epigraph x       = 0.5\textwidth,
+  body split       = \ptoc@opt@chapsplit,
+  body gap         = 5mm,
+  body right       = 6mm,
+  body top         = 6mm,
+  body bottom      = 10mm,
+  body leading     = 1.2,
+  section pad      = 2.2mm,
+  section before   = {2.4\baselineskip plus 0.5\baselineskip minus 0.3\baselineskip},
+  section after    = {1.2\baselineskip},
+  section font     = {\ptoc@serif\fontsize{15pt}{18pt}\selectfont},
+  section number font = \ptoc@opt@fontlabel,
+  subsection font  = {\ptoc@serif\bfseries\fontsize{10pt}{13pt}\selectfont},
+  margin text      = \leftmark,
+  margin gap       = 6mm,
+  margin shift     = 0pt,
+  margin bar width = auto,
+  note gap         = 4mm,
+  footnotes        = margin,
+  footnote font    = \itshape,
+  theorems         = on,
+  theorem head font  = \ptoc@opt@fontlabel,
+  theorem title font = \bfseries,
+  theorem box sep    = 2.5mm,
+  theorem skip       = {9pt plus 2pt minus 2pt},
+  mini width       = 0.5\textwidth,
+  mini rule        = 1.5pt,
+  mini gap         = 3.5mm,
+  badge size       = 5.6mm,
+  accent           = ptoc@default,
+  ink              = ptoc@inkdefault,
+  part font        = {\ptoc@sans\fontsize{22pt}{22pt}\selectfont},
+  label font       = {\ptoc@mono\fontsize{5.6pt}{6pt}\selectfont},
+  number font      = \ptoc@opt@fontlabel,
+  title font       = {\ptoc@serif\fontsize{9pt}{11pt}\selectfont},
+  page font        = \ptoc@opt@fonttitle,
+  part label font  = {\ptoc@sans\fontsize{16pt}{18pt}\selectfont},
+  part title font  = {\ptoc@sans\fontsize{52pt}{50pt}\selectfont},
+  mini font        = {\ptoc@sans\fontsize{17pt}{19pt}\selectfont},
+  badge font       = {\ptoc@sans\fontsize{8pt}{8pt}\selectfont},
+  chapter number font = {\ptoc@sans\fontsize{300pt}{300pt}\selectfont},
+  chapter title font  = {\ptoc@serif\fontsize{34pt}{36pt}\selectfont},
+  epigraph font       = {\ptoc@serif\itshape\fontsize{13pt}{16pt}\selectfont},
+  margin font         = \ptoc@opt@fontlabel,
+  margin page font    = \ptoc@opt@fontpage,
+  note font           = {\ptoc@serif\fontsize{8pt}{10pt}\selectfont},
+}
+
+\newcommand*\ptocsetup[1]{\pgfkeys{/ptoc/.cd,#1}}
+
+% The footer text defaults to the document's \title (or to the job name when
+% no \title was given).  \thanks and line breaks are neutralised.
+\let\ptoc@notitle\@title
+\newcommand*\ptoc@doctitle{%
+  \ifx\@title\ptoc@notitle \jobname
+  \else {\let\thanks\@gobble \def\\{\space}\@title}\fi}
+
+
+%% ----------------------------------------------------------------------
+%%  2. Lengths, state, small helpers
+%% ----------------------------------------------------------------------
+\newlength\ptoc@split    % x of the main vertical divider
+\newlength\ptoc@subsplit % x of the chapter-column divider
+\newlength\ptoc@pagew    % width of the page-number text
+\newlength\ptoc@pad      % padding beside rules
+\newlength\ptoc@chpad    % padding around the chapter name in the TOC
+\newlength\ptoc@rule     % rule thickness
+\newlength\ptoc@toppad   % strut above a row's text (rows with a number)
+\newlength\ptoc@botpad   % strut below a row's text (rows with a number)
+\newlength\ptoc@plainpad % padding of rows without a number
+\newlength\ptoc@titlew   % width of the number/title text
+\newlength\ptoc@miniw    % width of the chapter list on part pages
+\newlength\ptoc@minirulew
+\newlength\ptoc@minisep
+\newlength\ptoc@badgew
+\newlength\ptoc@savedtopskip % \topskip outside the TOC
+\newlength\ptoc@gap    % white gap left on each side of a vertical line
+\newlength\ptoc@pdx    % x of the page-number divider
+\newlength\ptoc@csplit % x of the divider on chapter pages
+\newlength\ptoc@cra    % y of the first / second rule on chapter pages
+\newlength\ptoc@crb
+\newlength\ptoc@epix   % x of the epigraph
+\newlength\ptoc@edge   % distance from the paper's left edge to the text block
+\newlength\ptoc@mw     % width of the outer margin
+\newlength\ptoc@mx     % x of the centre line of the outer margin text
+\newlength\ptoc@bx     % x of the centre line of the outer margin strip
+\newlength\ptoc@bw     % width of the margin bar
+\newlength\ptoc@bh     % distance from the paper top to the header baseline
+\newdimen\ptoc@pos     % helpers of \ptoc@gaprule
+\newdimen\ptoc@cur
+\newdimen\ptoc@cutl
+\newdimen\ptoc@cutr
+\newdimen\ptoc@ruleleft  % where the current row's top rule starts
+
+\newif\if@ptoc@sub       % current part has chapters -> draw the sub-column
+\newif\if@ptoc@first     % first row of the TOC -> print the running label
+\newif\if@ptoc@hasnum    % current row has a section-number line
+\newif\if@ptoc@prevsub   % previous row had the chapter-column divider
+\newif\if@ptoc@inchap    % the sections read from the .toc belong to a chapter
+\newif\if@ptoc@keep      % previous row opened a part -> no page break after it
+\newbox\ptoc@titlebox    % the typeset number/title cell of the current row
+\newbox\ptoc@pagebox     % the typeset page number of the current row
+\newcount\ptoc@partno    % parts met while typesetting the TOC
+\newcount\ptoc@partcnt   % parts met in the body
+\newcount\ptoc@chapno    % chapters met while typesetting the TOC
+\newcount\ptoc@chapcnt   % chapters met in the body
+\newbox\ptoc@nbox \newbox\ptoc@mbox \newbox\ptoc@rbox
+\newbox\ptoc@bxa \newbox\ptoc@bxb \newbox\ptoc@bxc \newbox\ptoc@bxd
+\let\ptoc@part\@empty    % part title waiting for its first row
+\let\ptoc@chap\@empty    % chapter title waiting for its first row
+\gdef\ptoc@pages{}       % page-number override for the current row
+\let\ptoc@nextpages\@empty
+\expandafter\gdef\csname ptoc@mini@0\endcsname{}
+
+% ---- full-size / body-size page geometry ----
+% The TOC, the part pages and the chapter openers are laid out on the full
+% text block of the geometry; ordinary pages use a smaller, "airy" block
+% inside it (more room above, below and to the left, room for margin notes).
+\newlength\ptoc@fulltw   % full text width
+\newlength\ptoc@bodytw   % body text width
+\newlength\ptoc@fullth   % full text height
+\newlength\ptoc@fulltopm % \topmargin of the full layout
+\newlength\ptoc@fullodd  % \oddsidemargin of the full layout
+\newlength\ptoc@fulleven % \evensidemargin of the full layout
+\newlength\ptoc@bodyleft
+\newlength\ptoc@bodyright
+\newlength\ptoc@bodytop
+\newlength\ptoc@bodybot
+\newlength\ptoc@bsplit   % x of the divider on ordinary pages (from the full block)
+\newlength\ptoc@bodygap  % space between the divider and the text
+\newlength\ptoc@fr       % distance from the header baseline to the footer rule
+
+\newcommand*\ptoc@settextwidth[1]{%
+  \setlength\textwidth{#1}\setlength\columnwidth{#1}%
+  \setlength\linewidth{#1}\hsize=#1\relax}
+% #1 = extra space above the text, #2 = extra space below it,
+% #3 = extra space left of it, #4 = \linespread.  Always called on a fresh
+% page (after \clearpage), so the new height is what the next page gets.
+\newcommand*\ptoc@setgeometry[4]{%
+  \setlength\textheight{\dimexpr\ptoc@fullth-#1-#2\relax}%
+  \setlength\topmargin{\dimexpr\ptoc@fulltopm+#1\relax}%
+  \setlength\oddsidemargin{\dimexpr\ptoc@fullodd+#3\relax}%
+  \setlength\evensidemargin{\dimexpr\ptoc@fulleven+#3\relax}%
+  \global\@colht\textheight \global\@colroom\@colht
+  \vsize\@colroom
+  \linespread{#4}\selectfont}
+\newcommand*\ptoc@fulllayout{%
+  \ptoc@settextwidth{\ptoc@fulltw}%
+  \ptoc@setgeometry{\z@}{\z@}{\z@}{1}}
+\newcommand*\ptoc@bodylayout{%
+  \ptoc@settextwidth{\ptoc@bodytw}%
+  \ptoc@setgeometry{\ptoc@bodytop}{\ptoc@bodybot}{\ptoc@bodyleft}%
+    {\ptoc@opt@bodyleading}}
+% left / right paper margin of the FULL layout on the page being shipped
+\newcommand*\ptoc@fullside{%
+  \if@twoside\ifodd\c@page\ptoc@fullodd\else\ptoc@fulleven\fi
+  \else\ptoc@fullodd\fi}
+
+% Evaluated at the start of every TOC (globally, so the page style sees them).
+\newcommand*\ptoc@setlengths{%
+  \global\ptoc@split    =\ptoc@opt@split\relax
+  \global\ptoc@subsplit =\ptoc@opt@subsplit\relax
+  \global\ptoc@pagew    =\ptoc@opt@pagewidth\relax
+  \global\ptoc@pad      =\ptoc@opt@padding\relax
+  \global\ptoc@chpad    =\ptoc@opt@chpad\relax
+  \global\ptoc@rule     =\ptoc@opt@rule\relax
+  \global\ptoc@toppad   =\ptoc@opt@toppad\relax
+  \global\ptoc@botpad   =\ptoc@opt@botpad\relax
+  \global\ptoc@plainpad =\ptoc@opt@plainpad\relax
+  \global\ptoc@titlew   =\dimexpr\textwidth-\ptoc@split-3\ptoc@pad
+                                 -\ptoc@rule-\ptoc@pagew\relax
+  \global\ptoc@pdx    =\dimexpr\ptoc@split+2\ptoc@pad+\ptoc@titlew\relax
+  \global\ptoc@gap    =\ptoc@opt@rulegap\relax
+  \global\ptoc@csplit =\ptoc@opt@chapsplit\relax
+  \global\ptoc@cra    =\dimexpr\ptoc@opt@chapruleone+\ptoc@opt@chapdrop\relax
+  \global\ptoc@crb    =\dimexpr\ptoc@opt@chapruletwo+\ptoc@opt@chapdrop\relax
+  \global\ptoc@epix   =\ptoc@opt@epix\relax}
+\AtBeginDocument{\ptoc@setlengths}
+
+% Lengths for the part pages (evaluated when a part page is made).
+\newcommand*\ptoc@setminilengths{%
+  \global\ptoc@miniw    =\ptoc@opt@miniwidth\relax
+  \global\ptoc@minirulew=\ptoc@opt@minirule\relax
+  \global\ptoc@minisep  =\ptoc@opt@minigap\relax
+  \global\ptoc@badgew   =\ptoc@opt@badgesize\relax}
+
+% A small label: label font, optionally upper-cased.
+\newcommand*\ptoc@label[1]{{\ptoc@opt@fontlabel\ptoc@opt@case{#1}}}
+
+% Rectangles made of rules.
+\newcommand*\ptoc@hbar[1]{\vrule width#1 height\ptoc@rule depth\z@}   % ----
+\newcommand*\ptoc@vbar{\vrule width\ptoc@rule}                        %  |
+% An invisible strut: #1 above the baseline, #2 below it.
+\newcommand*\ptoc@strut[2]{\vrule width\z@ height#1 depth#2\relax}
+
+% A horizontal rule from x=#1 to x=#2 (an \hbox of width \textwidth) that
+% leaves a small white gap on both sides of every vertical line listed in #3
+% (ascending x, a comma list of lengths, each line \ptoc@rule wide).  A rule
+% that ends at a vertical line stops short of it by the same gap.  Where a
+% vertical line passes through, a rule-sized square keeps it unbroken.
+% Vertical lines that are NOT listed are simply run over by the rule.
+\def\ptoc@dseg#1#2{%
+  \ifdim#2>#1\relax
+    \hskip\dimexpr#1-\ptoc@pos\relax
+    \ptoc@hbar{\dimexpr#2-#1\relax}%
+    \ptoc@pos=#2\relax
+  \fi}
+\newcommand*\ptoc@gaprulew[4]{%       % #1 = width of the box
+  \hbox to#1{%
+    \ptoc@pos=\z@ \ptoc@cur=#2\relax
+    \@for\ptoc@v:=#4\do{%
+      \ptoc@cutl=\dimexpr\ptoc@v-\ptoc@gap\relax
+      \ptoc@cutr=\dimexpr\ptoc@v+\ptoc@rule+\ptoc@gap\relax
+      \ifdim\ptoc@cutr>\ptoc@cur\relax
+        \ifdim\ptoc@cutl>#3\relax
+          \ptoc@dseg{\ptoc@cur}{#3}%
+        \else
+          \ptoc@dseg{\ptoc@cur}{\ptoc@cutl}%
+        \fi
+        \ptoc@cur=\ptoc@cutr\relax
+      \fi
+      \ifdim\ptoc@v<#3\relax
+        \ptoc@dseg{\ptoc@v}{\dimexpr\ptoc@v+\ptoc@rule\relax}%
+      \fi}%
+    \ptoc@dseg{\ptoc@cur}{#3}%
+    \hfil}}
+\newcommand*\ptoc@gaprule[3]{\ptoc@gaprulew{\textwidth}{#1}{#2}{#3}}
+
+
+% Links must not survive inside upper-cased labels.
+\newcommand*\ptoc@nolinks{\let\hyper@linkstart\@gobbletwo \let\hyper@linkend\@empty}
+
+% Chapter number in the TOC label:  "1  TITLE"
+\newcommand*\ptoc@numlabel[1]{#1\hskip 1mm\relax}
+
+
+%% ----------------------------------------------------------------------
+%%  3. User command
+%% ----------------------------------------------------------------------
+% \sectionpages{34--37} before a \section overrides its page number.  It writes
+% a line into the .toc just before the section's own line.
+\newcommand*\sectionpages[1]{\addtocontents{toc}{\protect\ptoc@setpages{#1}}}
+\newcommand*\ptoc@setpages[1]{\gdef\ptoc@nextpages{#1}}
+\DeclareRobustCommand\tocpages[1]{\gdef\ptoc@pages{#1}}
+
+
+%% ----------------------------------------------------------------------
+%%  3b. Hyperlinks (only active when hyperref is loaded)
+%% ----------------------------------------------------------------------
+\AtBeginDocument{%
+  \@ifpackageloaded{hyperref}{%
+    \edef\ptoc@x{\noexpand\hypersetup{linktoc=\ptoc@opt@linktoc}}\ptoc@x}{}}
+
+\newcommand*\ptoc@applylinkstyle{%
+  \@ifpackageloaded{hyperref}{\ptoc@opt@linkstyle}{}}
+
+% #1 = page as written by hyperref, e.g. \hyper@linkstart{link}{sec.3}5\hyper@linkend
+% Print \ptoc@pages (e.g. 34--37) inside the SAME link.
+\def\ptoc@grab#1#2{\gdef\ptoc@anchor{#2}}
+\newcommand*\ptoc@relink[1]{%
+  \gdef\ptoc@anchor{}%
+  \setbox\z@\hbox{\let\hyper@linkstart\ptoc@grab \let\hyper@linkend\relax #1}%
+  \ifx\ptoc@anchor\@empty
+    \ptoc@pages
+  \else
+    \hyper@linkstart{link}{\ptoc@anchor}\ptoc@pages\hyper@linkend
+  \fi}
+
+
+%% ----------------------------------------------------------------------
+%%  4. Hooks: what a \part / \chapter / \section line in the .toc does
+%% ----------------------------------------------------------------------
+% (plain \def, not \renewcommand, so that they also exist in any class)
+\def\l@part#1#2{%
+  \global\@ptoc@inchapfalse
+  \gdef\ptoc@part{#1}\global\let\ptoc@chap\@empty \global\@ptoc@subfalse
+  \global\advance\ptoc@partno\@ne
+  \expandafter\gdef\csname ptoc@mini@\the\ptoc@partno\endcsname{}}
+\def\l@chapter#1#2{%
+  \global\advance\ptoc@chapno\@ne \global\@ptoc@inchaptrue
+  \expandafter\gdef\csname ptoc@sec@\the\ptoc@chapno\endcsname{}%
+  \gdef\ptoc@chap{#1}\global\@ptoc@subtrue
+  % remember the chapter for the mini contents on this part's page
+  \expandafter\g@addto@macro\csname ptoc@mini@\the\ptoc@partno\endcsname
+    {\ptoc@miniitem{#1}}}
+\def\l@section#1#2{%
+  \edef\ptoc@rowargs{%
+    \noexpand\tocpages{\unexpanded\expandafter{\ptoc@nextpages}}}%
+  \expandafter\ptoc@row\expandafter{\ptoc@rowargs #1}{#2}%
+  \global\let\ptoc@nextpages\@empty
+  % remember the section for the list on its chapter's opening page
+  \if@ptoc@inchap
+    \expandafter\g@addto@macro\csname ptoc@sec@\the\ptoc@chapno\endcsname
+      {\ptoc@secitem{#1}}%
+  \fi}
+% deeper levels are not part of this design: drop them from the TOC
+\def\l@subsection#1#2{}
+\def\l@subsubsection#1#2{}
+\def\l@paragraph#1#2{}
+\def\l@subparagraph#1#2{}
+
+
+%% ----------------------------------------------------------------------
+%%  5. A row.  Boxes with no glue between them, so all rules touch.
+%%
+%%      [ yellow heading ...................... running label ]  zero height
+%%      ------------------------------------------------------  top rule
+%%      [ chapter label |] number / title            | page      content
+%% ----------------------------------------------------------------------
+
+% Zero-height box that hangs above the top rule.
+\newcommand*\ptoc@hanging{%
+  \hbox to\textwidth{%
+    \ifx\ptoc@part\@empty\else
+      \raisebox{\ptoc@opt@partshift}[0pt][0pt]{%
+        {\color{ptoc@accent}\ptoc@opt@fontpart
+         \let\numberline\@gobble \ptoc@nolinks \ptoc@part}}%
+    \fi
+    \hfil
+    \if@ptoc@first
+      \raisebox{\ptoc@opt@labelshift}[0pt][0pt]{%
+        \ptoc@label{\ptoc@opt@contentslabel}}%
+      \hskip\dimexpr\textwidth-\ptoc@split+\ptoc@pad\relax
+    \fi}}
+
+% The horizontal rule of a row.  Of the vertical lines it meets (chapter-column
+% divider, main divider, page-number divider) only the MAIN divider, between
+% chapters and sections, interrupts it; the others are run over.
+\newcommand*\ptoc@toprule{%
+  \ptoc@gaprule{\ptoc@ruleleft}{\textwidth}{\ptoc@split}}
+
+% Left zone: chapter divider and label (or just empty space).
+\newcommand*\ptoc@leftzone{%
+  \if@ptoc@sub
+    \hskip\ptoc@subsplit \ptoc@vbar
+    \ifx\ptoc@chap\@empty
+      \hskip\dimexpr\ptoc@split-\ptoc@subsplit-\ptoc@rule\relax
+    \else
+      \hskip\ptoc@chpad
+      \vtop{\hsize=\dimexpr\ptoc@split-\ptoc@subsplit-\ptoc@rule-2\ptoc@chpad\relax
+            \ptoc@opt@fontlabel \raggedleft \parindent=\z@ \noindent
+            \let\numberline\ptoc@numlabel \ptoc@nolinks
+            \ptoc@opt@case{\vskip -1.5mm\ptoc@chap}\par}%
+      \hskip\ptoc@chpad
+    \fi
+  \else
+    \hskip\ptoc@split
+  \fi}
+
+% The number/title cell is built into a box first, so that the page number
+% can be centred against its height.  Typeset twice: the first pass finds
+% out (via \numberline) whether the row has a section number, which decides
+% the padding -- a numbered row keeps its number line near the top, a row
+% without one is centred between its rules.
+% The number line reads "SECTION 1.2" (see the `section label' key).
+\newcommand*\ptoc@numline[1]{%
+  \global\@ptoc@hasnumtrue
+  {\ptoc@opt@fontnumber
+   \ifx\ptoc@opt@sectionlabel\@empty\else
+     \ptoc@opt@case{\ptoc@opt@sectionlabel}\nobreakspace
+   \fi
+   #1}\newline}
+
+\newcommand*\ptoc@titlebody[1]{%
+  \vtop{\hsize=\ptoc@titlew \ptoc@opt@fonttitle \raggedright
+        \parindent=\z@ \noindent
+        \setbox\z@\hbox{H}%                     % cap height of the title font
+        \if@ptoc@hasnum
+          \ptoc@strut{\ptoc@toppad}{\z@}%
+        \else
+          \ptoc@strut{\dimexpr\ht\z@+\ptoc@plainpad\relax}{\z@}%
+        \fi
+        \let\numberline\ptoc@numline #1%
+        \if@ptoc@hasnum
+          \ptoc@strut{\z@}{\ptoc@botpad}%
+        \else
+          \ptoc@strut{\z@}{\ptoc@plainpad}%
+        \fi
+        \par}}
+
+\newcommand*\ptoc@buildtitle[1]{%
+  \global\@ptoc@hasnumfalse
+  \setbox\ptoc@titlebox\ptoc@titlebody{#1}%
+  \setbox\ptoc@titlebox\ptoc@titlebody{#1}}
+
+% Page number: vertically centred on the title cell.
+\newcommand*\ptoc@pagecell[1]{%
+  \setbox\ptoc@pagebox\hbox{\ptoc@opt@fontpage
+    \ifx\ptoc@pages\@empty #1\else\ptoc@relink{#1}\fi}%
+  \raise\dimexpr(\ht\ptoc@titlebox-\dp\ptoc@titlebox
+                  -\ht\ptoc@pagebox+\dp\ptoc@pagebox)/2\relax
+  \hbox to\ptoc@pagew{\box\ptoc@pagebox\hfil}}
+
+\newcommand*\ptoc@row[2]{%    #1 = number+title, #2 = page from the .toc
+  \gdef\ptoc@pages{}%
+  \par
+  % The rows are stacked boxes with no glue between them, so TeX has no
+  % place to break the page.  Offer one between rows (but keep the first
+  % row of a part together with the next one).
+  \if@ptoc@first\else
+    \if@ptoc@keep\penalty\@M\else\penalty\z@\fi
+  \fi
+  \ptoc@mark
+  \nointerlineskip
+  % The rule starts at the page edge for a part, at the chapter column
+  % for a chapter, at the main divider otherwise.
+  \ifx\ptoc@part\@empty
+    \ifx\ptoc@chap\@empty \ptoc@ruleleft=\ptoc@split
+    \else                 \ptoc@ruleleft=\ptoc@subsplit \fi
+  \else \ptoc@ruleleft=\z@ \fi
+  \ptoc@buildtitle{#1}%
+  \ptoc@hanging                                   \nointerlineskip
+  \ptoc@toprule                                   \nointerlineskip
+  \hbox to\textwidth{%
+    \ptoc@leftzone
+    \hskip\ptoc@pad \copy\ptoc@titlebox
+    \hskip\ptoc@pad \ptoc@vbar \hskip\ptoc@pad
+    \ptoc@pagecell{#2}\hfil}%
+  \ifx\ptoc@part\@empty \global\@ptoc@keepfalse \else \global\@ptoc@keeptrue \fi
+  \if@ptoc@sub \global\@ptoc@prevsubtrue \else \global\@ptoc@prevsubfalse \fi
+  \global\let\ptoc@part\@empty \global\let\ptoc@chap\@empty
+  \global\@ptoc@firstfalse}
+
+% Multi-page support.  Every row leaves a mark "AS" for the page builder:
+%   A = 1  the chapter-column divider is already running above this row
+%   S = 1  the chapter-column divider runs below this row
+% The page header uses A of the first row on a page, the filler at the
+% bottom of the page uses S of the last one, so the dividers continue
+% across page breaks.
+\newcommand*\ptoc@mark{%
+  \if@ptoc@sub
+    \ifx\ptoc@part\@empty
+      \if@ptoc@first \def\ptoc@mk{01}\else \def\ptoc@mk{11}\fi
+    \else \def\ptoc@mk{01}\fi
+  \else \def\ptoc@mk{00}\fi
+  \expandafter\mark\expandafter{\ptoc@mk}}
+\def\ptoc@parsemark#1#2#3\relax{\def\ptoc@mkA{#1}\def\ptoc@mkS{#2}}
+
+% Filler at the bottom of every TOC page (installed as \@textbottom): keeps
+% the vertical rules running down to the footer rule.
+\newcommand*\ptoc@textbottom{%
+  \expandafter\ptoc@parsemark\botmark 00\relax
+  \cleaders\hbox to\textwidth{%
+    \if 1\ptoc@mkS
+      \hskip\ptoc@subsplit \vrule width\ptoc@rule height 2pt depth\z@
+      \hskip\dimexpr\ptoc@pdx-\ptoc@subsplit-\ptoc@rule\relax
+    \else
+      \hskip\ptoc@pdx
+    \fi
+    \vrule width\ptoc@rule height 2pt depth\z@ \hfil}\vfill}
+
+
+%% ----------------------------------------------------------------------
+%%  6. \tableofcontents
+%% ----------------------------------------------------------------------
+\def\tableofcontents{%
+  \clearpage
+  \ptoc@fulllayout
+  \ptoc@setlengths
+  \pagestyle{ptoc}%
+  \ptoc@savedtopskip=\topskip
+  \let\ptoc@oldtextbottom\@textbottom
+  \let\@textbottom\ptoc@textbottom
+  \begingroup
+    \parindent\z@ \parskip\z@
+    \topskip=\z@   % rows on continuation pages start flush with the text top
+    \ptoc@applylinkstyle
+    \global\@ptoc@firsttrue \global\@ptoc@subfalse \global\@ptoc@keepfalse
+    \global\let\ptoc@part\@empty \global\let\ptoc@chap\@empty
+    \global\ptoc@partno=\z@ \global\ptoc@chapno=\z@
+    \global\@ptoc@inchapfalse \global\@ptoc@prevsubfalse
+    \expandafter\gdef\csname ptoc@mini@0\endcsname{}%
+    \vspace*{\dimexpr\ptoc@opt@topspace+\ptoc@savedtopskip\relax}%
+    \@starttoc{toc}%
+  \endgroup
+  \clearpage
+  \ptoc@bodylayout
+  \let\@textbottom\ptoc@oldtextbottom
+  \mark{{}{}}%   forget the TOC marks
+  \pagestyle{\ptoc@opt@bodystyle}}
+
+
+%% ----------------------------------------------------------------------
+%%  7. Page style for the TOC: full-height divider, footer rule and text
+%%     (drawn with rules only -- no TikZ, no extra LaTeX runs)
+%% ----------------------------------------------------------------------
+\newcommand*\ptoc@header{%
+  % chapter-column divider, when it is already running at the top of the page
+  \expandafter\ptoc@parsemark\firstmark 00\relax
+  \let\ptoc@topA\ptoc@mkA
+  \expandafter\ptoc@parsemark\botmark 00\relax
+  \if 1\ptoc@topA
+    \rlap{\smash{\hbox{\hskip\ptoc@subsplit
+      \vrule width\ptoc@rule
+             height\dimexpr 1in+\voffset+\topmargin+\headheight\relax
+             depth \headsep}}}%
+  \fi
+  % main divider, from the page top to just below the footer text
+  \rlap{\smash{\hbox{%
+    \hskip\ptoc@split
+    \vrule width\ptoc@rule
+           height\dimexpr 1in+\voffset+\topmargin+\headheight\relax
+           depth \dimexpr \headsep+\textheight+\footskip+1.5mm\relax}}}%
+  % footer rule, at the bottom of the text block; it breaks around the main
+  % divider only
+  \rlap{\smash{\lower\dimexpr\headsep+\textheight\relax
+    \ptoc@gaprule{\z@}{\textwidth}{\ptoc@split}}}}
+
+\newcommand*\ptoc@footer{%
+  \hbox to\textwidth{%
+    \hbox to\ptoc@split{\hss\ptoc@label{\ptoc@opt@footertext}\hskip\ptoc@pad}%
+    \hskip\ptoc@pad {\ptoc@opt@fontpage\thepage}\hfil}}
+
+\newcommand*\ps@ptoc{%
+  \let\@mkboth\@gobbletwo
+  \def\@oddhead{\ptoc@header}\let\@evenhead\@oddhead
+  \def\@oddfoot{\ptoc@footer}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  8. Part pages:   logo / title ........ mini contents
+%% ----------------------------------------------------------------------
+
+% Default logo: black square, colour gap, black core.
+\newcommand*\ptoc@logo{%
+  \begingroup
+    \@tempdima=13mm
+    \@tempdimb=\dimexpr0.13\@tempdima\relax      % ring thickness
+    \@tempdimc=\dimexpr0.29\@tempdima\relax      % inset of the core
+    \hbox to\@tempdima{%
+      \rlap{\color{ptoc@ink}\vrule width\@tempdima height\@tempdima depth\z@}%
+      \rlap{\hskip\@tempdimb\raise\@tempdimb\hbox{\color{ptoc@accent}%
+            \vrule width\dimexpr\@tempdima-2\@tempdimb\relax
+                   height\dimexpr\@tempdima-2\@tempdimb\relax depth\z@}}%
+      \rlap{\hskip\@tempdimc\raise\@tempdimc\hbox{\color{ptoc@ink}%
+            \vrule width\dimexpr\@tempdima-2\@tempdimc\relax
+                   height\dimexpr\@tempdima-2\@tempdimc\relax depth\z@}}%
+      \hss}%
+  \endgroup}
+
+% Round badge with a number (ink disc, accent-coloured number).
+\newcommand*\ptoc@badge[1]{%
+  \setbox\tw@\hbox{\ptoc@opt@fontbadge #1}%
+  \hbox to\ptoc@badgew{%
+    \rlap{\hbox to\ptoc@badgew{\hss
+      \raise\dimexpr\ht\tw@/2\relax\hbox{\unitlength=\ptoc@badgew
+        \begin{picture}(0,0)\put(0,0){\color{ptoc@ink}\circle*{1}}\end{picture}}%
+      \hss}}%
+    \hss{\color{ptoc@accent}\box\tw@}\hss}}
+
+% One chapter in the mini contents.  #1 = \numberline{n}Title (as in the .toc)
+\newcommand*\ptoc@miniitem[1]{%
+  \gdef\ptoc@bnum{}%
+  \setbox\z@\hbox{\def\numberline##1{\gdef\ptoc@bnum{##1}}#1}% grab the number
+  \setbox\z@\hbox{\ptoc@opt@fontmini H}%                 cap height of the title
+  \setbox\tw@\hbox{\ptoc@opt@fontbadge 1}%               digit height in badge
+  \nointerlineskip
+  \hbox{\raise\dimexpr(\ht\z@-\ht\tw@)/2\relax\hbox{\ptoc@badge{\ptoc@bnum}}%
+        \hskip 3mm
+        \vtop{\hsize=\dimexpr\ptoc@miniw-\ptoc@badgew-3mm\relax
+              \ptoc@opt@fontmini \raggedright \parindent=\z@ \noindent
+              \let\numberline\@gobble #1\par}}%
+  \vskip\ptoc@minisep}
+
+% #1 = number of the part; prints nothing when it has no chapters.
+\newcommand*\ptoc@minitoc[1]{%
+  \expandafter\ifx\csname ptoc@mini@#1\endcsname\relax\else
+    \expandafter\ifx\csname ptoc@mini@#1\endcsname\@empty\else
+      \vbox{\hsize=\ptoc@miniw \parindent=\z@
+        \hrule height\ptoc@minirulew \vskip 6mm
+        \csname ptoc@mini@#1\endcsname
+        \vskip-\ptoc@minisep \vskip 6mm
+        \hrule height\ptoc@minirulew}%
+    \fi
+  \fi}
+
+% #1 = number of the part (only shown with a non-empty `part label'),
+% #2 = title
+\newcommand*\ptoc@partpage[2]{%
+  % (no \clearpage here: \part and \@part have just made one, and a second
+  %  one would ship the page holding hyperref's anchor as a blank page)
+  \ptoc@fulllayout
+  \ptoc@setminilengths
+  \thispagestyle{empty}%
+  \pagecolor{ptoc@accent}%
+  \begingroup
+    \color{ptoc@ink}\parindent\z@ \raggedright
+    \ptoc@opt@partlogo\par
+    \vskip 5mm
+    \ifx\ptoc@opt@partlabel\@empty\else\ifx\relax#1\relax\else
+      {\ptoc@opt@fontpartlabel \ptoc@opt@partlabel\nobreakspace#1\par}\vskip 1mm
+    \fi\fi
+    {\ptoc@opt@fontparttitle #2\par}%
+    \vfill
+    \ptoc@minitoc{\the\ptoc@partcnt}%
+  \endgroup
+  \clearpage
+  \nopagecolor
+  \ptoc@bodylayout}
+
+% Replace the class's part page.  The part number is not written to the .toc
+% (only the title): a \numberline written here without \protect is expanded
+% at write time into a fixed-width \hbox, which pushed the title off the page.
+% The class's \part puts \null\vfil on the fresh page before calling \@part; with
+% our own \@part that page was shipped as a blank one in the `plain' style
+% right after the TOC.  Same command without it.
+% The part title also becomes the running text of the pages that follow
+% (until a chapter starts), so a part without chapters is not headed by the
+% document title.
+\renewcommand\part{%
+  \if@openright \cleardoublepage \else \clearpage \fi
+  \thispagestyle{empty}%
+  \secdef\@part\@spart}
+\def\@part[#1]#2{%
+  \global\advance\ptoc@partcnt\@ne
+  \markboth{#1}{}%
+  \ifnum\c@secnumdepth>-2\relax
+    \refstepcounter{part}%
+    \addcontentsline{toc}{part}{#1}%
+    \ptoc@partpage{\thepart}{#2}%
+  \else
+    \addcontentsline{toc}{part}{#1}%
+    \ptoc@partpage{}{#2}%
+  \fi}
+\def\@spart#1{\ptoc@partpage{}{#1}}
+
+
+%% ----------------------------------------------------------------------
+%%  9. Chapter pages
+%%
+%%  A full-page opener in the language of the TOC: hairline grid with small
+%%  breaks, a huge accent-coloured number that the lines run over, mono
+%%  labels in the left column (chapter, then its sections as read from the
+%%  .toc), the title in the big column, an optional epigraph.
+%%
+%%      \chapterepigraph{The quote}{Author, Work}   % before \chapter
+%%
+%%  The number is placed by `chapter number x' (from the paper edge, so a
+%%  negative value is clipped by the page) and `chapter shift' (relative to
+%%  the second rule).  It is drawn first: rules, labels and title print
+%%  over it.  `chapter drop' lowers the whole grid.
+%% ----------------------------------------------------------------------
+\let\ptoc@epiquote\@empty
+\let\ptoc@episource\@empty
+\newcommand*\chapterepigraph[2]{\gdef\ptoc@epiquote{#1}\gdef\ptoc@episource{#2}}
+
+% Material placed at (x, y) below the top left corner of the text block.
+% #1 = x, #2 = y (may be negative), #3 = material.  Takes up no space.
+\newcommand*\ptoc@put[3]{%
+  \vbox to\z@{\vskip#2\relax \hbox to\z@{\hskip#1\relax #3\hss}\vss}}
+
+% One section in the list on the chapter page (#1 = \numberline{3.1}Title).
+\newcommand*\ptoc@secitem[1]{%
+  {\ptoc@opt@fontlabel \let\numberline\ptoc@numlabel \ptoc@nolinks
+   \ptoc@opt@case{#1}\par}\vskip 1.8mm}
+
+% #1 = title, #2 = 1 for a numbered chapter, 0 for \chapter*
+\newcommand*\ptoc@chapterpage[2]{%
+  \par
+  \ptoc@fulllayout
+  \ptoc@setlengths
+  \thispagestyle{ptocchapter}%
+  % distance from the paper's left edge to the text block
+  \ptoc@edge=\dimexpr1in+\hoffset
+    +\if@twoside\ifodd\c@page\oddsidemargin\else\evensidemargin\fi
+     \else\oddsidemargin\fi\relax
+  \ifnum#2>\z@
+    \gdef\ptoc@chapfoot{\ptoc@opt@chapterlabel\nobreakspace\thechapter}%
+    \setbox\ptoc@bxa\hbox{{\color{ptoc@accent}\ptoc@opt@fontchapnum\thechapter}}%
+  \else
+    \gdef\ptoc@chapfoot{#1}%
+    \setbox\ptoc@bxa\hbox{}%
+  \fi
+  % epigraph
+  \ifx\ptoc@epiquote\@empty
+    \setbox\ptoc@bxb\hbox{}%
+  \else
+    \setbox\ptoc@bxb\vbox{\hsize=\dimexpr\textwidth-\ptoc@epix\relax
+      \parindent\z@ \raggedright
+      {\ptoc@opt@fontepigraph \ptoc@epiquote\par}%
+      \ifx\ptoc@episource\@empty\else
+        \vskip 3mm {\ptoc@opt@fontlabel\ptoc@opt@case{\ptoc@episource}\par}%
+      \fi}%
+  \fi
+  \global\let\ptoc@epiquote\@empty \global\let\ptoc@episource\@empty
+  % left column: chapter label and the sections
+  \setbox\ptoc@bxc\vtop{\hsize=\dimexpr\ptoc@csplit-\ptoc@pad\relax
+    \parindent\z@ \raggedleft
+    \ifnum#2>\z@
+      {\ptoc@opt@fontlabel
+       \ptoc@opt@case{\ptoc@opt@chapterlabel\nobreakspace\thechapter}\par}%
+      \vskip 6mm
+      \@ifundefined{ptoc@sec@\the\ptoc@chapcnt}{}%
+        {\csname ptoc@sec@\the\ptoc@chapcnt\endcsname}%
+    \fi}%
+  % title
+  \setbox\ptoc@bxd\vtop{\hsize=\dimexpr\textwidth-\ptoc@csplit-2\ptoc@pad\relax
+    \parindent\z@ \raggedright \ptoc@opt@fontchaptitle #1\par}%
+  \vbox to\textheight{%
+    \offinterlineskip \parindent\z@ \parskip\z@
+    % the number is drawn FIRST, so everything else prints over it
+    \ptoc@put{\dimexpr\ptoc@opt@chapnumx-\ptoc@edge\relax}
+             {\dimexpr\ptoc@crb-\ptoc@opt@chapshift-\ht\ptoc@bxa\relax}
+             {\box\ptoc@bxa}%
+    \ptoc@put{\ptoc@epix}
+             {\dimexpr\ptoc@crb-\ptoc@toppad-\ht\ptoc@bxb-\dp\ptoc@bxb\relax}
+             {\box\ptoc@bxb}%
+    \ptoc@put{\z@}{\dimexpr\ptoc@crb+\ptoc@toppad\relax}{\box\ptoc@bxc}%
+    \ptoc@put{\dimexpr\ptoc@csplit+\ptoc@pad\relax}
+             {\dimexpr\ptoc@crb+\ptoc@toppad\relax}{\box\ptoc@bxd}%
+    % the lines come last so that they print over the number
+    \ptoc@put{\ptoc@csplit}
+             {-\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax}
+             {\vrule width\ptoc@rule height\z@
+                     depth\dimexpr1in+\voffset+\topmargin+\headheight+\headsep
+                                  +\textheight+\footskip+1.5mm\relax}%
+    \ptoc@put{\z@}{\ptoc@cra}{\ptoc@gaprule{\z@}{\textwidth}{\ptoc@csplit}}%
+    \ptoc@put{\z@}{\ptoc@crb}{\ptoc@gaprule{\z@}{\textwidth}{\ptoc@csplit}}%
+    \vss}%
+  \par\clearpage
+  \ptoc@bodylayout}
+
+\def\@makechapterhead#1{%
+  \global\advance\ptoc@chapcnt\@ne
+  \ifnum\c@secnumdepth>\m@ne
+    \if@mainmatter \ptoc@chapterpage{#1}{1}\else \ptoc@chapterpage{#1}{0}\fi
+  \else \ptoc@chapterpage{#1}{0}\fi}
+\def\@makeschapterhead#1{\chaptermark{#1}\ptoc@chapterpage{#1}{0}}
+
+% Page style of a chapter page: the footer of the TOC, around the chapter divider.
+\newcommand*\ptoc@chapfooter{%
+  \rlap{\smash{\raise\footskip
+    \ptoc@gaprule{\z@}{\textwidth}{\ptoc@csplit}}}%
+  \hbox to\textwidth{%
+    \hbox to\ptoc@csplit{\hss\hskip\ptoc@pad}%
+    \hskip\ptoc@pad {\ptoc@opt@fontpage\thepage}\hfil}}
+\newcommand*\ps@ptocchapter{%
+  \let\@mkboth\@gobbletwo
+  \def\@oddhead{}\let\@evenhead\@oddhead
+  \def\@oddfoot{\ptoc@chapfooter}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  10. Ordinary pages: page number and running text in the outer margin
+%%
+%%      page number  (top of the margin)
+%%
+%%      R U N N I N G   T E X T   (reads downwards, tops of the letters
+%%                                  point to the paper edge)
+%%
+%%  The text is `margin text' (default: the chapter title; before the first
+%%  chapter the part title, before that the document title).  A solid bar of
+%%  the accent colour runs down the whole outer margin behind them (`margin
+%%  bar width').  With twoside the margin is the right one on odd pages and
+%%  the left one, mirrored, on even pages.  With margin notes the number and
+%%  text stay in the strip between the notes and the paper edge (they use
+%%  the FULL text width).
+%% ----------------------------------------------------------------------
+\def\ptoc@str@auto{auto}
+\def\ptoc@str@none{none}
+
+% The bar: full paper height, centred on x=\ptoc@bx, \ptoc@mw wide when `auto'.
+\newcommand*\ptoc@drawbar{%
+  \ifx\ptoc@opt@barwidth\ptoc@str@none\else
+    \ifx\ptoc@opt@barwidth\ptoc@str@auto
+      \ptoc@bw=\ptoc@mw
+    \else
+      \ptoc@bw=\ptoc@opt@barwidth\relax
+    \fi
+    \ptoc@bh=\dimexpr1in+\voffset+\topmargin+\headheight\relax
+    \rlap{\hskip\dimexpr\ptoc@bx-\ptoc@bw/2\relax
+          \smash{{\color{ptoc@accent}%
+            \vrule width\ptoc@bw height\ptoc@bh
+                   depth\dimexpr\paperheight-\ptoc@bh\relax}}}%
+  \fi}
+
+% #1 = +1: outer margin on the right, -1: on the left
+\newcommand*\ptoc@marginside[1]{%
+  \ifnum#1>\z@
+    \setbox\ptoc@rbox\hbox{\rotatebox[origin=c]{-90}{\box\ptoc@mbox}}%
+    \ptoc@mw=\dimexpr\paperwidth-\ptoc@fulltw-\ptoc@fullside-1in-\hoffset\relax
+    \ptoc@bx=\dimexpr\ptoc@fulltw-\ptoc@bodyleft+\ptoc@mw/2\relax
+    \ptoc@mx=\dimexpr\ptoc@bx+\ptoc@opt@marginshift\relax
+  \else
+    \setbox\ptoc@rbox\hbox{\rotatebox[origin=c]{90}{\box\ptoc@mbox}}%
+    \ptoc@mw=\dimexpr\ptoc@fullside+1in+\hoffset\relax
+    \ptoc@bx=\dimexpr-\ptoc@mw/2-\ptoc@bodyleft\relax
+    \ptoc@mx=\dimexpr\ptoc@bx-\ptoc@opt@marginshift\relax
+  \fi
+  \ptoc@drawbar
+  \rlap{\hskip\dimexpr\ptoc@mx-\wd\ptoc@nbox/2\relax
+        \smash{\lower\dimexpr\headsep+\ht\ptoc@nbox\relax\box\ptoc@nbox}}%
+  \rlap{\hskip\dimexpr\ptoc@mx-\wd\ptoc@rbox/2\relax
+        \smash{\lower\dimexpr\headsep+\ht\ptoc@nbox+\ptoc@opt@margingap
+                             +\ht\ptoc@rbox\relax\box\ptoc@rbox}}}
+
+% The grid of an ordinary page, drawn from the header (everything is placed
+% relative to the left edge of the text, hence the negative skips): the
+% divider from the top of the paper to just below the footer, the footer
+% rule across the full block (broken around the divider like the rules of the
+% TOC) and the footer text left of the divider.
+\newcommand*\ptoc@pageframe{%
+  \ptoc@bh=\dimexpr1in+\voffset+\topmargin+\headheight\relax
+  \ptoc@fr=\dimexpr\headsep+\textheight+\ptoc@bodybot\relax
+  \rlap{\hskip\dimexpr\ptoc@bsplit-\ptoc@bodyleft\relax
+        \smash{\vrule width\ptoc@rule height\ptoc@bh
+                      depth\dimexpr\ptoc@fr+\footskip+1.5mm\relax}}%
+  \rlap{\hskip-\ptoc@bodyleft
+        \smash{\lower\ptoc@fr
+          \ptoc@gaprulew{\ptoc@fulltw}{\z@}{\ptoc@fulltw}{\ptoc@bsplit}}}%
+  \rlap{\hskip-\ptoc@bodyleft
+        \smash{\lower\dimexpr\ptoc@fr+\footskip\relax
+          \hbox to\ptoc@bsplit{\hss\ptoc@label{\ptoc@opt@footertext}\hskip\ptoc@pad}}}}
+
+\newcommand*\ptoc@marginhead{%
+  \ptoc@pageframe
+  \setbox\ptoc@nbox\hbox{\ptoc@opt@fontmarginpage\thepage}%
+  \setbox\ptoc@mbox\hbox{\ptoc@opt@fontmargin\ptoc@opt@case{\ptoc@opt@margintext}}%
+  \ifdim\wd\ptoc@mbox=\z@
+    \setbox\ptoc@mbox\hbox{\ptoc@opt@fontmargin\ptoc@opt@case{\ptoc@doctitle}}%
+  \fi
+  \if@twoside
+    \ifodd\c@page \ptoc@marginside\@ne \else \ptoc@marginside\m@ne \fi
+  \else \ptoc@marginside\@ne \fi}
+
+\newcommand*\ps@ptocbody{%
+  \let\@mkboth\markboth
+  \def\chaptermark##1{\markboth{##1}{}}%
+  \def\sectionmark##1{\markright{##1}}%
+  \def\@oddhead{\ptoc@marginhead}\let\@evenhead\@oddhead
+  \def\@oddfoot{}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  10b. Sections on ordinary pages
+%%
+%%  The structure of a chapter opener in small:
+%%
+%%      ------------------+-----------------------------   hairline, broken
+%%             SECTION 1.2| Title of the section             around the divider
+%%
+%%  The label stands in the column left of the divider, flush against it
+%%  (the number in the accent colour); the title is in `section font'.  The
+%%  heading is not followed by an indented paragraph.  \subsection has the
+%%  number in the label column and no hairline.
+%%
+%%  `section font', `section number font' and `subsection font' are complete
+%%  font switches.
+%% ----------------------------------------------------------------------
+% A label in the column left of the divider: right-aligned, flush against
+% the divider, zero width, first baseline on the baseline of the text.
+% #1 = font switch, #2 = word (may be empty), #3 = number (may be empty).
+\DeclareRobustCommand*\ptoc@leftlabel[3]{%
+  \protected@edef\ptoc@tmpa{#2}\protected@edef\ptoc@tmpb{#3}%
+  \setbox\z@\hbox{\normalfont #1%
+    \ifx\ptoc@tmpa\@empty\else
+      \ptoc@opt@case{#2}%
+      \ifx\ptoc@tmpb\@empty\else\nobreakspace\fi
+    \fi
+    \ifx\ptoc@tmpb\@empty\else{\color{ptoc@accent}#3}\fi}%
+  \dimen@=\dimexpr\ptoc@bsplit-\ptoc@pad\relax
+  \llap{%
+    \ifdim\wd\z@>\dimen@
+      % too long for one line: wrap it, flush right
+      \vtop{\everypar{}% (a paragraph in here must not fire amsthm's \everypar)
+        \hsize=\dimen@ \raggedleft \parindent\z@ \normalfont #1%
+        \ifx\ptoc@tmpa\@empty\else
+          \ptoc@opt@case{#2}%
+          \ifx\ptoc@tmpb\@empty\else\nobreakspace\fi
+        \fi
+        \ifx\ptoc@tmpb\@empty\else{\color{ptoc@accent}#3}\fi\par}%
+    \else
+      \box\z@
+    \fi
+    \hskip\dimexpr\ptoc@bodyleft-\ptoc@bsplit+\ptoc@pad\relax}}
+% (robust: \@sect expands this with \protected@edef, which must not touch the
+% font switches inside)
+\DeclareRobustCommand*\ptoc@seclabel{%
+  \ptoc@leftlabel{\ptoc@opt@fontsecnum}{\ptoc@opt@sectionlabel}{\thesection}}
+\DeclareRobustCommand*\ptoc@subseclabel{%
+  \ptoc@leftlabel{\ptoc@opt@fontsecnum}{}{\thesubsection}}
+\expandafter\def\csname ptoc@seccnt@section\endcsname{\ptoc@seclabel}
+\expandafter\def\csname ptoc@seccnt@subsection\endcsname{\ptoc@subseclabel}
+\let\ptoc@oldseccntformat\@seccntformat
+\renewcommand*\@seccntformat[1]{%
+  \@ifundefined{ptoc@seccnt@#1}%
+    {\ptoc@oldseccntformat{#1}}%
+    {\csname ptoc@seccnt@#1\endcsname}}
+% The hairline above a section title: across the full block, broken around
+% the divider.  Runs in the heading's own group, before its first line.
+\newcommand*\ptoc@secrule{%
+  \nointerlineskip
+  \hbox to\z@{\hskip-\ptoc@bodyleft
+    \ptoc@gaprulew{\ptoc@fulltw}{\z@}{\ptoc@fulltw}{\ptoc@bsplit}\hss}%
+  \nobreak\vskip\ptoc@opt@secpad \nointerlineskip}
+\newcommand*\ptoc@sectionstyle{\ptoc@secrule\raggedright\ptoc@opt@fontsection}
+\newcommand*\ptoc@subsectionstyle{\raggedright\ptoc@opt@fontsubsection}
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-\ptoc@opt@secbefore}{\ptoc@opt@secafter}{\ptoc@sectionstyle}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.5\baselineskip plus 0.3\baselineskip minus 0.2\baselineskip}%
+  {0.6\baselineskip}{\ptoc@subsectionstyle}}
+
+
+%% ----------------------------------------------------------------------
+%%  11. Margin notes, sidenotes, footnotes in the label column (Tufte style)
+%%
+%%      \marginnote[offset]{text}   unnumbered
+%%      \sidenote[offset]{text}     numbered (resets per chapter)
+%%      footnotes = margin          makes \footnote = \sidenote, with the
+%%                                  text in `footnote font' (italic)
+%%
+%%  The notes stand in the column left of the divider (\reversemarginpar),
+%%  flush left, as wide as the column less `note gap'.
+%%  offset: positive moves the note down, negative up.
+%%  Limits: built on \marginpar, so not inside floats, minipages or
+%%  section titles.  Assumes oneside.  A note and a theorem or section label
+%%  at the same height will overlap: move the note with the offset.
+%%
+%%  `footnote font' also applies to ordinary (bottom-of-page) footnotes,
+%%  i.e. with `footnotes = normal'.
+%% ----------------------------------------------------------------------
+\reversemarginpar
+\newcommand*\ptoc@notestyle{%
+  \renewcommand\baselinestretch{1}%
+  \ptoc@opt@fontnote \raggedright \parindent\z@ \parskip\z@}
+
+% offset #1 (down = +), material #2; keeps the first baseline on the text line
+\newcommand\ptoc@noteput[2]{%
+  \noindent
+  \setbox\z@\vtop{\hsize=\marginparwidth \ptoc@notestyle #2\par}%
+  \raisebox{-#1}[\ht\z@][\dp\z@]{\box\z@}}
+
+\newcommand\marginnote[2][\z@]{\marginpar{\ptoc@noteput{#1}{#2}}}
+
+\newcounter{sidenote}
+\@ifundefined{c@chapter}{}{\@addtoreset{sidenote}{chapter}}
+% #1 = offset, #2 = font switch for the text (may be empty), #3 = text.
+% The number stays upright in both places.
+\newcommand\ptoc@sidenote[3]{%
+  \stepcounter{sidenote}%
+  \edef\ptoc@sn{\thesidenote}%
+  \textsuperscript{\ptoc@sn}%
+  \marginpar{\ptoc@noteput{#1}{\textsuperscript{\ptoc@sn}\nobreakspace {#2#3}}}}
+\newcommand\sidenote[2][\z@]{\ptoc@sidenote{#1}{}{#2}}
+\newcommand\ptoc@footnote[2][\z@]{\ptoc@sidenote{#1}{\ptoc@opt@fontfootnote}{#2}}
+
+% Ordinary footnotes: the text goes through `footnote font', the mark does not.
+\newcommand*\ptoc@italicfootnotes{%
+  \let\ptoc@oldmakefntext\@makefntext
+  \long\def\@makefntext##1{\ptoc@oldmakefntext{\ptoc@opt@fontfootnote ##1}}}
+
+\def\ptoc@str@margin{margin}
+\AtBeginDocument{%
+  % the geometry as set by the user is the FULL layout
+  \ptoc@fulltw=\textwidth
+  \ptoc@fullth=\textheight
+  \ptoc@fulltopm=\topmargin
+  \ptoc@fullodd=\oddsidemargin
+  \ptoc@fulleven=\evensidemargin
+  \ptoc@bsplit=\ptoc@opt@bodysplit\relax
+  \ptoc@bodygap=\ptoc@opt@bodygap\relax
+  \ptoc@bodyleft=\dimexpr\ptoc@bsplit+\ptoc@bodygap\relax
+  \ptoc@bodyright=\ptoc@opt@bodyright\relax
+  \ptoc@bodytop=\ptoc@opt@bodytop\relax
+  \ptoc@bodybot=\ptoc@opt@bodybottom\relax
+  \ptoc@bodytw=\dimexpr\ptoc@fulltw-\ptoc@bodyleft-\ptoc@bodyright\relax
+  % margin notes fill the label column, up to `note gap' from the divider
+  \marginparwidth=\dimexpr\ptoc@bsplit-\ptoc@opt@notegap\relax
+  \marginparsep=\dimexpr\ptoc@bodygap+\ptoc@opt@notegap\relax
+  \marginparpush=2mm
+  \ifx\ptoc@opt@footnotes\ptoc@str@margin \let\footnote\ptoc@footnote \fi
+  \ifx\footnote\ptoc@footnote\else \ptoc@italicfootnotes \fi
+  \ptoc@bodylayout
+  \ifx\ptoc@opt@theorems\ptoc@str@off\else \ptoc@definetheorems \fi}
+
+%% ----------------------------------------------------------------------
+%%  12. Theorem-like environments
+%%
+%%  Two amsthm styles, both with an italic body:
+%%    ptocplain   no box
+%%    ptocbox     zero skip above and below; the frame brings its own
+%%  and two mdframed frames:
+%%    ptocthm      square hairline box hanging on the divider: the top and
+%%                 bottom rules stop short of it by `rule gap', the divider
+%%                 is the left side, a vertical rule closes the right side.
+%%                 Used by theorem, lemma, definition.
+%%    ptocthmwide  the same without the right side: top and bottom rule only,
+%%                 running out past the text block to the full block edge,
+%%                 where the margin bar begins.  Used by example, remark.
+%%  The text inside is aligned with the text outside.  proposition,
+%%  corollary and question use ptocplain and have no frame.
+%%  In all of them the name and number stand in the label column, like the
+%%  label of a section (`theorem head font'), and the optional title is run
+%%  into the text in bold.  The environments are defined at \begin{document}
+%%  (after \ptocsetup has been read), unless `theorems = off'.
+%% ----------------------------------------------------------------------
+\def\ptoc@str@off{off}
+\newskip\ptoc@thmskip
+\newlength\ptoc@thmL   % how far the box reaches left of the text
+
+% The title is run into the text, in bold, followed by a full stop.  (amsthm
+% drops \thmnote when there is no title.)
+\newcommand*\ptoc@thmtitle[1]{\thmnote{{\ptoc@opt@fontthmtitle #1.}\ }}
+% #1 = name, #2 = number (empty for the starred forms), #3 = title
+\newcommand*\ptoc@thmhead[3]{%
+  \ptoc@leftlabel{\ptoc@opt@fontthmhead}{#1}{#2}\ptoc@thmtitle{#3}}
+
+\newcommand*\ptoc@definetheorems{%
+  \ptoc@thmskip=\ptoc@opt@thmskip\relax
+  \ptoc@thmL=\dimexpr\ptoc@bodygap-\ptoc@opt@rule-\ptoc@opt@rulegap\relax
+  \newtheoremstyle{ptocplain}%
+    {\ptoc@thmskip}{\ptoc@thmskip}{\itshape}{0pt}{}{}{0pt}%
+    {\ptoc@thmhead{##1}{##2}{##3}}%
+  % the box brings its own space above and below
+  \newtheoremstyle{ptocbox}%
+    {0pt}{0pt}{\itshape}{0pt}{}{}{0pt}%
+    {\ptoc@thmhead{##1}{##2}{##3}}%
+  \mdfdefinestyle{ptocthm}{%
+    linecolor=ptoc@ink, linewidth=\ptoc@opt@rule, roundcorner=0pt,
+    leftline=false,
+    leftmargin=-\ptoc@thmL, rightmargin=0pt,
+    innerleftmargin=\ptoc@thmL, innerrightmargin=\ptoc@opt@thmboxsep,
+    innertopmargin=\ptoc@opt@thmboxsep,
+    innerbottommargin=\dimexpr\ptoc@opt@thmboxsep*2/5\relax,
+    skipabove=\ptoc@thmskip, skipbelow=\ptoc@thmskip}%
+  % example / remark: top and bottom rule only, from the divider to the margin bar
+  \mdfdefinestyle{ptocthmwide}{%
+    linecolor=ptoc@ink, linewidth=\ptoc@opt@rule, roundcorner=0pt,
+    leftline=false, rightline=false,
+    leftmargin=-\ptoc@thmL, rightmargin=-\ptoc@bodyright,
+    innerleftmargin=\ptoc@thmL, innerrightmargin=\ptoc@bodyright,
+    innertopmargin=\ptoc@opt@thmboxsep,
+    innerbottommargin=\dimexpr\ptoc@opt@thmboxsep*2/5\relax,
+    skipabove=\ptoc@thmskip, skipbelow=\ptoc@thmskip}%
+  % one counter for everything, reset in every section
+  \theoremstyle{ptocbox}%
+  \newtheorem{theorem}{Theorem}[section]
+  \newtheorem*{theorem*}{Theorem}%
+  \newtheorem{lemma}[theorem]{Lemma}%
+  \newtheorem*{lemma*}{Lemma}%
+  \newtheorem{definition}[theorem]{Definition}%
+  \newtheorem*{definition*}{Definition}%
+  \surroundwithmdframed[style=ptocthm]{theorem}%
+  \surroundwithmdframed[style=ptocthm]{theorem*}%
+  \surroundwithmdframed[style=ptocthm]{lemma}%
+  \surroundwithmdframed[style=ptocthm]{lemma*}%
+  \surroundwithmdframed[style=ptocthm]{definition}%
+  \surroundwithmdframed[style=ptocthm]{definition*}%
+  \theoremstyle{ptocplain}%
+  \newtheorem{proposition}[theorem]{Proposition}%
+  \newtheorem*{proposition*}{Proposition}%
+  \newtheorem{corollary}[theorem]{Corollary}%
+  \newtheorem*{corollary*}{Corollary}%
+  \newtheorem{question}[theorem]{Question}%
+  \newtheorem*{question*}{Question}%
+  % example and remark: ptocbox (zero skip) inside the wide frame
+  \theoremstyle{ptocbox}%
+  \newtheorem{example}[theorem]{Example}%
+  \newtheorem*{example*}{Example}%
+  \newtheorem{remark}[theorem]{Remark}%
+  \newtheorem*{remark*}{Remark}%
+  \surroundwithmdframed[style=ptocthmwide]{example}%
+  \surroundwithmdframed[style=ptocthmwide]{example*}%
+  \surroundwithmdframed[style=ptocthmwide]{remark}%
+  \surroundwithmdframed[style=ptocthmwide]{remark*}%
+  % the proof is labelled in the column too
+  \renewenvironment{proof}[1][\proofname]{%
+    \par\pushQED{\qed}\normalfont
+    \topsep=\ptoc@thmskip \partopsep=\z@
+    \trivlist\item[]\leavevmode
+    \ptoc@leftlabel{\ptoc@opt@fontthmhead}{##1}{}%
+    \ignorespaces}%
+    {\popQED\endtrivlist\@endpefalse}}
+
+
+\endinput

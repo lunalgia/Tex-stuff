@@ -1,0 +1,902 @@
+% Source: book pp. 354--369 (PDF 368--383); no solutions.
+% \exnote: Axler's small italic comment under an exercise
+\section{Determinants}
+
+\subsection{Defining the Determinant}
+
+The next definition will lead us to a clean, beautiful, basis-free definition
+of the determinant of an operator.
+
+\begin{definition}[$\alpha_T$]\label{ax:9.40}
+Suppose that $m$ is a positive integer and $T\in\Lin(V)$. For
+$\alpha\in V_{\mathrm{alt}}^{(m)}$, define $\alpha_T\in V_{\mathrm{alt}}^{(m)}$
+by
+\[ \alpha_T(v_1,\dots,v_m) = \alpha(Tv_1,\dots,Tv_m) \]
+for each list $v_1,\dots,v_m$ of vectors in $V$.
+\end{definition}
+
+Suppose $T\in\Lin(V)$. If $\alpha\in V_{\mathrm{alt}}^{(m)}$ and
+$v_1,\dots,v_m$ is a list of vectors in $V$ with $v_j=v_k$ for some $j\ne k$,
+then $Tv_j=Tv_k$, which implies that
+$\alpha_T(v_1,\dots,v_m)=\alpha(Tv_1,\dots,Tv_m)=0$. Thus the function
+$\alpha\mapsto\alpha_T$ is a linear map of $V_{\mathrm{alt}}^{(m)}$ to itself.
+
+\begingroup\emergencystretch=2em
+We know that $\dim V_{\mathrm{alt}}^{(\dim V)}=1$ (see \ref{ax:9.37}). Every
+linear map from a one-dimensional vector space to itself is multiplication by
+some unique scalar. For the linear map $\alpha\mapsto\alpha_T$, we now define
+$\det T$ to be that scalar.\par\endgroup
+
+\begin{definition}[Determinant of an operator, $\det T$]\label{ax:9.41}
+Suppose $T\in\Lin(V)$. The \emph{determinant} of $T$, denoted by $\det T$, is
+defined to be the unique number in $\F$ such that
+\[ \alpha_T = (\det T)\,\alpha \]
+for all $\alpha\in V_{\mathrm{alt}}^{(\dim V)}$.
+\end{definition}
+
+\begin{example}[Determinants of operators]\label{ax:9.42}
+Let $n=\dim V$.
+\begin{itemize}
+\item If $I$ is the identity operator on $V$, then $\alpha_I=\alpha$ for all
+  $\alpha\in V_{\mathrm{alt}}^{(n)}$. Thus $\det I=1$.
+\item More generally, if $\lambda\in\F$, then $\alpha_{\lambda I}=\lambda^n\alpha$
+  for all $\alpha\in V_{\mathrm{alt}}^{(n)}$. Thus $\det(\lambda I)=\lambda^n$.
+\item Still more generally, if $T\in\Lin(V)$ and $\lambda\in\F$, then
+  $\alpha_{\lambda T}=\lambda^n\alpha_T=\lambda^n(\det T)\alpha$ for all
+  $\alpha\in V_{\mathrm{alt}}^{(n)}$. Thus $\det(\lambda T)=\lambda^n\det T$.
+\item Suppose $T\in\Lin(V)$ and there is a basis $e_1,\dots,e_n$ of $V$
+  consisting of eigenvectors of $T$, with corresponding eigenvalues
+  $\lambda_1,\dots,\lambda_n$. If $\alpha\in V_{\mathrm{alt}}^{(n)}$, then
+  \[ \alpha_T(e_1,\dots,e_n) = \alpha(\lambda_1e_1,\dots,\lambda_ne_n)
+     = (\lambda_1\cdots\lambda_n)\alpha(e_1,\dots,e_n). \]
+  If $\alpha\ne0$, then \ref{ax:9.39} implies $\alpha(e_1,\dots,e_n)\ne0$.
+  Thus the equation above implies
+  \[ \det T = \lambda_1\cdots\lambda_n. \]
+\end{itemize}
+\end{example}
+
+Our next task is to define and give a formula for the determinant of a square
+matrix. To do this, we associate with each square matrix an operator and then
+define the determinant of the matrix to be the determinant of the associated
+operator.
+
+\begin{definition}[Determinant of a matrix, $\det A$]\label{ax:9.43}
+Suppose that $n$ is a positive integer and $A$ is an $n$-by-$n$ square matrix
+with entries in $\F$. Let $T\in\Lin(\F^n)$ be the operator whose matrix with
+respect to the standard basis of $\F^n$ equals $A$. The \emph{determinant} of
+$A$, denoted by $\det A$, is defined by $\det A=\det T$.
+\end{definition}
+
+\begin{example}[Determinants of matrices]\label{ax:9.44}\leavevmode
+\begin{itemize}
+\item If $I$ is the $n$-by-$n$ identity matrix, then the corresponding operator
+  on $\F^n$ is the identity operator $I$ on $\F^n$. Thus the first bullet point
+  of \ref{ax:9.42} implies that the determinant of the identity matrix is $1$.
+\item Suppose $A$ is a diagonal matrix with $\lambda_1,\dots,\lambda_n$ on the
+  diagonal. Then the corresponding operator on $\F^n$ has the standard basis
+  of $\F^n$ as eigenvectors, with eigenvalues $\lambda_1,\dots,\lambda_n$. Thus
+  the last bullet point of \ref{ax:9.42} implies that
+  $\det A=\lambda_1\cdots\lambda_n$.
+\end{itemize}
+\end{example}
+
+For the next result, think of each list $v_1,\dots,v_n$ of $n$ vectors in
+$\F^n$ as a list of $n$-by-$1$ column vectors. The notation
+$\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$ then denotes the
+$n$-by-$n$ square matrix whose $k^{\text{th}}$ column is $v_k$ for each
+$k=1,\dots,n$.
+
+\begin{result}[Determinant is an alternating multilinear form]\label{ax:9.45}
+Suppose that $n$ is a positive integer. The map that takes a list
+$v_1,\dots,v_n$ of vectors in $\F^n$ to
+$\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$ is an alternating
+$n$-linear form on $\F^n$.
+\end{result}
+
+\begin{proof}
+Let $e_1,\dots,e_n$ be the standard basis of $\F^n$ and suppose
+$v_1,\dots,v_n$ is a list of vectors in $\F^n$. Let $T\in\Lin(\F^n)$ be the
+operator such that $Te_k=v_k$ for $k=1,\dots,n$. Thus $T$ is the operator whose
+matrix with respect to $e_1,\dots,e_n$ is
+$\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$. Hence
+$\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}=\det T$, by definition
+of the determinant of a matrix.
+
+Let $\alpha$ be an alternating $n$-linear form on $\F^n$ such that
+$\alpha(e_1,\dots,e_n)=1$. Then
+\begin{align*}
+\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix} &= \det T\\
+  &= (\det T)\,\alpha(e_1,\dots,e_n)\\
+  &= \alpha(Te_1,\dots,Te_n)\\
+  &= \alpha(v_1,\dots,v_n),
+\end{align*}
+where the third line follows from the definition of the determinant of an
+operator. The equation above shows that the map that takes a list of vectors
+$v_1,\dots,v_n$ in $\F^n$ to
+$\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$ is the alternating
+$n$-linear form $\alpha$ on $\F^n$.
+\end{proof}
+
+The previous result has several important consequences. For example, it
+immediately implies that a matrix with two identical columns has
+determinant~$0$. We will come back to other consequences later, but for now we
+want to give a formula for the determinant of a square matrix. Recall that if
+$A$ is a matrix, then $A_{j,k}$ denotes the entry in row $j$, column $k$ of
+$A$.
+
+\begin{result}[Formula for determinant of a matrix]\label{ax:9.46}
+Suppose that $n$ is a positive integer and $A$ is an $n$-by-$n$ square matrix.
+Then
+\[ \det A = \sum_{(j_1,\dots,j_n)\in\operatorname{perm} n}
+   \bigl(\sgn(j_1,\dots,j_n)\bigr)A_{j_1,1}\cdots A_{j_n,n}. \]
+\end{result}
+
+\begin{proof}
+Apply \ref{ax:9.36} with $V=\F^n$ and $e_1,\dots,e_n$ the standard basis of
+$\F^n$ and $\alpha$ the alternating $n$-linear form on $\F^n$ that takes
+$v_1,\dots,v_n$ to $\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$ [see
+\ref{ax:9.45}]. If each $v_k$ is the $k^{\text{th}}$ column of $A$, then each
+$b_{j,k}$ in \ref{ax:9.36} equals $A_{j,k}$. Finally,
+\[ \alpha(e_1,\dots,e_n) = \det\begin{pmatrix} e_1 & \cdots & e_n \end{pmatrix}
+   = \det I = 1. \]
+Thus the formula in \ref{ax:9.36} becomes the formula stated in this result.
+\end{proof}
+
+\begin{example}[Explicit formula for determinant]\label{ax:9.47}\leavevmode
+\begin{itemize}
+\item If $A$ is a $2$-by-$2$ matrix, then the formula in \ref{ax:9.46} becomes
+  \[ \det A = A_{1,1}A_{2,2} - A_{2,1}A_{1,2}. \]
+\item If $A$ is a $3$-by-$3$ matrix, then the formula in \ref{ax:9.46} becomes
+  \begin{align*}
+  \det A = {}&A_{1,1}A_{2,2}A_{3,3} - A_{2,1}A_{1,2}A_{3,3}
+             - A_{3,1}A_{2,2}A_{1,3}\\
+             &- A_{1,1}A_{3,2}A_{2,3} + A_{3,1}A_{1,2}A_{2,3}
+             + A_{2,1}A_{3,2}A_{1,3}.
+  \end{align*}
+\end{itemize}
+\end{example}
+
+The sum in the formula in \ref{ax:9.46} contains $n!$ terms. Because $n!$ grows
+rapidly as $n$ increases, the formula in \ref{ax:9.46} is not a viable method
+to evaluate determinants even for moderately sized $n$. For example, $10!$ is
+over three million, and $100!$ is approximately $10^{158}$, leading to a sum
+that the fastest computer cannot evaluate. We will soon see some results that
+lead to faster evaluations of determinants than direct use of the sum in
+\ref{ax:9.46}.
+
+\begin{result}[Determinant of upper-triangular matrix]\label{ax:9.48}
+Suppose that $A$ is an upper-triangular matrix with
+$\lambda_1,\dots,\lambda_n$ on the diagonal. Then
+$\det A=\lambda_1\cdots\lambda_n$.
+\end{result}
+
+\begin{proof}
+If $(j_1,\dots,j_n)\in\operatorname{perm} n$ with
+$(j_1,\dots,j_n)\ne(1,\dots,n)$, then $j_k>k$ for some $k\in\{1,\dots,n\}$,
+which implies that $A_{j_k,k}=0$. Thus the only permutation that can make a
+nonzero contribution to the sum in \ref{ax:9.46} is the permutation
+$(1,\dots,n)$. Because $A_{k,k}=\lambda_k$ for each $k=1,\dots,n$, this implies
+that $\det A=\lambda_1\cdots\lambda_n$.
+\end{proof}
+
+\subsection{Properties of Determinants}
+
+Our definition of the determinant leads to the following magical proof that
+the determinant is multiplicative.
+
+\begin{result}[Determinant is multiplicative]\label{ax:9.49}\leavevmode
+\begin{parts}
+\item Suppose $S,T\in\Lin(V)$. Then $\det(ST)=(\det S)(\det T)$.
+\item Suppose $A$ and $B$ are square matrices of the same size. Then
+  \[ \det(AB) = (\det A)(\det B) \]
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item Let $n=\dim V$. Suppose $\alpha\in V_{\mathrm{alt}}^{(n)}$ and
+  $v_1,\dots,v_n\in V$. Then
+  \begin{align*}
+  \alpha_{ST}(v_1,\dots,v_n) &= \alpha(STv_1,\dots,STv_n)\\
+    &= (\det S)\alpha(Tv_1,\dots,Tv_n)\\
+    &= (\det S)(\det T)\alpha(v_1,\dots,v_n),
+  \end{align*}
+  where the first equation follows from the definition of $\alpha_{ST}$, the
+  second equation follows from the definition of $\det S$, and the third
+  equation follows from the definition of $\det T$. The equation above implies
+  that $\det(ST)=(\det S)(\det T)$.
+\item Let $S,T\in\Lin(\F^n)$ be such that $\Mat(S)=A$ and $\Mat(T)=B$, where
+  all matrices of operators in this proof are with respect to the standard
+  basis of $\F^n$. Then $\Mat(ST)=\Mat(S)\Mat(T)=AB$ (see \ref{ax:3.43}). Thus
+  \[ \det(AB) = \det(ST) = (\det S)(\det T) = (\det A)(\det B), \]
+  where the second equality comes from the result in (a). \qedhere
+\end{parts}
+\end{proof}
+
+The determinant of an operator determines whether the operator is invertible.
+
+\begin{result}[Invertible $\iff$ nonzero determinant]\label{ax:9.50}
+An operator $T\in\Lin(V)$ is invertible if and only if $\det T\ne0$.
+Furthermore, if $T$ is invertible, then $\det(T^{-1})=1/(\det T)$.
+\end{result}
+
+\begin{proof}
+First suppose $T$ is invertible. Thus $TT^{-1}=I$. Now \ref{ax:9.49} implies
+that
+\[ 1 = \det I = \det(TT^{-1}) = (\det T)\bigl(\det(T^{-1})\bigr). \]
+Hence $\det T\ne0$ and $\det(T^{-1})$ is the multiplicative inverse of
+$\det T$.
+
+To prove the other direction, now suppose $\det T\ne0$. Suppose $v\in V$ and
+$v\ne0$. Let $v,e_2,\dots,e_n$ be a basis of $V$ and let
+$\alpha\in V_{\mathrm{alt}}^{(n)}$ be such that $\alpha\ne0$. Then
+$\alpha(v,e_2,\dots,e_n)\ne0$ (by \ref{ax:9.39}). Now
+\[ \alpha(Tv,Te_2,\dots,Te_n) = (\det T)\alpha(v,e_2,\dots,e_n) \ne 0. \]
+Thus $Tv\ne0$. Hence $T$ is invertible.
+\end{proof}
+
+An $n$-by-$n$ matrix $A$ is invertible (see \ref{ax:3.80} for the definition of
+an invertible matrix) if and only if the operator on $\F^n$ associated with
+$A$ (via the standard basis of $\F^n$) is invertible. Thus the previous result
+shows that a square matrix $A$ is invertible if and only if $\det A\ne0$.
+
+\begin{result}[Eigenvalues and determinants]\label{ax:9.51}
+Suppose $T\in\Lin(V)$ and $\lambda\in\F$. Then $\lambda$ is an eigenvalue of
+$T$ if and only if $\det(\lambda I-T)=0$.
+\end{result}
+
+\begin{proof}
+The number $\lambda$ is an eigenvalue of $T$ if and only if $T-\lambda I$ is
+not invertible (see \ref{ax:5.7}), which happens if and only if $\lambda I-T$
+is not invertible, which happens if and only if $\det(\lambda I-T)=0$ (by
+\ref{ax:9.50}).
+\end{proof}
+
+Suppose $T\in\Lin(V)$ and $S\colon W\to V$ is an invertible linear map. To
+prove that $\det(S^{-1}TS)=\det T$, we could try to use \ref{ax:9.49} and
+\ref{ax:9.50}, writing
+\begin{align*}
+\det(S^{-1}TS) &= (\det S^{-1})(\det T)(\det S)\\
+               &= \det T.
+\end{align*}
+That proof works if $W=V$, but if $W\ne V$ then it makes no sense because the
+determinant is defined only for linear maps from a vector space to itself, and
+$S$ maps $W$ to $V$, making $\det S$ undefined. The proof given below works
+around this issue and is valid when $W\ne V$.
+
+\begin{result}[Determinant is a similarity invariant]\label{ax:9.52}
+Suppose $T\in\Lin(V)$ and $S\colon W\to V$ is an invertible linear map. Then
+\[ \det(S^{-1}TS) = \det T. \]
+\end{result}
+
+\begin{proof}
+Let $n=\dim W=\dim V$. Suppose $\tau\in W_{\mathrm{alt}}^{(n)}$. Define
+$\alpha\in V_{\mathrm{alt}}^{(n)}$ by
+\[ \alpha(v_1,\dots,v_n) = \tau(S^{-1}v_1,\dots,S^{-1}v_n) \]
+for $v_1,\dots,v_n\in V$. Suppose $w_1,\dots,w_n\in W$. Then
+\begin{align*}
+\tau_{S^{-1}TS}(w_1,\dots,w_n) &= \tau(S^{-1}TSw_1,\dots,S^{-1}TSw_n)\\
+  &= \alpha(TSw_1,\dots,TSw_n)\\
+  &= \alpha_T(Sw_1,\dots,Sw_n)\\
+  &= (\det T)\alpha(Sw_1,\dots,Sw_n)\\
+  &= (\det T)\tau(w_1,\dots,w_n).
+\end{align*}
+The equation above and the definition of the determinant of the operator
+$S^{-1}TS$ imply that $\det(S^{-1}TS)=\det T$.
+\end{proof}
+
+For the special case in which $V=\F^n$ and $e_1,\dots,e_n$ is the standard
+basis of $\F^n$, the next result is true by the definition of the determinant
+of a matrix. The left side of the equation in the next result does not depend
+on a choice of basis, which means that the right side is independent of the
+choice of basis.
+
+\begin{result}[Determinant of operator equals determinant of its matrix]\label{ax:9.53}
+Suppose $T\in\Lin(V)$ and $e_1,\dots,e_n$ is a basis of $V$. Then
+\[ \det T = \det\Mat\bigl(T,(e_1,\dots,e_n)\bigr). \]
+\end{result}
+
+\begin{proof}
+Let $f_1,\dots,f_n$ be the standard basis of $\F^n$. Let $S\colon\F^n\to V$ be
+the linear map such that $Sf_k=e_k$ for each $k=1,\dots,n$. Thus
+$\Mat\bigl(S,(f_1,\dots,f_n),(e_1,\dots,e_n)\bigr)$ and
+$\Mat\bigl(S^{-1},(e_1,\dots,e_n),(f_1,\dots,f_n)\bigr)$ both equal the
+$n$-by-$n$ identity matrix. Hence
+\refstepcounter{theorem}%
+\[ \Mat\bigl(S^{-1}TS,(f_1,\dots,f_n)\bigr) = \Mat\bigl(T,(e_1,\dots,e_n)\bigr),
+   \tag*{\thetheorem}\label{ax:9.54} \]
+as follows from two applications of \ref{ax:3.43}. Thus
+\begin{align*}
+\det T &= \det(S^{-1}TS)\\
+       &= \det\Mat\bigl(S^{-1}TS,(f_1,\dots,f_n)\bigr)\\
+       &= \det\Mat\bigl(T,(e_1,\dots,e_n)\bigr),
+\end{align*}
+where the first line comes from \ref{ax:9.52}, the second line comes from the
+definition of the determinant of a matrix, and the third line follows from
+\ref{ax:9.54}.
+\end{proof}
+
+The next result gives a more intuitive way to think about determinants than the
+definition or the formula in \ref{ax:9.46}. We could make the characterization
+in the result below the definition of the determinant of an operator on a
+finite-dimensional complex vector space, with the current definition then
+becoming a consequence of that definition.
+
+\begin{result}[If $\F=\C$, then determinant equals product of eigenvalues]\label{ax:9.55}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then $\det T$ equals the product of the
+eigenvalues of $T$, with each eigenvalue included as many times as its
+multiplicity.
+\end{result}
+
+\begin{proof}
+There is a basis of $V$ with respect to which $T$ has an upper-triangular
+matrix with the diagonal entries of the matrix consisting of the eigenvalues of
+$T$, with each eigenvalue included as many times as its multiplicity---see
+\ref{ax:8.37}. Thus \ref{ax:9.53} and \ref{ax:9.48} imply that $\det T$ equals
+the product of the eigenvalues of $T$, with each eigenvalue included as many
+times as its multiplicity.
+\end{proof}
+
+As the next result shows, the determinant interacts nicely with the transpose
+of a square matrix, with the dual of an operator, and with the adjoint of an
+operator on an inner product space.
+
+\begin{result}[Determinant of transpose, dual, or adjoint]\label{ax:9.56}\leavevmode
+\begin{parts}
+\item Suppose $A$ is a square matrix. Then $\det A^{\mathrm{t}}=\det A$.
+\item Suppose $T\in\Lin(V)$. Then $\det T'=\det T$.
+\item Suppose $V$ is an inner product space and $T\in\Lin(V)$. Then
+  \[ \det(T^*) = \overline{\det T}. \]
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item Let $n$ be a positive integer. Define $\alpha\colon(\F^n)^n\to\F$ by
+  \[ \alpha(v_1,\dots,v_n)
+     = \det\Bigl(\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}^{\mathrm{t}}\Bigr) \]
+  for all $v_1,\dots,v_n\in\F^n$. The formula in \ref{ax:9.46} for the
+  determinant of a matrix shows that $\alpha$ is an $n$-linear form on $\F^n$.
+
+  Suppose $v_1,\dots,v_n\in\F^n$ and $v_j=v_k$ for some $j\ne k$. If $B$ is an
+  $n$-by-$n$ matrix, then
+  $\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}^{\mathrm{t}}B$ cannot equal
+  the identity matrix because row $j$ and row $k$ of
+  $\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}^{\mathrm{t}}B$ are equal.
+  Thus $\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}^{\mathrm{t}}$ is not
+  invertible, which implies that $\alpha(v_1,\dots,v_n)=0$. Hence $\alpha$ is
+  an alternating $n$-linear form on $\F^n$.
+
+  Note that $\alpha$ applied to the standard basis of $\F^n$ equals $1$.
+  Because the vector space of alternating $n$-linear forms on $\F^n$ has
+  dimension one (by \ref{ax:9.37}), this implies that $\alpha$ is the
+  determinant function. Thus (a) holds.
+\item The equation $\det T'=\det T$ follows from (a) and \ref{ax:9.53} and
+  \ref{ax:3.132}.
+\item Pick an orthonormal basis of $V$. The matrix of $T^*$ with respect to
+  that basis is the conjugate transpose of the matrix of $T$ with respect to
+  that basis (by \ref{ax:7.9}). Thus \ref{ax:9.53}, \ref{ax:9.46}, and (a)
+  imply that $\det(T^*)=\overline{\det T}$. \qedhere
+\end{parts}
+\end{proof}
+
+\begin{result}[Helpful results in evaluating determinants]\label{ax:9.57}\leavevmode
+\begin{parts}
+\item If either two columns or two rows of a square matrix are equal, then the
+  determinant of the matrix equals $0$.
+\item Suppose $A$ is a square matrix and $B$ is the matrix obtained from $A$ by
+  swapping either two columns or two rows. Then $\det A=-\det B$.
+\item If one column or one row of a square matrix is multiplied by a scalar,
+  then the value of the determinant is multiplied by the same scalar.
+\item If a scalar multiple of one column of a square matrix is added to another
+  column, then the value of the determinant is unchanged.
+\item If a scalar multiple of one row of a square matrix is added to another
+  row, then the value of the determinant is unchanged.
+\end{parts}
+\end{result}
+
+\begin{proof}
+All the assertions in this result follow from the result that the maps
+$v_1,\dots,v_n\mapsto\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$ and
+$v_1,\dots,v_n\mapsto
+\det\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}^{\mathrm{t}}$ are both
+alternating $n$-linear forms on $\F^n$ [see \ref{ax:9.45} and
+\ref{ax:9.56}(a)].
+
+For example, to prove (d) suppose $v_1,\dots,v_n\in\F^n$ and $c\in\F$. Then
+\begin{align*}
+&\det\begin{pmatrix} v_1+cv_2 & v_2 & \cdots & v_n \end{pmatrix}\\
+&\qquad= \det\begin{pmatrix} v_1 & v_2 & \cdots & v_n \end{pmatrix}
+  + c\det\begin{pmatrix} v_2 & v_2 & v_3 & \cdots & v_n \end{pmatrix}\\
+&\qquad= \det\begin{pmatrix} v_1 & v_2 & \cdots & v_n \end{pmatrix},
+\end{align*}
+where the first equation follows from the multilinearity property and the
+second equation follows from the alternating property. The equation above
+shows that adding a multiple of the second column to the first column does not
+change the value of the determinant. The same conclusion holds for any two
+columns. Thus (d) holds.
+
+The proof of (e) follows from (d) and from \ref{ax:9.56}(a). The proofs of (a),
+(b), and (c) use similar tools and are left to the reader.
+\end{proof}
+
+For matrices whose entries are concrete numbers, the result above leads to a
+much faster way to evaluate the determinant than direct application of the
+formula in \ref{ax:9.46}. Specifically, apply the Gaussian elimination
+procedure of swapping rows [by \ref{ax:9.57}(b), this changes the determinant
+by a factor of $-1$], multiplying a row by a nonzero constant [by
+\ref{ax:9.57}(c), this changes the determinant by the same constant], and
+adding a multiple of one row to another row [by \ref{ax:9.57}(e), this does not
+change the determinant] to produce an upper-triangular matrix, whose
+determinant is the product of the diagonal entries (by \ref{ax:9.48}). If your
+software keeps track of the number of row swaps and of the constants used when
+multiplying a row by a constant, then the determinant of the original matrix
+can be computed.
+
+Because a number $\lambda\in\F$ is an eigenvalue of an operator $T\in\Lin(V)$
+if and only if $\det(\lambda I-T)=0$ (by \ref{ax:9.51}), you may be tempted to
+think that one way to find eigenvalues quickly is to choose a basis of $V$, let
+$A=\Mat(T)$, evaluate $\det(\lambda I-A)$, and then solve the equation
+$\det(\lambda I-A)=0$ for $\lambda$. However, that procedure is rarely
+efficient, except when $\dim V=2$ (or when $\dim V$ equals $3$ or $4$ if you
+are willing to use the cubic or quartic formulas). One problem is that the
+procedure described in the paragraph above for evaluating a determinant does
+not work when the matrix includes a symbol (such as the $\lambda$ in
+$\lambda I-A$). This problem arises because decisions need to be made in the
+Gaussian elimination procedure about whether certain quantities equal $0$, and
+those decisions become complicated in expressions involving a symbol
+$\lambda$.
+
+Recall that an operator on a finite-dimensional inner product space is unitary
+if it preserves norms (see \ref{ax:7.51} and the paragraph following it). Every
+eigenvalue of a unitary operator has absolute value $1$ (by \ref{ax:7.54}).
+Thus the product of the eigenvalues of a unitary operator has absolute
+value~$1$. Hence (at least in the case $\F=\C$) the determinant of a unitary
+operator has absolute value $1$ (by \ref{ax:9.55}). The next result gives a
+proof that works without the assumption that $\F=\C$.
+
+\begin{result}[Every unitary operator has determinant with absolute value $1$]\label{ax:9.58}
+Suppose $V$ is an inner product space and $S\in\Lin(V)$ is a unitary operator.
+Then $\abs{\det S}=1$.
+\end{result}
+
+\begin{proof}
+Because $S$ is unitary, $I=S^*S$ (see \ref{ax:7.53}). Thus
+\[ 1 = \det(S^*S) = (\det S^*)(\det S) = (\overline{\det S})(\det S)
+   = \abs{\det S}^2, \]
+where the second equality comes from \ref{ax:9.49}(a) and the third equality
+comes from \ref{ax:9.56}(c). The equation above implies that
+$\abs{\det S}=1$.
+\end{proof}
+
+The determinant of a positive operator on an inner product space meshes well
+with the analogy that such operators correspond to the nonnegative real
+numbers.
+
+\begin{result}[Every positive operator has nonnegative determinant]\label{ax:9.59}
+Suppose $V$ is an inner product space and $T\in\Lin(V)$ is a positive
+operator. Then $\det T\ge0$.
+\end{result}
+
+\begin{proof}
+By the spectral theorem (\ref{ax:7.29} or \ref{ax:7.31}), $V$ has an
+orthonormal basis consisting of eigenvectors of $T$. Thus by the last bullet
+point of \ref{ax:9.42}, $\det T$ equals a product of the eigenvalues of $T$,
+possibly with repetitions. Each eigenvalue of $T$ is a nonnegative number (by
+\ref{ax:7.38}). Thus we conclude that $\det T\ge0$.
+\end{proof}
+
+Suppose $V$ is an inner product space and $T\in\Lin(V)$. Recall that the list
+of nonnegative square roots of the eigenvalues of $T^*T$ (each included as many
+times as its multiplicity) is called the list of singular values of $T$ (see
+Section~7E).
+
+\begin{result}[$\abs{\det T}={}$product of singular values of $T$]\label{ax:9.60}
+Suppose $V$ is an inner product space and $T\in\Lin(V)$. Then
+\[ \abs{\det T} = \sqrt{\det(T^*T)}
+   = \text{product of singular values of } T. \]
+\end{result}
+
+\begin{proof}
+We have
+\[ \abs{\det T}^2 = (\overline{\det T})(\det T)
+   = \bigl(\det(T^*)\bigr)(\det T) = \det(T^*T), \]
+where the middle equality comes from \ref{ax:9.56}(c) and the last equality
+comes from \ref{ax:9.49}(a). Taking square roots of both sides of the equation
+above shows that $\abs{\det T}=\sqrt{\det(T^*T)}$.
+
+Let $s_1,\dots,s_n$ denote the list of singular values of $T$. Thus
+$s_1^2,\dots,s_n^2$ is the list of eigenvalues of $T^*T$ (with appropriate
+repetitions), corresponding to an orthonormal basis of $V$ consisting of
+eigenvectors of $T^*T$. Hence the last bullet point of \ref{ax:9.42} implies
+that
+\[ \det(T^*T) = s_1^2\cdots s_n^2. \]
+Thus $\abs{\det T}=s_1\cdots s_n$, as desired.
+\end{proof}
+
+An operator $T$ on a real inner product space changes volume by a factor of the
+product of the singular values (by \ref{ax:7.111}). Thus the next result
+follows immediately from \ref{ax:7.111} and \ref{ax:9.60}. This result explains
+why the absolute value of a determinant appears in the change of variables
+formula in multivariable calculus.
+
+\begin{result}[$T$ changes volume by factor of $\abs{\det T}$]\label{ax:9.61}
+Suppose $T\in\Lin(\R^n)$ and $\Omega\subseteq\R^n$. Then
+\[ \operatorname{volume} T(\Omega)
+   = \abs{\det T}(\operatorname{volume}\Omega). \]
+\end{result}
+
+For operators on finite-dimensional complex vector spaces, we now connect the
+determinant to a polynomial that we have previously seen.
+
+\begin{result}[If $\F=\C$, then characteristic polynomial of $T$ equals $\det(zI-T)$]\label{ax:9.62}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Let $\lambda_1,\dots,\lambda_m$ denote the
+distinct eigenvalues of $T$, and let $d_1,\dots,d_m$ denote their
+multiplicities. Then
+\[ \det(zI-T) = (z-\lambda_1)^{d_1}\cdots(z-\lambda_m)^{d_m}. \]
+\end{result}
+
+\begin{proof}
+There exists a basis of $V$ with respect to which $T$ has an upper-triangular
+matrix with each $\lambda_k$ appearing on the diagonal exactly $d_k$ times (by
+\ref{ax:8.37}). With respect to this basis, $zI-T$ has an upper-triangular
+matrix with $z-\lambda_k$ appearing on the diagonal exactly $d_k$ times for
+each $k$. Thus \ref{ax:9.48} gives the desired equation.
+\end{proof}
+
+Suppose $\F=\C$ and $T\in\Lin(V)$. The characteristic polynomial of $T$ was
+defined in \ref{ax:8.26} as the polynomial on the right side of the equation in
+\ref{ax:9.62}. We did not previously define the characteristic polynomial of an
+operator on a finite-dimensional real vector space because such operators may
+have no eigenvalues, making a definition using the right side of the equation
+in \ref{ax:9.62} inappropriate.
+
+We now present a new definition of the characteristic polynomial, motivated by
+\ref{ax:9.62}. This new definition is valid for both real and complex vector
+spaces. The equation in \ref{ax:9.62} shows that this new definition is
+equivalent to our previous definition when $\F=\C$ (\ref{ax:8.26}).
+
+\begin{definition}[Characteristic polynomial]\label{ax:9.63}
+Suppose $T\in\Lin(V)$. The polynomial defined by
+\[ z\mapsto\det(zI-T) \]
+is called the \emph{characteristic polynomial} of $T$.
+\end{definition}
+
+The formula in \ref{ax:9.46} shows that the characteristic polynomial of an
+operator $T\in\Lin(V)$ is a monic polynomial of degree $\dim V$. The zeros in
+$\F$ of the characteristic polynomial of $T$ are exactly the eigenvalues of $T$
+(by \ref{ax:9.51}).
+
+Previously we proved the Cayley--Hamilton theorem (\ref{ax:8.29}) in the
+complex case. Now we can extend that result to operators on real vector spaces.
+
+\begin{result}[Cayley--Hamilton theorem]\label{ax:9.64}
+Suppose $T\in\Lin(V)$ and $q$ is the characteristic polynomial of $T$. Then
+$q(T)=0$.
+\end{result}
+
+\begin{proof}
+If $\F=\C$, then the equation $q(T)=0$ follows from \ref{ax:9.62} and
+\ref{ax:8.29}.
+
+Now suppose $\F=\R$. Fix a basis of $V$, and let $A$ be the matrix of $T$ with
+respect to this basis. Let $S$ be the operator on $\C^{\dim V}$ such that the
+matrix of $S$ (with respect to the standard basis of $\C^{\dim V}$) is $A$. For
+all $z\in\R$ we have
+\[ q(z) = \det(zI-T) = \det(zI-A) = \det(zI-S). \]
+Thus $q$ is the characteristic polynomial of $S$. The case $\F=\C$ (first
+sentence of this proof) now implies that $0=q(S)=q(A)=q(T)$.
+\end{proof}
+
+The Cayley--Hamilton theorem (\ref{ax:9.64}) implies that the characteristic
+polynomial of an operator $T\in\Lin(V)$ is a polynomial multiple of the minimal
+polynomial of $T$ (by \ref{ax:5.29}). Thus if the degree of the minimal
+polynomial of $T$ equals $\dim V$, then the characteristic polynomial of $T$
+equals the minimal polynomial of $T$. This happens for a very large percentage
+of operators, including over $99.999\%$ of $4$-by-$4$ matrices with integer
+entries in $[-100,100]$ (see the paragraph following \ref{ax:5.25}).
+
+The last sentence in our next result was previously proved in the complex case
+(see \ref{ax:8.54}). Now we can give a proof that works on both real and
+complex vector spaces.
+
+\begin{result}[Characteristic polynomial, trace, and determinant]\label{ax:9.65}
+Suppose $T\in\Lin(V)$. Let $n=\dim V$. Then the characteristic polynomial of
+$T$ can be written as
+\[ z^n - (\tr T)z^{n-1} + \cdots + (-1)^n(\det T). \]
+\end{result}
+
+\begin{proof}
+The constant term of a polynomial function of $z$ is the value of the
+polynomial when $z=0$. Thus the constant term of the characteristic polynomial
+of $T$ equals $\det(-T)$, which equals $(-1)^n\det T$ (by the third bullet
+point of \ref{ax:9.42}).
+
+Fix a basis of $V$, and let $A$ be the matrix of $T$ with respect to this
+basis. The matrix of $zI-T$ with respect to this basis is $zI-A$. The term
+coming from the identity permutation $\{1,\dots,n\}$ in the formula
+\ref{ax:9.46} for $\det(zI-A)$ is
+\[ (z-A_{1,1})\cdots(z-A_{n,n}). \]
+The coefficient of $z^{n-1}$ in the expression above is
+$-(A_{1,1}+\cdots+A_{n,n})$, which equals $-\tr T$. The terms in the formula
+for $\det(zI-A)$ coming from other elements of $\operatorname{perm} n$ contain
+at most $n-2$ factors of the form $z-A_{k,k}$ and thus do not contribute to the
+coefficient of $z^{n-1}$ in the characteristic polynomial of $T$.
+\end{proof}
+
+\marginnote{The next result was proved by Jacques Hadamard (1865--1963) in
+1893.}%
+In the result below, think of the columns of the $n$-by-$n$ matrix $A$ as
+elements of $\F^n$. The norms appearing below then arise from the standard
+inner product on $\F^n$. Recall that the notation $R_{\cdot,k}$ in the proof
+below means the $k^{\text{th}}$ column of the matrix $R$ (as was defined in
+\ref{ax:3.44}).
+
+\begin{result}[Hadamard's inequality]\label{ax:9.66}
+Suppose $A$ is an $n$-by-$n$ matrix. Let $v_1,\dots,v_n$ denote the columns of
+$A$. Then
+\[ \abs{\det A} \le \prod_{k=1}^n\norm{v_k}. \]
+\end{result}
+
+\begin{proof}
+If $A$ is not invertible, then $\det A=0$ and hence the desired inequality
+holds in this case.
+
+Thus assume that $A$ is invertible. The QR factorization (\ref{ax:7.58}) tells
+us that there exist a unitary matrix $Q$ and an upper-triangular matrix $R$
+whose diagonal contains only positive numbers such that $A=QR$. We have
+\begin{align*}
+\abs{\det A} &= \abs{\det Q}\,\abs{\det R}\\
+  &= \abs{\det R}\\
+  &= \prod_{k=1}^n R_{k,k}\\
+  &\le \prod_{k=1}^n\norm{R_{\cdot,k}}\\
+  &= \prod_{k=1}^n\norm{QR_{\cdot,k}}\\
+  &= \prod_{k=1}^n\norm{v_k},
+\end{align*}
+where the first line comes from \ref{ax:9.49}(b), the second line comes from
+\ref{ax:9.58}, the third line comes from \ref{ax:9.48}, and the fifth line
+holds because $Q$ is an isometry.
+\end{proof}
+
+To give a geometric interpretation to Hadamard's inequality, suppose $\F=\R$.
+Let $T\in\Lin(\R^n)$ be the operator such that $Te_k=v_k$ for each
+$k=1,\dots,n$, where $e_1,\dots,e_n$ is the standard basis of $\R^n$. Then $T$
+maps the box $P(e_1,\dots,e_n)$ onto the parallelepiped $P(v_1,\dots,v_n)$
+[see \ref{ax:7.102} and \ref{ax:7.105} for a review of this notation and
+terminology]. Because the box $P(e_1,\dots,e_n)$ has volume $1$, this implies
+(by \ref{ax:9.61}) that the parallelepiped $P(v_1,\dots,v_n)$ has volume
+$\abs{\det T}$, which equals $\abs{\det A}$. Thus Hadamard's inequality above
+can be interpreted to say that among all parallelepipeds whose edges have
+lengths $\norm{v_1},\dots,\norm{v_n}$, the ones with largest volume have
+orthogonal edges $($and thus have volume
+$\prod_{k=1}^n\norm{v_k})$.
+
+For a necessary and sufficient condition for Hadamard's inequality to be an
+equality, see Exercise~18.
+
+\begingroup\emergencystretch=2em
+The matrix in the next result is called the \emph{Vandermonde matrix}.
+Vandermonde matrices have important applications in polynomial interpolation,
+the discrete Fourier transform, and other areas of mathematics. The proof of
+the next result is a nice illustration of the power of switching between
+matrices and linear maps.\par\endgroup
+
+\begin{result}[Determinant of Vandermonde matrix]\label{ax:9.67}
+Suppose $n>1$ and $\beta_1,\dots,\beta_n\in\F$. Then
+\[ \det\begin{pmatrix}
+     1 & \beta_1 & \beta_1^2 & \cdots & \beta_1^{n-1}\\
+     1 & \beta_2 & \beta_2^2 & \cdots & \beta_2^{n-1}\\
+       &         & \ddots    &        &              \\
+     1 & \beta_n & \beta_n^2 & \cdots & \beta_n^{n-1}
+   \end{pmatrix}
+   = \prod_{1\le j<k\le n}(\beta_k-\beta_j). \]
+\end{result}
+
+\begin{proof}
+Let $1,z,\dots,z^{n-1}$ be the standard basis of $\Poly_{n-1}(\F)$ and let
+$e_1,\dots,e_n$ denote the standard basis of $\F^n$. Define a linear map
+$S\colon\Poly_{n-1}(\F)\to\F^n$ by
+\[ Sp = \bigl(p(\beta_1),\dots,p(\beta_n)\bigr). \]
+
+Let $A$ denote the Vandermonde matrix shown in the statement of this result.
+Note that
+\[ A = \Mat\bigl(S,(1,z,\dots,z^{n-1}),(e_1,\dots,e_n)\bigr). \]
+
+Let $T\colon\Poly_{n-1}(\F)\to\Poly_{n-1}(\F)$ be the operator on
+$\Poly_{n-1}(\F)$ such that $T1=1$ and
+\[ Tz^k = (z-\beta_1)(z-\beta_2)\cdots(z-\beta_k) \]
+for $k=1,\dots,n-1$. Let
+$B=\Mat\bigl(T,(1,z,\dots,z^{n-1}),(1,z,\dots,z^{n-1})\bigr)$. Then $B$ is an
+upper-triangular matrix all of whose diagonal entries equal $1$. Thus
+$\det B=1$ (by \ref{ax:9.48}).
+
+Let $C=\Mat\bigl(ST,(1,z,\dots,z^{n-1}),(e_1,\dots,e_n)\bigr)$. Thus $C=AB$
+(by \ref{ax:3.81}), which implies that
+\[ \det A = (\det A)(\det B) = \det C. \]
+The definitions of $C$, $S$, and $T$ show that $C$ equals
+\[ \begin{pmatrix}
+   1 & 0 & 0 & \cdots & 0\\
+   1 & \beta_2-\beta_1 & 0 & \cdots & 0\\
+   1 & \beta_3-\beta_1 & (\beta_3-\beta_1)(\beta_3-\beta_2) & \cdots & 0\\
+     &  &  & \ddots & \\
+   1 & \beta_n-\beta_1 & (\beta_n-\beta_1)(\beta_n-\beta_2) & \cdots
+     & (\beta_n-\beta_1)(\beta_n-\beta_2)\cdots(\beta_n-\beta_{n-1})
+   \end{pmatrix}. \]
+Now $\det A=\det C=\displaystyle\prod_{1\le j<k\le n}(\beta_k-\beta_j)$, where
+we have used \ref{ax:9.56}(a) and \ref{ax:9.48}.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{9C}
+
+\begin{exercise}
+Prove or give a counterexample: $S,T\in\Lin(V)\implies
+\det(S+T)=\det S+\det T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose the first column of a square matrix $A$ consists of all zeros except
+possibly the first entry $A_{1,1}$. Let $B$ be the matrix obtained from $A$ by
+deleting the first row and the first column of $A$. Show that
+$\det A=A_{1,1}\det B$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is nilpotent. Prove that $\det(I+T)=1$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $S\in\Lin(V)$. Prove that $S$ is unitary if and only if
+$\abs{\det S}=\norm{S}=1$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $A$ is a block upper-triangular matrix
+\[ A = \begin{pmatrix}
+       A_1 &        & *\\
+           & \ddots &  \\
+       0   &        & A_m
+       \end{pmatrix}, \]
+where each $A_k$ along the diagonal is a square matrix. Prove that
+\[ \det A = (\det A_1)\cdots(\det A_m). \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $A=\begin{pmatrix} v_1 & \cdots & v_n \end{pmatrix}$ is an $n$-by-$n$
+matrix, with $v_k$ denoting the $k^{\text{th}}$ column of $A$. Show that if
+$(m_1,\dots,m_n)\in\operatorname{perm} n$, then
+\[ \det\begin{pmatrix} v_{m_1} & \cdots & v_{m_n} \end{pmatrix}
+   = \bigl(\sgn(m_1,\dots,m_n)\bigr)\det A. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is invertible. Let $p$ denote the characteristic
+polynomial of $T$ and let $q$ denote the characteristic polynomial of $T^{-1}$.
+Prove that
+\[ q(z) = \frac{1}{p(0)}z^{\dim V}p\Bigl(\frac{1}{z}\Bigr) \]
+for all nonzero $z\in\F$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is an operator with no eigenvalues (which implies that
+$\F=\R$). Prove that $\det T>0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $V$ is a real vector space of even dimension, $T\in\Lin(V)$, and
+$\det T<0$. Prove that $T$ has at least two distinct eigenvalues.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a real vector space of odd dimension and $T\in\Lin(V)$. Without
+using the minimal polynomial, prove that $T$ has an eigenvalue.
+\exnote{\emergencystretch=2em This result was previously proved without using determinants or the
+characteristic polynomial---see \ref{ax:5.34}.}
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $\F=\R$, $T\in\Lin(V)$, and $\det T>0$, then
+$T$ has a square root.
+\exnote{If $\F=\C$, $T\in\Lin(V)$, and $\det T\ne0$, then $T$ has a square root
+(see \ref{ax:8.41}).}
+\end{exercise}
+
+\begin{exercise}
+Suppose $S,T\in\Lin(V)$ and $S$ is invertible. Define $p\colon\F\to\F$ by
+\[ p(z) = \det(zS-T). \]
+Prove that $p$ is a polynomial of degree $\dim V$ and that the coefficient of
+$z^{\dim V}$ in this polynomial is $\det S$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$, $T\in\Lin(V)$, and $n=\dim V>2$. Let
+$\lambda_1,\dots,\lambda_n$ denote the eigenvalues of $T$, with each eigenvalue
+included as many times as its multiplicity.
+\begin{parts}
+\item Find a formula for the coefficient of $z^{n-2}$ in the characteristic
+  polynomial of $T$ in terms of $\lambda_1,\dots,\lambda_n$.
+\item Find a formula for the coefficient of $z$ in the characteristic
+  polynomial of $T$ in terms of $\lambda_1,\dots,\lambda_n$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space and $T$ is a positive operator on $V$.
+Prove that
+\[ \det\sqrt{T} = \sqrt{\det T}. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space and $T\in\Lin(V)$. Use the polar
+decomposition to give a proof that
+\[ \abs{\det T} = \sqrt{\det(T^*T)} \]
+that is different from the proof given earlier (see \ref{ax:9.60}).
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Define $g\colon\F\to\F$ by $g(x)=\det(I+xT)$. Show that
+$g'(0)=\tr T$.
+\exnote{Look for a clean solution to this exercise, without using the explicit
+but complicated formula for the determinant of a matrix.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $a,b,c$ are positive numbers. Find the volume of the ellipsoid
+\[ \biggl\{(x,y,z)\in\R^3 : \frac{x^2}{a^2}+\frac{y^2}{b^2}+\frac{z^2}{c^2}<1
+   \biggr\} \]
+by finding a set $\Omega\subseteq\R^3$ whose volume you know and an operator
+$T$ on $\R^3$ such that $T(\Omega)$ equals the ellipsoid above.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $A$ is an invertible square matrix. Prove that Hadamard's
+inequality (\ref{ax:9.66}) is an equality if and only if each column of $A$ is
+orthogonal to the other columns.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space, $e_1,\dots,e_n$ is an orthonormal basis
+of $V$, and $T\in\Lin(V)$ is a positive operator.
+\begin{parts}
+\item Prove that $\det T\le\prod_{k=1}^n\ip{Te_k}{e_k}$.
+\item Prove that if $T$ is invertible, then the inequality in (a) is an equality
+  if and only if $e_k$ is an eigenvector of $T$ for each $k=1,\dots,n$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $A$ is an $n$-by-$n$ matrix, and suppose $c$ is such that
+$\abs{A_{j,k}}\le c$ for all $j,k\in\{1,\dots,n\}$. Prove that
+\[ \abs{\det A} \le c^nn^{n/2}. \]
+\exnote{The formula for the determinant of a matrix (\ref{ax:9.46}) shows that
+$\abs{\det A}\le c^nn!$. However, the estimate given by this exercise is much
+better. For example, if $c=1$ and $n=100$, then $c^nn!\approx10^{158}$, but the
+estimate given by this exercise is the much smaller number $10^{100}$. If $n$
+is an integer power of $2$, then the inequality above is sharp and cannot be
+improved.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $n$ is a positive integer and $\delta\colon\C^{n,n}\to\C$ is a function
+such that
+\[ \delta(AB) = \delta(A)\cdot\delta(B) \]
+for all $A,B\in\C^{n,n}$ and $\delta(A)$ equals the product of the diagonal
+entries of $A$ for each diagonal matrix $A\in\C^{n,n}$. Prove that
+\[ \delta(A) = \det A \]
+for all $A\in\C^{n,n}$.
+\exnote{Recall that $\C^{n,n}$ denotes the set of $n$-by-$n$ matrices with
+entries in $\C$. This exercise shows that the determinant is the unique
+function defined on square matrices that is multiplicative and has the desired
+behavior on diagonal matrices. This result is analogous to Exercise~10 in
+Section~8D, which shows that the trace is uniquely determined by its algebraic
+properties.}
+\end{exercise}
+
+\axquote{I find that in my own elementary lectures, I have, for pedagogical
+reasons, pushed determinants more and more into the background. Too often I
+have had the experience that, while the students acquired facility with the
+formulas, which are so useful in abbreviating long expressions, they often
+failed to gain familiarity with their \emph{meaning}, and skill in manipulation
+prevented the student from going into all the details of the subject and so
+gaining a mastery.}{\emph{Elementary Mathematics from an Advanced Standpoint:
+Geometry}, Felix Klein}

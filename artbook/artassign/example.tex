@@ -1,0 +1,139 @@
+% Build with LuaLaTeX (or XeLaTeX), twice:   lualatex example.tex
+%
+% For a question-only copy, change  solutions=show  to  solutions=hide
+% below (or load the package with the `nosolutions' option).
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, left=14mm, right=24mm, top=16mm, bottom=22mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\usepackage{amsmath, amssymb}
+\usepackage{passign}   % after geometry
+
+\passignsetup{
+  course        = Linear Algebra,
+  course code   = MATH 2210,
+  term          = Autumn 2026,
+  number        = 3,
+  title         = {Eigenvalues and\\ Diagonalisation},
+  author        = Ada Lovelace,
+  student id    = 20260042,
+  instructor    = Prof.\ C.\ Babbage,
+  due           = 12 October 2026,
+  solutions     = show,
+}
+
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+
+\maketitle
+\addtitlefield{Collaborators}{None}
+
+\begin{remark*}[Conventions]
+Throughout, matrices are real unless stated otherwise, and $I$ denotes
+the identity matrix of the appropriate size.  Show all working.
+\end{remark*}
+
+\section{Warm-up}
+
+\begin{question}[title=A first eigenvalue computation, marks=10]
+Let
+\[
+  A = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}.
+\]
+\begin{parts}
+  \part[4] Find the eigenvalues of $A$.
+  \part[3] Find a basis of each eigenspace.
+  \part[3] Is $A$ diagonalisable?  Justify your answer.
+    \begin{subparts}
+      \subpart[1] State the criterion you are using.
+      \subpart[2] Apply it to $A$.
+    \end{subparts}
+\end{parts}
+\end{question}
+
+\begin{solution}
+\begin{parts}
+  \part The characteristic polynomial is
+  \[
+    \det(A-\lambda I) = (2-\lambda)^2 - 1 = (\lambda-1)(\lambda-3),
+  \]
+  so the eigenvalues are $\lambda_1 = 1$ and $\lambda_2 = 3$.
+
+  \part For $\lambda_1 = 1$ we solve $(A-I)v=0$, which gives $v_1 =
+  (1,-1)^{\top}$.  For $\lambda_2 = 3$ we solve $(A-3I)v=0$, which gives
+  $v_2 = (1,1)^{\top}$.
+
+  \part Yes.
+    \begin{subparts}
+      \subpart A matrix is diagonalisable if and only if $\R^n$ has a
+      basis of eigenvectors.
+      \subpart The vectors $v_1, v_2$ are linearly independent, so they
+      form a basis of $\R^2$ and
+      \[
+        A = PDP^{-1}, \quad
+        P = \begin{pmatrix} 1 & 1 \\ -1 & 1 \end{pmatrix}, \quad
+        D = \begin{pmatrix} 1 & 0 \\ 0 & 3 \end{pmatrix}.
+      \]
+    \end{subparts}
+\end{parts}
+\end{solution}
+
+\section{Proofs}
+
+\begin{question}[5]
+Recall the following definition.
+
+\begin{definition}[Eigenvalue]
+A scalar $\lambda$ is an \emph{eigenvalue} of $A$ if $Av=\lambda v$ for
+some non-zero vector $v$.
+\end{definition}
+
+Show that if $\lambda$ is an eigenvalue of an invertible matrix $A$, then
+$\lambda \neq 0$ and $\lambda^{-1}$ is an eigenvalue of $A^{-1}$.
+
+\begin{hint*}
+Apply $A^{-1}$ to both sides of $Av = \lambda v$.
+\end{hint*}
+\end{question}
+
+\begin{solution}
+Let $Av=\lambda v$ with $v\neq 0$.  If $\lambda=0$ then $Av=0$, which
+contradicts the invertibility of $A$.  Hence $\lambda\neq0$, and applying
+$A^{-1}$ gives $v=\lambda A^{-1}v$, that is
+$A^{-1}v=\lambda^{-1}v$.\marginnote{We need $v\ne0$ here, otherwise the
+conclusion is vacuous.}
+
+\begin{remark}
+The converse also holds: apply the same argument to $A^{-1}$.
+\end{remark}
+\end{solution}
+
+\begin{question}[title=Trace and determinant, marks=3+3]
+Let $A$ be a $2\times2$ matrix with eigenvalues $\lambda_1,\lambda_2$.
+\begin{parts}
+  \part Prove that $\operatorname{tr}A=\lambda_1+\lambda_2$.
+  \part Prove that $\det A=\lambda_1\lambda_2$.
+\end{parts}
+\end{question}
+
+\begin{solution}[Via the characteristic polynomial]
+Write $\chi_A(\lambda)=\lambda^2-(\operatorname{tr}A)\lambda+\det A$.
+Since $\lambda_1,\lambda_2$ are its roots,
+$\chi_A(\lambda)=(\lambda-\lambda_1)(\lambda-\lambda_2)$, and comparing
+coefficients yields both claims.\sidenote{Valid over $\mathbb{C}$, where the
+polynomial always splits.}
+\end{solution}
+
+\begin{question*}[label=Bonus, marks=2]
+Does every real $2\times2$ matrix have a real eigenvalue?  Give a proof
+or a counterexample.
+\end{question*}
+
+\begin{solution}
+No.  The rotation $R=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$ has
+characteristic polynomial $\lambda^2+1$, which has no real roots.
+\end{solution}
+
+\end{document}

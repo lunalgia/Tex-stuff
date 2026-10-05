@@ -1,4 +1,4 @@
-\documentclass[a4paper, 10    pt, twoside, openany]{memoir}
+\documentclass[a4paper, 10pt, twoside, openany]{memoir}
 %reduces compile time, albeit at the cost of way higher file size.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,7 +29,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %math setup
-\usepackage{amsmath}
+\usepackage{amsmath, amssymb}
 \usepackage{amsthm}
 %\usepackage[lite, subscriptcorrection]{mtpro2}
 \usepackage[lite, zswash, subscriptcorrection]{mtpro2}
@@ -91,6 +91,10 @@
 \newfontfamily\chapterfont{EB Garamond}
 \newfontfamily\chapternumfont{Riesling}
 
+%for fixing the font that operators like \limsup use
+\DeclareSymbolFont{operators}{TU}{\rmdefault}{m}{n}
+\SetSymbolFont{operators}{bold}{TU}{\rmdefault}{b}{n}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %
@@ -128,8 +132,8 @@
 \setulmarginsandblock{1.8cm}{0cm}{*}
 
 %non indented paras.
-%\setlength{\parindent}{0em}
-%\nonzeroparskip
+\setlength{\parindent}{0em}
+\nonzeroparskip
 
 \usepackage[dvipsnames]{xcolor}
 \usepackage{ragged2e}
@@ -258,7 +262,7 @@
 }
 % ===== BACK MATTER CHAPTER STYLE
 \makechapterstyle{backmatter}{% Back matter chapter style
-  \chapterstyle{custom}% Backmatter chapterstyle is similar to mainmatter, for appendices.
+  \chapterstyle{plain}% Backmatter chapterstyle is similar to mainmatter, for appendices.
 }
 
 % Setup styles for frontmatter and backmatter
@@ -387,9 +391,16 @@ urlcolor=hkgreen,
 \footmarkstyle{{\itshape#1. }}
 \setlength{\footmarkwidth}{0em}
 \setlength{\footmarksep}{-\footmarkwidth}
-% memoir command - do all footnotes in margin
-\footnotesinmargin
 
+% memoir command - do all footnotes in margin
+% don't use memoir's built-in mechanism
+% (remove \footnotesinmargin)
+
+\renewcommand{\footnote}[2][0pt]{%
+  \refstepcounter{footnote}%
+  \textsuperscript{\thefootnote}%
+  \marginnote{\footnotesize{\itshape\thefootnote. }#2}[#1]%
+}
 % SIDECAPTIONS
 \setsidecaps{\marginparsep}{\marginparwidth}
 \sidecapmargin{outer}
@@ -407,7 +418,7 @@ urlcolor=hkgreen,
   {\small\bfseries\scshape\figurename~\thefigure}}
 \makeatother
 
-\renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont} % Change footnotesize to 10pt
+\renewcommand{\footnotesize}{\fontsize{9pt}{12pt}\selectfont} % Change footnotesize to 10pt
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                                                                                                                                                %

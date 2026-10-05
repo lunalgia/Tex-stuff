@@ -1,0 +1,546 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{4}\setcounter{theorem}{63}
+\fi % TEST-ONLY-END
+% Source: book pp. 270--279 (PDF 284--293); no solutions.
+% \axeqno: see 7C.tex
+\DeclareRobustCommand\axeqno{\refstepcounter{theorem}\tag*{\thetheorem}}
+\section{Singular Value Decomposition}
+
+\subsection{Singular Values}
+
+We will need the following result in this section.
+
+\begin{result}[Properties of $T^*T$]\label{ax:7.64}
+Suppose $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $T^*T$ is a positive operator on $V$;
+\item $\nul T^*T=\nul T$;
+\item $\range T^*T=\range T^*$;
+\item $\dim\range T=\dim\range T^*=\dim\range T^*T$.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item We have
+  \[ (T^*T)^* = T^*(T^*)^* = T^*T. \]
+  Thus $T^*T$ is self-adjoint.
+
+  If $v\in V$, then
+  \[ \bigl\langle (T^*T)v, v\bigr\rangle = \ip{T^*(Tv)}{v} = \ip{Tv}{Tv}
+     = \norm{Tv}^2 \ge 0. \]
+  Thus $T^*T$ is a positive operator.
+\item First suppose $v\in\nul T^*T$. Then
+  \[ \norm{Tv}^2 = \ip{Tv}{Tv} = \ip{T^*Tv}{v} = \ip{0}{v} = 0. \]
+  Thus $Tv=0$, proving that $\nul T^*T\subseteq\nul T$.
+
+  The inclusion in the other direction is clear, because if $v\in V$ and
+  $Tv=0$, then $T^*Tv=0$.
+
+  Thus $\nul T^*T=\nul T$, completing the proof of (b).
+\item We already know from (a) that $T^*T$ is self-adjoint. Thus
+  \[ \range T^*T = (\nul T^*T)^\perp = (\nul T)^\perp = \range T^*, \]
+  where the first and last equalities come from \ref{ax:7.6} and the second
+  equality comes from (b).
+\item To verify the first equation in (d), note that
+  \[ \dim\range T = \dim(\nul T^*)^\perp = \dim W-\dim\nul T^* = \dim\range T^*, \]
+  where the first equality comes from \ref{ax:7.6}(d), the second equality
+  comes from \ref{ax:6.51}, and the last equality comes from the fundamental
+  theorem of linear maps (\ref{ax:3.21}).
+
+  The equality $\dim\range T^*=\dim\range T^*T$ follows from (c).\qedhere
+\end{parts}
+\end{proof}
+
+The eigenvalues of an operator tell us something about the behavior of the
+operator. Another collection of numbers, called the singular values, is also
+useful. Eigenspaces and the notation $E$ (used in the examples) were defined in
+\ref{ax:5.52}.
+
+\begin{definition}[Singular values]\label{ax:7.65}
+Suppose $T\in\Lin(V,W)$. The \emph{singular values} of $T$ are the nonnegative
+square roots of the eigenvalues of $T^*T$, listed in decreasing order, each
+included as many times as the dimension of the corresponding eigenspace of
+$T^*T$.
+\end{definition}
+
+\begin{example}[Singular values of an operator on $\F^4$]\label{ax:7.66}
+Define $T\in\Lin(\F^4)$ by $T(z_1,z_2,z_3,z_4)=\allowbreak(0,3z_1,2z_2,-3z_4)$. A
+calculation shows that
+\[ T^*T(z_1,z_2,z_3,z_4) = (9z_1,4z_2,0,9z_4), \]
+as you should verify. Thus the standard basis of $\F^4$ diagonalizes $T^*T$,
+and we see that the eigenvalues of $T^*T$ are $9$, $4$, and $0$. Also, the
+dimensions of the eigenspaces corresponding to the eigenvalues are
+\[ \dim E(9,T^*T)=2 \quad\text{and}\quad \dim E(4,T^*T)=1 \quad\text{and}\quad
+   \dim E(0,T^*T)=1. \]
+Taking nonnegative square roots of these eigenvalues of $T^*T$ and using
+dimension information from above, we conclude that the singular values of $T$
+are $3,3,2,0$.
+
+The only eigenvalues of $T$ are $-3$ and $0$. Thus in this case, the collection
+of eigenvalues did not pick up the number $2$ that appears in the definition
+(and hence the behavior) of $T$, but the list of singular values does include
+$2$.
+\end{example}
+
+\begin{example}[Singular values of a linear map from $\F^4$ to
+$\F^3$]\label{ax:7.67}
+Suppose $T\in\Lin(\F^4,\F^3)$ has matrix (with respect to the standard bases)
+\[ \begin{pmatrix} 0&0&0&-5\\ 0&0&0&0\\ 1&1&0&0 \end{pmatrix}. \]
+You can verify that the matrix of $T^*T$ is
+\[ \begin{pmatrix} 1&1&0&0\\ 1&1&0&0\\ 0&0&0&0\\ 0&0&0&25 \end{pmatrix} \]
+and that the eigenvalues of the operator $T^*T$ are $25,2,0$, with
+$\dim E(25,T^*T)=1$, $\dim E(2,T^*T)=1$, and $\dim E(0,T^*T)=2$. Thus the
+singular values of $T$ are $5,\sqrt2,0,0$.
+\end{example}
+
+See Exercise~2 for a characterization of the positive singular values.
+
+\begin{result}[Role of positive singular values]\label{ax:7.68}
+Suppose that $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $T$ is injective $\iff$ $0$ is not a singular value of $T$;
+\item the number of positive singular values of $T$ equals $\dim\range T$;
+\item $T$ is surjective $\iff$ number of positive singular values of $T$
+  equals $\dim W$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+The linear map $T$ is injective if and only if $\nul T=\{0\}$, which happens if
+and only if $\nul T^*T=\{0\}$ [by \ref{ax:7.64}(b)], which happens if and only
+if $0$ is not an eigenvalue of $T^*T$, which happens if and only if $0$ is not
+a singular value of $T$, completing the proof of (a).
+
+The spectral theorem applied to $T^*T$ shows that $\dim\range T^*T$ equals the
+number of positive eigenvalues of $T^*T$ (counting repetitions). Thus
+\ref{ax:7.64}(d) implies that $\dim\range T$ equals the number of positive
+singular values of $T$, proving (b).
+
+Use (b) and \ref{ax:2.39} to show that (c) holds.
+\end{proof}
+
+The table below compares eigenvalues with singular values.
+
+\begin{center}\small
+\begin{tabular}{|p{.44\linewidth}|p{.44\linewidth}|}
+\hline
+\multicolumn{1}{|c|}{\textbf{list of eigenvalues}} &
+\multicolumn{1}{c|}{\textbf{list of singular values}}\\
+\hline
+context: vector spaces & context: inner product spaces\\
+\hline
+defined only for linear maps from a vector space to itself &
+defined for linear maps from an inner product space to a possibly different
+inner product space\\
+\hline
+can be arbitrary real numbers (if $\F=\R$) or complex numbers (if $\F=\C$) &
+are nonnegative numbers\\
+\hline
+can be the empty list if $\F=\R$ & length of list equals dimension of domain\\
+\hline
+includes $0$ $\iff$ operator is not invertible &
+includes $0$ $\iff$ linear map is not injective\\
+\hline
+no standard order, especially if $\F=\C$ & always listed in decreasing order\\
+\hline
+\end{tabular}
+\end{center}
+
+The next result nicely characterizes isometries in terms of singular values.
+
+\begin{result}[Isometries characterized by having all singular values
+equal~$1$]\label{ax:7.69}
+Suppose that $S\in\Lin(V,W)$. Then
+\[ S \text{ is an isometry} \iff \text{all singular values of $S$ equal $1$}. \]
+\end{result}
+
+\begin{proof}
+We have
+\begin{align*}
+S \text{ is an isometry} &\iff S^*S=I\\
+  &\iff \text{all eigenvalues of $S^*S$ equal $1$}\\
+  &\iff \text{all singular values of $S$ equal $1$},
+\end{align*}
+where the first equivalence comes from \ref{ax:7.49} and the second equivalence
+comes from the spectral theorem (\ref{ax:7.29} or \ref{ax:7.31}) applied to the
+self-adjoint operator $S^*S$.
+\end{proof}
+
+\subsection{SVD for Linear Maps and for Matrices}
+
+\marginnote[-12mm]{The singular value decomposition is useful in computational linear
+algebra because good techniques exist for approximating eigenvalues and
+eigenvectors of positive operators such as $T^*T$, whose eigenvalues and
+eigenvectors lead to the singular value decomposition.}%
+The next result shows that every linear map from $V$ to $W$ has a remarkably
+clean description in terms of its singular values and orthonormal lists in $V$
+and $W$. In the next section we will see several important applications of the
+singular value decomposition (often called the SVD).
+
+\begin{result}[Singular value decomposition]\label{ax:7.70}
+Suppose $T\in\Lin(V,W)$ and the positive singular values of $T$ are
+$s_1,\dots,s_m$. Then there exist orthonormal lists $e_1,\dots,e_m$ in $V$ and
+$f_1,\dots,f_m$ in $W$ such that
+\[ Tv = s_1\ip{v}{e_1}f_1+\cdots+s_m\ip{v}{e_m}f_m \axeqno\label{ax:7.71} \]
+for every $v\in V$.
+\end{result}
+
+\begin{proof}
+Let $s_1,\dots,s_n$ denote the singular values of $T$ (thus $n=\dim V$).
+Because $T^*T$ is a positive operator [see \ref{ax:7.64}(a)], the spectral
+theorem implies that there exists an orthonormal basis $e_1,\dots,e_n$ of $V$
+with
+\[ T^*Te_k = s_k^2e_k \axeqno\label{ax:7.72} \]
+for each $k=1,\dots,n$.
+
+For each $k=1,\dots,m$, let
+\[ f_k = \frac{Te_k}{s_k}. \axeqno\label{ax:7.73} \]
+If $j,k\in\{1,\dots,m\}$, then
+\[ \ip{f_j}{f_k} = \frac{1}{s_js_k}\ip{Te_j}{Te_k}
+   = \frac{1}{s_js_k}\ip{e_j}{T^*Te_k} = \frac{s_k}{s_j}\ip{e_j}{e_k}
+   = \begin{cases} 0 & \text{if } j\ne k,\\ 1 & \text{if } j=k. \end{cases} \]
+Thus $f_1,\dots,f_m$ is an orthonormal list in $W$.
+
+If $k\in\{1,\dots,n\}$ and $k>m$, then $s_k=0$ and hence $T^*Te_k=0$ (by
+\ref{ax:7.72}), which implies that $Te_k=0$ [by \ref{ax:7.64}(b)].
+
+Suppose $v\in V$. Then
+\begin{align*}
+Tv &= T(\ip{v}{e_1}e_1+\cdots+\ip{v}{e_n}e_n)\\
+   &= \ip{v}{e_1}Te_1+\cdots+\ip{v}{e_m}Te_m\\
+   &= s_1\ip{v}{e_1}f_1+\cdots+s_m\ip{v}{e_m}f_m,
+\end{align*}
+where the last index in the first line switched from $n$ to $m$ in the second
+line because $Te_k=0$ if $k>m$ (as noted in the paragraph above) and the third
+line follows from \ref{ax:7.73}. The equation above is our desired result.
+\end{proof}
+
+Suppose $T\in\Lin(V,W)$, the positive singular values of $T$ are
+$s_1,\dots,s_m$, and $e_1,\dots,e_m$ and $f_1,\dots,f_m$ are as in the singular
+value decomposition \ref{ax:7.70}. The orthonormal list $e_1,\dots,e_m$ can be
+extended to an orthonormal basis $e_1,\dots,e_{\dim V}$ of $V$ and the
+orthonormal list $f_1,\dots,f_m$ can be extended to an orthonormal basis
+$f_1,\dots,f_{\dim W}$ of $W$. The formula \ref{ax:7.71} shows that
+\[ Te_k = \begin{cases} s_kf_k & \text{if } 1\le k\le m,\\
+   0 & \text{if } m<k\le\dim V. \end{cases} \]
+Thus the matrix of $T$ with respect to the orthonormal bases
+$(e_1,\dots,e_{\dim V})$ and $(f_1,\dots,f_{\dim W})$ has the simple form
+\[ \Mat\bigl(T,(e_1,\dots,e_{\dim V}),(f_1,\dots,f_{\dim W})\bigr)_{j,k}
+   = \begin{cases} s_k & \text{if } 1\le j=k\le m,\\
+   0 & \text{otherwise}. \end{cases} \]
+
+If $\dim V=\dim W$ (as happens, for example, if $W=V$), then the matrix
+described in the paragraph above is a diagonal matrix. If we extend the
+definition of diagonal matrix as follows to apply to matrices that are not
+necessarily square, then we have proved the wonderful result that every linear
+map from $V$ to $W$ has a diagonal matrix with respect to appropriate
+orthonormal bases.
+
+\begin{definition}[Diagonal matrix]\label{ax:7.74}
+An $M$-by-$N$ matrix $A$ is called a \emph{diagonal matrix} if all entries of
+the matrix are $0$ except possibly $A_{k,k}$ for $k=1,\dots,\min(M,N)$.
+\end{definition}
+
+The table below compares the spectral theorem (\ref{ax:7.29} and
+\ref{ax:7.31}) with the singular value decomposition (\ref{ax:7.70}).
+
+\begin{center}\small
+\begin{tabular}{|p{.44\linewidth}|p{.44\linewidth}|}
+\hline
+\multicolumn{1}{|c|}{\textbf{spectral theorem}} &
+\multicolumn{1}{c|}{\textbf{singular value decomposition}}\\
+\hline
+describes only self-adjoint operators (when $\F=\R$) or normal operators (when
+$\F=\C$) &
+describes arbitrary linear maps from an inner product space to a possibly
+different inner product space\\
+\hline
+produces a single orthonormal basis &
+produces two orthonormal lists, one for domain space and one for range space,
+that are not necessarily the same even when range space equals domain space\\
+\hline
+different proofs depending on whether $\F=\R$ or $\F=\C$ &
+same proof works regardless of whether $\F=\R$ or $\F=\C$\\
+\hline
+\end{tabular}
+\end{center}
+
+The singular value decomposition gives us a new way to understand the adjoint
+and the inverse of a linear map. Specifically, the next result shows that given
+a singular value decomposition of a linear map $T\in\Lin(V,W)$, we can obtain
+the adjoint of $T$ simply by interchanging the roles of the $e$'s and the
+$f$'s (see \ref{ax:7.77}). Similarly, we can obtain the pseudoinverse
+$T^\dagger$ (see \ref{ax:6.68}) of $T$ by interchanging the roles of the $e$'s
+and the $f$'s and replacing each positive singular value $s_k$ of $T$ with
+$1/s_k$ (see \ref{ax:7.78}).
+
+Recall that the pseudoinverse $T^\dagger$ in \ref{ax:7.78} below equals the
+inverse $T^{-1}$ if $T$ is invertible [see \ref{ax:6.69}(a)].
+
+\begin{result}[Singular value decomposition of adjoint and
+pseudoinverse]\label{ax:7.75}
+Suppose $T\in\Lin(V,W)$ and the positive singular values of $T$ are
+$s_1,\dots,s_m$. Suppose $e_1,\dots,e_m$ and $f_1,\dots,f_m$ are orthonormal
+lists in $V$ and $W$ such that
+\[ Tv = s_1\ip{v}{e_1}f_1+\cdots+s_m\ip{v}{e_m}f_m \axeqno\label{ax:7.76} \]
+for every $v\in V$. Then
+\[ T^*w = s_1\ip{w}{f_1}e_1+\cdots+s_m\ip{w}{f_m}e_m \axeqno\label{ax:7.77} \]
+and
+\[ T^\dagger w = \frac{\ip{w}{f_1}}{s_1}e_1+\cdots+\frac{\ip{w}{f_m}}{s_m}e_m
+   \axeqno\label{ax:7.78} \]
+for every $w\in W$.
+\end{result}
+
+\begin{proof}
+If $v\in V$ and $w\in W$ then
+\begin{align*}
+\ip{Tv}{w} &= \bigl\langle s_1\ip{v}{e_1}f_1+\cdots+s_m\ip{v}{e_m}f_m,
+  w\bigr\rangle\\
+&= s_1\ip{v}{e_1}\ip{f_1}{w}+\cdots+s_m\ip{v}{e_m}\ip{f_m}{w}\\
+&= \bigl\langle v, s_1\ip{w}{f_1}e_1+\cdots+s_m\ip{w}{f_m}e_m\bigr\rangle.
+\end{align*}
+This implies that
+\[ T^*w = s_1\ip{w}{f_1}e_1+\cdots+s_m\ip{w}{f_m}e_m, \]
+proving \ref{ax:7.77}.
+
+To prove \ref{ax:7.78}, suppose $w\in W$. Let
+\[ v = \frac{\ip{w}{f_1}}{s_1}e_1+\cdots+\frac{\ip{w}{f_m}}{s_m}e_m. \]
+Apply $T$ to both sides of the equation above, getting
+\begin{align*}
+Tv &= \frac{\ip{w}{f_1}}{s_1}Te_1+\cdots+\frac{\ip{w}{f_m}}{s_m}Te_m\\
+   &= \ip{w}{f_1}f_1+\cdots+\ip{w}{f_m}f_m\\
+   &= P_{\range T}w,
+\end{align*}
+where the second line holds because \ref{ax:7.76} implies that $Te_k=s_kf_k$
+if $k=1,\dots,m$, and the last line above holds because \ref{ax:7.76} implies
+that $f_1,\dots,f_m$ spans $\range T$ and thus is an orthonormal basis of
+$\range T$ [and hence \ref{ax:6.57}(i) applies]. The equation above, the
+observation that $v\in(\nul T)^\perp$ [see Exercise~8(b)], and the definition
+of $T^\dagger w$ (see \ref{ax:6.68}) show that $v=T^\dagger w$, proving
+\ref{ax:7.78}.
+\end{proof}
+
+\begin{example}[Finding a singular value decomposition]\label{ax:7.79}
+Define $T\in\Lin(\F^4,\F^3)$ by $T(x_1,x_2,x_3,x_4)=(-5x_4,0,x_1+x_2)$. We want
+to find a singular value decomposition of $T$. The matrix of $T$ (with respect
+to the standard bases) is
+\[ \begin{pmatrix} 0&0&0&-5\\ 0&0&0&0\\ 1&1&0&0 \end{pmatrix}. \]
+Thus, as discussed in Example~\ref{ax:7.67}, the matrix of $T^*T$ is
+\[ \begin{pmatrix} 1&1&0&0\\ 1&1&0&0\\ 0&0&0&0\\ 0&0&0&25 \end{pmatrix}, \]
+and the positive eigenvalues of $T^*T$ are $25,2$, with
+$\dim E(25,T^*T)=\allowbreak1$ and $\dim E(2,T^*T)=1$. Hence the positive singular values of $T$ are
+$5,\sqrt2$.
+
+Thus to find a singular value decomposition of $T$, we must find an
+orthonormal list $e_1,e_2$ in $\F^4$ and an orthonormal list $f_1,f_2$ in
+$\F^3$ such that
+\[ Tv = 5\ip{v}{e_1}f_1+\sqrt2\ip{v}{e_2}f_2 \]
+for all $v\in\F^4$.
+
+An orthonormal basis of $E(25,T^*T)$ is the vector $(0,0,0,1)$; an orthonormal
+basis of $E(2,T^*T)$ is the vector
+$\bigl(1/\sqrt2,1/\sqrt2,0,0\bigr)$. Thus, following the proof
+of \ref{ax:7.70}, we take
+\[ e_1=(0,0,0,1) \quad\text{and}\quad
+   e_2=\Bigl(1/\sqrt2,1/\sqrt2,0,0\Bigr) \]
+and
+\[ f_1=\frac{Te_1}{5}=(-1,0,0) \quad\text{and}\quad
+   f_2=\frac{Te_2}{\sqrt2}=(0,0,1). \]
+Then, as expected, we see that $e_1,e_2$ is an orthonormal list in $\F^4$ and
+$f_1,f_2$ is an orthonormal list in $\F^3$ and
+\[ Tv = 5\ip{v}{e_1}f_1+\sqrt2\ip{v}{e_2}f_2 \]
+for all $v\in\F^4$. Thus we have found a singular value decomposition of $T$.
+\end{example}
+
+The next result translates the singular value decomposition from the context
+of linear maps to the context of matrices. Specifically, the following result
+gives a factorization of an arbitrary matrix as the product of three nice
+matrices. The proof gives an explicit construction of these three matrices in
+terms of the singular value decomposition.
+
+In the next result, the phrase ``orthonormal columns'' should be interpreted to
+mean that the columns are orthonormal with respect to the standard Euclidean
+inner product.
+
+\begin{result}[Matrix version of SVD]\label{ax:7.80}
+Suppose $A$ is a $p$-by-$n$ matrix of rank $m\ge1$. Then there exist a
+$p$-by-$m$ matrix $B$ with orthonormal columns, an $m$-by-$m$ diagonal matrix
+$D$ with positive numbers on the diagonal, and an $n$-by-$m$ matrix $C$ with
+orthonormal columns such that
+\[ A = BDC^*. \]
+\end{result}
+
+\begin{proof}
+Let $T\colon\F^n\to\F^p$ be the linear map whose matrix with respect to the
+standard bases equals $A$. Then $\dim\range T=m$ (by \ref{ax:3.78}). Let
+\[ Tv = s_1\ip{v}{e_1}f_1+\cdots+s_m\ip{v}{e_m}f_m \axeqno\label{ax:7.81} \]
+be a singular value decomposition of $T$. Let
+\begin{align*}
+B &= \text{the $p$-by-$m$ matrix whose columns are $f_1,\dots,f_m$},\\
+D &= \text{the $m$-by-$m$ diagonal matrix whose diagonal entries are
+  $s_1,\dots,s_m$},\\
+C &= \text{the $n$-by-$m$ matrix whose columns are $e_1,\dots,e_m$}.
+\end{align*}
+
+Let $u_1,\dots,u_m$ denote the standard basis of $\F^m$. If
+$k\in\{1,\dots,m\}$ then
+\[ (AC-BD)u_k = Ae_k-B(s_ku_k) = s_kf_k-s_kf_k = 0. \]
+Thus $AC=BD$.
+
+Multiply both sides of this last equation by $C^*$ (the conjugate transpose of
+$C$) on the right to get
+\[ ACC^* = BDC^*. \]
+
+Note that the rows of $C^*$ are the complex conjugates of $e_1,\dots,e_m$. Thus
+if $k\in\{1,\dots,m\}$, then the definition of matrix multiplication shows that
+$C^*e_k=u_k$; hence $CC^*e_k=e_k$. Thus $ACC^*v=Av$ for all
+$v\in\spn(e_1,\dots,e_m)$.
+
+If $v\in\bigl(\spn(e_1,\dots,e_m)\bigr)^\perp$, then $Av=0$ (as follows from
+\ref{ax:7.81}) and $C^*v=0$ (as follows from the definition of matrix
+multiplication). Hence $ACC^*v=Av$ for all
+$v\in\bigl(\spn(e_1,\dots,e_m)\bigr)^\perp$.
+
+Because $ACC^*$ and $A$ agree on $\spn(e_1,\dots,e_m)$ and on
+$\bigl(\spn(e_1,\dots,e_m)\bigr)^\perp$, we conclude that $ACC^*=A$. Thus the
+displayed equation above becomes
+\[ A = BDC^*, \]
+as desired.
+\end{proof}
+
+Note that the matrix $A$ in the result above has $pn$ entries. In comparison,
+the matrices $B$, $D$, and $C$ above have a total of
+\[ m(p+m+n) \]
+entries. Thus if $p$ and $n$ are large numbers and the rank $m$ is considerably
+less than $p$ and $n$, then the number of entries that must be stored on a
+computer to represent $A$ is considerably less than $pn$.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{7E}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Show that $T=0$ if and only if all singular values of
+$T$ are $0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ and $s>0$. Prove that $s$ is a singular value of $T$ if
+and only if there exist nonzero vectors $v\in V$ and $w\in W$ such that
+\[ Tv=sw \quad\text{and}\quad T^*w=sv. \]
+\exnote{The vectors $v,w$ satisfying both equations above are called a
+\textbf{Schmidt pair}. Erhard Schmidt introduced the concept of singular values
+in 1907.}
+\end{exercise}
+
+\begin{exercise}
+Give an example of $T\in\Lin(\C^2)$ such that $0$ is the only eigenvalue of $T$
+and the singular values of $T$ are $5,0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V,W)$, $s_1$ is the largest singular value of $T$, and
+$s_n$ is the smallest singular value of $T$. Prove that
+\[ \{\norm{Tv} : v\in V \text{ and } \norm{v}=1\} = [s_n,s_1]. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(\C^2)$ is defined by $T(x,y)=(-4y,x)$. Find the singular
+values of $T$.
+\end{exercise}
+
+\begin{exercise}
+Find the singular values of the differentiation operator
+$D\in\Lin(\Poly_2(\R))$ defined by $Dp=p'$, where the inner product on
+$\Poly_2(\R)$ is as in Example~\ref{ax:6.34}.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V)$ is self-adjoint or that $\F=\C$ and $T\in\Lin(V)$ is
+normal. Let $\lambda_1,\dots,\lambda_n$ be the eigenvalues of $T$, each
+included in this list as many times as the dimension of the corresponding
+eigenspace. Show that the singular values of $T$ are
+$\abs{\lambda_1},\dots,\abs{\lambda_n}$, after these numbers have been sorted
+into decreasing order.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Suppose $s_1\ge s_2\ge\cdots\ge s_m>0$ and
+$e_1,\dots,e_m$ is an orthonormal list in $V$ and $f_1,\dots,f_m$ is an
+orthonormal list in $W$ such that
+\[ Tv = s_1\ip{v}{e_1}f_1+\cdots+s_m\ip{v}{e_m}f_m \]
+for every $v\in V$.
+\begin{parts}
+\item Prove that $f_1,\dots,f_m$ is an orthonormal basis of $\range T$.
+\item Prove that $e_1,\dots,e_m$ is an orthonormal basis of $(\nul T)^\perp$.
+\item Prove that $s_1,\dots,s_m$ are the positive singular values of $T$.
+\item Prove that if $k\in\{1,\dots,m\}$, then $e_k$ is an eigenvector of
+  $T^*T$ with corresponding eigenvalue $s_k^2$.
+\item Prove that
+  \[ TT^*w = s_1^2\ip{w}{f_1}f_1+\cdots+s_m^2\ip{w}{f_m}f_m \]
+  for all $w\in W$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Show that $T$ and $T^*$ have the same positive
+singular values.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ has singular values $s_1,\dots,s_n$. Prove that if $T$
+is an invertible linear map, then $T^{-1}$ has singular values
+\[ \frac{1}{s_n},\dots,\frac{1}{s_1}. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V,W)$ and $v_1,\dots,v_n$ is an orthonormal basis of
+$V$. Let $s_1,\dots,s_n$ denote the singular values of $T$.
+\begin{parts}
+\item Prove that $\norm{Tv_1}^2+\cdots+\norm{Tv_n}^2=s_1^2+\cdots+s_n^2$.
+\item Prove that if $W=V$ and $T$ is a positive operator, then
+  \[ \ip{Tv_1}{v_1}+\cdots+\ip{Tv_n}{v_n} = s_1+\cdots+s_n. \]
+\end{parts}
+\exnote{See the comment after Exercise 5 in Section 7A.}
+\end{exercise}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Give an example of a finite-dimensional vector space and an operator $T$
+  on it such that the singular values of $T^2$ do not equal the squares of the
+  singular values of $T$.
+\item Suppose $T\in\Lin(V)$ is normal. Prove that the singular values of $T^2$
+  equal the squares of the singular values of $T$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T_1,T_2\in\Lin(V)$. Prove that $T_1$ and $T_2$ have the same singular
+values if and only if there exist unitary operators $S_1,S_2\in\Lin(V)$ such
+that $T_1=S_1T_2S_2$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Let $s_n$ denote the smallest singular value of $T$.
+Prove that $s_n\norm{v}\le\norm{Tv}$ for every $v\in V$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $s_1\ge\cdots\ge s_n$ are the singular values of $T$.
+Prove that if $\lambda$ is an eigenvalue of $T$, then
+$s_1\ge\abs{\lambda}\ge s_n$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Prove that $(T^*)^\dagger=(T^\dagger)^*$.
+\exnote{Compare the result in this exercise to the analogous result for
+invertible linear maps [see \ref{ax:7.5}(f)].}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that $T$ is self-adjoint if and only if
+$T^\dagger$ is self-adjoint.
+\end{exercise}
+
+\axquote{Matrices unfold\\ Singular values gleam like stars\\ Order in chaos
+shines}{written by ChatGPT with input \emph{haiku about SVD}}

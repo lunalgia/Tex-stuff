@@ -1,0 +1,1182 @@
+\setlength{\chnumsep}{12em}
+\chapter{Sequences}
+
+\section{Preliminaries}
+
+Our aim is here to rigorously deal with the various results you have probably already encountered
+in calculus. While we will be \emph{rigorous}, we won't be \emph{abstract}. You have
+probably already encountered limits of functions. One way to think about
+such limits is \emph{sequences}. In highschool mathematics,
+you might have encountered ``intuitive'' notions of sequences:
+\[
+\text{Sequence: }  \text{a sequence is a list of numbers, e.g. } a_1, a_2, a_3, \ldots
+\]
+Let us work with this for now. Consider the following limit:
+\[
+\lim_{x \to 0} \sin(x) = 0.
+\]
+One way to think about it is by getting closer and closer to $0$ in a continuous manner. However, an equivalent,
+and maybe more powerful way is to think about a list of numbers that grows closer
+and closer to $0$. So, let us plot $\sin(x)$ for $x = x_1, x_2, x_3, \ldots$ where
+$x_n \to 0$. This allows us to see that $\sin(x)$ approaches $0$ as $x$ grows closer to $0$.
+
+\begin{figure}[H]
+\begin{fullwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+   axis lines = middle,
+   xlabel = {$x$},
+   ylabel = {$\sin(x)$},
+   xlabel style={anchor=west},
+   ylabel style={anchor=south},
+   xmin=-0.3, xmax=2.4,
+   ymin=-0.6, ymax=1.25,
+   xtick={0,0.5,1,1.5,2},
+   ytick={-1,-0.5,0,0.5,1},
+   samples=200,
+   domain=-0.3:2.4,
+   width=15cm, height=7cm,
+   scale only axis,
+   clip=false,
+]
+
+% the curve y = sin(x), x in radians
+\addplot[thick, blue] {sin(deg(x))};
+
+% the sequence x_i = 2/(i+1) -> 0, and its images under sin
+   \draw[red!70, dashed] (axis cs:2.0000,0) -- (axis cs:2.0000,0.9093);
+   \filldraw[red] (axis cs:2.0000,0) circle (1.5pt);
+   \filldraw[red] (axis cs:2.0000,0.9093) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:1.0000,0) -- (axis cs:1.0000,0.8415);
+   \filldraw[red] (axis cs:1.0000,0) circle (1.5pt);
+   \filldraw[red] (axis cs:1.0000,0.8415) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.6667,0) -- (axis cs:0.6667,0.6184);
+   \filldraw[red] (axis cs:0.6667,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.6667,0.6184) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.5000,0) -- (axis cs:0.5000,0.4794);
+   \filldraw[red] (axis cs:0.5000,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.5000,0.4794) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.4000,0) -- (axis cs:0.4000,0.3894);
+   \filldraw[red] (axis cs:0.4000,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.4000,0.3894) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.3333,0) -- (axis cs:0.3333,0.3272);
+   \filldraw[red] (axis cs:0.3333,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.3333,0.3272) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.2857,0) -- (axis cs:0.2857,0.2818);
+   \filldraw[red] (axis cs:0.2857,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.2857,0.2818) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.2000,0) -- (axis cs:0.2000,0.1987);
+   \filldraw[red] (axis cs:0.2000,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.2000,0.1987) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.1538,0) -- (axis cs:0.1538,0.1533);
+   \filldraw[red] (axis cs:0.1538,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.1538,0.1533) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.1111,0) -- (axis cs:0.1111,0.1109);
+   \filldraw[red] (axis cs:0.1111,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.1111,0.1109) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0800,0) -- (axis cs:0.0800,0.0799);
+   \filldraw[red] (axis cs:0.0800,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0800,0.0799) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0606,0) -- (axis cs:0.0606,0.0606);
+   \filldraw[red] (axis cs:0.0606,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0606,0.0606) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0455,0) -- (axis cs:0.0455,0.0454);
+   \filldraw[red] (axis cs:0.0455,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0455,0.0454) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0333,0) -- (axis cs:0.0333,0.0333);
+   \filldraw[red] (axis cs:0.0333,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0333,0.0333) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0241,0) -- (axis cs:0.0241,0.0241);
+   \filldraw[red] (axis cs:0.0241,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0241,0.0241) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0171,0) -- (axis cs:0.0171,0.0171);
+   \filldraw[red] (axis cs:0.0171,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0171,0.0171) circle (1.5pt);
+   \draw[red!70, dashed] (axis cs:0.0121,0) -- (axis cs:0.0121,0.0121);
+   \filldraw[red] (axis cs:0.0121,0) circle (1.5pt);
+   \filldraw[red] (axis cs:0.0121,0.0121) circle (1.5pt);
+% first few terms labelled
+\node[red, font=\footnotesize] at (axis cs:2.0000,-0.18) {$x_0$};
+\node[red, font=\footnotesize] at (axis cs:1.0000,-0.18) {$x_1$};
+\node[red, font=\footnotesize] at (axis cs:0.6667,-0.18) {$x_2$};
+\node[red, font=\footnotesize] at (axis cs:0.5000,-0.18) {$x_3$};
+
+% origin
+\filldraw[black] (axis cs:0,0) circle (1.5pt);
+\node[below left, font=\footnotesize] at (axis cs:0,0) {$0$};
+
+% sequence formula
+
+% continuation / convergence note
+\node[red!70, font=\footnotesize] at (axis cs:0.55,-0.34) {$x_4,\, x_5,\, \ldots \to 0$};
+\draw[->, thick, red!70] (axis cs:0.55,-0.28) -- (axis cs:0.18,-0.1);
+
+\end{axis}
+\end{tikzpicture}
+\label{fig:sin-sequence}
+\end{fullwidth}
+\vspace{-\baselineskip}\vspace{-\baselineskip}
+  \sideparmargin{inner}
+  \sidepar{\vspace{\baselineskip}
+    \caption{A sequence $x_i \to 0$ and the corresponding values $\sin(x_i) \to 0$.}}
+\end{figure}
+
+This is primarily the reason we work with sequences. Although it is easy to imagine the limit
+in the other way too, it is often helpful to work with a discrete set of points instead.
+
+However the definition of sequence we laid out hardly suffices as a good definition, for one, we have postponed the burden of definition
+from sequence to a list of numbers. Let us give a more formal definition.
+
+\begin{definition}
+    A \emph{sequence} is a function $a: \mathbb{N} \to \RR$, such that
+    \[
+        a_n = a(n)
+    \]
+    for all $n \in \mathbb{N}$ is the $n$-th term of the sequence.
+\end{definition}
+
+\marginnote{I will adopt the convention that $\mathbb{N}$ does not include $0$. The notions of functions
+and other primitive things will be assumed. Sequences will be denoted by $(a_n)_{n=1}^{\infty}$ or
+simply $(a_n)$, for reasons that will become clear as we go.}
+
+\begin{example}
+    Some examples from highschool mathematics include the sequences defined by $a_n = ar^n$,
+    and $a_n = a + nd$. These sequences are \emph{geometric} and \emph{arithmetic}, respectively.
+\end{example}
+
+
+For this course we will assume the properties and existence of $\RR$. In more rigorous analysis
+courses, you will learn about the \emph{construction} of $\RR$, but we will not go into detail
+here. The properties of $\RR$ are listed below.
+
+\begin{itemize}
+    \item For all $a, b \in \RR$, $a + b, a - b, a \cdot b, a / b$ are defined (for the last, $b \neq 0$).
+    \item For all $a, b \in \RR$, either $a < b$, $a = b$, or $a > b$.
+\end{itemize}
+
+You might realise that these properties are also the properties that $\QQ$ has.
+What, then, distinguishes $\QQ$ from $\RR$? Clearly they're not the same, we've all seen
+proofs that $\sqrt{2}$ is in fact not rational, but we also happen to ``know'' that $\sqrt{2}$ is a
+real number. There is precisely one property that distinguishes $\QQ$ from $\RR$, and it happens
+to unfortunately be a little more obtuse than the above, rather obvious ones.
+
+The property we speak of is the \emph{Least Upper Bound Property}, but before stating it,
+we need to define what an \emph{upper bound} is.
+
+\begin{definition}
+    A \emph{least upper bound} of a set $S$ is a real number
+    $b$ such that $b \geq a$ for all $a \in S$.
+\end{definition}
+
+We now must define what it means to have a \emph{least upper bound} for a set $S$:
+\begin{definition}
+    A set $S$ has a \emph{least upper bound} if there exists a real number $b$ such that
+    $b$ is an upper bound for $S$, and if $a$ is an upper bound for $S$, then $b \geq a$. We
+    write $b = \sup S$.
+\end{definition}
+
+Now we can actually state this mysterious property of the reals:
+\[
+    \text{If } S \subset \RR \text{ has an upper bound } b, \text{ then } S \text{ has a least upper bound } b.
+\]
+
+There is a similar property for lower bounds, that I will leave for you to prove, using
+the least upper bound property.
+\begin{definition}
+    A set $S$ has a \emph{least lower bound} if there exists a real number $b$ such that
+    $b$ is a lower bound for $S$, and if $a$ is a lower bound for $S$, then $b \leq a$. We
+    write $b = \inf S$.
+\end{definition}
+
+One final property that we require is the archimedean property. This seems like a
+really obvious result, so much so that you might be surprised that it is even necessary.
+However as we will continue to do in the course, we will not take it as a given
+and actually prove it.
+
+\begin{theorem}[Archimedean Property]
+	For any real number $a$, there exists a positive integer $N$ such that $N > a$.
+\end{theorem}
+
+\begin{proof}
+	Suppose no such $N$ exists. Then for every positive integer $N$, $N \leq a$,
+	so $a$ is an upper bound of $\NN \subset \RR$. By the Least Upper Bound Property,
+	there must exist a least upper bound $b$ of $\NN \subset \RR$.
+
+	Note that $b-1$ must be an upper bound of $\NN$ as well, because if $b - 1 < n \in \NN$,
+	then $b < n + 1 \in \NN$, which cannot be true since $b$ is an upper bound of $\NN$.
+	However, if $b-1$ is an upper bound of $\NN$, then $b - 1 > b$ by the definition
+	of Least Upper Bound, which cannot be true! Hence some $N \in \NN$ must exist such that $N > a$.
+\end{proof}
+
+\begin{exc}
+	\begin{exercise}
+		Prove that if a set has a lower bound, then it has a greatest lower bound.
+	\end{exercise}
+\begin{solution}
+
+		Let $S \subseteq \mathbb{R}$ be nonempty and bounded below. Define
+		\[
+			T = \{-s : s \in S\}.
+		\]
+		Since $S$ is bounded below, there exists $m \in \mathbb{R}$ such that $m \le s$ for all $s \in S$. Then $-s \le -m$ for all $s \in S$, so $T$ is bounded above by $-m$.
+
+		By the least upper bound property of $\mathbb{R}$, $T$ has a supremum; call it $\alpha = \sup T$.
+
+		\begin{claim}
+			$-\alpha = \inf S$.
+		\end{claim}
+
+		\emph{Lower bound.} For all $t \in T$, $t \le \alpha$, so for all $s \in S$, $-s \le \alpha$, i.e.\ $-\alpha \le s$. Thus $-\alpha$ is a lower bound for $S$.
+
+		\emph{Greatest lower bound.} Let $\beta$ be any lower bound for $S$, so $\beta \le s$ for all $s \in S$. Then $-s \le -\beta$ for all $s \in S$, i.e.\ $-\beta$ is an upper bound for $T$. Since $\alpha = \sup T$ is the \emph{least} upper bound, $\alpha \le -\beta$, so $\beta \le -\alpha$.
+
+		Hence $-\alpha$ is a lower bound for $S$ and is $\ge$ every other lower bound, so $-\alpha = \inf S$.
+\end{solution}
+\end{exc}
+
+\section{Convergent Sequences}
+
+Although just about anything can be defined as a sequence---for example the oscillating sequence
+defined by $a_n = (-1)^n$---our interest resides in a more limited set of ``nice'' sequences. Consider
+for example the sequence defined by $a_n = 1 + 1/n$. As we go to farther values of $n$, this
+sequence grows closer and closer to the value $1$. This notion of growing closer and closer to a value
+is captured by the concept of convergence (which is equivalent to the idea of a limit).
+
+\begin{definition}
+    A sequence $(a_n)$ is \emph{convergent}, and is said to converge to $\limsup a_i$, called the
+   \vocab{limit} of the sequence, if for every $\varepsilon > 0$, there exists an $N \in \NN$ such that
+    $\abs{a_n - \limsup a_i} < \varepsilon$ for all $n \geq N$, where $\limsup a_i$ is the limit of the sequence.
+\end{definition}
+
+We write $\lim_{n \to \infty} a_n = \limsup a_i$ to denote that the sequence $(a_n)$ converges to $\limsup a_i$.
+If the definition looks a little obtuse, then do not worry. At first it might seem terribly confusing,
+but this actually just captures the notion we just mentioned, the point is that by going to large enough
+values, we can get arbitrarily close to the value it converges to.
+
+% Preamble requirements:
+% \usepackage{tikz}
+% \usetikzlibrary{decorations.pathreplacing}
+% (assumes tufte-latex or similar package providing \marginfigure)
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[scale=0.82, every node/.style={font=\scriptsize}]
+
+  \def\dr{1pt} % dot radius
+
+  % main axis
+  \draw[->] (-3.5,0) -- (2.4,0);
+
+  % isolated points a_1, a_2, a_3
+  \foreach \x/\lbl in {-3.3/a_1, -2.85/a_2, -2.4/a_3} {
+    \fill (\x,0) circle (\dr);
+    \node[above] at (\x,0.08) {$\lbl$};
+  }
+
+  % trailing dots, sitting on the axis like the other points
+  \foreach \x in {-2.05,-1.92,-1.79} {
+    \fill (\x,0) circle (1pt);
+  }
+
+  % interval endpoints
+  \def\L{-1.5}
+  \def\R{1.5}
+  \def\A{0.5}
+
+  % open interval parentheses
+  \node[scale=1.3] at (\L,0) {$($};
+  \node[scale=1.3] at (\R,0) {$)$};
+
+  % a_N: first point inside the interval, near the left end
+  \fill (-1.3,0) circle (\dr);
+
+  % dense, congested cluster of points near a
+  \foreach \x in {0.0,0.08,0.17,0.4,0.55,0.8,0.95} {
+    \fill (\x,0) circle (\dr);
+  }
+
+  % labels below the axis
+  \node[below] at (\L,-0.16) {$a-\varepsilon$};
+  \node[below] at (\A,-0.16) {$a$};
+  \node[below] at (\R,-0.16) {$a+\varepsilon$};
+
+  % a_N label with downward arrow
+  \node at (-1.3,0.7) {$a_N$};
+  \draw[->] (-1.3,0.55) -- (-1.3,0.1);
+
+  % brace for V_epsilon(a)
+  \draw[decorate,decoration={brace,amplitude=4pt}]
+    (\L,1.0) -- (\R,1.0) node[midway,above=5pt] {$V_\varepsilon(a)$};
+
+\end{tikzpicture}
+\caption{A sequence that converges to $a$}
+\end{marginfigure}
+
+\begin{remark}
+    There is a \emph{topological} way to think about this. Unfortunately the course won't go
+    into this in detail, but something useful is the notion of $\varepsilon$ neighbourhood of a point.
+    This is simply the set of all points within $\varepsilon$ distance of the given point. So how
+    is it different from the definition we just gave?
+
+    The notion of distance is not just limited to $\RR$---while we do have $\abs{x-a}$ as
+    the distance of $x$ from $a$, we can also find out the distance between two points in for
+    example $\RR^2$, using what is called the \emph{metric}. For now these are just words without
+    meaning, but perhaps the idea of convergence by being able to find a point in the sequence for
+    any $\epsilon > 0$, such that all terms after it are within the $\varepsilon$ neighbourhood,
+    $V_{\varepsilon}$ of that point.
+\end{remark}
+
+A good imperative to have when defining something is one, to actually see if this object exists,
+and two to see that it is well defined. When we write down a symbol like $\lim_{n \to \infty} a_n$,
+we must check if this is actually a unique value, that is there is only value that the sequence
+converges to. Otherwise our definition would be ambiguous, the symbol would mean too many things.
+Therefore, let us do a little proposition.
+
+\begin{proposition*}
+    If the sequence $(a_n)$ converges to $\limsup a_i$, and $M$, then $\limsup a_i = M$.
+\end{proposition*}
+
+\begin{proof}
+	Suppose the sequence $(a_n)$ converges to $\limsup a_i$, and $M$. Then, by the
+	definition of convergence, for any $\varepsilon > 0$, there exists $N_1$ such that for all $n \geq N_1$, $\abs{a_n - \limsup a_i} < \varepsilon$.
+	Similarly, there exists $N_2$ such that for all $n \geq N_2$, $\abs{a_n - M} < \varepsilon$.
+
+	A straightforward way to proceed is to add up the two inequalities. But first
+	you must remember that the $n$ that satisfied $n > N_1$ does not necessarily satisfy $n > N_2$.
+	How do we deal with this? Pick any $n > \max(N_1, N_2)$, so that now $a_n$ satisfies
+	both the inequalities.
+	\[
+	\abs{a_n - \limsup a_i} + \abs{a_n - M} = \abs{a_n - \limsup a_i} + \abs{M - a_n} < 2\varepsilon,
+	\]
+	and now we use one of the most important inequalities in these epsilon proofs, the triangle inequality:
+	\[
+	2\varepsilon > \abs{a_n - \limsup a_i} + \abs{a_n - M} \ge \abs{a_n - \limsup a_i} + \abs{M - a_n} = \abs{M - \limsup a_i}.
+	\]
+
+	But remember that we could choose \emph{any} epsilon here. Now there are two ways to proceed.
+	One, by choosing the initial
+	epsilon to be $\varepsilon'/2$, we have that for any $\varepsilon' > 0$,
+	\[
+	\varepsilon' > \abs{M - \limsup a_i}
+	\]
+	but that must mean $M - \limsup a_i = 0$! (convince yourself of it, by arguing formally using
+	$M-\limsup a_i = r \neq 0$).
+
+	A more clever proof would be to use $\varepsilon = \abs{M - \limsup a_i}/2$, assuming for contradiction
+	that $M \neq \limsup a_i$, so that we would get:
+	\[
+	 \abs{M - \limsup a_i} < 2\varepsilon = \abs{M - \limsup a_i}
+	\]
+	which cannot be! The idea behind this is to think about close $a_n$ must be to
+	$\limsup a_i$ and $M$, and achieve a contradiction by thinking about the distance between
+	the two values.
+\end{proof}
+
+Now we know that our symbols are well defined. But I have yet to show you an example
+of a sequence that converges to some value using the definition we adopted. Let us
+now do that.
+
+\begin{example}
+The sequence $a_n = \dfrac{1}{n}$ converges to $0$.
+
+\hrulebar
+
+Before writing the proof, let us think about what
+we need. The definition requires: for any $\varepsilon > 0$, there exists
+$N \in \mathbb{N}$ such that $\abs{a_n - 0} < \varepsilon$ for all $n > N$. The
+quantifier, for any, matters here. $\varepsilon$ is given to us first (adversarially, we may
+imagine), and only afterward do we get to choose $N$; the choice of $N$ is
+therefore allowed to depend on $\varepsilon$.
+
+Fix an $\varepsilon > 0$, how large must $n$ be to guarantee
+$\abs{1/n - 0} < \varepsilon$? Since $1/n > 0$, this inequality is equivalent to
+$n > 1/\varepsilon$. This tells us exactly how to choose $N$: any natural
+number $N \geq 1/\varepsilon$ will do. We now write this up formally.
+
+\begin{proof} Let $\varepsilon > 0$. By the Archimedean property,
+there exists $N \in \mathbb{N}$ with $N > 1/\varepsilon$. We claim this $N$
+works. Let $n > N$. Then
+\[
+n > N > \frac{1}{\varepsilon} \quad\Longrightarrow\quad \frac{1}{n} < \varepsilon,
+\]
+and since $n \geq 1$ we have $1/n > 0$, so
+\[
+\abs{a_n - 0} = \frac{1}{n} < \varepsilon.
+\]
+As $\varepsilon > 0$ was arbitrary, this shows $a_n \to 0$. $\blacksquare$
+\end{proof}
+
+\end{example}
+
+
+\begin{example}
+The sequence $a_n = \dfrac{2n}{3n+1}$ converges to $\dfrac{2}{3}$.
+
+\hrulebar
+
+As before, we first manipulate $\abs{a_n - \limsup a_i}$
+algebraically until the dependence on $n$ becomes transparent:
+\[
+\abs{\frac{2n}{3n+1} - \frac{2}{3}}
+= \abs{\frac{3(2n) - 2(3n+1)}{3(3n+1)}}
+= \abs{\frac{-2}{3(3n+1)}}
+= \frac{2}{3(3n+1)}.
+\]
+This is a decreasing function of $n$, so making it small is just a matter of
+making $n$ large. We want
+\[
+\frac{2}{3(3n+1)} < \varepsilon
+\quad\Longleftrightarrow\quad
+3n + 1 > \frac{2}{3\varepsilon}
+\quad\Longleftarrow\quad
+n > \frac{2}{9\varepsilon}.
+\]
+(We used $\Longleftarrow$ rather than $\Longleftrightarrow$ in the last step
+purely for convenience — we don't need the sharpest possible $N$, only
+\emph{some} $N$ that works, so we are free to bound things generously.) This
+suggests taking $N$ to be any natural number exceeding $2/(9\varepsilon)$.
+
+\medskip
+\noindent\textbf{Proof.} Let $\varepsilon > 0$, and choose $N \in \mathbb{N}$
+with $N > \dfrac{2}{9\varepsilon}$ (possible by the Archimedean property). Let
+$n > N$. Then $n > 2/(9\varepsilon)$, so $9\varepsilon n > 2$, and hence
+$3(3n+1) = 9n + 3 > 9n > \dfrac{2}{\varepsilon}$. Rearranging,
+\[
+\frac{2}{3(3n+1)} < \varepsilon.
+\]
+Combined with the algebraic identity from the discussion above,
+\[
+\abs{\frac{2n}{3n+1} - \frac{2}{3}} = \frac{2}{3(3n+1)} < \varepsilon.
+\]
+Since $\varepsilon > 0$ was arbitrary, $a_n \to 2/3$. $\blacksquare$
+\end{example}
+
+You might've realised that this is often quite cumbersome to work with. For example,
+what about proving $a_n = 1/n + 2n/(3n + 1)$ converged to $2/3$? Try doing this yourself,
+but be warned, this will be annoying to deal with.
+
+We can simplify many matters here by proving some useful properties of limits of
+sequences. These are set up as exercises to be done at the end of this section. They're
+guided of course, since picking the right epsilon is a skill that requires learning
+which I will not presume.
+
+\begin{remark}
+    A subsequent definition that we can make is to formalise the notion of divergence. A
+    sequence $(a_n)$ is said to \emph{diverge} if there does not exist a value that the sequence
+    converges to.
+
+    However it serves to distinguist between two different notions of divergence. Consider the
+    sequences $a_n = (-1)^n$ and $b_n = n$. Both sequences diverge, but the first one
+    has no well defined behaviour as we grow larger, while the larger gets arbitrarily large.
+
+    To formalise this distinction, we often work in the \emph{extended real numbers} defined by
+    $\RR \union \{\infty, -\infty\}$, where $\infty$ and $-\infty$
+    represent the notions of positive and negative infinity, respectively. We define a few properties:
+
+    \begin{itemize}
+        \item For any $a \in \RR$, $a \leq \infty$ and $a \geq -\infty$.
+        \item For any $a \in \RR$, $a + \infty = \infty$ and $- \infty + a = -\infty$.
+    \end{itemize}
+
+    Now we are able to extend the notion of convergence:
+
+    \begin{itemize}
+        \item A sequence $(a_n)$ converges to $\infty$ if for any $M \in \RR$, there exists a $N$ such that $a_n > M$ for all $n \geq N$.
+        \item A sequence $(a_n)$ converges to $-\infty$ if for any $M \in \RR$, there exists a $N$ such that $a_n < M$ for all $n \geq N$.
+
+    \end{itemize}
+    \label{rem:extended_convergence}
+\end{remark}
+
+\begin{exc}
+
+    We will prove the following properties of limits of sequences:
+    \begin{itemize}
+        \item If $\lim_{n \to \infty} a_n = a$, and $\lim_{n \to \infty} b_n = b$, and $c_n$ is the sequence defined by $c_n = a_n + b_n$, then $\lim_{n \to \infty} c_n = a + b$.
+        \item If $\lim_{n \to \infty} a_n = a$, and $\lim_{n \to \infty} b_n = b$, and $c_n$ is the sequence defined by $c_n = a_n \cdot b_n$, then $\lim_{n \to \infty} c_n = a \cdot b$.
+        \item If $\lim_{n \to \infty} a_n = a$, and $\lim_{n \to \infty} b_n = b \neq 0$, and $c_n$ is the sequence defined by $c_n = {a_n}/{b_n}$ when $b_n \neq 0$, and $0$ when $b_n = 0$, then $\lim_{n \to \infty} c_n = {a}/{b}$.
+    \end{itemize}
+    \begin{exercise}
+    Prove that if
+    \[
+    \abs{x - x_0} < \frac{\varepsilon}{2} \quad \text{and} \quad \abs{y - y_0} < \frac{\varepsilon}{2},
+    \]
+    then
+    \[
+    \abs{(x+y) - (x_0+y_0)} < \varepsilon,
+    \]
+    \[
+    \abs{(x-y) - (x_0-y_0)} < \varepsilon.
+    \]
+    \end{exercise}
+
+    \begin{exercise}
+    Prove that if
+    \[
+    \abs{x - x_0} < \min\left( \frac{\varepsilon}{2(\abs{y_0}+1)}, 1 \right)
+    \quad \text{and} \quad
+    \abs{y - y_0} < \frac{\varepsilon}{2(\abs{x_0}+1)},
+    \]
+    then $\abs{xy - x_0y_0} < \varepsilon$.
+
+    (The notation ``min'' is self evident, the first inequality in the
+    hypothesis just means that
+    \[
+    \abs{x - x_0} < \frac{\varepsilon}{2(\abs{y_0}+1)} \quad \text{and} \quad \abs{x - x_0} < 1;
+    \]
+    at one point in the argument you will need the first inequality, and at
+    another point you will need the second. One more word of advice: since the
+    hypotheses only provide information about $x - x_0$ and $y - y_0$, it is
+    almost a foregone conclusion that the proof will depend upon writing $xy -
+    x_0y_0$ in a way that involves $x - x_0$ and $y - y_0$.)
+    \end{exercise}
+
+    \begin{exercise}
+    Prove that if $y_0 \neq 0$ and
+    \[
+    \abs{y - y_0} < \min\left( \frac{\abs{y_0}}{2}, \frac{\varepsilon\abs{y_0}^2}{2} \right),
+    \]
+    then $y \neq 0$ and
+    \[
+    \abs{\frac{1}{y} - \frac{1}{y_0}} < \varepsilon.
+    \]
+    \end{exercise}
+
+    \begin{exercise}
+	Now prove the three propositions we stated at the beginning.
+	\label{exc:limit_properties}
+    \end{exercise}
+   	\begin{solution}
+		\textbf{(i) Sum of limits}
+		\begin{claim}
+			\[\lim_{n\to\infty}(a_n+b_n) = \lim_{n\to\infty} a_n + \lim_{n\to\infty} b_n.\]
+		\end{claim}
+		\begin{proof}
+			Let $\varepsilon > 0$. Since $a_n \to a$ and $b_n \to b$, choose $N_a, N_b \in \mathbb{N}$ such that
+			\[
+				n \geq N_a \implies \abs{a_n - a} < \frac{\varepsilon}{2}, \qquad
+				n \geq N_b \implies \abs{b_n - b} < \frac{\varepsilon}{2}.
+			\]
+			Let $N = \max(N_a, N_b)$. Then for all $n \geq N$,
+			\[
+				\abs{(a_n+b_n) - (a+b)} \leq \abs{a_n - a} + \abs{b_n - b} < \varepsilon.
+			\]
+		\end{proof}
+		\textbf{(ii) Product of limits}
+		\begin{claim}
+			\[\lim_{n\to\infty} (a_n b_n) = (\lim_{n\to\infty} a_n)(\lim_{n\to\infty} b_n).\]
+		\end{claim}
+		\begin{proof}
+			Let $\varepsilon > 0$. Choose $N_a, N_b \in \mathbb{N}$ such that
+			\begin{align*}
+				n \geq N_a &\implies \abs{a_n - a} < \frac{\varepsilon}{2(3\abs{b}+1)}, \\
+				n \geq N_b &\implies \abs{b_n - b} < \min\left(\frac{\varepsilon}{2(\abs{a}+1)}, \frac{\abs{b}}{2}\right).
+			\end{align*}
+			For $n \geq N_b$, the reverse triangle inequality gives $\abs{b} - \abs{b_n} \leq \abs{b - b_n} < \abs{b}/2$, so $\abs{b_n} < \tfrac{3}{2}\abs{b}$.
+
+			Then for $n \geq N := \max(N_a, N_b)$,
+			\begin{align*}
+				\abs{a_nb_n - ab} &= \abs{b_n(a_n-a) + a(b_n-b)} \\
+				&\leq \abs{b_n}\,\abs{a_n - a} + \abs{a}\abs{b_n - b} \\
+				&< \frac{3\abs{b}}{2}\cdot\frac{\varepsilon}{2(3\abs{b}+1)} + \frac{3\abs{a}}{2}\cdot\frac{\varepsilon}{2(3\abs{a}+1)} \\
+				&< \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+			\end{align*}
+		\end{proof}
+		\textbf{(iii) Quotient of limits}
+		\begin{claim}
+			If $\lim_{n\to\infty} a_n = a$ and $\lim_{n\to\infty} b_n = b$, then
+			\[
+				\lim_{n\to\infty} \frac{a_n}{b_n} \mathbb{1}_{b_n\neq 0} = \frac{a}{b}.
+			\]
+		\end{claim}
+		\begin{proof}
+			First, we show that
+			\[
+				\frac{1}{b_n} \to \frac{1}{b}.
+			\]
+			Since $b_n \to b$ and $b \neq 0$, there exists $N_1 \in \mathbb{N}$ such that
+			\[
+				n \geq N_1 \implies \abs{b_n - b} < \frac{\abs{b}}{2}.
+			\]
+			Hence, for $n \geq N_1$,
+			\[
+				\abs{b_n} \geq \abs{b} - \abs{b_n - b} > \frac{\abs{b}}{2},
+			\]
+			so in particular $b_n \neq 0$.
+
+			Now let $\varepsilon>0$. Since $b_n\to b$, choose $N_2\in\mathbb{N}$ such that
+			\[
+				n\geq N_2
+				\implies
+				\abs{b_n - b} < \frac{\abs{b}}{2}.
+			\]
+			Hence, for $n \geq N_2$,
+			\[
+				\abs{b_n} \geq \abs{b} - \abs{b_n - b} > \frac{\abs{b}}{2},
+			\]
+			so in particular $b_n \neq 0$.
+
+			Now let $\varepsilon>0$. Since $b_n\to b$, choose $N_2\in\mathbb{N}$ such that
+			\[
+				n\geq N_2
+				\implies
+				\abs{b_n - b} < \frac{\abs{b}}{2}.
+			\]
+			Thus, for $n\geq N:=\max(N_1,N_2)$,
+			\[
+				\abs{\frac{1}{b_n}-\frac{1}{b}}
+				=
+				\frac{\abs{b_n-b}}{\abs{b_n}\,\abs{b}}
+				<
+				\frac{\varepsilon \abs{b}^2/2}{(b/2)\abs{b}}
+				=
+				\varepsilon.
+			\]
+			Therefore,
+			\[
+				\frac{1}{b_n}\to\frac{1}{b}.
+			\]
+
+			By part (ii), the product of convergent sequences converges to
+			the product of their limits. Hence
+			\[
+				\frac{a_n}{b_n}
+				=
+				a_n\frac{1}{b_n}
+				\to
+				a\frac{1}{b}
+				=
+				\frac{a}{b}.
+			\]
+		\end{proof}
+	\end{solution}
+
+    \begin{exercise}
+	We call a sequence bounded iff there exists a number $M$ such that $\abs{x} \leq M$ for all $x$ in the sequence.
+	We call a sequence monotonically increasing iff for all $n \leq m$, $x_n \leq x_m$.
+
+	Suppose that $(a_n)$ is a monotonically increasing bounded sequence. Prove that
+	it converges.
+
+	\emph{Hint: Let $B = \{a_n : n \in \mathbb{N}\}$, the set of all values of $a_n$. Note that this
+	is bounded. Then consider the least upper bound of $B$. How does this relate to the convergence of $(a_n)$?}
+	\label{exc:monotone_convergence}
+	\end{exercise}
+	\begin{solution}
+	    Suppose that $(a_n)_{n=1}^{\infty}$ is monotonically increasing. Let
+	    $a = \sup\{a_n \mid n \in \mathbb{N}\}$.
+	    Then,
+	    \[ \lim_{n\to\infty} a_n = a.\]
+
+	    \begin{proof}
+	    We proceed by contradiction. Suppose not. Then there exists $\varepsilon > 0$
+	    such that
+	    \[
+	    \nexists N \in \mathbb{N} \text{ so that } \forall n > N,\ \abs{a - a_n} < \varepsilon.
+	    \]
+
+	    Note that $a \geq a_n$ for any $n \in \mathbb{N}$ by definition of supremum.
+
+	    \begin{claim}
+	    For all $K \in \mathbb{N}$ we have that $a - a_K \geq \varepsilon.$
+	    \end{claim}
+
+	    This is true because we know that there must exist $k^* \geq K$ such that $a - a_{k^*} \geq \varepsilon$.
+	    If no such $k^*$ existed, our assumption above would not hold and we would be done.
+
+	    Now, since $(a_n)_{n=1}^{\infty}$ is monotonically increasing,
+	    \[
+	    a_{k^*} \geq a_K \implies a - a_K \geq a - a_{k^*} \geq \varepsilon.
+	    \]
+	    Thus, $a - a_K \geq \varepsilon$.
+
+	    Now, since $\forall K \in \mathbb{N},\ a - a_K \geq \varepsilon$, we have
+	    \[
+	    \forall K \in \mathbb{N},\ a - \varepsilon \geq a_K.
+	    \]
+	    But then $a - \varepsilon$ is an upper bound of $(a_n)_{n=1}^{\infty}$, which cannot
+	    be the case, since $a - \varepsilon < a$, violating the definition of $a$ being a
+	    supremum. This is a contradiction, so the claim holds.
+	    \end{proof}
+	\end{solution}
+
+	\begin{exercise}
+	Show that every convergent sequence is bounded.
+	\end{exercise}
+	\begin{solution}
+		The sketch of this is as follows. If $(a_n)_{n=1}^{\infty}$ converges to
+		$L \in \RR$, then there exist a $N \in \NN$ such that $\abs{a_n - L} \leq 1$ for all
+		$n \geq N$. Thus, $\abs{a_n} \leq \abs{L} + 1$ for all $n \geq N$, so $(a_n)_{n=1}^{\infty}$ is bounded
+		by $\max(a_1, a_2, \dots, a_N, \abs{L} + 1)$
+	\end{solution}
+\end{exc}
+
+
+\section{Cauchy Sequences}
+
+Sometimes we know that a sequence does converge, but using the above definition of convergence
+makes it hard to prove that it does. A more powerful definition is the Cauchy sequence definition.
+
+Let us go through an example.
+To estimate square roots, a method that has been used since
+ancient times is the Babylonian method, which starts with a guess and
+repeatedly averages it with $37$ divided by itself. Let us define a sequence using it,
+with initial value $6$ (since it is close to the square root of $37$):
+\[
+x_1 = 6, \qquad x_{n+1} = \frac{1}{2}\left(x_n + \frac{37}{x_n}\right)
+\]
+
+
+\begin{table}[H]
+\begin{sidecaption}{The first few terms of the Babylonian square root sequence. $x_4$ and
+$x_5$ are so close that they have the same values upto 6 decimal places.}
+\begin{center}
+\begin{tabular}{c c c}
+\toprule
+$n$ & $x_n$ & $\abs{x_n - x_{n-1}}$ \\
+\midrule
+1 & 6.000000 & --- \\
+2 & 6.083333 & 0.083333 \\
+3 & 6.082763 & 0.000571 \\
+4 & 6.082763 & 0.000000 \\
+5 & 6.082763 & 0.000000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{sidecaption}
+\end{table}
+
+I hope it is clear to you that this sequence converges to whatever the value of $\sqrt{37}$ is.
+If you're not convinced, write down a few more values of the sequence, and use whatever value
+of $\sqrt{37}$ your calculator gives you. But how do you go about proving this?
+It seems very inelegant to have to rely on a calculator to prove that a sequence converges,
+nevermind if it even suffices as a proof \footnote[-2.2cm]{It can be made rigorous by proving the
+decimal expansion of $\sqrt{37}$ to some number of decimal places. Then you could try to show
+that a term of the sequence has the same value as the decimal expansion of $\sqrt{37}$ up to that point,
+so that their difference is less than $10^{-m}$ for some $m$. I hope that this comes
+across as really cumbersome to you.}.
+
+But I have deliberately written down the third column of the table here,
+so that you can see that the difference between the terms of the sequence
+decreases as $n$ increases. Roughly speaking, then the sequence should also converge,
+as the following terms don't deviate too much. This is infact the idea behind
+Cauchy sequences, which allow to use restate convergence.
+
+\begin{definition}
+A Cauchy sequence is a sequence $(a_n)$ such that for any $\varepsilon > 0$, there exists an $N$ such that
+$\abs{a_n - a_m} < \varepsilon$ for all $n, m \geq N$.
+\end{definition}
+
+Let us prove the proposition we just discussed, of how Cauchy sequences relate to convergence.
+
+\begin{restatable}{theorem}{cauchyconvergence}
+\label{thm:cauchy_convergence}
+A sequence is cauchy if and only if it is convergent.
+\end{restatable}
+
+Unfortunately the proof of this will have to wait for a while. One direction of it is not
+hard, I will leave it up to you to show that a convergent sequence is Cauchy. However,
+for the other direction we'll need to cover a few more definitions. It is perhaps clear
+that we would need to do this, because to prove something is convergent, you would want a value
+that it converges to. For an arbitrary sequence, it seems outside our abilities
+to be able to choose something like that for now.
+
+\vspace{-1em}
+\begin{exc}
+\vspace{-1em}
+\begin{exercise}
+Show that a convergent sequence is Cauchy.
+\end{exercise}
+\begin{solution}
+We wish to show that for any $\varepsilon > 0$, $\exists N \in \mathbb{N}$:
+$\forall n,m \geq N$, $\abs{a_n - a_m} < \varepsilon$.
+
+Since $(a_n)_{n=1}^{\infty}$ is convergent, let $N \in \mathbb{N}$ be such that
+\[
+\forall i > N,\quad \abs{a_i - a} < \frac{\varepsilon}{2}.
+\]
+
+Then, for any $n,m > N$,
+\[
+\abs{a_n - a} < \frac{\varepsilon}{2}, \qquad \abs{a_m - a} < \frac{\varepsilon}{2}
+\]
+\[
+\implies \abs{a_n - a_m} = \abs{(a_n-a) + (a-a_m)} \leq \abs{a_n - a} + \abs{a_m - a}
+< \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+\]
+
+\[
+\implies \abs{a_n - a_m} < \varepsilon \text{ for any } n,m > N.
+\]
+
+Thus, $(a_n)_{n=1}^{\infty}$ is Cauchy.
+\end{solution}
+
+\begin{exercise}
+Show that any Cauchy sequence is bounded
+\label{exc:cauchy_bounded}
+\end{exercise}
+
+\begin{solution}
+Suppose not. Note that if a sequence is not bounded, then for any $B \in
+\mathbb{R}$ and any $N \in \mathbb{N}$, we can find $m \in \mathbb{N}$, $m > N$,
+with $\abs{a_m} > \abs{B}$; if this were not true, the sequence would be bounded above
+and below by $\max(a_1,\dots,a_N,B)$ and $\min(a_1,\dots,a_N,-B)$ respectively.
+
+Now let $(a_n)_{n=1}^\infty$ be a Cauchy sequence, and suppose it is not
+bounded. Since it is Cauchy, for any $\varepsilon > 0$, $\exists K \in \mathbb{N}$
+such that
+\[
+\abs{a_m - a_n} < \varepsilon \quad \text{for all } m,n > K.
+\]
+
+Take $\varepsilon = 1$, and let $K \in \mathbb{N}$ be such that
+$\abs{a_m - a_n} < 1$ for all $m,n > K$.
+
+Since the sequence is not bounded, there must exist $k^* > K$ such that
+\[
+\abs{a_{k^*}} \geq 1 + \abs{a_K}.
+\]
+
+But then
+\[
+\abs{a_{k^*} - a_K} \geq \abs{a_{k^*}} - \abs{a_K} \geq 1.
+\]
+
+However, since $k^*, K > K$, $(a_n)_{n=1}^{\infty}$ being Cauchy gives
+$\abs{a_{k^*} - a_K} < 1$, a contradiction.
+\end{solution}
+\end{exc}
+\section{Limit Points}
+
+Although a sequence might not have a limit, it might still ``cluster'' around a value
+infinitely often. So we could define a new sequence, consisting of such terms in
+the sequence, and it would in fact converge to such a point.
+This is the idea behind \vocab{limit points}.
+
+\begin{definition}
+    We call $\theta$ a limit point of a sequence, if for all $\varepsilon > 0$, and
+    $M \ge 1$, there exists $N \ge M$ such that $\abs{a_N - \theta} < \varepsilon$.
+\end{definition}
+
+Be aware of the distinction between the definition of a limit point and a limit! Here
+we are just claiming we can find an arbitrarily large point close to $\theta$,
+not that every point after that is also close to $\theta$. So for example, a sequence
+like $a_n = (-1)^n$ has $-1$ as a limit point, but it does not converge to $-1$.
+
+The idea of defining a new sequence derived from the original also has a name,
+in particular, we define a \vocab{subsequence} of the original sequence.
+
+\begin{definition}
+	A sequence $(b_m)$ is called a \vocab{subsequence} of the original sequence $a_n$ if there
+	exists a sequence $1 \le n_1 < n_2 < \dots < n_m < \dots$ such that $b_m = a_{n_m}$ for all $m$.
+\end{definition}
+
+Therefore, we should be able to find a subsequence that converges to any limit point. Since
+it is a good idea to learn how to define a subsequence with specific properties,
+we will prove this result.
+
+\begin{theorem}
+	If a sequence $(a_n)$ has a limit point $\theta$, then there exists a subsequence $(b_m)$
+	that converges to $\theta$.
+\end{theorem}
+
+\begin{proof}
+	We want to ensure that we can get arbitrarily close to $\theta$ by going
+	far enough into the sequence. How do we do this? Well, the first thing is to
+	utilise the definition of the limit point. We know that we can find some point, $n_1$
+	that is arbitrarily close to $\theta$. But this is for a particular value of $\varepsilon$, and sure
+	we could keep choosing $n_2 > n_1$ to get a term that is similarly close to $\theta$,
+	but that is hardly sufficient.
+
+	The idea is to get stricter and stricter bounds. Define a subsequence as follows, let $n_1$
+	be such that $\abs{a_{n_1} - \theta} < 1$. Then let $n_2 > n_1$ be such that
+	$\abs{a_{n_2} - \theta} < {1}/{2}$, and so on, that is $n_{m} > n_{m-1}$ be such that
+	$\abs{a_{n_m} - \theta} < {1}/{m}$. Define $b_m = a_{n_m}$. Let us prove that this
+	indeed works.
+
+	Consider an epsilon, we must find a $N \in \NN$ such that for all $n > N$,
+	$\abs{b_n - \theta} < \varepsilon$. We know that $\abs{b_n - \theta} < {1}/{n}$, so it
+	suffices to choose $N$ such that ${1}/{N} < \varepsilon$, i.e. $N > {1}/{\varepsilon}$,
+	which we can indeed do by the Archimedean property, so we are done.
+\end{proof}
+
+\begin{remark}
+	This construction really reveals the power of sequences. You can always work with
+	functions by default, but using sequences allow you to \emph{inductively} build up
+	a desired sequence. This is not something you can do with functions, as might be
+	obvious to you.
+\end{remark}
+
+Can a sequence cluster around any point? Clearly not if it is bounded at least. But
+there is actual a stricter sense in which it can't cluster around any point---for bounded sequences---using the idea of $\limsup$ and $\liminf$.
+
+\begin{definition}
+	For a sequence $(a_n)$, the $\limsup$ is the limit of the sequence of upper bounds of
+	the \emph{tails of the sequence},
+	$\limsup a_n \coloneq \lim_{n \to \infty} \sup \{a_m \mid m \geq n\}$, and the $\liminf$ is the limit of the sequence of lower bounds of
+	the \emph{tails of the sequence},
+	$\liminf a_n \coloneq \lim_{n \to \infty} \inf \{a_m \mid m \geq n\}$.
+\end{definition}
+
+\begin{figure}[H]
+\vspace{-1em}
+\begin{fullwidth}
+\begin{tikzpicture}
+\hspace{-4em}
+\begin{axis}[
+    width=19cm, height=9.5cm,
+    scale only axis,
+    xlabel={$n$}, ylabel={$a_n$},
+    xmin=0, xmax=78, ymin=-1.9, ymax=2.9,
+    xtick={0,10,...,60},
+    ytick={-1,-0.2,0.6,1.3,2},
+    axis lines=left,
+    grid=major, grid style={gray!15},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={Limit points, $\limsup$, and $\liminf$ of a bounded sequence},
+    title style={font=\small, yshift=2pt},
+    legend style={at={(0.5,-0.16)}, anchor=north, legend columns=3,
+                  font=\footnotesize, draw=gray!40, fill=white,
+                  fill opacity=0.9, text opacity=1},
+    clip=false,
+]
+
+% --- shaded "forbidden past this point" bands ---
+\fill[red!7]  (axis cs:0,2.1)  rectangle (axis cs:78,2.9);
+\fill[blue!7] (axis cs:0,-1.9) rectangle (axis cs:78,-1.1);
+
+% eps-boundary lines: limsup+eps and liminf-eps
+\draw[dash dot, red!45!black]  (axis cs:0,2.1)  -- (axis cs:78,2.1);
+\draw[dash dot, blue!45!black] (axis cs:0,-1.1) -- (axis cs:78,-1.1);
+
+% --- the five limit points ---
+\draw[densely dashed, red!55!black]  (axis cs:0,2)    -- (axis cs:62,2);
+\draw[densely dotted, gray!60!black] (axis cs:0,1.3)  -- (axis cs:62,1.3);
+\draw[densely dotted, gray!60!black] (axis cs:0,0.6)  -- (axis cs:62,0.6);
+\draw[densely dotted, gray!60!black] (axis cs:0,-0.2) -- (axis cs:62,-0.2);
+\draw[densely dashed, blue!55!black] (axis cs:0,-1)   -- (axis cs:62,-1);
+
+\node[anchor=west, font=\footnotesize, red!55!black]  at (axis cs:65, 1.95)  {$\text{lim sup } a_n$};
+\node[anchor=west, font=\footnotesize, gray!60!black] at (axis cs:65, 1.3)  {limit point};
+\node[anchor=west, font=\footnotesize, gray!60!black] at (axis cs:65, 0.6)  {limit point};
+\node[anchor=west, font=\footnotesize, gray!60!black] at (axis cs:65, -0.2) {limit point};
+\node[anchor=west, font=\footnotesize, blue!55!black] at (axis cs:65, -0.95)  {$\text{lim inf } a_n$};
+
+% --- callouts: nothing ever clusters beyond the eps-bands ---
+\node[align=left, font=\footnotesize, text=red!55!black, draw=red!40,
+      fill=red!4, rounded corners, inner sep=3pt]
+  (hicall) at (axis cs:24, 2.62)
+  {only $n=4$ lands above $\limsup a_i+\varepsilon$};
+\draw[->, red!55!black, thin] (hicall.west) -- (axis cs:4.6,2.27);
+
+\node[align=left, font=\footnotesize, text=blue!55!black, draw=blue!40,
+      fill=blue!4, rounded corners, inner sep=3pt]
+  (locall) at (axis cs:24, -1.55)
+  {only $n=1,5$ land below $\liminf a_n-\varepsilon$};
+\draw[->, blue!55!black, thin] (locall.west) -- (axis cs:5.4,-1.18);
+\draw[->, blue!55!black, thin] (locall.west) -- (axis cs:1.4,-1.18);
+
+% the raw sequence a_n
+\addplot[only marks, mark=*, mark size=1.1pt, gray!35!black]
+    coordinates { (1,-1.2000) (2,1.1000) (3,0.9667) (4,2.2500) (5,-1.2000) (6,-0.0333) (7,0.4571) (8,1.4250) (9,1.8889) (10,-0.9000) (11,-0.2909) (12,0.6833) (13,1.2231) (14,2.0714) (15,-1.0667) (16,-0.1375) (17,0.5412) (18,1.3556) (19,1.9474) (20,-0.9500) (21,-0.2476) (22,0.6455) (23,1.2565) (24,2.0417) (25,-1.0400) (26,-0.1615) (27,0.5630) (28,1.3357) (29,1.9655) (30,-0.9667) (31,-0.2323) (32,0.6312) (33,1.2697) (34,2.0294) (35,-1.0286) (36,-0.1722) (37,0.5730) (38,1.3263) (39,1.9744) (40,-0.9750) (41,-0.2244) (42,0.6238) (43,1.2767) (44,2.0227) (45,-1.0222) (46,-0.1783) (47,0.5787) (48,1.3208) (49,1.9796) (50,-0.9800) (51,-0.2196) (52,0.6192) (53,1.2811) (54,2.0185) (55,-1.0182) (56,-0.1821) (57,0.5825) (58,1.3172) (59,1.9831) (60,-0.9833) };
+
+% sup_{n>=N} a_n  (decreasing, -> limsup)
+\addplot[thick, red!55!black, mark=none]
+    coordinates { (1,2.2500) (2,2.2500) (3,2.2500) (4,2.2500) (5,2.0714) (6,2.0714) (7,2.0714) (8,2.0714) (9,2.0714) (10,2.0714) (11,2.0714) (12,2.0714) (13,2.0714) (14,2.0714) (15,2.0417) (16,2.0417) (17,2.0417) (18,2.0417) (19,2.0417) (20,2.0417) (21,2.0417) (22,2.0417) (23,2.0417) (24,2.0417) (25,2.0294) (26,2.0294) (27,2.0294) (28,2.0294) (29,2.0294) (30,2.0294) (31,2.0294) (32,2.0294) (33,2.0294) (34,2.0294) (35,2.0227) (36,2.0227) (37,2.0227) (38,2.0227) (39,2.0227) (40,2.0227) (41,2.0227) (42,2.0227) (43,2.0227) (44,2.0227) (45,2.0185) (46,2.0185) (47,2.0185) (48,2.0185) (49,2.0185) (50,2.0185) };
+
+% inf_{n>=N} a_n  (increasing, -> liminf)
+\addplot[thick, blue!55!black, mark=none]
+    coordinates { (1,-1.2000) (2,-1.2000) (3,-1.2000) (4,-1.2000) (5,-1.2000) (6,-1.0667) (7,-1.0667) (8,-1.0667) (9,-1.0667) (10,-1.0667) (11,-1.0667) (12,-1.0667) (13,-1.0667) (14,-1.0667) (15,-1.0667) (16,-1.0400) (17,-1.0400) (18,-1.0400) (19,-1.0400) (20,-1.0400) (21,-1.0400) (22,-1.0400) (23,-1.0400) (24,-1.0400) (25,-1.0400) (26,-1.0286) (27,-1.0286) (28,-1.0286) (29,-1.0286) (30,-1.0286) (31,-1.0286) (32,-1.0286) (33,-1.0286) (34,-1.0286) (35,-1.0286) (36,-1.0222) (37,-1.0222) (38,-1.0222) (39,-1.0222) (40,-1.0222) (41,-1.0222) (42,-1.0222) (43,-1.0222) (44,-1.0222) (45,-1.0222) (46,-1.0182) (47,-1.0182) (48,-1.0182) (49,-1.0182) (50,-1.0182) };
+
+\end{axis}
+\end{tikzpicture}
+\end{fullwidth}
+\vspace{-\baselineskip}\vspace{-\baselineskip}
+  \sideparmargin{inner}
+  \sidepar{\vspace{\baselineskip - 1em}
+    \caption{\RaggedLeft The sequence $a_n = c_{n\bmod 5} + (-1)^n/n$ with $c_0,\dots,c_4 = -1,-0.2,0.6,1.3,2$.
+    One can see that
+    five subsequences cluster at five distinct values.
+    Red/blue curves are $\sup_{n\ge N}a_n$ and $\inf_{n\ge N}a_n$, which converge to $\limsup a_i$
+    and $\liminf a_n$. For any $\varepsilon>0$ (here $\varepsilon=0.1$),
+    only finitely many terms lie above $\limsup a_i+\varepsilon$ or below
+    $\liminf a_n-\varepsilon$.}}
+\end{figure}
+
+We will show that these exist for convergent sequences (more generally, for bounded sequences), and these are the tools
+that will finally allow us to show that all Cauchy sequences are convergent. But
+first let us discuss about the idea of clustering I mentioned---what the $\limsup$ and $\liminf$ are really doing.
+As I mentioned, they are the greatest and smallest limit points. That is, the function clusters around
+a value greater than the $\limsup$ and smaller than the $\liminf$ only finitely many times.
+
+Before we prove \Cref{thm:cauchy_convergence}, let us first discuss this a little. We
+want to show that every bounded sequence has $\limsup$ and $\liminf$ as limit points. But
+to do that at all, we must show these actually exist, based on our definition.
+
+\begin{theorem}
+	If $(a_n)$ is a bounded sequence, then the sequence defined by $t_n = \sup\{a_m \mid m \ge n\}$
+	and $s_n = \inf\{a_m \mid m \ge n\}$ is convergent, and $\limsup a_n = \lim_{n\to\infty} t_n$ and $\liminf a_n = \lim_{n\to\infty} s_n$.
+	\label{prop:limsup_liminf_exist}
+\end{theorem}
+
+\begin{proof}
+I will only do one of these, and leave the other for you to fill in.
+
+We will do this in a silly manner, first showing that $(t_n)$ is bounded,
+and then that is monotonically decreasing\footnote[0cm]{The definition is analogous to that of
+monotonically increasing sequence, i.e $t_n \ge t_m$ for all $m \ge n$.}. This will allow
+us to use \Cref{exc:monotone_convergence} to conclude that $(t_n)$ is convergent.
+
+The first is easy to conclude from \Cref{exc:cauchy_bounded}. Since $(a_n)$ is bounded,
+there exists $M$ such that $\abs{a_n} \le M$ for all $n$. Then,
+$t_n \ge a_n \ge -M$ for all $n$. Also, since $M$ is an upper bound for $\{a_m \mid m \ge n\}$,
+$t_n \le M$ for all $n$. Therefore, $(t_n)$ is also bounded.
+
+\marginnote{Note that the $\sup$ exists because the sequence is bounded, so the
+tail has an upper bound.}
+
+Now for the latter, we note that $t_n$ is the least upper bound of $\{a_m \mid m \ge n\}$,
+and $t_{n+1}$ is the least upper bound of $\{a_m \mid m \ge n+1\}$. If $t_n < t_{n+1}$,
+then $t_{n+1}$ is not the least upper bound of $\{a_m \mid m \ge n + 1\}$, $t_n \ge a_m$ for all $m \ge n + 1$,
+so it is an upper bound, and $t_n < t_{n+1}$, which is a contradiction. Therefore, we must have that
+$t_n \ge t_{n+1}$, and so $(t_n)$ is monotonically decreasing.
+
+To prove that it is convergent, we will use \Cref{exc:monotone_convergence} with a bit of trickery.
+It is easy to see that $t'_n = -t_n$ is bounded and monotonically increasing, so it
+must be convergent. Also, $-\mathbb{1}_n = -1$ is also convergent (it converges to $-1$), so
+$t_n = -\mathbb{1}_n \cdot t'_n$ must also be convergent by \Cref{exc:limit_properties}.
+By definition, we write $\limsup a_n = \lim_{n \to \infty} t_n$.
+\end{proof}
+
+Now let us consider the result we talked about:
+
+\begin{theorem}
+    If $(a_n)$ is a bounded sequence, then $\limsup a_n$ is a limit point of $(a_n)$.
+\end{theorem}
+
+\begin{proof}
+We must show that for all $\varepsilon > 0$ and $M \ge 1$, there exists $N \ge M$ such that
+    $\abs{a_N - \limsup a_i} < \varepsilon$.
+
+    Fix $\varepsilon > 0$ and $M \ge 1$. Since $t_n \to \limsup a_i$, choose $N_1$ such that
+    $\abs{t_n - \limsup a_i} < \varepsilon/2$ for all $n \ge N_1$. Let $n_0 = \max(N_1, M)$, so that
+    $\abs{t_{n_0} - \limsup a_i} < \varepsilon/2$ and $n_0 \ge M$.
+
+    By definition, $t_{n_0} = \sup\{a_m \mid m \ge n_0\}$ is the \emph{least} upper
+    bound of that set. If every $a_m$ with $m \ge n_0$ satisfied
+    $a_m \le t_{n_0} - \varepsilon/2$, then $t_{n_0} - \varepsilon/2$ would itself be an
+    upper bound smaller than $t_{n_0}$, contradicting leastness. So there exists some
+    $N \ge n_0 \ge M$ with
+    \[
+        a_N > t_{n_0} - \varepsilon/2.
+    \]
+    Also $a_N \le t_{n_0}$, since $t_{n_0}$ is an upper bound for $\{a_m \mid m \ge n_0\}$
+    and $N \ge n_0$. Combining,
+    \[
+        \abs{a_N - t_{n_0}} < \varepsilon/2.
+    \]
+    Now use the triangle inequality together with $\abs{t_{n_0} - \limsup a_i} < \varepsilon/2$:
+    \[
+        \abs{a_N - \limsup a_i} \le \abs{a_N - t_{n_0}} + \abs{t_{n_0} - \limsup a_i} < \varepsilon/2 + \varepsilon/2 = \varepsilon.
+    \]
+    Since $N \ge M$, this is exactly what was required. As $\varepsilon > 0$ and $M \ge 1$
+    were arbitrary, $\limsup a_i$ is a limit point of $(a_n)$.
+\end{proof}
+
+\marginnote{I write $\limsup a_i$ instead of $\limsup a_n$ to avoid notational overload. The index
+doesn't really matter.}[-8cm]
+
+Let us now prove \Cref{thm:cauchy_convergence}.
+\cauchyconvergence*
+
+\begin{proof}
+Let $a_n$ be a Cauchy sequence. We claim that it converges to $\limsup a_i$. This exists because
+of \Cref{exc:cauchy_bounded} and \Cref{prop:limsup_liminf_exist}.
+
+We wish to find a $N$ such that $\abs{a_n - \limsup a_i} < \varepsilon$ for all $n \ge N$.
+Since $(a_n)$ is a Cauchy sequence, there exists a $N_1$ such that $\abs{a_n - a_m} < \varepsilon/4$ for all $n, m \ge N_1$.
+
+Since $t_n \coloneq \sup \{a_m \mid m \ge n\}$ is convergent, there exist $N_2$
+such that $\abs{t_n - \limsup a_i} < \varepsilon/2$ for all $n \ge N_2$, and so for $n > N_3 = \max(N_1, N_2)$.
+
+Now consider the terms $a_{N_3}, a_{N_3+1}, \dots$. Note that $t_n $ is greater than all of them
+by definition. Now there must exist a $i$ such that $t_n - a_{N_3 + i} < \varepsilon/4$, otherwise
+$t_n - \varepsilon/4$ would be a smaller upper bound of $\{a_m \mid m \ge N_3 + i\}$, which is a contradiction.
+
+Let this be $a_{N}$. Since $N > N_3 = \max(N_1, N_2)$, we have that $\abs{a_N - a_m} < \varepsilon/4$ for all $m \ge N$.
+Using this, and $t_n - a_{N} = \abs{t_n - a_{N}} < \varepsilon/4$, we get that:
+\[
+\varepsilon/2 > \abs{a_{N} - a_m} + \abs{t_n - a_{N}} \ge \abs{a_m - t_n}
+\]
+and finally, using $\abs{t_n - \limsup a_i} < \varepsilon/2$, we get that:
+\[
+\varepsilon > \abs{t_n - \limsup a_i} + \abs{a_m - t_n} \ge \abs{a_m - \limsup a_i}
+\]
+for all $m \ge N$. Thus we are done.
+\end{proof}
+
+\vspace{-1em}
+\begin{remark}
+    Continuing on \Cref{rem:extended_convergence}, we may also
+    use the extended definition to allow $\limsup a_n$ to be $\infty$ and
+    $\liminf a_n$ to be $-\infty$. This is a surprisingly important idea,
+    as it allows us to say that \emph{all} sequences, regardless of them being bounded or not,
+    have a $\limsup$ and $\liminf$.
+\end{remark}
+\vspace{-1em}
+\begin{remark}
+    Here is a trick I have pulled over you to prove \Cref{thm:cauchy_convergence}. Cauchy
+    sequences are what we use to \emph{construct} the reals. Look carefully at what properties
+    I used for the proof---the most important is the existence of $\sup$. In particular,
+    Cauchy sequences are not all convergent if we work with the rationals! We construct
+    the reals by defining a real to be an equivalence class of Cauchy sequences whose
+    difference is also a Cauchy sequence (i.e the difference between their terms decreases to zero as
+    we grow larger).
+\end{remark}
+
+\begin{exc}
+    \begin{exercise}[subtitle = {Balzano Weirstrass Theorem}]
+
+    Prove that every bounded sequence has a convergent subsequence.
+
+    \emph{Hint: You already know one such subsequence! What do subsequences of bounded sequences converge to?
+        But I also want you to do this in another manner, without appealing to what we have
+        already shown, i.e without using the theorems we have already proved for bounded
+        sequences.}
+    \end{exercise}
+    \begin{solution}
+    \begin{claim}
+    Any sequence $(a_n)$ contains a subsequence which is either nondecreasing (montonically
+    increasing) or non-increasing (monotonically decreasing).
+    \end{claim}
+    \begin{proof}
+    Call a natural number $n$ a \emph{peak} point of the sequence $(a_n)$ if $a_m < a_n$ for all
+    $m > n$
+
+    Case 1. The sequence has infinitely many peak points. In this case, if $n_1 < n_2 <
+    n_3 < \ldots$ are the peak points, then $a_n_1 > a_n_2 > a_n_3 > \ldots$ , so $a_n_k$ is the desired
+    (nonincreasing) subsequence.
+
+    Case 2. The sequence has only finitely many peak points. In this case, let $n_1$ be greater
+    than all peak points. Since $n_1$ is not a peak point, there is some $n_2 > n_1$ such that
+    $a_n_2 \geq a_n_1$ . Since $n_2$ is not a peak point (it is greater than $n_1$ , and hence greater
+    than all peak points) there is some $n_3 > n_2$ such that $a_n_3 \geq a_n_2$ . Continuing in this
+    way we obtain the desired (nondecreasing) subsequence.
+
+    Since we have a monotonically increasing/decreasing sequence, and it must bounded
+    because it is a subsequence of a bounded sequence, by \Cref{exc:monotone_convergence}
+    we are done.
+    \end{proof}
+    \end{solution}
+    \begin{exercise}
+    Let $(a_n)$ be a bounded sequence. Show that:
+    \begin{enumerate}
+    \item $\liminf a_n$ exists.
+    \item $\liminf a_n \leq \limsup a_n$.
+    \item $\liminf a_n = \limsup a_n$ if and only if $(a_n)$ is convergent (or Cauchy).
+    \end{enumerate}
+    \end{exercise}
+\end{exc}

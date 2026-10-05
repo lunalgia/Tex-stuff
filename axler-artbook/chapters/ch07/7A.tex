@@ -1,0 +1,806 @@
+% Source: book pp. 228--242 (PDF 242--256). No solutions in the manual.
+% a numbered display (Axler numbers a few equations with the item counter):
+%   text\axeqstep{ax:7.15}  \[ ... \tag{\thetheorem} \]
+\DeclareRobustCommand\axeqstep[1]{\refstepcounter{theorem}\label{#1}}
+% the small italic comment that follows some exercises
+\section{Self-Adjoint and Normal Operators}
+
+\subsection{Adjoints}
+
+\begin{definition}[Adjoint, $T^*$]\label{ax:7.1}
+Suppose $T\in\Lin(V,W)$. The \emph{adjoint} of $T$ is the function
+$T^*\colon W\to V$ such that
+\[ \ip{Tv}{w} = \ip{v}{T^*w} \]
+for every $v\in V$ and every $w\in W$.
+\end{definition}
+
+\marginnote{The word \textbf{adjoint} has another meaning in linear algebra. In
+case you encounter the second meaning elsewhere, be warned that the two meanings
+for adjoint are unrelated to each other.}%
+To see why the definition above makes sense, suppose $T\in\Lin(V,W)$. Fix
+$w\in W$. Consider the linear functional
+\[ v\mapsto\ip{Tv}{w} \]
+on $V$ that maps $v\in V$ to $\ip{Tv}{w}$; this linear functional depends on $T$
+and $w$. By the Riesz representation theorem (\ref{ax:6.42}), there exists a
+unique vector in $V$ such that this linear functional is given by taking the
+inner product with it. We call this unique vector $T^*w$. In other words, $T^*w$
+is the unique vector in $V$ such that
+\[ \ip{Tv}{w} = \ip{v}{T^*w} \]
+for every $v\in V$.
+
+In the equation above, the inner product on the left takes place in $W$ and the
+inner product on the right takes place in $V$. However, we use the same
+notation $\ip{\cdot}{\cdot}$ for both inner products.
+
+\begin{example}[Adjoint of a linear map from $\R^3$ to $\R^2$]\label{ax:7.2}
+Define $T\colon\R^3\to\R^2$ by
+\[ T(x_1,x_2,x_3) = (x_2+3x_3,\,2x_1). \]
+To compute $T^*$, suppose $(x_1,x_2,x_3)\in\R^3$ and $(y_1,y_2)\in\R^2$. Then
+\begin{align*}
+\bigl\langle T(x_1,x_2,x_3),(y_1,y_2)\bigr\rangle
+  &= \bigl\langle (x_2+3x_3,\,2x_1),(y_1,y_2)\bigr\rangle\\
+  &= x_2y_1+3x_3y_1+2x_1y_2\\
+  &= \bigl\langle (x_1,x_2,x_3),(2y_2,y_1,3y_1)\bigr\rangle.
+\end{align*}
+The equation above and the definition of the adjoint imply that
+\[ T^*(y_1,y_2) = (2y_2,y_1,3y_1). \]
+\end{example}
+
+\begin{example}[Adjoint of a linear map with range of dimension at most $1$]%
+\label{ax:7.3}
+Fix $u\in V$ and $x\in W$. Define $T\in\Lin(V,W)$ by
+\[ Tv = \ip{v}{u}x \]
+for each $v\in V$. To compute $T^*$, suppose $v\in V$ and $w\in W$. Then
+\begin{align*}
+\ip{Tv}{w} &= \bigl\langle \ip{v}{u}x,w\bigr\rangle\\
+           &= \ip{v}{u}\ip{x}{w}\\
+           &= \bigl\langle v,\ip{w}{x}u\bigr\rangle.
+\end{align*}
+Thus
+\[ T^*w = \ip{w}{x}u. \]
+\end{example}
+
+\marginnote[-3em]{The two examples above and the proof below use a common technique
+for computing $T^*$: start with a formula for $\ip{Tv}{w}$ then manipulate it to
+get just $v$ in the first slot; the entry in the second slot will then be
+$T^*w$.}%
+In the two examples above, $T^*$ turned out to be not just a function from $W$
+to $V$ but a linear map from $W$ to $V$. This behavior is true in general, as
+shown by the next result.
+
+\begin{result}[Adjoint of a linear map is a linear map]\label{ax:7.4}
+If $T\in\Lin(V,W)$, then $T^*\in\Lin(W,V)$.
+\end{result}
+
+\begin{proof}
+Suppose $T\in\Lin(V,W)$. If $v\in V$ and $w_1,w_2\in W$, then
+\begin{align*}
+\ip{Tv}{w_1+w_2} &= \ip{Tv}{w_1}+\ip{Tv}{w_2}\\
+                 &= \ip{v}{T^*w_1}+\ip{v}{T^*w_2}\\
+                 &= \ip{v}{T^*w_1+T^*w_2}.
+\end{align*}
+The equation above shows that
+\[ T^*(w_1+w_2) = T^*w_1+T^*w_2. \]
+
+If $v\in V$, $\lambda\in\F$, and $w\in W$, then
+\begin{align*}
+\ip{Tv}{\lambda w} &= \overline{\lambda}\ip{Tv}{w}\\
+                   &= \overline{\lambda}\ip{v}{T^*w}\\
+                   &= \ip{v}{\lambda T^*w}.
+\end{align*}
+The equation above shows that
+\[ T^*(\lambda w) = \lambda T^*w. \]
+
+Thus $T^*$ is a linear map, as desired.
+\end{proof}
+
+\begin{result}[Properties of the adjoint]\label{ax:7.5}
+Suppose $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $(S+T)^*=S^*+T^*$ for all $S\in\Lin(V,W)$;
+\item $(\lambda T)^*=\overline{\lambda}T^*$ for all $\lambda\in\F$;
+\item $(T^*)^*=T$;
+\item $(ST)^*=T^*S^*$ for all $S\in\Lin(W,U)$ (here $U$ is a finite-dimensional
+  inner product space over $\F$);
+\item $I^*=I$, where $I$ is the identity operator on $V$;
+\item if $T$ is invertible, then $T^*$ is invertible and
+  $(T^*)^{-1}=(T^{-1})^*$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Suppose $v\in V$ and $w\in W$.
+\begin{parts}
+\item If $S\in\Lin(V,W)$, then
+  \begin{align*}
+  \bigl\langle (S+T)v,w\bigr\rangle &= \ip{Sv}{w}+\ip{Tv}{w}\\
+    &= \ip{v}{S^*w}+\ip{v}{T^*w}\\
+    &= \ip{v}{S^*w+T^*w}.
+  \end{align*}
+  Thus $(S+T)^*w=S^*w+T^*w$, as desired.
+\item If $\lambda\in\F$, then
+  \[ \bigl\langle (\lambda T)v,w\bigr\rangle = \lambda\ip{Tv}{w}
+     = \lambda\ip{v}{T^*w} = \ip{v}{\overline{\lambda}T^*w}. \]
+  Thus $(\lambda T)^*w=\overline{\lambda}T^*w$, as desired.
+\item We have
+  \[ \ip{T^*w}{v} = \overline{\ip{v}{T^*w}} = \overline{\ip{Tv}{w}}
+     = \ip{w}{Tv}. \]
+  Thus $(T^*)^*v=Tv$, as desired.
+\item Suppose $S\in\Lin(W,U)$ and $u\in U$. Then
+  \[ \bigl\langle (ST)v,u\bigr\rangle = \bigl\langle S(Tv),u\bigr\rangle
+     = \ip{Tv}{S^*u} = \bigl\langle v,T^*(S^*u)\bigr\rangle. \]
+  Thus $(ST)^*u=T^*(S^*u)$, as desired.
+\item Suppose $u\in V$. Then
+  \[ \ip{Iu}{v} = \ip{u}{v}. \]
+  Thus $I^*v=v$, as desired.
+\item Suppose $T$ is invertible. Take adjoints of both sides of the equation
+  $T^{-1}T=I$, then use (d) and (e) to show that $T^*(T^{-1})^*=I$. Similarly,
+  the equation $TT^{-1}=I$ implies $(T^{-1})^*T^*=I$. Thus $(T^{-1})^*$ is the
+  inverse of $T^*$, as desired. \qedhere
+\end{parts}
+\end{proof}
+
+If $\F=\R$, then the map $T\mapsto T^*$ is a linear map from $\Lin(V,W)$ to
+$\Lin(W,V)$, as follows from (a) and (b) of the result above. However, if
+$\F=\C$, then this map is not linear because of the complex conjugate that
+appears in (b).
+
+The next result shows the relationship between the null space and the range of
+a linear map and its adjoint.
+
+\begin{result}[Null space and range of $T^*$]\label{ax:7.6}
+Suppose $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $\nul T^*=(\range T)^\perp$;
+\item $\range T^*=(\nul T)^\perp$;
+\item $\nul T=(\range T^*)^\perp$;
+\item $\range T=(\nul T^*)^\perp$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+We begin by proving (a). Let $w\in W$. Then
+\begin{align*}
+w\in\nul T^* &\iff T^*w=0\\
+  &\iff \ip{v}{T^*w}=0 \text{ for all } v\in V\\
+  &\iff \ip{Tv}{w}=0 \text{ for all } v\in V\\
+  &\iff w\in(\range T)^\perp.
+\end{align*}
+Thus $\nul T^*=(\range T)^\perp$, proving (a).
+
+If we take the orthogonal complement of both sides of (a), we get (d), where we
+have used \ref{ax:6.52}. Replacing $T$ with $T^*$ in (a) gives (c), where we
+have used \ref{ax:7.5}(c). Finally, replacing $T$ with $T^*$ in (d) gives (b).
+\end{proof}
+
+As we will soon see, the next definition is intimately connected to the matrix
+of the adjoint of a linear map.
+
+\begin{definition}[Conjugate transpose, $A^*$]\label{ax:7.7}
+The \emph{conjugate transpose} of an $m$-by-$n$ matrix $A$ is the $n$-by-$m$
+matrix $A^*$ obtained by interchanging the rows and columns and then taking the
+complex conjugate of each entry. In other words, if $j\in\{1,\dots,n\}$ and
+$k\in\{1,\dots,m\}$, then
+\[ (A^*)_{j,k} = \overline{A_{k,j}}. \]
+\end{definition}
+
+\begin{example}[Conjugate transpose of a $2$-by-$3$ matrix]\label{ax:7.8}
+The conjugate transpose of the $2$-by-$3$ matrix
+$\begin{pmatrix} 2 & 3+4i & 7\\ 6 & 5 & 8i \end{pmatrix}$
+is the $3$-by-$2$ matrix
+\[ \begin{pmatrix} 2 & 6\\ 3-4i & 5\\ 7 & -8i \end{pmatrix}. \]
+\end{example}
+
+% the first note sits beside Example 7.8 (a note cannot go inside the box)
+\marginnote[-24mm]{If a matrix $A$ has only real entries, then $A^*=A^{\mathrm{t}}$,
+where $A^{\mathrm{t}}$ denotes the transpose of $A$ (the matrix obtained by
+interchanging the rows and the columns).}%
+\marginnote{The adjoint of a linear map does not depend on a choice of basis.
+Thus we frequently emphasize adjoints of linear maps instead of transposes or
+conjugate transposes of matrices.}%
+The next result shows how to compute the matrix of $T^*$ from the matrix of
+$T$. \textbf{Caution:} With respect to nonorthonormal bases, the matrix of $T^*$
+does not necessarily equal the conjugate transpose of the matrix of $T$.
+
+\begin{result}[Matrix of $T^*$ equals conjugate transpose of matrix of $T$]%
+\label{ax:7.9}
+Let $T\in\Lin(V,W)$. Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$ and
+$f_1,\dots,f_m$ is an orthonormal basis of $W$. Then
+$\Mat\bigl(T^*,(f_1,\dots,f_m),(e_1,\dots,e_n)\bigr)$ is the conjugate transpose
+of $\Mat\bigl(T,(e_1,\dots,e_n),(f_1,\dots,f_m)\bigr)$. In other words,
+\[ \Mat(T^*) = \bigl(\Mat(T)\bigr)^*. \]
+\end{result}
+
+\begin{proof}
+In this proof, we will write $\Mat(T)$ and $\Mat(T^*)$ instead of the longer
+expressions $\Mat\bigl(T,(e_1,\dots,e_n),(f_1,\dots,f_m)\bigr)$ and
+$\Mat\bigl(T^*,(f_1,\dots,f_m),(e_1,\dots,e_n)\bigr)$.
+
+Recall that we obtain the $k^{\text{th}}$ column of $\Mat(T)$ by writing $Te_k$
+as a linear combination of the $f_j$'s; the scalars used in this linear
+combination then become the $k^{\text{th}}$ column of $\Mat(T)$. Because
+$f_1,\dots,f_m$ is an orthonormal basis of $W$, we know how to write $Te_k$ as a
+linear combination of the $f_j$'s [see \ref{ax:6.30}(a)]:
+\[ Te_k = \ip{Te_k}{f_1}f_1+\cdots+\ip{Te_k}{f_m}f_m. \]
+Thus
+\[ \text{the entry in row $j$, column $k$, of $\Mat(T)$ is $\ip{Te_k}{f_j}$.} \]
+
+In the statement above, replace $T$ with $T^*$ and interchange $e_1,\allowbreak\dots,e_n$
+and $f_1,\allowbreak\dots,f_m$. This shows that the entry in row $j$, column $k$, of
+$\Mat(T^*)$ is $\ip{T^*f_k}{e_j}$, which equals $\ip{f_k}{Te_j}$, which equals
+$\overline{\ip{Te_j}{f_k}}$, which equals the complex conjugate of the entry in
+row $k$, column $j$, of $\Mat(T)$. Thus $\Mat(T^*)=\bigl(\Mat(T)\bigr)^*$.
+\end{proof}
+
+The Riesz representation theorem as stated in \ref{ax:6.58} provides an
+identification of $V$ with its dual space $V'$ defined in \ref{ax:3.110}. Under
+this identification, the orthogonal complement $U^\perp$ of a subset
+$U\subseteq V$ corresponds to the annihilator $U^0$ of $U$. If $U$ is a subspace
+of $V$, then the formulas for the dimensions of $U^\perp$ and $U^0$ become
+identical under this identification---see \ref{ax:3.125} and \ref{ax:6.51}.
+
+\marginnote{Because orthogonal complements and adjoints are easier to deal with
+than annihilators and dual maps, there is no need to work with annihilators and
+dual maps in the context of inner product spaces.}%
+Suppose $T\colon V\to W$ is a linear map. Under the identification of $V$ with
+$V'$ and the identification of $W$ with $W'$, the adjoint map
+$T^*\colon W\to V$ corresponds to the dual map $T'\colon W'\to V'$ defined in
+\ref{ax:3.118}, as Exercise~32 asks you to verify. Under this identification,
+the formulas for $\nul T^*$ and $\range T^*$ [\ref{ax:7.6}(a) and (b)] then
+become identical to the formulas for $\nul T'$ and $\range T'$
+[\ref{ax:3.128}(a) and \ref{ax:3.130}(b)]. Furthermore, the theorem about the
+matrix of $T^*$ (\ref{ax:7.9}) is analogous to the theorem about the matrix of
+$T'$ (\ref{ax:3.132}).
+
+\subsection{Self-Adjoint Operators}
+
+Now we switch our attention to operators on inner product spaces. Instead of
+considering linear maps from $V$ to $W$, we will focus on linear maps from $V$
+to $V$; recall that such linear maps are called operators.
+
+\begin{definition}[Self-adjoint]\label{ax:7.10}
+An operator $T\in\Lin(V)$ is called \emph{self-adjoint} if $T=T^*$.
+\end{definition}
+
+If $T\in\Lin(V)$ and $e_1,\dots,e_n$ is an orthonormal basis of $V$, then $T$
+is self-adjoint if and only if
+$\Mat\bigl(T,(e_1,\dots,e_n)\bigr)=\Mat\bigl(T,(e_1,\dots,e_n)\bigr)^*$, as
+follows from \ref{ax:7.9}.
+
+\begin{example}[Determining whether $T$ is self-adjoint from its matrix]%
+\label{ax:7.11}
+Suppose $c\in\F$ and $T$ is the operator on $\F^2$ whose matrix (with respect
+to the standard basis) is
+\[ \Mat(T) = \begin{pmatrix} 2 & c\\ 3 & 7 \end{pmatrix}. \]
+The matrix of $T^*$ (with respect to the standard basis) is
+\[ \Mat(T^*) = \begin{pmatrix} 2 & 3\\ \overline{c} & 7 \end{pmatrix}. \]
+Thus $\Mat(T)=\Mat(T^*)$ if and only if $c=3$. Hence the operator $T$ is
+self-adjoint if and only if $c=3$.
+\end{example}
+
+A good analogy to keep in mind is that the adjoint on $\Lin(V)$ plays a role
+similar to that of the complex conjugate on $\C$. A complex number $z$ is real
+if and only if $z=\overline{z}$; thus a self-adjoint operator ($T=T^*$) is
+analogous to a real number.
+
+\marginnote{An operator $T\in\Lin(V)$ is self-adjoint if and only if
+\[ \ip{Tv}{w} = \ip{v}{Tw} \]
+for all $v,w\in V$.}%
+We will see that the analogy discussed above is reflected in some important
+properties of self-adjoint operators, beginning with eigenvalues in the next
+result.
+
+If $\F=\R$, then by definition every eigenvalue is real, so the next result is
+interesting only when $\F=\C$.
+
+\begin{result}[Eigenvalues of self-adjoint operators]\label{ax:7.12}
+Every eigenvalue of a self-adjoint operator is real.
+\end{result}
+
+\begin{proof}
+Suppose $T$ is a self-adjoint operator on $V$. Let $\lambda$ be an eigenvalue of
+$T$, and let $v$ be a nonzero vector in $V$ such that $Tv=\lambda v$. Then
+\[ \lambda\norm{v}^2 = \ip{\lambda v}{v} = \ip{Tv}{v} = \ip{v}{Tv}
+   = \ip{v}{\lambda v} = \overline{\lambda}\norm{v}^2. \]
+Thus $\lambda=\overline{\lambda}$, which means that $\lambda$ is real, as
+desired.
+\end{proof}
+
+The next result is false for real inner product spaces. As an example, consider
+the operator $T\in\Lin(\R^2)$ that is a counterclockwise rotation of $90^\circ$
+around the origin; thus $T(x,y)=(-y,x)$. Notice that $Tv$ is orthogonal to $v$
+for every $v\in\R^2$, even though $T\ne0$.
+
+\begin{result}[$Tv$ is orthogonal to $v$ for all $v$ $\iff$ $T=0$ (assuming
+$\F=\C$)]\label{ax:7.13}
+Suppose $V$ is a complex inner product space and $T\in\Lin(V)$. Then
+\[ \ip{Tv}{v}=0 \text{ for every } v\in V \iff T=0. \]
+\end{result}
+
+\begin{proof}
+If $u,w\in V$, then
+\begin{align*}
+\ip{Tu}{w} &= \frac{\bigl\langle T(u+w),u+w\bigr\rangle
+                    -\bigl\langle T(u-w),u-w\bigr\rangle}{4}\\
+  &\qquad+\frac{\bigl\langle T(u+iw),u+iw\bigr\rangle
+                -\bigl\langle T(u-iw),u-iw\bigr\rangle}{4}\,i,
+\end{align*}
+as can be verified by computing the right side. Note that each term on the
+right side is of the form $\ip{Tv}{v}$ for appropriate $v\in V$.
+
+Now suppose $\ip{Tv}{v}=0$ for every $v\in V$. Then the equation above implies
+that $\ip{Tu}{w}=0$ for all $u,w\in V$, which then implies that $Tu=0$ for every
+$u\in V$ (take $w=Tu$). Hence $T=0$, as desired.
+\end{proof}
+
+\marginnote{The next result provides another good example of how self-adjoint
+operators behave like real numbers.}%
+The next result is false for real inner product spaces, as shown by considering
+any operator on a real inner product space that is not self-adjoint.
+
+\begin{result}[$\ip{Tv}{v}$ is real for all $v$ $\iff$ $T$ is self-adjoint
+(assuming $\F=\C$)]\label{ax:7.14}
+Suppose $V$ is a complex inner product space and $T\in\Lin(V)$. Then
+\[ T \text{ is self-adjoint} \iff \ip{Tv}{v}\in\R \text{ for every } v\in V. \]
+\end{result}
+
+\begin{proof}
+If $v\in V$, then\axeqstep{ax:7.15}
+\[ \ip{T^*v}{v} = \overline{\ip{v}{T^*v}} = \overline{\ip{Tv}{v}}.
+   \tag{\thetheorem} \]
+Now
+\begin{align*}
+T \text{ is self-adjoint} &\iff T-T^*=0\\
+  &\iff \bigl\langle (T-T^*)v,v\bigr\rangle=0 \text{ for every } v\in V\\
+  &\iff \ip{Tv}{v}-\overline{\ip{Tv}{v}}=0 \text{ for every } v\in V\\
+  &\iff \ip{Tv}{v}\in\R \text{ for every } v\in V,
+\end{align*}
+where the second equivalence follows from \ref{ax:7.13} as applied to $T-T^*$
+and the third equivalence follows from \ref{ax:7.15}.
+\end{proof}
+
+On a real inner product space $V$, a nonzero operator $T$ might satisfy
+$\ip{Tv}{v}=0$ for all $v\in V$. However, the next result shows that this
+cannot happen for a self-adjoint operator.
+
+\begin{result}[$T$ self-adjoint and $\ip{Tv}{v}=0$ for all $v$ $\iff$
+$T=0$]\label{ax:7.16}
+Suppose $T$ is a self-adjoint operator on $V$. Then
+\[ \ip{Tv}{v}=0 \text{ for every } v\in V \iff T=0. \]
+\end{result}
+
+\begin{proof}
+We have already proved this (without the hypothesis that $T$ is self-adjoint)
+when $V$ is a complex inner product space (see \ref{ax:7.13}). Thus we can
+assume that $V$ is a real inner product space. If $u,w\in V$, then%
+\axeqstep{ax:7.17}
+\[ \ip{Tu}{w} = \frac{\bigl\langle T(u+w),u+w\bigr\rangle
+                      -\bigl\langle T(u-w),u-w\bigr\rangle}{4},
+   \tag{\thetheorem} \]
+as can be proved by computing the right side using the equation
+\[ \ip{Tw}{u} = \ip{w}{Tu} = \ip{Tu}{w}, \]
+where the first equality holds because $T$ is self-adjoint and the second
+equality holds because we are working in a real inner product space.
+
+Now suppose $\ip{Tv}{v}=0$ for every $v\in V$. Because each term on the right
+side of \ref{ax:7.17} is of the form $\ip{Tv}{v}$ for appropriate $v$, this
+implies that $\ip{Tu}{w}=0$ for all $u,w\in V$. This implies that $Tu=0$ for
+every $u\in V$ (take $w=Tu$). Hence $T=0$, as desired.
+\end{proof}
+
+\subsection{Normal Operators}
+
+\begin{definition}[Normal]\label{ax:7.18}\leavevmode
+\begin{itemize}
+\item An operator on an inner product space is called \emph{normal} if it
+  commutes with its adjoint.
+\item In other words, $T\in\Lin(V)$ is normal if $TT^*=T^*T$.
+\end{itemize}
+\end{definition}
+
+Every self-adjoint operator is normal, because if $T$ is self-adjoint then
+$T^*=T$ and hence $T$ commutes with $T^*$.
+
+\begin{example}[An operator that is normal but not self-adjoint]\label{ax:7.19}
+Let $T$ be the operator on $\F^2$ whose matrix (with respect to the standard
+basis) is
+\[ \begin{pmatrix} 2 & -3\\ 3 & 2 \end{pmatrix}. \]
+Thus $T(w,z)=(2w-3z,3w+2z)$.
+
+This operator $T$ is not self-adjoint because the entry in row~2, column~1
+(which equals $3$) does not equal the complex conjugate of the entry in row~1,
+column~2 (which equals $-3$).
+
+The matrix of $TT^*$ equals
+\[ \begin{pmatrix} 2 & -3\\ 3 & 2 \end{pmatrix}
+   \begin{pmatrix} 2 & 3\\ -3 & 2 \end{pmatrix},
+   \quad\text{which equals}\quad
+   \begin{pmatrix} 13 & 0\\ 0 & 13 \end{pmatrix}. \]
+Similarly, the matrix of $T^*T$ equals
+\[ \begin{pmatrix} 2 & 3\\ -3 & 2 \end{pmatrix}
+   \begin{pmatrix} 2 & -3\\ 3 & 2 \end{pmatrix},
+   \quad\text{which equals}\quad
+   \begin{pmatrix} 13 & 0\\ 0 & 13 \end{pmatrix}. \]
+Because $TT^*$ and $T^*T$ have the same matrix, we see that $TT^*=T^*T$. Thus
+$T$ is normal.
+\end{example}
+
+In the next section we will see why normal operators are worthy of special
+attention. The next result provides a useful characterization of normal
+operators.
+
+\begin{result}[$T$ is normal if and only if $Tv$ and $T^*v$ have the same
+norm]\label{ax:7.20}
+Suppose $T\in\Lin(V)$. Then
+\[ T \text{ is normal} \iff \norm{Tv}=\norm{T^*v} \text{ for every } v\in V. \]
+\end{result}
+
+\begin{proof}
+We have
+\begin{align*}
+T \text{ is normal} &\iff T^*T-TT^*=0\\
+  &\iff \bigl\langle (T^*T-TT^*)v,v\bigr\rangle=0 \text{ for every } v\in V\\
+  &\iff \ip{T^*Tv}{v}=\ip{TT^*v}{v} \text{ for every } v\in V\\
+  &\iff \ip{Tv}{Tv}=\ip{T^*v}{T^*v} \text{ for every } v\in V\\
+  &\iff \norm{Tv}^2=\norm{T^*v}^2 \text{ for every } v\in V\\
+  &\iff \norm{Tv}=\norm{T^*v} \text{ for every } v\in V,
+\end{align*}
+where we used \ref{ax:7.16} to establish the second equivalence (note that the
+operator $T^*T-TT^*$ is self-adjoint).
+\end{proof}
+
+The next result presents several consequences of the result above. Compare (e)
+of the next result to Exercise~3. That exercise states that the eigenvalues of
+the adjoint of each operator are equal (as a set) to the complex conjugates of
+the eigenvalues of the operator. The exercise says nothing about eigenvectors,
+because an operator and its adjoint may have different eigenvectors. However,
+(e) of the next result implies that a normal operator and its adjoint have the
+same eigenvectors.
+
+\begin{result}[Range, null space, and eigenvectors of a normal operator]%
+\label{ax:7.21}
+Suppose $T\in\Lin(V)$ is normal. Then
+\begin{parts}
+\item $\nul T=\nul T^*$;
+\item $\range T=\range T^*$;
+\item $V=\nul T\oplus\range T$;
+\item $T-\lambda I$ is normal for every $\lambda\in\F$;
+\item if $v\in V$ and $\lambda\in\F$, then $Tv=\lambda v$ if and only if
+  $T^*v=\overline{\lambda}v$.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item Suppose $v\in V$. Then
+  \[ v\in\nul T \iff \norm{Tv}=0 \iff \norm{T^*v}=0 \iff v\in\nul T^*, \]
+  where the middle equivalence above follows from \ref{ax:7.20}. Thus
+  $\nul T=\nul T^*$.
+\item We have
+  \[ \range T = (\nul T^*)^\perp = (\nul T)^\perp = \range T^*, \]
+  where the first equality comes from \ref{ax:7.6}(d), the second equality
+  comes from (a) in this result, and the third equality comes from
+  \ref{ax:7.6}(b).
+\item We have
+  \[ V = (\nul T)\oplus(\nul T)^\perp = \nul T\oplus\range T^*
+       = \nul T\oplus\range T, \]
+  where the first equality comes from \ref{ax:6.49}, the second equality comes
+  from \ref{ax:7.6}(b), and the third equality comes from (b) in this result.
+\item Suppose $\lambda\in\F$. Then
+  \begin{align*}
+  (T-\lambda I)(T-\lambda I)^* &= (T-\lambda I)(T^*-\overline{\lambda}I)\\
+    &= TT^*-\overline{\lambda}T-\lambda T^*+\abs{\lambda}^2I\\
+    &= T^*T-\overline{\lambda}T-\lambda T^*+\abs{\lambda}^2I\\
+    &= (T^*-\overline{\lambda}I)(T-\lambda I)\\
+    &= (T-\lambda I)^*(T-\lambda I).
+  \end{align*}
+  Thus $T-\lambda I$ commutes with its adjoint. Hence $T-\lambda I$ is normal.
+\item Suppose $v\in V$ and $\lambda\in\F$. Then (d) and \ref{ax:7.20} imply that
+  \[ \norm{(T-\lambda I)v} = \norm{(T-\lambda I)^*v}
+     = \norm{(T^*-\overline{\lambda}I)v}. \]
+  Thus $\norm{(T-\lambda I)v}=0$ if and only if
+  $\norm{(T^*-\overline{\lambda}I)v}=0$. Hence $Tv=\lambda v$ if and only if
+  $T^*v=\overline{\lambda}v$. \qedhere
+\end{parts}
+\end{proof}
+
+Because every self-adjoint operator is normal, the next result applies in
+particular to self-adjoint operators.
+
+\begin{result}[Orthogonal eigenvectors for normal operators]\label{ax:7.22}
+Suppose $T\in\Lin(V)$ is normal. Then eigenvectors of $T$ corresponding to
+distinct eigenvalues are orthogonal.
+\end{result}
+
+\begin{proof}
+Suppose $\alpha,\beta$ are distinct eigenvalues of $T$, with corresponding
+eigenvectors $u,v$. Thus $Tu=\alpha u$ and $Tv=\beta v$. From \ref{ax:7.21}(e)
+we have $T^*v=\overline{\beta}v$. Thus
+\begin{align*}
+(\alpha-\beta)\ip{u}{v} &= \ip{\alpha u}{v}-\ip{u}{\overline{\beta}v}\\
+                        &= \ip{Tu}{v}-\ip{u}{T^*v}\\
+                        &= 0.
+\end{align*}
+Because $\alpha\ne\beta$, the equation above implies that $\ip{u}{v}=0$. Thus
+$u$ and $v$ are orthogonal, as desired.
+\end{proof}
+
+As stated here, the next result makes sense only when $\F=\C$. However, see
+Exercise~12 for a version that makes sense when $\F=\C$ and when $\F=\R$.
+
+Suppose $\F=\C$ and $T\in\Lin(V)$. Under the analogy between $\Lin(V)$ and
+$\C$, with the adjoint on $\Lin(V)$ playing a similar role to that of the
+complex conjugate on $\C$, the operators $A$ and $B$ as defined by \ref{ax:7.24}
+correspond to the real and imaginary parts of $T$. Thus the informal title of
+the result below should make sense.
+
+\begin{result}[$T$ is normal $\iff$ the real and imaginary parts of $T$
+commute]\label{ax:7.23}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then $T$ is normal if and only if there
+exist commuting self-adjoint operators $A$ and $B$ such that $T=A+iB$.
+\end{result}
+
+\begin{proof}
+First suppose $T$ is normal. Let\axeqstep{ax:7.24}
+\[ A = \frac{T+T^*}{2} \quad\text{and}\quad B = \frac{T-T^*}{2i}.
+   \tag{\thetheorem} \]
+Then $A$ and $B$ are self-adjoint and $T=A+iB$. A quick computation shows
+that\axeqstep{ax:7.25}
+\[ AB-BA = \frac{T^*T-TT^*}{2i}. \tag{\thetheorem} \]
+Because $T$ is normal, the right side of the equation above equals $0$. Thus
+the operators $A$ and $B$ commute, as desired.
+
+To prove the implication in the other direction, now suppose there exist
+commuting self-adjoint operators $A$ and $B$ such that $T=A+iB$. Then
+$T^*=A-iB$. Adding the last two equations and then dividing by $2$ produces the
+equation for $A$ in \ref{ax:7.24}. Subtracting the last two equations and then
+dividing by $2i$ produces the equation for $B$ in \ref{ax:7.24}. Now
+\ref{ax:7.24} implies \ref{ax:7.25}. Because $B$ and $A$ commute,
+\ref{ax:7.25} implies that $T$ is normal, as desired.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{7A}
+
+\begin{exercise}
+Suppose $n$ is a positive integer. Define $T\in\Lin(\F^n)$ by
+\[ T(z_1,\dots,z_n) = (0,z_1,\dots,z_{n-1}). \]
+Find a formula for $T^*(z_1,\dots,z_n)$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Prove that
+\[ T=0 \iff T^*=0 \iff T^*T=0 \iff TT^*=0. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $\lambda\in\F$. Prove that
+\[ \lambda \text{ is an eigenvalue of } T \iff \overline{\lambda} \text{ is an
+   eigenvalue of } T^*. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $U$ is a subspace of $V$. Prove that
+\[ U \text{ is invariant under } T \iff U^\perp \text{ is invariant under }
+   T^*. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$
+and $f_1,\dots,f_m$ is an orthonormal basis of $W$. Prove that
+\[ \norm{Te_1}^2+\cdots+\norm{Te_n}^2 = \norm{T^*f_1}^2+\cdots+\norm{T^*f_m}^2. \]
+\exercisenote{The numbers $\norm{Te_1}^2,\dots,\norm{Te_n}^2$ in the equation
+above depend on the orthonormal basis $e_1,\dots,e_n$, but the right side of the
+equation does not depend on $e_1,\dots,e_n$. Thus the equation above shows that
+the sum on the left side does not depend on which orthonormal basis
+$e_1,\dots,e_n$ is used.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$. Prove that
+\begin{parts}
+\item $T$ is injective $\iff$ $T^*$ is surjective;
+\item $T$ is surjective $\iff$ $T^*$ is injective.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Prove that if $T\in\Lin(V,W)$, then
+\begin{parts}
+\item $\dim\nul T^*=\dim\nul T+\dim W-\dim V$;
+\item $\dim\range T^*=\dim\range T$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $A$ is an $m$-by-$n$ matrix with entries in $\F$. Use (b) in
+Exercise~7 to prove that the row rank of $A$ equals the column rank of $A$.
+\exercisenote{This exercise asks for yet another alternative proof of a result
+that was previously proved in \ref{ax:3.57} and \ref{ax:3.133}.}
+\end{exercise}
+
+\begin{exercise}
+Prove that the product of two self-adjoint operators on $V$ is self-adjoint if
+and only if the two operators commute.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Prove that $T$ is self-adjoint if and only
+if
+\[ \ip{Tv}{v} = \bigl\langle T^*v,v\bigr\rangle \]
+for all $v\in V$.
+\end{exercise}
+
+\begin{exercise}
+Define an operator $S\colon\F^2\to\F^2$ by $S(w,z)=(-z,w)$.
+\begin{parts}
+\item Find a formula for $S^*$.
+\item Show that $S$ is normal but not self-adjoint.
+\item Find all eigenvalues of $S$.
+\end{parts}
+\exercisenote{If $\F=\R$, then $S$ is the operator on $\R^2$ of
+counterclockwise rotation by $90^\circ$.}
+\end{exercise}
+
+\begin{exercise}
+An operator $B\in\Lin(V)$ is called \emph{skew} if
+\[ B^* = -B. \]
+Suppose that $T\in\Lin(V)$. Prove that $T$ is normal if and only if there exist
+commuting operators $A$ and $B$ such that $A$ is self-adjoint, $B$ is a skew
+operator, and $T=A+B$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\R$. Define $\mathcal{A}\in\Lin\bigl(\Lin(V)\bigr)$ by
+$\mathcal{A}T=T^*$ for all $T\in\Lin(V)$.
+\begin{parts}
+\item Find all eigenvalues of $\mathcal{A}$.
+\item Find the minimal polynomial of $\mathcal{A}$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Define an inner product on $\Poly_2(\R)$ by $\ip{p}{q}=\int_0^1pq$. Define an
+operator $T\in\Lin\bigl(\Poly_2(\R)\bigr)$ by
+\[ T(ax^2+bx+c) = bx. \]
+\begin{parts}
+\item Show that with this inner product, the operator $T$ is not self-adjoint.
+\item The matrix of $T$ with respect to the basis $1,x,x^2$ is
+  \[ \begin{pmatrix} 0 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & 0 \end{pmatrix}. \]
+  This matrix equals its conjugate transpose, even though $T$ is not
+  self-adjoint. Explain why this is not a contradiction.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is invertible. Prove that
+\begin{parts}
+\item $T$ is self-adjoint $\iff$ $T^{-1}$ is self-adjoint;
+\item $T$ is normal $\iff$ $T^{-1}$ is normal.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\R$.
+\begin{parts}
+\item Show that the set of self-adjoint operators on $V$ is a subspace of
+  $\Lin(V)$.
+\item What is the dimension of the subspace of $\Lin(V)$ in (a) [in terms of
+  $\dim V$]?
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$. Show that the set of self-adjoint operators on $V$ is not a
+subspace of $\Lin(V)$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\dim V\ge2$. Show that the set of normal operators on $V$ is not a
+subspace of $\Lin(V)$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $\norm{T^*v}\le\norm{Tv}$ for every $v\in V$. Prove
+that $T$ is normal.
+\exercisenote{This exercise fails on infinite-dimensional inner product spaces,
+leading to what are called hyponormal operators, which have a well-developed
+theory.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $P\in\Lin(V)$ is such that $P^2=P$. Prove that the following are
+equivalent.
+\begin{parts}
+\item $P$ is self-adjoint.
+\item $P$ is normal.
+\item There is a subspace $U$ of $V$ such that $P=P_U$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $D\colon\Poly_8(\R)\to\Poly_8(\R)$ is the differentiation operator
+defined by $Dp=p'$. Prove that there does not exist an inner product on
+$\Poly_8(\R)$ that makes $D$ a normal operator.
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator $T\in\Lin(\R^3)$ such that $T$ is normal but not
+self-adjoint.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T$ is a normal operator on $V$. Suppose also that $v,w\in V$ satisfy
+the equations
+\[ \norm{v}=\norm{w}=2, \qquad Tv=3v, \qquad Tw=4w. \]
+Show that $\norm{T(v+w)}=10$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and
+\[ a_0+a_1z+a_2z^2+\cdots+a_{m-1}z^{m-1}+z^m \]
+is the minimal polynomial of $T$. Prove that the minimal polynomial of $T^*$ is
+\[ \overline{a_0}+\overline{a_1}z+\overline{a_2}z^2+\cdots
+   +\overline{a_{m-1}}z^{m-1}+z^m. \]
+\exercisenote{This exercise shows that the minimal polynomial of $T^*$ equals
+the minimal polynomial of $T$ if $\F=\R$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that $T$ is diagonalizable if and only if $T^*$ is
+diagonalizable.
+\end{exercise}
+
+\begin{exercise}
+Fix $u,x\in V$. Define $T\in\Lin(V)$ by $Tv=\ip{v}{u}x$ for every $v\in V$.
+\begin{parts}
+\item Prove that if $V$ is a real vector space, then $T$ is self-adjoint if and
+  only if the list $u,x$ is linearly dependent.
+\item Prove that $T$ is normal if and only if the list $u,x$ is linearly
+  dependent.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is normal. Prove that
+\[ \nul T^k=\nul T \quad\text{and}\quad \range T^k=\range T \]
+for every positive integer $k$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is normal. Prove that if $\lambda\in\F$, then the minimal
+polynomial of $T$ is not a polynomial multiple of $(x-\lambda)^2$.
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $T\in\Lin(V)$ and there is an orthonormal
+basis $e_1,\dots,e_n$ of $V$ such that $\norm{Te_k}=\norm{T^*e_k}$ for each
+$k=1,\dots,n$, then $T$ is normal.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(\F^3)$ is normal and $T(1,1,1)=(2,2,2)$. Suppose
+$(z_1,z_2,z_3)\in\nul T$. Prove that $z_1+z_2+z_3=0$.
+\end{exercise}
+
+\begin{exercise}
+Fix a positive integer $n$. In the inner product space of continuous
+real-valued functions on $[-\pi,\pi]$ with inner product
+$\ip{f}{g}=\int_{-\pi}^{\pi}fg$, let
+\[ V = \spn(1,\cos x,\cos2x,\dots,\cos nx,\sin x,\sin2x,\dots,\sin nx). \]
+\begin{parts}
+\item Define $D\in\Lin(V)$ by $Df=f'$. Show that $D^*=-D$. Conclude that $D$ is
+  normal but not self-adjoint.
+\item Define $T\in\Lin(V)$ by $Tf=f''$. Show that $T$ is self-adjoint.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\colon V\to W$ is a linear map. Show that under the standard
+identification of $V$ with $V'$ (see \ref{ax:6.58}) and the corresponding
+identification of $W$ with $W'$, the adjoint map $T^*\colon W\to V$ corresponds
+to the dual map $T'\colon W'\to V'$. More precisely, show that
+\[ T'(\varphi_w) = \varphi_{T^*w} \]
+for all $w\in W$, where $\varphi_w$ and $\varphi_{T^*w}$ are defined as in
+\ref{ax:6.58}.
+\end{exercise}

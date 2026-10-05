@@ -1,15 +1,18 @@
 %tikz for graphs and mdframed
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 %theorem related packages
 \usepackage{thmtools}
 \usepackage{import}
 \usepackage{xifthen}
 \usepackage{pdfpages}
 \usepackage{transparent}
+\usepackage{booktabs}
 \usepackage{ifoddpage}
 \usepackage{tcolorbox}
-\tcbset{on line, 
+\tcbset{on line,
         boxsep=3pt, left=0pt,right=0pt,top=0pt,bottom=0pt,
         colframe=slategreen,colback=slategreen,arc=1pt,outer arc=1pt
         }
@@ -83,7 +86,7 @@
       linewidth=1pt,
       skipabove=15pt,
       skipbelow=5pt,
-      innertopmargin=6pt,
+      innertopmargin=10pt,
       nobreak=true,
       innerbottommargin=7pt,
 }
@@ -133,7 +136,7 @@
       roundcorner=1pt,
       skipabove=8pt,
       linewidth=1pt,
-      innertopmargin=-10.8pt,
+      innertopmargin=-4pt,
       innerleftmargin=9.2pt,
       innerbottommargin=5pt,
       rightline=false,
@@ -164,9 +167,9 @@
 
   \mdfdefinestyle{rembox}{%
   skipbelow=20em,
-  skipabove=10pt,
+  skipabove=20pt,
   linewidth=1pt,
-  innertopmargin=5pt,
+  innertopmargin=10pt,
   innerleftmargin=12pt,
   innerbottommargin=10pt,
   rightline=false,
@@ -199,6 +202,10 @@
   \declaretheorem[style=thmexample,name=Corollary,numbered=no]{corollary*}
   \declaretheorem[style=basehead,name=Proposition,sibling=theorem]{proposition}
   \declaretheorem[style=thmexample,name=Corollary,sibling=theorem]{corollary}
+  \declaretheorem[style=basehead,name=Claim,numbered=no]{claim}
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -212,6 +219,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   \usepackage{xsim, needspace}
+  \usepackage{etoolbox}
 
   \makeatletter
   \DeclareExerciseEnvironmentTemplate{custom}{%
@@ -240,25 +248,43 @@
   \xsimsetup{
     exercise/the-counter = \thesection.\arabic{exercise}. ,
     exercise/template = custom ,
+    exercise/name = ,
     solution/template = custom ,
-    exercise/name = 
 }
 
+  %heading shown above each section's group of solutions in the backmatter
+  \DeclareExerciseHeadingTemplate{persection}{%
+    \subsection*{\S\ExerciseSection}%
+  }
+
+  %print all solutions, grouped and headed section-by-section (across all chapters)
+  \newcommand{\printsolutionsbysection}{%
+    \def\lastchapter{}%
+    \def\lastsection{}%
+    \ForEachUsedExerciseByType{%
+      \edef\currentchapter{\ExercisePropertyGet{##1}{##2}{chapter-value}}%
+      \edef\currentsection{\ExercisePropertyGet{##1}{##2}{section-value}}%
+      \ifx\lastchapter\currentchapter\else
+        \section*{Chapter~\ExercisePropertyGet{##1}{##2}{chapter}}%
+      \fi
+      \ifx\lastsection\currentsection\else
+        \subsection*{\S\ExercisePropertyGet{##1}{##2}{section}}%
+      \fi
+      \XSIMprint{solution}{##1}{##2}%
+      \let\lastchapter\currentchapter
+      \let\lastsection\currentsection
+    }%
+  }
   \newenvironment{exc}{%
       ~\\ \rule[0cm]{\textwidth-4cm}{0.01cm}\rule[-0.11cm]{4cm}{0.12cm} \vskip2pt {\hspace*{\textwidth-3.8cm}\Large\textbf{Exercises}}}%
       {\bigskip \hrule \medskip}
-    
 
 
-\usepackage{ifoddpage}
-%sidenote. Better to use than marginnote, as it fixes which side is to be used.
-\newcommand{\sidenote}[1]{
-  \checkoddpage
-  \ifoddpage
-    \marginnote{#1}
-  \else
-    \reversemarginpar
-    \marginnote{#1}
-    \normalmarginpar
-  \fi
-}
+\newlength{\fullwidthlen}
+\setlength{\fullwidthlen}{\marginparwidth}
+\addtolength{\fullwidthlen}{\marginparsep}
+\newenvironment{fullwidth}{%
+  \begin{adjustwidth}{}{-\fullwidthlen}%
+  }{%
+  \end{adjustwidth}%
+  }

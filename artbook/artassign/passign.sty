@@ -1,0 +1,1112 @@
+%% ======================================================================
+%%  passign.sty  v1.0  --  print-on-demand-catalogue style assignments
+%%
+%%  A sibling of ptoc.sty for homework / assignment submissions.  It keeps
+%%  the visual grammar of ptoc -- the label column left of a hairline
+%%  divider, hairlines that break around the divider, small mono labels,
+%%  boxed theorems, margin notes, and the accent-coloured bar in the outer
+%%  margin that carries the page number and a vertical running text -- but
+%%  drops the book structure (no parts, chapters, table of contents).
+%%
+%%  Requires LuaLaTeX or XeLaTeX (fontspec), and any ordinary class
+%%  (article, report, book).  Load `geometry' BEFORE this package: the
+%%  geometry you set is the full block that the grid is drawn on.  The
+%%  outer (right) margin of that geometry is where the accent bar goes.
+%%  Build twice if you use marks (the total is read back from the .aux).
+%%
+%%  What a page looks like
+%%  ----------------------
+%%  \maketitle       a header grid on the first page: the assignment label
+%%                   and a huge accent-coloured number in the label column,
+%%                   the title to the right; below, one row per piece of
+%%                   metadata (course, name, student id, instructor, due
+%%                   date, total marks, and any fields you add).
+%%  question         the structural unit.  A hairline across the page
+%%                   (broken around the divider), the label QUESTION 3 and
+%%                   the marks in the label column, an optional title.
+%%  solution         the same label column (SOLUTION 3), a tinted block
+%%                   on the divider, and a small accent square at the end.
+%%                   Can be hidden for a question-only copy.
+%%  \section         optional grouping of questions (Section A, B ...),
+%%                   styled like a ptoc section.  It does not change the
+%%                   numbering of the questions.
+%%
+%%  Commands
+%%     \passignsetup{key=value, ...}   configure (keys below)
+%%     \title{..} \author{..}          shortcuts for the keys of that name
+%%     \maketitle                      the title block (alias \makeassignmenttitle)
+%%     \addtitlefield{Label}{Value}    one more row in the title block
+%%     \showsolutions  \hidesolutions  same as  solutions = show / hide
+%%     \totalmarks                     the total of all marks given so far
+%%                                     (needs a second run)
+%%     \marginnote[offset]{text}       unnumbered note in the label column
+%%     \sidenote[offset]{text}         numbered note in the label column
+%%                                     (offset: + moves down, - moves up)
+%%
+%%  Package options
+%%     solutions / nosolutions         show (default) or hide the solutions
+%%     key=value                       anything \passignsetup understands
+%%
+%%  Environments
+%%     question[options]               a numbered question.  Options:
+%%                                       marks = 5     marks for the question
+%%                                       title = ...   a title (bold, serif)
+%%                                       label = ...   replaces the word
+%%                                                     "Question" (e.g. Bonus)
+%%                                     A bare value is taken as the marks:
+%%                                     \begin{question}[5]  =  [marks=5].
+%%                                     Marks may be an expression: [3+2].
+%%     question*                       an unnumbered question (same options)
+%%     parts, subparts                 inside a question:
+%%                                       \begin{parts}
+%%                                         \part[4] ...   % (a), 4 marks
+%%                                         \part    ...   % (b)
+%%                                           \begin{subparts}
+%%                                             \subpart[2] ...   % (i)
+%%                                           \end{subparts}
+%%                                       \end{parts}
+%%     solution[Title]                 the solution.  The optional title is
+%%                                     run into the text, in bold.  Put the
+%%                                     \end{solution} on a line of its own;
+%%                                     it may be indented.
+%%
+%%  Theorem-like environments (amsthm, defined at \begin{document})
+%%     theorem  lemma                  italic, in a square box
+%%     definition                      upright, in a square box
+%%     proposition  corollary          italic, no box
+%%     example  remark  hint  note     upright, no box
+%%     proof                           labelled in the column
+%%     Each also exists unnumbered:  theorem*  lemma*  remark*  hint*  ...
+%%     All numbered ones share one counter, reset in every question, so
+%%     they read REMARK 3.2.  The name and number stand in the label
+%%     column; the optional title  \begin{remark}[Title]  stays in the
+%%     text, in bold.  Use the starred forms outside a question.
+%%     `theorems = off' skips all of this.
+%%
+%%  Keys (defaults in brackets)
+%%   assignment   course            course name                         []
+%%                course code       e.g. MATH 2210                      []
+%%                number            assignment number                   []
+%%                title             assignment title                    []
+%%                author            your name                           []
+%%                student id        your student number                 []
+%%                instructor        instructor / grader                 []
+%%                term              e.g. Autumn 2026                    []
+%%                due               due date                            []
+%%   words        assignment label  [Assignment]    question label   [Question]
+%%                solution label    [Solution]      section label    [Section]
+%%                course label      [Course]        author label     [Name]
+%%                id label          [Student ID]    instructor label [Instructor]
+%%                term label        [Term]          due label        [Due]
+%%                total label       [Total]
+%%                mark word         [mark]          marks word       [marks]
+%%   solutions    solutions         show | hide                         [show]
+%%                solution style    tint | box | plain                  [tint]
+%%                solution number   true | false: number in the label   [true]
+%%                solution tint     percentage of the accent colour     [14]
+%%                solution space    blank space left by a hidden        [0pt]
+%%                                  solution (room to write by hand)
+%%   layout       rule              rule thickness                      [0.5pt]
+%%                rule gap          white gap each side of the divider  [0.8mm]
+%%                label pad         space between label and divider     [2mm]
+%%                body split        x of the divider (= width of the    [0.25\textwidth]
+%%                                  label column)
+%%                body gap          space between divider and text      [5mm]
+%%                body right        space between text and the outer    [6mm]
+%%                                  margin strip
+%%                body top          extra space above the text          [6mm]
+%%                body bottom       extra space below the text          [10mm]
+%%                body leading      \linespread                         [1.2]
+%%   title block  title before      space between rule and title        [3mm]
+%%                title after       space between title and next rule   [4mm]
+%%                meta sep          space between metadata rows         [1.6mm]
+%%                title skip        space after the block               [7mm]
+%%   questions    question before / question after / question pad
+%%                part skip         space above a (a), (b) ...          [0.5\baselineskip ...]
+%%                subpart skip      space above a (i), (ii) ...         [0.3\baselineskip ...]
+%%                subpart indent    indent of a subpart                 [1.2em]
+%%                subpart label width                                   [2.1em]
+%%                solution before / solution after
+%%   sections     section pad / section before / section after
+%%   margin       margin text       running text, any code              [course code and
+%%                                  (empty = the title)                  assignment]
+%%                footer text       text under the label column         [name, student id]
+%%                margin gap        space between number and text       [6mm]
+%%                margin shift      move both towards the paper edge    [0pt]
+%%                margin bar width  auto | a length | none              [auto]
+%%                label case        \MakeUppercase, or empty            [\MakeUppercase]
+%%   notes        note gap          space between notes and the divider [4mm]
+%%                footnotes         margin | normal                     [margin]
+%%                footnote font     applied to the text of footnotes    [\itshape]
+%%   theorems     theorems          on | off                            [on]
+%%                theorem head font / theorem title font
+%%                theorem box sep   space between box and text          [2.5mm]
+%%                theorem skip      space above and below               [9pt plus 2pt minus 2pt]
+%%   colours      accent            bar, big number, tint, qed square   [#FFC400]
+%%                ink               rules, qed outline, theorem boxes   [#1F1B1D]
+%%                number colour     numbers in the label column         [ink]
+%%   fonts        each is arbitrary code that switches font, usually
+%%                \fontspec[Ligatures=TeX]{...} then \fontsize{..}{..}\selectfont
+%%                label font        small mono labels                   [mono 5.6pt]
+%%                part label font   (a), (b) in the label column        [mono 7pt]
+%%                subpart label font                                    [mono 7pt]
+%%                title font        the title in the title block        [serif 26pt]
+%%                number font       the huge assignment number          [sans 54pt]
+%%                question title font                                   [bold serif 11pt]
+%%                section font / section number font / subsection font
+%%                margin font / margin page font / note font
+%% ======================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{passign}[2026/10/02 v1.0 print-on-demand style assignments]
+
+\RequirePackage{fontspec}
+\RequirePackage{xcolor}
+\RequirePackage{pgfkeys}
+\RequirePackage{graphicx}   % \rotatebox for the margin text, \raisebox
+\RequirePackage{amsthm}     % theorem-like environments, the end-of-solution mark
+\RequirePackage{mdframed}   % boxes around theorems, the tint behind solutions
+\RequirePackage{verbatim}   % skips hidden solutions (no restrictions on content)
+
+\newif\ifpassign@solutions \passign@solutionstrue
+\newif\ifpassign@solnumber \passign@solnumbertrue
+\newif\ifpassign@qm        % the current question has marks of its own
+\newif\ifpassign@pm        % the current part has marks of its own
+
+
+%% ----------------------------------------------------------------------
+%%  1. Options and their defaults
+%% ----------------------------------------------------------------------
+\definecolor{passign@default}{HTML}{FFC400}
+\definecolor{passign@inkdefault}{HTML}{1F1B1D}
+
+% Default fonts (TeX Gyre ships with TeX Live; fall back to the standard
+% families if it is missing).  Replace them freely via the font keys.
+\newcommand*\passign@sans{%
+  \IfFontExistsTF{TeX Gyre Heros}{\fontspec[Ligatures=TeX]{TeX Gyre Heros}}{\sffamily}%
+  \bfseries}
+\newcommand*\passign@serif{%
+  \IfFontExistsTF{TeX Gyre Pagella}{\fontspec[Ligatures=TeX]{TeX Gyre Pagella}}{\rmfamily}}
+\newcommand*\passign@mono{%
+  \IfFontExistsTF{TeX Gyre Cursor}%
+    {\fontspec[Ligatures=TeX,LetterSpace=12]{TeX Gyre Cursor}}{\ttfamily}}
+
+% default running text / footer text (see `margin text', `footer text')
+\newcommand*\passign@defaultmargin{%
+  \passign@opt@coursecode
+  \ifx\passign@opt@coursecode\@empty\else
+    \ifx\passign@opt@number\@empty\else\space\textperiodcentered\space\fi
+  \fi
+  \ifx\passign@opt@number\@empty\else
+    \passign@opt@assignmentlabel\nobreakspace\passign@opt@number
+  \fi}
+\newcommand*\passign@defaultfooter{%
+  \passign@opt@author
+  \ifx\passign@opt@author\@empty\else
+    \ifx\passign@opt@studentid\@empty\else\space\textperiodcentered\space\fi
+  \fi
+  \passign@opt@studentid}
+
+\pgfkeys{/passign/.cd,
+  % --- the assignment
+  course/.store in         = \passign@opt@course,
+  course code/.store in    = \passign@opt@coursecode,
+  number/.store in         = \passign@opt@number,
+  title/.store in          = \passign@opt@title,
+  author/.store in         = \passign@opt@author,
+  student id/.store in     = \passign@opt@studentid,
+  instructor/.store in     = \passign@opt@instructor,
+  term/.store in           = \passign@opt@term,
+  due/.store in            = \passign@opt@due,
+  % --- words
+  assignment label/.store in = \passign@opt@assignmentlabel,
+  question label/.store in = \passign@opt@questionlabel,
+  solution label/.store in = \passign@opt@solutionlabel,
+  section label/.store in  = \passign@opt@sectionlabel,
+  course label/.store in   = \passign@opt@courselabel,
+  author label/.store in   = \passign@opt@authorlabel,
+  id label/.store in       = \passign@opt@idlabel,
+  instructor label/.store in = \passign@opt@instructorlabel,
+  term label/.store in     = \passign@opt@termlabel,
+  due label/.store in      = \passign@opt@duelabel,
+  total label/.store in    = \passign@opt@totallabel,
+  mark word/.store in      = \passign@opt@markword,
+  marks word/.store in     = \passign@opt@markswords,
+  % --- solutions
+  solutions/.is choice,
+  solutions/show/.code     = {\passign@solutionstrue},
+  solutions/hide/.code     = {\passign@solutionsfalse},
+  solution style/.store in = \passign@opt@solstyle,
+  solution number/.is if   = passign@solnumber,
+  solution tint/.store in  = \passign@opt@soltint,
+  solution space/.store in = \passign@opt@solspace,
+  solution before/.store in= \passign@opt@solbefore,
+  solution after/.store in = \passign@opt@solafter,
+  % --- layout
+  rule/.store in           = \passign@opt@rule,
+  rule gap/.store in       = \passign@opt@rulegap,
+  label pad/.store in      = \passign@opt@labelpad,
+  body split/.store in     = \passign@opt@bodysplit,
+  body gap/.store in       = \passign@opt@bodygap,
+  body right/.store in     = \passign@opt@bodyright,
+  body top/.store in       = \passign@opt@bodytop,
+  body bottom/.store in    = \passign@opt@bodybottom,
+  body leading/.store in   = \passign@opt@bodyleading,
+  % --- title block
+  title before/.store in   = \passign@opt@titlebefore,
+  title after/.store in    = \passign@opt@titleafter,
+  meta sep/.store in       = \passign@opt@metasep,
+  title skip/.store in     = \passign@opt@titleskip,
+  % --- questions
+  question before/.store in= \passign@opt@qbefore,
+  question after/.store in = \passign@opt@qafter,
+  question pad/.store in   = \passign@opt@qpad,
+  part skip/.store in      = \passign@opt@partskip,
+  subpart skip/.store in   = \passign@opt@subpartskip,
+  subpart indent/.store in = \passign@opt@subindent,
+  subpart label width/.store in = \passign@opt@sublabelw,
+  % --- sections
+  section pad/.store in    = \passign@opt@secpad,
+  section before/.store in = \passign@opt@secbefore,
+  section after/.store in  = \passign@opt@secafter,
+  % --- margin text on every page
+  margin text/.store in    = \passign@opt@margintext,
+  footer text/.store in    = \passign@opt@footertext,
+  margin gap/.store in     = \passign@opt@margingap,
+  margin shift/.store in   = \passign@opt@marginshift,
+  margin bar width/.store in = \passign@opt@barwidth,
+  label case/.store in     = \passign@opt@case,
+  % --- margin notes
+  note gap/.store in       = \passign@opt@notegap,
+  footnotes/.store in      = \passign@opt@footnotes,
+  footnote font/.store in  = \passign@opt@fontfootnote,
+  % --- theorem-like environments
+  theorems/.store in       = \passign@opt@theorems,
+  theorem head font/.store in  = \passign@opt@fontthmhead,
+  theorem title font/.store in = \passign@opt@fontthmtitle,
+  theorem box sep/.store in    = \passign@opt@thmboxsep,
+  theorem skip/.store in       = \passign@opt@thmskip,
+  % --- colours
+  accent/.code             = {\colorlet{passign@accent}{#1}},
+  ink/.code                = {\colorlet{passign@ink}{#1}},
+  number colour/.store in  = \passign@opt@numcolour,
+  % --- fonts
+  label font/.store in     = \passign@opt@fontlabel,
+  part label font/.store in    = \passign@opt@fontpartlabel,
+  subpart label font/.store in = \passign@opt@fontsublabel,
+  title font/.store in     = \passign@opt@fonttitle,
+  number font/.store in    = \passign@opt@fontbignum,
+  question title font/.store in = \passign@opt@fontqtitle,
+  section font/.store in   = \passign@opt@fontsection,
+  section number font/.store in = \passign@opt@fontsecnum,
+  subsection font/.store in = \passign@opt@fontsubsection,
+  margin font/.store in    = \passign@opt@fontmargin,
+  margin page font/.store in = \passign@opt@fontmarginpage,
+  note font/.store in      = \passign@opt@fontnote,
+  %
+  % ---- defaults ----
+  course = {}, course code = {}, number = {}, title = {}, author = {},
+  student id = {}, instructor = {}, term = {}, due = {},
+  assignment label = Assignment,
+  question label   = Question,
+  solution label   = Solution,
+  section label    = Section,
+  course label     = Course,
+  author label     = Name,
+  id label         = {Student ID},
+  instructor label = Instructor,
+  term label       = Term,
+  due label        = Due,
+  total label      = Total,
+  mark word        = mark,
+  marks word       = marks,
+  solutions        = show,
+  solution style   = tint,
+  solution number  = true,
+  solution tint    = 14,
+  solution space   = 0pt,
+  solution before  = {1.2\baselineskip plus 0.3\baselineskip minus 0.2\baselineskip},
+  solution after   = {1.2\baselineskip plus 0.3\baselineskip minus 0.2\baselineskip},
+  rule             = 0.5pt,
+  rule gap         = 0.8mm,
+  label pad        = 2mm,
+  body split       = 0.25\textwidth,
+  body gap         = 5mm,
+  body right       = 6mm,
+  body top         = 6mm,
+  body bottom      = 10mm,
+  body leading     = 1.2,
+  title before     = 3mm,
+  title after      = 4mm,
+  meta sep         = 1.6mm,
+  title skip       = 7mm,
+  question before  = {2.2\baselineskip plus 0.5\baselineskip minus 0.3\baselineskip},
+  question after   = {0.6\baselineskip plus 0.2\baselineskip},
+  question pad     = 2.2mm,
+  part skip        = {0.6\baselineskip plus 0.2\baselineskip minus 0.1\baselineskip},
+  subpart skip     = {0.35\baselineskip plus 0.15\baselineskip minus 0.1\baselineskip},
+  subpart indent   = 1.2em,
+  subpart label width = 2.1em,
+  section pad      = 2.2mm,
+  section before   = {2.8\baselineskip plus 0.5\baselineskip minus 0.3\baselineskip},
+  section after    = {1.2\baselineskip},
+  margin text      = \passign@defaultmargin,
+  footer text      = \passign@defaultfooter,
+  margin gap       = 6mm,
+  margin shift     = 0pt,
+  margin bar width = auto,
+  label case       = \MakeUppercase,
+  note gap         = 4mm,
+  footnotes        = margin,
+  footnote font    = \itshape,
+  theorems         = on,
+  theorem head font  = \passign@opt@fontlabel,
+  theorem title font = \bfseries,
+  theorem box sep    = 2.5mm,
+  theorem skip       = {9pt plus 2pt minus 2pt},
+  accent           = passign@default,
+  ink              = passign@inkdefault,
+  number colour    = passign@accent,
+  label font       = {\passign@mono\fontsize{5.6pt}{6pt}\selectfont},
+  part label font  = {\passign@mono\fontsize{7pt}{8pt}\selectfont},
+  subpart label font = {\passign@mono\fontsize{7pt}{8pt}\selectfont},
+  title font       = {\passign@serif\fontsize{26pt}{28pt}\selectfont},
+  number font      = {\passign@sans\fontsize{54pt}{54pt}\selectfont},
+  question title font = {\passign@serif\bfseries\fontsize{11pt}{14pt}\selectfont},
+  section font     = {\passign@serif\fontsize{15pt}{18pt}\selectfont},
+  section number font = \passign@opt@fontlabel,
+  subsection font  = {\passign@serif\bfseries\fontsize{10pt}{13pt}\selectfont},
+  margin font      = \passign@opt@fontlabel,
+  margin page font = {\passign@serif\fontsize{9pt}{11pt}\selectfont},
+  note font        = {\passign@serif\fontsize{8pt}{10pt}\selectfont},
+}
+
+\newcommand*\passignsetup[1]{\pgfkeys{/passign/.cd,#1}}
+\newcommand*\showsolutions{\passignsetup{solutions=show}}
+\newcommand*\hidesolutions{\passignsetup{solutions=hide}}
+
+% package options: `solutions', `nosolutions', or any key=value
+\DeclareOption{solutions}{\passign@solutionstrue}
+\DeclareOption{nosolutions}{\passign@solutionsfalse}
+\DeclareOption*{%
+  \edef\passign@tmp{\noexpand\pgfkeys{/passign/.cd,\CurrentOption}}%
+  \passign@tmp}
+\ProcessOptions\relax
+
+% \title and \author are shortcuts for the keys of the same name
+\renewcommand*\title[1]{\gdef\@title{#1}\gdef\passign@opt@title{#1}}
+\renewcommand*\author[1]{\gdef\@author{#1}\gdef\passign@opt@author{#1}}
+
+
+%% ----------------------------------------------------------------------
+%%  2. Lengths, state, small helpers
+%% ----------------------------------------------------------------------
+\newlength\passign@pad     % space between a label and the divider
+\newlength\passign@rule    % rule thickness
+\newlength\passign@gap     % white gap on each side of the divider
+\newlength\passign@fulltw  % full text width (the grid)
+\newlength\passign@bodytw  % body text width
+\newlength\passign@fullth  % full text height
+\newlength\passign@fulltopm
+\newlength\passign@fullodd
+\newlength\passign@fulleven
+\newlength\passign@bodyleft
+\newlength\passign@bodyright
+\newlength\passign@bodytop
+\newlength\passign@bodybot
+\newlength\passign@bsplit  % x of the divider (from the full block)
+\newlength\passign@bodygap % space between the divider and the text
+\newlength\passign@fr      % distance from the header baseline to the footer rule
+\newlength\passign@mw      % width of the outer margin
+\newlength\passign@mx      % x of the centre line of the outer margin text
+\newlength\passign@bx      % x of the centre line of the outer margin strip
+\newlength\passign@bw      % width of the margin bar
+\newlength\passign@bh      % distance from the paper top to the header baseline
+\newdimen\passign@pos      % helpers of \passign@gaprulew
+\newdimen\passign@cur
+\newdimen\passign@cutl
+\newdimen\passign@cutr
+\newbox\passign@nbox \newbox\passign@mbox \newbox\passign@rbox
+\newbox\passign@bxa \newbox\passign@bxb
+
+\def\passign@str@auto{auto}
+\def\passign@str@none{none}
+\def\passign@str@off{off}
+\def\passign@str@margin{margin}
+\def\passign@str@tint{tint}
+\def\passign@str@box{box}
+\def\passign@str@one{1}
+\def\passign@str@zero{0}
+
+% A small label: label font, optionally upper-cased.
+\newcommand*\passign@label[1]{{\passign@opt@fontlabel\passign@opt@case{#1}}}
+
+% Rectangles made of rules.
+\newcommand*\passign@hbar[1]{\vrule width#1 height\passign@rule depth\z@}
+
+% A horizontal rule from x=#2 to x=#3 (an \hbox of width #1) that leaves a
+% small white gap on both sides of every vertical line listed in #4
+% (ascending x, a comma list of lengths, each line \passign@rule wide).
+% Where a vertical line passes through, a rule-sized square keeps it
+% unbroken.  (This is the rule of ptoc's table of contents.)
+\def\passign@dseg#1#2{%
+  \ifdim#2>#1\relax
+    \hskip\dimexpr#1-\passign@pos\relax
+    \passign@hbar{\dimexpr#2-#1\relax}%
+    \passign@pos=#2\relax
+  \fi}
+\newcommand*\passign@gaprulew[4]{%       % #1 = width of the box
+  \hbox to#1{%
+    \passign@pos=\z@ \passign@cur=#2\relax
+    \@for\passign@v:=#4\do{%
+      \passign@cutl=\dimexpr\passign@v-\passign@gap\relax
+      \passign@cutr=\dimexpr\passign@v+\passign@rule+\passign@gap\relax
+      \ifdim\passign@cutr>\passign@cur\relax
+        \ifdim\passign@cutl>#3\relax
+          \passign@dseg{\passign@cur}{#3}%
+        \else
+          \passign@dseg{\passign@cur}{\passign@cutl}%
+        \fi
+        \passign@cur=\passign@cutr\relax
+      \fi
+      \ifdim\passign@v<#3\relax
+        \passign@dseg{\passign@v}{\dimexpr\passign@v+\passign@rule\relax}%
+      \fi}%
+    \passign@dseg{\passign@cur}{#3}%
+    \hfil}}
+
+% The hairline across the whole block (broken around the divider), as a
+% zero-width box so that it can sit in the text column.
+\newcommand*\passign@hrule{%
+  \nointerlineskip
+  \hbox to\z@{\hskip-\passign@bodyleft
+    \passign@gaprulew{\passign@fulltw}{\z@}{\passign@fulltw}{\passign@bsplit}\hss}%
+  \nointerlineskip}
+
+
+%% ----------------------------------------------------------------------
+%%  3. Full block / body block geometry
+%%
+%%  The geometry the user sets is the FULL block.  Pages are set in a
+%%  smaller, "airy" block inside it (more room above, below and to the
+%%  left, room for the label column).
+%% ----------------------------------------------------------------------
+\newcommand*\passign@settextwidth[1]{%
+  \setlength\textwidth{#1}\setlength\columnwidth{#1}%
+  \setlength\linewidth{#1}\hsize=#1\relax}
+\newcommand*\passign@bodylayout{%
+  \passign@settextwidth{\passign@bodytw}%
+  \setlength\textheight{\dimexpr\passign@fullth-\passign@bodytop-\passign@bodybot\relax}%
+  \setlength\topmargin{\dimexpr\passign@fulltopm+\passign@bodytop\relax}%
+  \setlength\oddsidemargin{\dimexpr\passign@fullodd+\passign@bodyleft\relax}%
+  \setlength\evensidemargin{\dimexpr\passign@fulleven+\passign@bodyleft\relax}%
+  \global\@colht\textheight \global\@colroom\@colht
+  \vsize\@colroom
+  \linespread{\passign@opt@bodyleading}\selectfont}
+% left / right paper margin of the FULL layout on the page being shipped
+\newcommand*\passign@fullside{%
+  \if@twoside\ifodd\c@page\passign@fullodd\else\passign@fulleven\fi
+  \else\passign@fullodd\fi}
+
+
+%% ----------------------------------------------------------------------
+%%  4. The label column
+%% ----------------------------------------------------------------------
+% A label in the column left of the divider: right-aligned, flush against
+% the divider, zero width, first baseline on the baseline of the text.
+% #1 = font switch, #2 = word (may be empty), #3 = number (may be empty),
+% #4 = a MACRO holding a second line (\@empty for none), e.g. the marks.
+% The label never wraps wider than the column.
+\DeclareRobustCommand*\passign@leftlabelm[4]{%
+  \protected@edef\passign@tmpa{#2}\protected@edef\passign@tmpb{#3}%
+  \llap{%
+    \vtop{\everypar{}% (a paragraph in here must not fire amsthm's \everypar)
+      \hsize=\dimexpr\passign@bsplit-\passign@pad\relax
+      \raggedleft \parindent\z@ \normalfont #1%
+      \ifx\passign@tmpa\@empty\else
+        \passign@opt@case{#2}%
+        \ifx\passign@tmpb\@empty\else\nobreakspace\fi
+      \fi
+      \ifx\passign@tmpb\@empty\else{\color{passign@num}#3}\fi
+      \par
+      \ifx#4\@empty\else
+        \nointerlineskip\vskip 0.9mm
+        {\color{passign@ink!60}#4}\par
+      \fi}%
+    \hskip\dimexpr\passign@bodyleft-\passign@bsplit+\passign@pad\relax}}
+\DeclareRobustCommand*\passign@leftlabel[3]{\passign@leftlabelm{#1}{#2}{#3}\@empty}
+
+% Marks.  #1 is a macro holding the marks (possibly empty); the result,
+% "5 MARKS" (or \@empty), is left in \passign@marksout.
+\newcommand*\passign@mkmarks[1]{%
+  \ifx#1\@empty
+    \let\passign@marksout\@empty
+  \else
+    \edef\passign@marksout{\noexpand\passign@opt@case{#1\noexpand\nobreakspace
+      \ifx#1\passign@str@one\passign@opt@markword\else\passign@opt@markswords\fi}}%
+  \fi}
+
+% Total marks.  Every question (or, if it has none, its parts, or their
+% subparts) adds to the total, which is written to the .aux and can be
+% printed with \totalmarks on the next run.  Marks may be any number or
+% arithmetic expression:  [5]  [2.5]  [3+2].
+\gdef\passign@totalmarks{0}
+\gdef\passign@lasttotal{0}
+\ExplSyntaxOn
+\cs_new_protected:Npn \passign@addmarks #1
+  { \xdef \passign@totalmarks { \fp_to_decimal:n { \passign@totalmarks + (#1) } } }
+\ExplSyntaxOff
+\newcommand*\totalmarks{\passign@lasttotal}
+\AtEndDocument{%
+  \if@filesw
+    \immediate\write\@auxout{\string\gdef\string\passign@lasttotal{\passign@totalmarks}}%
+  \fi}
+
+
+%% ----------------------------------------------------------------------
+%%  5. Questions, parts, subparts
+%%
+%%      ------------------+-----------------------------   hairline, broken
+%%                QUESTION 3| Title of the question          around the divider
+%%                  5 MARKS |
+%%
+%%  The label stands in the column, flush against the divider, the number
+%%  in the number colour, the marks in a second line.  A question has no
+%%  indented first paragraph.
+%% ----------------------------------------------------------------------
+\newcounter{question}
+\renewcommand\thequestion{\arabic{question}}
+\newcounter{qpart}
+\renewcommand\theqpart{\alph{qpart}}
+\newcounter{qsubpart}
+\renewcommand\theqsubpart{\roman{qsubpart}}
+\def\passign@curqnum{}
+
+\pgfkeys{/passign/q/.cd,
+  title/.store in = \passign@q@title,
+  marks/.store in = \passign@q@marks,
+  label/.store in = \passign@q@label,
+  .unknown/.code  = {\edef\passign@q@marks{\pgfkeyscurrentname}},
+}
+
+% #1 = 1 for a numbered question, 0 for question*;  #2 = the options
+\newcommand*\passign@qbegin[2]{%
+  \par
+  \let\passign@q@title\@empty \let\passign@q@marks\@empty
+  \let\passign@q@label\@empty
+  \pgfkeys{/passign/q/.cd,#2}%
+  \addvspace{\passign@opt@qbefore}%
+  \ifnum#1>\z@
+    \refstepcounter{question}%
+    \edef\passign@curqnum{\thequestion}%
+  \else
+    % unnumbered: its own little numbering for theorems and remarks
+    \def\passign@curqnum{}%
+    \@ifundefined{c@theorem}{}{\setcounter{theorem}{0}\def\thetheorem{\arabic{theorem}}}%
+  \fi
+  \setcounter{qpart}{0}\setcounter{qsubpart}{0}%
+  \ifx\passign@q@label\@empty
+    \let\passign@qword\passign@opt@questionlabel
+  \else
+    \let\passign@qword\passign@q@label
+  \fi
+  \ifx\passign@q@marks\@empty
+    \global\passign@qmfalse
+  \else
+    \global\passign@qmtrue \passign@addmarks{\passign@q@marks}%
+  \fi
+  \global\passign@pmfalse
+  \passign@mkmarks\passign@q@marks
+  % hairline, then the label (and the title) on the first line
+  \passign@hrule
+  \nobreak\vskip\passign@opt@qpad \nointerlineskip
+  \ifx\passign@q@title\@empty
+    \noindent
+    \passign@leftlabelm{\passign@opt@fontlabel}{\passign@qword}{\passign@curqnum}\passign@marksout
+    \ignorespaces
+  \else
+    \noindent
+    \passign@leftlabelm{\passign@opt@fontlabel}{\passign@qword}{\passign@curqnum}\passign@marksout
+    {\passign@opt@fontqtitle \raggedright \passign@q@title\par}%
+    \nobreak\vskip 0.8\baselineskip
+    \@afterindentfalse\@afterheading
+  \fi}
+\newcommand*\passign@qend{\par\addvspace{\passign@opt@qafter}}
+
+\newenvironment{question}[1][]{\passign@qbegin{1}{#1}}{\passign@qend}
+\newenvironment{question*}[1][]{\passign@qbegin{0}{#1}}{\passign@qend}
+
+% \part[marks]: (a) in the label column, the marks under it
+\newcommand\passign@part[1][]{%
+  \par\addvspace{\passign@opt@partskip}%
+  \stepcounter{qpart}\setcounter{qsubpart}{0}%
+  \def\passign@pmv{#1}%
+  \ifx\passign@pmv\@empty
+    \global\passign@pmfalse
+  \else
+    \global\passign@pmtrue
+    \ifpassign@qm\else\passign@addmarks{\passign@pmv}\fi
+  \fi
+  \passign@mkmarks\passign@pmv
+  \noindent
+  \passign@leftlabelm{\passign@opt@fontpartlabel}{}{(\theqpart)}\passign@marksout
+  \ignorespaces}
+% \subpart[marks]: (i), hanging, marks inline
+\newcommand\passign@subpart[1][]{%
+  \par\addvspace{\passign@opt@subpartskip}%
+  \stepcounter{qsubpart}%
+  \def\passign@pmv{#1}%
+  \ifx\passign@pmv\@empty\else
+    \ifpassign@qm\else\ifpassign@pm\else\passign@addmarks{\passign@pmv}\fi\fi
+  \fi
+  \passign@mkmarks\passign@pmv
+  \hangindent=\dimexpr\passign@opt@subindent+\passign@opt@sublabelw\relax
+  \hangafter=1\relax
+  \noindent\hskip\passign@opt@subindent
+  \hbox to\passign@opt@sublabelw{{\passign@opt@fontsublabel\color{passign@num}(\theqsubpart)}\hss}%
+  \ifx\passign@pmv\@empty\else
+    {\passign@opt@fontlabel\color{passign@ink!60}\passign@marksout}\ %
+  \fi
+  \ignorespaces}
+\newenvironment{parts}{\par\setcounter{qpart}{0}\let\part\passign@part}{\par}
+\newenvironment{subparts}{\par\setcounter{qsubpart}{0}\let\subpart\passign@subpart}{\par}
+
+
+%% ----------------------------------------------------------------------
+%%  6. Solutions
+%%
+%%  Shown:   the label SOLUTION 3 in the column, an optional bold title run
+%%           into the text, a tint on the divider (or a box, or nothing),
+%%           and a small accent square flush right at the end.
+%%  Hidden:  skipped as the `comment' environment of verbatim.sty skips
+%%           its contents -- anything may be inside, and the \end line may
+%%           be indented -- optionally leaving `solution space' blank.
+%%  Chosen at \begin{document}, after \passignsetup has been read.
+%% ----------------------------------------------------------------------
+\newcommand*\passign@qedsquare{%
+  \begingroup
+    \fboxsep=\z@ \fboxrule=\passign@rule
+    \fcolorbox{passign@ink}{passign@accent}{\vrule width 0.9ex height 0.9ex depth\z@}%
+  \endgroup}
+
+\newcommand*\passign@definehiddensolution{%
+  \def\solution{%
+    \@bsphack
+    \let\do\@makeother\dospecials\catcode`\^^M\active
+    \let\verbatim@startline\relax
+    \let\verbatim@addtoline\@gobble
+    \let\verbatim@processline\relax
+    \let\verbatim@finish\relax
+    \verbatim@}%
+  \def\endsolution{%
+    \@esphack
+    \par\ifdim\passign@opt@solspace>\z@ \vspace*{\passign@opt@solspace}\fi}}
+
+\newcommand*\passign@definevisiblesolution{%
+  \colorlet{passign@soltint}{passign@accent!\passign@opt@soltint}%
+  \mdfdefinestyle{passignsol}{%
+    hidealllines=true, backgroundcolor=passign@soltint,
+    leftmargin=-\passign@thmL, rightmargin=0pt,
+    innerleftmargin=\passign@thmL, innerrightmargin=\passign@opt@thmboxsep,
+    innertopmargin=\passign@opt@thmboxsep,
+    innerbottommargin=\passign@opt@thmboxsep,
+    skipabove=0pt, skipbelow=0pt}%
+  \ifx\passign@opt@solstyle\passign@str@tint
+    \def\passign@solframe@begin{\begin{mdframed}[style=passignsol]}%
+    \def\passign@solframe@end{\end{mdframed}}%
+  \else\ifx\passign@opt@solstyle\passign@str@box
+    \def\passign@solframe@begin{\begin{mdframed}[style=passignbox]}%
+    \def\passign@solframe@end{\end{mdframed}}%
+  \else
+    \let\passign@solframe@begin\@empty
+    \let\passign@solframe@end\@empty
+  \fi\fi
+  \newenvironment{solution}[1][]{%
+    \par\addvspace{\passign@opt@solbefore}%
+    \passign@solframe@begin
+    \pushQED{\qed}%
+    \noindent
+    \passign@leftlabel{\passign@opt@fontthmhead}{\passign@opt@solutionlabel}%
+      {\ifpassign@solnumber\passign@curqnum\fi}%
+    \ifx\relax##1\relax\else{\passign@opt@fontthmtitle ##1.}\ \fi
+    \ignorespaces}%
+   {\popQED\passign@solframe@end\par\addvspace{\passign@opt@solafter}}}
+
+\newcommand*\passign@definesolution{%
+  \ifpassign@solutions
+    \passign@definevisiblesolution
+  \else
+    \passign@definehiddensolution
+  \fi}
+
+
+%% ----------------------------------------------------------------------
+%%  7. Title block
+%%
+%%      ------------------+-----------------------------
+%%              ASSIGNMENT| Title of the assignment
+%%                       3  |
+%%      ------------------+-----------------------------
+%%                  COURSE| MATH 2210 . Linear Algebra
+%%                    NAME| Ada Lovelace
+%%                     ...|
+%%
+%%  The big number is drawn in the accent colour; empty keys leave out
+%%  their row.
+%% ----------------------------------------------------------------------
+\gdef\passign@extrafields{}
+\newcommand*\addtitlefield[2]{%
+  \g@addto@macro\passign@extrafields{\passign@metarow{#1}{#2}}}
+
+% a row: label in the column, value in the text.  An empty value skips it.
+\newcommand*\passign@metarow[2]{%
+  \protected@edef\passign@mv{#2}%
+  \ifx\passign@mv\@empty\else
+    \par\nointerlineskip\vskip\passign@opt@metasep
+    \noindent\passign@leftlabel{\passign@opt@fontlabel}{#1}{}#2\par
+  \fi}
+
+\newcommand*\passign@coursevalue{%
+  \passign@opt@coursecode
+  \ifx\passign@opt@coursecode\@empty\else
+    \ifx\passign@opt@course\@empty\else\space\textperiodcentered\space\fi
+  \fi
+  \passign@opt@course}
+\newcommand*\passign@totalvalue{%
+  \ifx\passign@lasttotal\passign@str@zero\else
+    \passign@lasttotal\nobreakspace
+    \ifx\passign@lasttotal\passign@str@one\passign@opt@markword
+    \else\passign@opt@markswords\fi
+  \fi}
+
+\newcommand*\passign@titlerow{%
+  \setbox\passign@bxa\vtop{\hsize=\dimexpr\passign@bsplit-\passign@pad\relax
+    \raggedleft \parindent\z@
+    \ifx\passign@opt@number\@empty\else
+      {\passign@opt@fontlabel\passign@opt@case{\passign@opt@assignmentlabel}\par}%
+      \nointerlineskip\vskip 1.5mm
+      {\color{passign@accent}\passign@opt@fontbignum\passign@opt@number\par}%
+    \fi}%
+  \setbox\passign@bxb\vtop{\hsize=\textwidth
+    \raggedright \parindent\z@
+    {\passign@opt@fonttitle\passign@opt@title\par}}%
+  \nointerlineskip
+  \hbox to\z@{\hskip-\passign@bodyleft
+    \hbox to\passign@fulltw{%
+      \box\passign@bxa
+      \hskip\dimexpr\passign@bodyleft-\passign@bsplit+\passign@pad\relax
+      \box\passign@bxb\hss}\hss}%
+  \nointerlineskip}
+
+\renewcommand*\maketitle{%
+  \par
+  \begingroup
+    \parindent\z@ \parskip\z@
+    \passign@hrule
+    \nobreak\vskip\passign@opt@titlebefore
+    \passign@titlerow
+    \nobreak\vskip\passign@opt@titleafter
+    \passign@hrule
+    \passign@metarow{\passign@opt@courselabel}{\passign@coursevalue}%
+    \passign@metarow{\passign@opt@termlabel}{\passign@opt@term}%
+    \passign@metarow{\passign@opt@authorlabel}{\passign@opt@author}%
+    \passign@metarow{\passign@opt@idlabel}{\passign@opt@studentid}%
+    \passign@metarow{\passign@opt@instructorlabel}{\passign@opt@instructor}%
+    \passign@metarow{\passign@opt@duelabel}{\passign@opt@due}%
+    \passign@metarow{\passign@opt@totallabel}{\passign@totalvalue}%
+    \passign@extrafields
+    \par
+  \endgroup
+  \vskip\passign@opt@titleskip}
+\let\makeassignmenttitle\maketitle
+
+
+%% ----------------------------------------------------------------------
+%%  8. Page number and running text in the outer margin
+%%
+%%      page number  (top of the margin)
+%%
+%%      R U N N I N G   T E X T   (reads downwards, tops of the letters
+%%                                  point to the paper edge)
+%%
+%%  A solid bar of the accent colour runs down the whole outer margin
+%%  behind them (`margin bar width').  With twoside the margin is the right
+%%  one on odd pages and the left one, mirrored, on even pages.
+%% ----------------------------------------------------------------------
+% The bar: full paper height, centred on x=\passign@bx, \passign@mw wide when `auto'.
+\newcommand*\passign@drawbar{%
+  \ifx\passign@opt@barwidth\passign@str@none\else
+    \ifx\passign@opt@barwidth\passign@str@auto
+      \passign@bw=\passign@mw
+    \else
+      \passign@bw=\passign@opt@barwidth\relax
+    \fi
+    \passign@bh=\dimexpr1in+\voffset+\topmargin+\headheight\relax
+    \rlap{\hskip\dimexpr\passign@bx-\passign@bw/2\relax
+          \smash{{\color{passign@accent}%
+            \vrule width\passign@bw height\passign@bh
+                   depth\dimexpr\paperheight-\passign@bh\relax}}}%
+  \fi}
+
+% #1 = +1: outer margin on the right, -1: on the left
+\newcommand*\passign@marginside[1]{%
+  \ifnum#1>\z@
+    \setbox\passign@rbox\hbox{\rotatebox[origin=c]{-90}{\box\passign@mbox}}%
+    \passign@mw=\dimexpr\paperwidth-\passign@fulltw-\passign@fullside-1in-\hoffset\relax
+    \passign@bx=\dimexpr\passign@fulltw-\passign@bodyleft+\passign@mw/2\relax
+    \passign@mx=\dimexpr\passign@bx+\passign@opt@marginshift\relax
+  \else
+    \setbox\passign@rbox\hbox{\rotatebox[origin=c]{90}{\box\passign@mbox}}%
+    \passign@mw=\dimexpr\passign@fullside+1in+\hoffset\relax
+    \passign@bx=\dimexpr-\passign@mw/2-\passign@bodyleft\relax
+    \passign@mx=\dimexpr\passign@bx-\passign@opt@marginshift\relax
+  \fi
+  \passign@drawbar
+  \rlap{\hskip\dimexpr\passign@mx-\wd\passign@nbox/2\relax
+        \smash{\lower\dimexpr\headsep+\ht\passign@nbox\relax\box\passign@nbox}}%
+  \rlap{\hskip\dimexpr\passign@mx-\wd\passign@rbox/2\relax
+        \smash{\lower\dimexpr\headsep+\ht\passign@nbox+\passign@opt@margingap
+                             +\ht\passign@rbox\relax\box\passign@rbox}}}
+
+% The grid of a page, drawn from the header (everything is placed relative
+% to the left edge of the text, hence the negative skips): the divider from
+% the top of the paper to just below the footer, the footer rule across the
+% full block (broken around the divider) and the footer text left of the
+% divider.
+\newcommand*\passign@pageframe{%
+  \passign@bh=\dimexpr1in+\voffset+\topmargin+\headheight\relax
+  \passign@fr=\dimexpr\headsep+\textheight+\passign@bodybot\relax
+  \rlap{\hskip\dimexpr\passign@bsplit-\passign@bodyleft\relax
+        \smash{\vrule width\passign@rule height\passign@bh
+                      depth\dimexpr\passign@fr+\footskip+1.5mm\relax}}%
+  \rlap{\hskip-\passign@bodyleft
+        \smash{\lower\passign@fr
+          \passign@gaprulew{\passign@fulltw}{\z@}{\passign@fulltw}{\passign@bsplit}}}%
+  \rlap{\hskip-\passign@bodyleft
+        \smash{\lower\dimexpr\passign@fr+\footskip\relax
+          \hbox to\passign@bsplit{\hss\passign@label{\passign@opt@footertext}%
+                                  \hskip\passign@pad}}}}
+
+\newcommand*\passign@marginhead{%
+  \passign@pageframe
+  \setbox\passign@nbox\hbox{\passign@opt@fontmarginpage\thepage}%
+  \setbox\passign@mbox\hbox{\passign@opt@fontmargin\passign@opt@case{\passign@opt@margintext}}%
+  \ifdim\wd\passign@mbox=\z@
+    \setbox\passign@mbox\hbox{\passign@opt@fontmargin\passign@opt@case{\passign@opt@title}}%
+  \fi
+  \ifdim\wd\passign@mbox=\z@
+    \setbox\passign@mbox\hbox{\passign@opt@fontmargin\passign@opt@case{\jobname}}%
+  \fi
+  \if@twoside
+    \ifodd\c@page \passign@marginside\@ne \else \passign@marginside\m@ne \fi
+  \else \passign@marginside\@ne \fi}
+
+\newcommand*\ps@passign{%
+  \let\@mkboth\@gobbletwo
+  \def\@oddhead{\passign@marginhead}\let\@evenhead\@oddhead
+  \def\@oddfoot{}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  9. Sections (optional grouping of questions)
+%%
+%%      ------------------+-----------------------------   hairline, broken
+%%             SECTION  1 | Title of the section             around the divider
+%%
+%%  The label stands in the column, flush against the divider; the title
+%%  is in `section font'.  \subsection has the number in the label column
+%%  and no hairline.  Sections do not number the questions.
+%% ----------------------------------------------------------------------
+% (robust: \@sect expands these with \protected@edef, which must not touch
+% the font switches inside)
+\DeclareRobustCommand*\passign@seclabel{%
+  \passign@leftlabel{\passign@opt@fontsecnum}{\passign@opt@sectionlabel}{\thesection}}
+\DeclareRobustCommand*\passign@subseclabel{%
+  \passign@leftlabel{\passign@opt@fontsecnum}{}{\thesubsection}}
+\expandafter\def\csname passign@seccnt@section\endcsname{\passign@seclabel}
+\expandafter\def\csname passign@seccnt@subsection\endcsname{\passign@subseclabel}
+\let\passign@oldseccntformat\@seccntformat
+\renewcommand*\@seccntformat[1]{%
+  \@ifundefined{passign@seccnt@#1}%
+    {\passign@oldseccntformat{#1}}%
+    {\csname passign@seccnt@#1\endcsname}}
+% The hairline above a section title: across the full block, broken around
+% the divider.  Runs in the heading's own group, before its first line.
+\newcommand*\passign@secrule{%
+  \passign@hrule
+  \nobreak\vskip\passign@opt@secpad \nointerlineskip}
+\newcommand*\passign@sectionstyle{\passign@secrule\raggedright\passign@opt@fontsection}
+\newcommand*\passign@subsectionstyle{\raggedright\passign@opt@fontsubsection}
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-\passign@opt@secbefore}{\passign@opt@secafter}{\passign@sectionstyle}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.5\baselineskip plus 0.3\baselineskip minus 0.2\baselineskip}%
+  {0.6\baselineskip}{\passign@subsectionstyle}}
+
+
+%% ----------------------------------------------------------------------
+%%  10. Margin notes, sidenotes, footnotes in the label column
+%%
+%%      \marginnote[offset]{text}   unnumbered
+%%      \sidenote[offset]{text}     numbered (restarts in every question)
+%%      footnotes = margin          makes \footnote = \sidenote, with the
+%%                                  text in `footnote font' (italic)
+%%
+%%  The notes stand in the column left of the divider (\reversemarginpar),
+%%  flush left, as wide as the column less `note gap'.
+%%  Limits: built on \marginpar, so not inside floats, minipages, section
+%%  titles or the boxed/tinted environments (theorem boxes, solutions in
+%%  `tint' or `box' style).  Assumes oneside.  A note and a label at the
+%%  same height will overlap: move the note with the offset.
+%% ----------------------------------------------------------------------
+\reversemarginpar
+\newcommand*\passign@notestyle{%
+  \renewcommand\baselinestretch{1}%
+  \passign@opt@fontnote \raggedright \parindent\z@ \parskip\z@}
+
+% offset #1 (down = +), material #2; keeps the first baseline on the text line
+\newcommand\passign@noteput[2]{%
+  \noindent
+  \setbox\z@\vtop{\hsize=\marginparwidth \passign@notestyle #2\par}%
+  \raisebox{-#1}[\ht\z@][\dp\z@]{\box\z@}}
+
+\newcommand\marginnote[2][\z@]{\marginpar{\passign@noteput{#1}{#2}}}
+
+\newcounter{sidenote}
+\@addtoreset{sidenote}{question}
+% #1 = offset, #2 = font switch for the text (may be empty), #3 = text.
+% The number stays upright in both places.
+\newcommand\passign@sidenote[3]{%
+  \stepcounter{sidenote}%
+  \edef\passign@sn{\thesidenote}%
+  \textsuperscript{\passign@sn}%
+  \marginpar{\passign@noteput{#1}{\textsuperscript{\passign@sn}\nobreakspace {#2#3}}}}
+\newcommand\sidenote[2][\z@]{\passign@sidenote{#1}{}{#2}}
+\newcommand\passign@footnote[2][\z@]{\passign@sidenote{#1}{\passign@opt@fontfootnote}{#2}}
+
+% Ordinary footnotes: the text goes through `footnote font', the mark does not.
+\newcommand*\passign@italicfootnotes{%
+  \let\passign@oldmakefntext\@makefntext
+  \long\def\@makefntext##1{\passign@oldmakefntext{\passign@opt@fontfootnote ##1}}}
+
+
+%% ----------------------------------------------------------------------
+%%  11. Theorem-like environments
+%%
+%%  Four amsthm styles:
+%%    passignplain    italic, no box          passignplainup  upright, no box
+%%    passignbox      italic, boxed           passignboxup    upright, boxed
+%%  The box is a square hairline box (mdframed) hanging on the divider: the
+%%  top and bottom rules stop short of it by `rule gap', the divider is the
+%%  left side.  The text inside is aligned with the text outside.
+%%  In all of them the name and number stand in the label column, like the
+%%  label of a section (`theorem head font'), and the optional title is run
+%%  into the text, in bold.
+%% ----------------------------------------------------------------------
+\newskip\passign@thmskip
+\newlength\passign@thmL   % how far the box reaches left of the text
+
+% The title is run into the text, in bold, followed by a full stop.  (amsthm
+% drops \thmnote when there is no title.)
+\newcommand*\passign@thmtitle[1]{\thmnote{{\passign@opt@fontthmtitle #1.}\ }}
+% #1 = name, #2 = number (empty for the starred forms), #3 = title
+\newcommand*\passign@thmhead[3]{%
+  \passign@leftlabel{\passign@opt@fontthmhead}{#1}{#2}\passign@thmtitle{#3}}
+
+\newcommand*\passign@definetheorems{%
+  \newtheoremstyle{passignplain}%
+    {\passign@thmskip}{\passign@thmskip}{\itshape}{0pt}{}{}{0pt}%
+    {\passign@thmhead{##1}{##2}{##3}}%
+  \newtheoremstyle{passignplainup}%
+    {\passign@thmskip}{\passign@thmskip}{\normalfont}{0pt}{}{}{0pt}%
+    {\passign@thmhead{##1}{##2}{##3}}%
+  % the box brings its own space above and below
+  \newtheoremstyle{passignbox}%
+    {0pt}{0pt}{\itshape}{0pt}{}{}{0pt}%
+    {\passign@thmhead{##1}{##2}{##3}}%
+  \newtheoremstyle{passignboxup}%
+    {0pt}{0pt}{\normalfont}{0pt}{}{}{0pt}%
+    {\passign@thmhead{##1}{##2}{##3}}%
+  % one counter for everything, reset in every question
+  \theoremstyle{passignbox}%
+  \newtheorem{theorem}{Theorem}[question]
+  \newtheorem*{theorem*}{Theorem}%
+  \newtheorem{lemma}[theorem]{Lemma}%
+  \newtheorem*{lemma*}{Lemma}%
+  \surroundwithmdframed[style=passignbox]{theorem}%
+  \surroundwithmdframed[style=passignbox]{theorem*}%
+  \surroundwithmdframed[style=passignbox]{lemma}%
+  \surroundwithmdframed[style=passignbox]{lemma*}%
+  \theoremstyle{passignboxup}%
+  \newtheorem{definition}[theorem]{Definition}%
+  \newtheorem*{definition*}{Definition}%
+  \surroundwithmdframed[style=passignbox]{definition}%
+  \surroundwithmdframed[style=passignbox]{definition*}%
+  \theoremstyle{passignplain}%
+  \newtheorem{proposition}[theorem]{Proposition}%
+  \newtheorem*{proposition*}{Proposition}%
+  \newtheorem{corollary}[theorem]{Corollary}%
+  \newtheorem*{corollary*}{Corollary}%
+  \theoremstyle{passignplainup}%
+  \newtheorem{example}[theorem]{Example}%
+  \newtheorem*{example*}{Example}%
+  \newtheorem{remark}[theorem]{Remark}%
+  \newtheorem*{remark*}{Remark}%
+  \newtheorem{hint}[theorem]{Hint}%
+  \newtheorem*{hint*}{Hint}%
+  \newtheorem{note}[theorem]{Note}%
+  \newtheorem*{note*}{Note}%
+  % the proof is labelled in the column too
+  \renewenvironment{proof}[1][\proofname]{%
+    \par\pushQED{\qed}\normalfont
+    \topsep=\passign@thmskip \partopsep=\z@
+    \trivlist\item[]\leavevmode
+    \passign@leftlabel{\passign@opt@fontthmhead}{##1}{}%
+    \ignorespaces}%
+    {\popQED\endtrivlist\@endpefalse}}
+
+
+%% ----------------------------------------------------------------------
+%%  12. Everything that needs the geometry: at \begin{document}
+%% ----------------------------------------------------------------------
+\AtBeginDocument{%
+  % the geometry as set by the user is the FULL layout
+  \passign@fulltw=\textwidth
+  \passign@fullth=\textheight
+  \passign@fulltopm=\topmargin
+  \passign@fullodd=\oddsidemargin
+  \passign@fulleven=\evensidemargin
+  \colorlet{passign@num}{\passign@opt@numcolour}%
+  \passign@pad=\passign@opt@labelpad\relax
+  \passign@rule=\passign@opt@rule\relax
+  \passign@gap=\passign@opt@rulegap\relax
+  \passign@bsplit=\passign@opt@bodysplit\relax
+  \passign@bodygap=\passign@opt@bodygap\relax
+  \passign@bodyleft=\dimexpr\passign@bsplit+\passign@bodygap\relax
+  \passign@bodyright=\passign@opt@bodyright\relax
+  \passign@bodytop=\passign@opt@bodytop\relax
+  \passign@bodybot=\passign@opt@bodybottom\relax
+  \passign@bodytw=\dimexpr\passign@fulltw-\passign@bodyleft-\passign@bodyright\relax
+  \passign@thmskip=\passign@opt@thmskip\relax
+  \passign@thmL=\dimexpr\passign@bodygap-\passign@opt@rule-\passign@opt@rulegap\relax
+  % margin notes fill the label column, up to `note gap' from the divider
+  \marginparwidth=\dimexpr\passign@bsplit-\passign@opt@notegap\relax
+  \marginparsep=\dimexpr\passign@bodygap+\passign@opt@notegap\relax
+  \marginparpush=2mm
+  \ifx\passign@opt@footnotes\passign@str@margin \let\footnote\passign@footnote \fi
+  \ifx\footnote\passign@footnote\else \passign@italicfootnotes \fi
+  \passign@bodylayout
+  % the boxes (also used for solutions in `box' style)
+  \mdfdefinestyle{passignbox}{%
+    linecolor=passign@ink, linewidth=\passign@opt@rule, roundcorner=0pt,
+    leftline=false,
+    leftmargin=-\passign@thmL, rightmargin=0pt,
+    innerleftmargin=\passign@thmL, innerrightmargin=\passign@opt@thmboxsep,
+    innertopmargin=\passign@opt@thmboxsep,
+    innerbottommargin=\dimexpr\passign@opt@thmboxsep*2/5\relax,
+    skipabove=\passign@thmskip, skipbelow=\passign@thmskip}%
+  \ifx\passign@opt@theorems\passign@str@off\else \passign@definetheorems \fi
+  \passign@definesolution
+  \renewcommand*\qedsymbol{\passign@qedsquare}%
+  \pagestyle{passign}}
+
+\endinput

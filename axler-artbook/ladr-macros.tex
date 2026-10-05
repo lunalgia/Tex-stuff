@@ -1,0 +1,149 @@
+% ladr-macros.tex: notation and environments for the Axler transcription.
+
+% test builds of a single section set their counters only when this is true
+\newif\iftestbuild
+% Loaded after artbook and macros.tex.  Nothing in artbook.sty is changed.
+
+% ---------------------------------------------------------------- notation
+\DeclareRobustCommand{\F}{\mathbb{F}}
+\DeclareRobustCommand{\R}{\mathbb{R}}
+\DeclareRobustCommand{\C}{\mathbb{C}}
+\DeclareRobustCommand{\Q}{\mathbb{Q}}
+\DeclareRobustCommand{\Z}{\mathbb{Z}}
+\DeclareRobustCommand{\N}{\mathbb{N}}
+\DeclareRobustCommand{\Lin}{\mathcal{L}}           % \Lin(V,W)
+\DeclareRobustCommand{\Poly}{\mathcal{P}}          % \Poly_m(\F)
+\DeclareRobustCommand{\Mat}{\mathcal{M}}           % \Mat(T)
+\DeclareMathOperator{\nul}{null}         % \null is a TeX primitive
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\dett}{det}
+\DeclareMathOperator{\sgn}{sign}
+\renewcommand{\rank}{\operatorname{rank}}
+\renewcommand{\tr}{\operatorname{tr}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\renewcommand{\dim}{\operatorname{dim}}
+\renewcommand{\ip}[2]{\langle #1, #2 \rangle}
+\renewcommand{\norm}[1]{\lVert #1 \rVert}
+\renewcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\ftimes}[2]{\underbrace{#1}_{#2}}  % x\cdots x with "m times" under it
+
+% physics.sty turns \dd, \dv ... into commands; nothing of Axler needs them.
+% Axler's l is a plain l: undo the \ell mapping of macros.tex.
+
+% ------------------------------------------------- numbering as in Axler
+% Every numbered item (definition, result, example, notation, figure) shares
+% one counter per chapter: 1.1, 1.2, ...  Sections are 1A, 1B, ...
+\renewcommand\thesection{\thechapter\Alph{section}}
+% Axler's subsections are unnumbered (but stay in the contents)
+\setcounter{secnumdepth}{1}
+\makeatletter
+\AtBeginDocument{%
+  \@removefromreset{theorem}{section}%
+  \@addtoreset{theorem}{chapter}%
+  \renewcommand\thetheorem{\thechapter.\arabic{theorem}}%
+  % Axler's results carry no name of their own: "Result" in the label column
+  \theoremstyle{artbookbox}%
+  \newtheorem{result}[theorem]{Result}%
+  \newtheorem{notation}[theorem]{Notation}%
+  \newtheorem*{result*}{Result}%
+  \surroundwithmdframed[style=artbookthm]{result}%
+  \surroundwithmdframed[style=artbookthm]{result*}%
+  \surroundwithmdframed[style=artbookthm]{notation}%
+  % a numbered figure takes its number from the same counter
+  \renewcommand\thefigure{\thetheorem}%
+}
+% \axfigure: a numbered figure in Axler's counter.  Use as
+%   \begin{figure}[htbp] ... \axcaption{text}\label{ax:6.9} \end{figure}
+\newcommand\axcaption[1]{\refstepcounter{theorem}%
+  \addtocounter{figure}{-1}\caption{#1}}
+
+% Fix for artbook's \marginnote: its \raisebox[\ht\z@][\dp\z@]{\box\z@}
+% reports a size of zero to \marginpar, so LaTeX never pushes the next note
+% below it and consecutive notes overlap.  Set the note as an ordinary
+% \marginpar paragraph instead (first baseline on the text line); a nonzero
+% offset becomes space above the note.
+\renewcommand\artbook@noteput[2]{\artbook@notestyle
+  \ifdim\dimexpr#1\relax=\z@\else\vspace*{#1}\fi #2\par}
+\makeatother
+
+% ------------------------------------------------- lists inside the text
+% (a), (b), ... as Axler sets them; bullets keep the default.
+\newlist{parts}{enumerate}{1}
+\setlist[parts]{label=(\alph*),leftmargin=*,widest=m,itemsep=1pt,topsep=3pt}
+\setlist[itemize]{itemsep=1pt,topsep=3pt,leftmargin=1.2em}
+\setlist[enumerate]{itemsep=1pt,topsep=3pt}
+
+% the named property lists of Axler (commutativity, associativity, ...):
+%   \begin{axprops} \item[commutativity] text ... \end{axprops}
+\newlist{axprops}{description}{1}
+\setlist[axprops]{style=nextline,leftmargin=1em,font=\normalfont\bfseries,
+  itemsep=2pt,topsep=3pt,parsep=0pt}
+
+% "Exercises 1A": a run-in heading for the exercise block of a section
+\newcommand\exercisesheading[1]{\subsection*{Exercises #1}}
+
+% a short attribution line for the solutions
+\newcommand\solnote[2]{\par\smallskip\noindent{\bfseries #1.}\ {\itshape #2}\par}
+
+% a small unnumbered figure in the label column, as Axler's margin figures:
+%   \marginfig{<tikz or \includegraphics>}{caption}
+\newcommand\marginfig[3][0pt]{\marginnote[#1]{\vskip0pt\centering #2\par\smallskip
+  {\itshape #3}\par}}
+
+% the quotation that closes some exercise sets
+\newcommand\axquote[2]{\par\bigskip\begingroup\raggedleft\small\itshape
+  \parbox{.8\linewidth}{\raggedleft #1\par\smallskip\upshape\textemdash #2}\par\endgroup}
+
+% the arrows of the R^2 pictures
+\tikzset{vec/.style={-{Stealth[length=2.2mm]},line width=.6pt},
+         axis/.style={-{Stealth[length=1.6mm]},line width=.3pt,black!60}}
+
+% solutions end with the black square, as in the manual; \qedhere works in a
+% closing display
+\AtBeginDocument{\xsimsetup{solution/pre-hook={\pushQED{\qed}},
+  solution/post-hook={\popQED}}}
+
+% the small italic remark Axler sets under some exercises
+\newcommand\exnote[1]{\par\smallskip{\small\itshape\leftskip=1.5em\relax #1\par}}
+\let\axexnote\exnote
+\let\exercisenote\exnote
+
+% the text column is narrow: allow a little extra stretch before overfull lines
+\setlength\emergencystretch{1.5em}
+
+% same space after the last exercise of every section
+\AddToHook{cmd/section/before}{\par\addvspace{\bigskipamount}}
+\allowdisplaybreaks[1]
+
+% artbook's contents lists only section-level rows (chapters are headers),
+% so each group of solutions gets its own section-level entry
+\renewcommand{\printsolutionsbysection}{%
+  \def\lastchapter{}\def\lastsection{}%
+  \ForEachUsedExerciseByType{%
+    \edef\currentchapter{\ExercisePropertyGet{##1}{##2}{chapter-value}}%
+    \edef\currentsection{\ExercisePropertyGet{##1}{##2}{section-value}}%
+    \ifx\lastchapter\currentchapter\else
+      \section*{Chapter~\ExercisePropertyGet{##1}{##2}{chapter}}%
+    \fi
+    \ifx\lastsection\currentsection\else
+      \subsection*{\S\ExercisePropertyGet{##1}{##2}{section}}%
+      \addcontentsline{toc}{section}{Solutions to
+        \ExercisePropertyGet{##1}{##2}{section}}%
+    \fi
+    \XSIMprint{solution}{##1}{##2}%
+    \let\lastchapter\currentchapter
+    \let\lastsection\currentsection}}
+
+% artbook counts only numbered chapter heads but every chapter line in the
+% .toc, so unnumbered front-matter chapters shifted every chapter's mini
+% contents by five.  Count the starred heads too.
+\makeatletter
+\def\@makeschapterhead#1{\global\advance\artbook@chapcnt\@ne
+  \chaptermark{#1}\artbook@chapterpage{#1}{0}}
+\makeatother

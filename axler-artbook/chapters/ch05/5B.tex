@@ -1,0 +1,1291 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{1}\setcounter{theorem}{18}
+\fi % TEST-ONLY-END
+% Source: book pp. 143--153 (PDF 157--167); solutions pp. 152--167.
+% \axeqtag: Axler's numbered displays (5.23, 5.25, 5.30) take their number
+% from the item counter; use as \[ ... \axeqtag\label{ax:5.23} \]
+\DeclareRobustCommand\axeqtag{\refstepcounter{theorem}%
+  \begingroup\edef\x{\endgroup\noexpand\tag{\thetheorem}}\x}
+
+\section{The Minimal Polynomial}
+
+\subsection{Existence of Eigenvalues on Complex Vector Spaces}
+
+Now we come to one of the central results about operators on finite-dimensional
+complex vector spaces.
+
+\begin{result}[Existence of eigenvalues]\label{ax:5.19}
+Every operator on a finite-dimensional nonzero complex vector space has an
+eigenvalue.
+\end{result}
+
+\begin{proof}
+Suppose $V$ is a finite-dimensional complex vector space of dimension $n>0$
+and $T\in\Lin(V)$. Choose $v\in V$ with $v\ne0$. Then
+\[ v,Tv,T^2v,\dots,T^nv \]
+is not linearly independent, because $V$ has dimension $n$ and this list has
+length $n+1$. Hence some linear combination (with not all the coefficients
+equal to $0$) of the vectors above equals $0$. Thus there exists a nonconstant
+polynomial $p$ of smallest degree such that
+\[ p(T)v=0. \]
+
+By the first version of the fundamental theorem of algebra (see
+\ref{ax:4.12}), there exists $\lambda\in\C$ such that $p(\lambda)=0$. Hence
+there exists a polynomial $q\in\Poly(\C)$ such that
+\[ p(z)=(z-\lambda)q(z) \]
+for every $z\in\C$ (see \ref{ax:4.6}). This implies (using \ref{ax:5.17}) that
+\[ 0=p(T)v=(T-\lambda I)\bigl(q(T)v\bigr). \]
+Because $q$ has smaller degree than $p$, we know that $q(T)v\ne0$. Thus the
+equation above implies that $\lambda$ is an eigenvalue of $T$ with eigenvector
+$q(T)v$.
+\end{proof}
+
+The proof above makes crucial use of the fundamental theorem of algebra. The
+comment following Exercise~16 helps explain why the fundamental theorem of
+algebra is so tightly connected to the result above.
+
+The hypothesis in the result above that $\F=\C$ cannot be replaced with the
+hypothesis that $\F=\R$, as shown by Example~\ref{ax:5.9}. The next example
+shows that the finite-dimensional hypothesis in the result above also cannot
+be deleted.
+
+\begin{example}[An operator on a complex vector space with no
+eigenvalues]\label{ax:5.20}
+Define $T\in\Lin(\Poly(\C))$ by $(Tp)(z)=zp(z)$. If $p\in\Poly(\C)$ is a
+nonzero polynomial, then the degree of $Tp$ is one more than the degree of
+$p$, and thus $Tp$ cannot equal a scalar multiple of $p$. Hence $T$ has no
+eigenvalues.
+
+Because $\Poly(\C)$ is infinite-dimensional, this example does not contradict
+the result above.
+\end{example}
+
+\subsection{Eigenvalues and the Minimal Polynomial}
+
+In this subsection we introduce an important polynomial associated with each
+operator. We begin with the following definition.
+
+\begin{definition}[Monic polynomial]\label{ax:5.21}
+A \emph{monic polynomial} is a polynomial whose highest-degree coefficient
+equals $1$.
+\end{definition}
+
+For example, the polynomial $2+9z^2+z^7$ is a monic polynomial of degree $7$.
+
+\begin{result}[Existence, uniqueness, and degree of minimal
+polynomial]\label{ax:5.22}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Then there is a unique
+monic polynomial $p\in\Poly(\F)$ of smallest degree such that $p(T)=0$.
+Furthermore, $\deg p\le\dim V$.
+\end{result}
+
+\begin{proof}
+If $\dim V=0$, then $I$ is the zero operator on $V$ and thus we take $p$ to be
+the constant polynomial $1$.
+
+Now use induction on $\dim V$. Thus assume that $\dim V>0$ and that the
+desired result is true for all operators on all vector spaces of smaller
+dimension. Let $u\in V$ be such that $u\ne0$. The list
+$u,Tu,\dots,T^{\dim V}u$ has length $1+\dim V$ and thus is linearly dependent.
+By the linear dependence lemma (\ref{ax:2.19}), there is a smallest positive
+integer $m\le\dim V$ such that $T^mu$ is a linear combination of
+$u,Tu,\dots,T^{m-1}u$. Thus there exist scalars
+$c_0,c_1,c_2,\dots,c_{m-1}\in\F$ such that
+\[ c_0u+c_1Tu+\cdots+c_{m-1}T^{m-1}u+T^mu=0. \axeqtag\label{ax:5.23} \]
+Define a monic polynomial $q\in\Poly_m(\F)$ by
+\[ q(z)=c_0+c_1z+\cdots+c_{m-1}z^{m-1}+z^m. \]
+Then \ref{ax:5.23} implies that $q(T)u=0$.
+
+If $k$ is a nonnegative integer, then
+\[ q(T)(T^ku)=T^k\bigl(q(T)u\bigr)=T^k(0)=0. \]
+The linear dependence lemma (\ref{ax:2.19}) shows that $u,Tu,\dots,T^{m-1}u$
+is linearly independent. Thus the equation above implies that
+$\dim\nul q(T)\ge m$. Hence
+\[ \dim\range q(T)=\dim V-\dim\nul q(T)\le\dim V-m. \]
+Because $\range q(T)$ is invariant under $T$ (by \ref{ax:5.18}), we can apply
+our induction hypothesis to the operator $T|_{\range q(T)}$ on the vector
+space $\range q(T)$. Thus there is a monic polynomial $s\in\Poly(\F)$ with
+\[ \deg s\le\dim V-m \quad\text{and}\quad s(T|_{\range q(T)})=0. \]
+Hence for all $v\in V$ we have
+\[ \bigl((sq)(T)\bigr)(v)=s(T)\bigl(q(T)v\bigr)=0 \]
+because $q(T)v\in\range q(T)$ and
+$s(T)|_{\range q(T)}=s(T|_{\range q(T)})=0$. Thus $sq$ is a monic polynomial
+such that $\deg sq\le\dim V$ and $(sq)(T)=0$.
+
+The paragraph above shows that there is a monic polynomial of degree at most
+$\dim V$ that when applied to $T$ gives the $0$ operator. Thus there is a monic
+polynomial of smallest degree with this property, completing the existence
+part of this result.
+
+Let $p\in\Poly(\F)$ be a monic polynomial of smallest degree such that
+$p(T)=0$. To prove the uniqueness part of the result, suppose $r\in\Poly(\F)$
+is a monic polynomial of the same degree as $p$ and $r(T)=0$. Then
+$(p-r)(T)=0$ and also $\deg(p-r)<\deg p$. If $p-r$ were not equal to $0$,
+then we could divide $p-r$ by the coefficient of the highest-order term in
+$p-r$ to get a monic polynomial (of smaller degree than $p$) that when applied
+to $T$ gives the $0$ operator. Thus $p-r=0$, as desired.
+\end{proof}
+
+The previous result justifies the following definition.
+
+\begin{definition}[Minimal polynomial]\label{ax:5.24}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Then the \emph{minimal
+polynomial} of $T$ is the unique monic polynomial $p\in\Poly(\F)$ of smallest
+degree such that $p(T)=0$.
+\end{definition}
+
+To compute the minimal polynomial of an operator $T\in\Lin(V)$, we need to
+find the smallest positive integer $m$ such that the equation
+\[ c_0I+c_1T+\cdots+c_{m-1}T^{m-1}=-T^m \]
+has a solution $c_0,c_1,\dots,c_{m-1}\in\F$. If we pick a basis of $V$ and
+replace $T$ in the equation above with the matrix of $T$, then the equation
+above can be thought of as a system of $(\dim V)^2$ linear equations in the
+$m$ unknowns $c_0,c_1,\dots,c_{m-1}\in\F$. Gaussian elimination or another
+fast method of solving systems of linear equations can tell us whether a
+solution exists, testing successive values $m=1,2,\dots$ until a solution
+exists. By \ref{ax:5.22}, a solution exists for some smallest positive integer
+$m\le\dim V$. The minimal polynomial of $T$ is then
+$c_0+c_1z+\cdots+c_{m-1}z^{m-1}+z^m$.
+
+Even faster (usually), pick $v\in V$ with $v\ne0$ and consider the equation
+\[ c_0v+c_1Tv+\cdots+c_{\dim V-1}T^{\dim V-1}v=-T^{\dim V}v.
+   \axeqtag\label{ax:5.25} \]
+Use a basis of $V$ to convert the equation above to a system of $\dim V$
+linear equations in $\dim V$ unknowns $c_0,c_1,\dots,c_{\dim V-1}$. If this
+system of equations has a unique solution $c_0,c_1,\dots,c_{\dim V-1}$ (as
+happens most of the time), then the scalars $c_0,c_1,\dots,c_{\dim V-1},1$ are
+the coefficients of the minimal polynomial of $T$ (because \ref{ax:5.22}
+states that the degree of the minimal polynomial is at most $\dim V$).
+
+\marginnote{These estimates are based on testing millions of random
+matrices.}%
+Consider operators on $\R^4$ (thought of as $4$-by-$4$ matrices with respect
+to the standard basis), and take $v=(1,0,0,0)$ in the paragraph above. The
+faster method described above works on over $99.8\%$ of the $4$-by-$4$
+matrices with integer entries in the interval $[-10,10]$ and on over
+$99.999\%$ of the $4$-by-$4$ matrices with integer entries in $[-100,100]$.
+
+The next example illustrates the faster procedure discussed above.
+
+\begin{example}[Minimal polynomial of an operator on $\F^5$]\label{ax:5.26}
+Suppose $T\in\Lin(\F^5)$ and
+\[ \Mat(T)=\begin{pmatrix}
+  0 & 0 & 0 & 0 & -3\\
+  1 & 0 & 0 & 0 & 6\\
+  0 & 1 & 0 & 0 & 0\\
+  0 & 0 & 1 & 0 & 0\\
+  0 & 0 & 0 & 1 & 0
+\end{pmatrix} \]
+with respect to the standard basis $e_1,e_2,e_3,e_4,e_5$. Taking $v=e_1$ for
+\ref{ax:5.25}, we have
+\begin{align*}
+Te_1 &= e_2, & T^4e_1 &= T(T^3e_1)=Te_4=e_5,\\
+T^2e_1 &= T(Te_1)=Te_2=e_3, & T^5e_1 &= T(T^4e_1)=Te_5=-3e_1+6e_2.\\
+T^3e_1 &= T(T^2e_1)=Te_3=e_4,
+\end{align*}
+Thus $3e_1-6Te_1=-T^5e_1$. The list $e_1,Te_1,T^2e_1,T^3e_1,T^4e_1$, which
+equals the list $e_1,e_2,e_3,e_4,e_5$, is linearly independent, so no other
+linear combination of this list equals $-T^5e_1$. Hence the minimal polynomial
+of $T$ is $3-6z+z^5$.
+\end{example}
+
+Recall that by definition, eigenvalues of operators on $V$ and zeros of
+polynomials in $\Poly(\F)$ must be elements of $\F$. In particular, if
+$\F=\R$, then eigenvalues and zeros must be real numbers.
+
+\begin{result}[Eigenvalues are the zeros of the minimal
+polynomial]\label{ax:5.27}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$.
+\begin{parts}
+\item The zeros of the minimal polynomial of $T$ are the eigenvalues of $T$.
+\item If $V$ is a complex vector space, then the minimal polynomial of $T$ has
+  the form
+  \[ (z-\lambda_1)\cdots(z-\lambda_m), \]
+  where $\lambda_1,\dots,\lambda_m$ is a list of all eigenvalues of $T$,
+  possibly with repetitions.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Let $p$ be the minimal polynomial of $T$.
+\begin{parts}
+\item First suppose $\lambda\in\F$ is a zero of $p$. Then $p$ can be written
+  in the form
+  \[ p(z)=(z-\lambda)q(z), \]
+  where $q$ is a monic polynomial with coefficients in $\F$ (see
+  \ref{ax:4.6}). Because $p(T)=0$, we have
+  \[ 0=(T-\lambda I)\bigl(q(T)v\bigr) \]
+  for all $v\in V$. Because $\deg q=(\deg p)-1$ and $p$ is the minimal
+  polynomial of $T$, there exists at least one vector $v\in V$ such that
+  $q(T)v\ne0$. The equation above thus implies that $\lambda$ is an eigenvalue
+  of $T$, as desired.
+
+  To prove that every eigenvalue of $T$ is a zero of $p$, now suppose
+  $\lambda\in\F$ is an eigenvalue of $T$. Thus there exists $v\in V$ with
+  $v\ne0$ such that $Tv=\lambda v$. Repeated applications of $T$ to both sides
+  of this equation show that $T^kv=\lambda^kv$ for every nonnegative integer
+  $k$. Thus
+  \[ p(T)v=p(\lambda)v. \]
+  Because $p$ is the minimal polynomial of $T$, we have $p(T)v=0$. Hence the
+  equation above implies that $p(\lambda)=0$. Thus $\lambda$ is a zero of
+  $p$, as desired.
+\item To get the desired result, use (a) and the second version of the
+  fundamental theorem of algebra (see \ref{ax:4.13}). \qedhere
+\end{parts}
+\end{proof}
+
+A nonzero polynomial has at most as many distinct zeros as its degree (see
+\ref{ax:4.8}). Thus (a) of the previous result, along with the result that the
+minimal polynomial of an operator on $V$ has degree at most $\dim V$, gives an
+alternative proof of \ref{ax:5.12}, which states that an operator on $V$ has
+at most $\dim V$ distinct eigenvalues.
+
+Every monic polynomial is the minimal polynomial of some operator, as shown by
+Exercise~16, which generalizes Example~\ref{ax:5.26}. Thus \ref{ax:5.27}(a)
+shows that finding exact expressions for the eigenvalues of an operator is
+equivalent to the problem of finding exact expressions for the zeros of a
+polynomial (and thus is not possible for some operators).
+
+\begin{example}[An operator whose eigenvalues cannot be found
+exactly]\label{ax:5.28}
+Let $T\in\Lin(\C^5)$ be the operator defined by
+\[ T(z_1,z_2,z_3,z_4,z_5)=(-3z_5,\,z_1+6z_5,\,z_2,\,z_3,\,z_4). \]
+The matrix of $T$ with respect to the standard basis of $\C^5$ is the
+$5$-by-$5$ matrix in Example~\ref{ax:5.26}. As we showed in that example, the
+minimal polynomial of $T$ is the polynomial
+\[ 3-6z+z^5. \]
+
+No zero of the polynomial above can be expressed using rational numbers, roots
+of rational numbers, and the usual rules of arithmetic (a proof of this would
+take us considerably beyond linear algebra). Because the zeros of the
+polynomial above are the eigenvalues of $T$ [by \ref{ax:5.27}(a)], we cannot
+find an exact expression for any eigenvalue of $T$ in any familiar form.
+
+Numerical techniques, which we will not discuss here, show that the zeros of
+the polynomial above, and thus the eigenvalues of $T$, are approximately the
+following five complex numbers:
+\[ -1.67,\quad 0.51,\quad 1.40,\quad -0.12+1.59i,\quad -0.12-1.59i. \]
+Note that the two nonreal zeros of this polynomial are complex conjugates of
+each other, as we expect for a polynomial with real coefficients (see
+\ref{ax:4.14}).
+\end{example}
+
+The next result completely characterizes the polynomials that when applied to
+an operator give the $0$ operator.
+
+\begin{result}[$q(T)=0\iff q$ is a polynomial multiple of the minimal
+polynomial]\label{ax:5.29}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $q\in\Poly(\F)$. Then
+$q(T)=0$ if and only if $q$ is a polynomial multiple of the minimal polynomial
+of $T$.
+\end{result}
+
+\begin{proof}
+Let $p$ denote the minimal polynomial of $T$.
+
+First suppose $q(T)=0$. By the division algorithm for polynomials
+(\ref{ax:4.9}), there exist polynomials $s,r\in\Poly(\F)$ such that
+\[ q=ps+r \axeqtag\label{ax:5.30} \]
+and $\deg r<\deg p$. We have
+\[ 0=q(T)=p(T)s(T)+r(T)=r(T). \]
+The equation above implies that $r=0$ (otherwise, dividing $r$ by its
+highest-degree coefficient would produce a monic polynomial that when applied
+to $T$ gives $0$; this polynomial would have a smaller degree than the minimal
+polynomial, which would be a contradiction). Thus \ref{ax:5.30} becomes the
+equation $q=ps$. Hence $q$ is a polynomial multiple of $p$, as desired.
+
+To prove the other direction, now suppose $q$ is a polynomial multiple of $p$.
+Thus there exists a polynomial $s\in\Poly(\F)$ such that $q=ps$. We have
+\[ q(T)=p(T)s(T)=0\,s(T)=0, \]
+as desired.
+\end{proof}
+
+The next result is a nice consequence of the result above.
+
+\begin{result}[Minimal polynomial of a restriction operator]\label{ax:5.31}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $U$ is a subspace of
+$V$ that is invariant under $T$. Then the minimal polynomial of $T$ is a
+polynomial multiple of the minimal polynomial of $T|_U$.
+\end{result}
+
+\begin{proof}
+Suppose $p$ is the minimal polynomial of $T$. Thus $p(T)v=0$ for all $v\in V$.
+In particular,
+\[ p(T)u=0 \text{ for all } u\in U. \]
+Thus $p(T|_U)=0$. Now \ref{ax:5.29}, applied to the operator $T|_U$ in place
+of $T$, implies that $p$ is a polynomial multiple of the minimal polynomial of
+$T|_U$.
+\end{proof}
+
+See Exercise~25 for a result about quotient operators that is analogous to the
+result above.
+
+The next result shows that the constant term of the minimal polynomial of an
+operator determines whether the operator is invertible.
+
+\begin{result}[$T$ not invertible $\iff$ constant term of minimal polynomial
+of $T$ is $0$]\label{ax:5.32}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Then $T$ is not
+invertible if and only if the constant term of the minimal polynomial of $T$
+is $0$.
+\end{result}
+
+\begin{proof}
+Suppose $T\in\Lin(V)$ and $p$ is the minimal polynomial of $T$. Then
+\begin{align*}
+T \text{ is not invertible}
+  &\iff 0 \text{ is an eigenvalue of } T\\
+  &\iff 0 \text{ is a zero of } p\\
+  &\iff \text{the constant term of } p \text{ is } 0,
+\end{align*}
+where the first equivalence holds by \ref{ax:5.7}, the second equivalence
+holds by \ref{ax:5.27}(a), and the last equivalence holds because the constant
+term of $p$ equals $p(0)$.
+\end{proof}
+
+\subsection{Eigenvalues on Odd-Dimensional Real Vector Spaces}
+
+The next result will be the key tool that we use to show that every operator
+on an odd-dimensional real vector space has an eigenvalue.
+
+\begin{result}[Even-dimensional null space]\label{ax:5.33}
+Suppose $\F=\R$ and $V$ is finite-dimensional. Suppose also that
+$T\in\Lin(V)$ and $b,c\in\R$ with $b^2<4c$. Then $\dim\nul(T^2+bT+cI)$ is an
+even number.
+\end{result}
+
+\begin{proof}
+Recall that $\nul(T^2+bT+cI)$ is invariant under $T$ (by \ref{ax:5.18}). By
+replacing $V$ with $\nul(T^2+bT+cI)$ and replacing $T$ with $T$ restricted to
+$\nul(T^2+bT+cI)$, we can assume that $T^2+bT+cI=0$; we now need to prove
+that $\dim V$ is even.
+
+Suppose $\lambda\in\R$ and $v\in V$ are such that $Tv=\lambda v$. Then
+\[ 0=(T^2+bT+cI)v=(\lambda^2+b\lambda+c)v
+    =\Bigl((\lambda+\tfrac{b}{2})^2+c-\tfrac{b^2}{4}\Bigr)v. \]
+The term in large parentheses above is a positive number. Thus the equation
+above implies that $v=0$. Hence we have shown that $T$ has no eigenvectors.
+
+Let $U$ be a subspace of $V$ that is invariant under $T$ and has the largest
+dimension among all subspaces of $V$ that are invariant under $T$ and have
+even dimension. If $U=V$, then we are done; otherwise assume there exists
+$w\in V$ such that $w\notin U$.
+
+Let $W=\spn(w,Tw)$. Then $W$ is invariant under $T$ because
+$T(Tw)=-bTw-cw$. Furthermore, $\dim W=2$ because otherwise $w$ would be an
+eigenvector of $T$. Now
+\[ \dim(U+W)=\dim U+\dim W-\dim(U\cap W)=\dim U+2, \]
+where $U\cap W=\{0\}$ because otherwise $U\cap W$ would be a one-dimensional
+subspace of $V$ that is invariant under $T$ (impossible because $T$ has no
+eigenvectors).
+
+Because $U+W$ is invariant under $T$, the equation above shows that there
+exists a subspace of $V$ invariant under $T$ of even dimension larger than
+$\dim U$. Thus the assumption that $U\ne V$ was incorrect. Hence $V$ has even
+dimension.
+\end{proof}
+
+The next result states that on odd-dimensional vector spaces, every operator
+has an eigenvalue. We already know this result for finite-dimensional complex
+vector spaces (without the odd hypothesis). Thus in the proof below, we will
+assume that $\F=\R$.
+
+\begin{result}[Operators on odd-dimensional vector spaces have
+eigenvalues]\label{ax:5.34}
+Every operator on an odd-dimensional vector space has an eigenvalue.
+\end{result}
+
+\begin{proof}
+Suppose $\F=\R$ and $V$ is finite-dimensional. Let $n=\dim V$, and suppose
+$n$ is an odd number. Let $T\in\Lin(V)$. We will use induction on $n$ in steps
+of size two to show that $T$ has an eigenvalue. To get started, note that the
+desired result holds if $\dim V=1$ because then every nonzero vector in $V$ is
+an eigenvector of $T$.
+
+Now suppose that $n\ge3$ and the desired result holds for all operators on all
+odd-dimensional vector spaces of dimension less than $n$. Let $p$ denote the
+minimal polynomial of $T$. If $p$ is a polynomial multiple of $x-\lambda$ for
+some $\lambda\in\R$, then $\lambda$ is an eigenvalue of $T$ [by
+\ref{ax:5.27}(a)] and we are done. Thus we can assume that there exist
+$b,c\in\R$ such that $b^2<4c$ and $p$ is a polynomial multiple of $x^2+bx+c$
+(see \ref{ax:4.16}).
+
+There exists a monic polynomial $q\in\Poly(\R)$ such that
+$p(x)=q(x)(x^2+bx+c)$ for all $x\in\R$. Now
+\[ 0=p(T)=\bigl(q(T)\bigr)(T^2+bT+cI), \]
+which means that $q(T)$ equals $0$ on $\range(T^2+bT+cI)$. Because
+$\deg q<\deg p$ and $p$ is the minimal polynomial of $T$, this implies that
+$\range(T^2+bT+cI)\ne V$.
+
+The fundamental theorem of linear maps (\ref{ax:3.21}) tells us that
+\[ \dim V=\dim\nul(T^2+bT+cI)+\dim\range(T^2+bT+cI). \]
+Because $\dim V$ is odd (by hypothesis) and $\dim\nul(T^2+bT+cI)$ is even (by
+\ref{ax:5.33}), the equation above shows that $\dim\range(T^2+bT+cI)$ is odd.
+
+Hence $\range(T^2+bT+cI)$ is a subspace of $V$ that is invariant under $T$
+(by \ref{ax:5.18}) and that has odd dimension less than $\dim V$. Our
+induction hypothesis now implies that $T$ restricted to $\range(T^2+bT+cI)$
+has an eigenvalue, which means that $T$ has an eigenvalue.
+\end{proof}
+
+See Exercise~23 in Section~8B and Exercise~10 in Section~9C for alternative
+proofs of the result above.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{5B}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$. Prove that $9$ is an eigenvalue of $T^2$ if and only if
+$3$ or $-3$ is an eigenvalue of $T$.
+\end{exercise}
+\begin{solution}
+Suppose $9$ is an eigenvalue of $T^2$. Then there exists a nonzero vector
+$v\in V$ such that $T^2v=9v$. This implies $(T-3I)(T+3I)v=0$. Let
+$w=(T+3I)v$, and suppose $w\ne0$. Then
+\[ (T-3I)w=Tw-3w=0 \implies Tw=3w, \]
+showing that $3$ is an eigenvalue of $T$. If $w=0$, then $(T+3I)v=0$, which
+implies $Tv=-3v$, showing that $-3$ is an eigenvalue of $T$.
+
+Conversely, suppose $3$ is an eigenvalue of $T$. Then there exists a nonzero
+vector $v\in V$ such that $Tv=3v$. Applying $T$ again, we get
+$T^2v=T(3v)=3Tv=3\cdot3v=9v$, showing that $9$ is an eigenvalue of $T^2$.
+Similarly, if $-3$ is an eigenvalue of $T$, then $9$ is an eigenvalue of
+$T^2$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a complex vector space and $T\in\Lin(V)$ has no eigenvalues.
+Prove that every subspace of $V$ invariant under $T$ is either $\{0\}$ or
+infinite-dimensional.
+\end{exercise}
+\begin{solution}
+Suppose $U$ is a subspace of $V$ invariant under $T$. If $U=\{0\}$, we are
+done. Suppose $U$ is nonzero and finite-dimensional. By invariance of $U$
+under $T$, $T|_U\in\Lin(U)$, and $T|_U$ has an eigenvalue $\lambda\in\C$ with
+corresponding eigenvector $v\in U$, $v\ne0$. But then $v$ is also an
+eigenvector of $T$ with eigenvalue $\lambda$, contradicting the assumption
+that $T$ has no eigenvalues. Hence, any nonzero invariant subspace $U$ must be
+infinite-dimensional.
+\end{solution}
+
+\begin{exercise}
+Suppose $n$ is an integer with $n>1$ and $T\in\Lin(\F^n)$ is defined by
+\[ T(x_1,\dots,x_n)=(x_1+\cdots+x_n,\dots,x_1+\cdots+x_n). \]
+\begin{parts}
+\item Find all eigenvalues and eigenvectors of $T$.
+\item Find the minimal polynomial of $T$.
+\end{parts}
+\exnote{The matrix of $T$ with respect to the standard basis of $\F^n$
+consists of all $1$'s.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $T(x_1,\dots,x_n)=\lambda(x_1,\dots,x_n)$ for some
+  $\lambda\in\F$ and $(x_1,\dots,x_n)\ne0$. Then
+  \[ \lambda x_j=x_1+\cdots+x_n \quad\text{for all } j=1,\dots,n. \]
+  This implies that $\lambda x_1=\lambda x_2=\cdots=\lambda x_n$. If
+  $\lambda\ne0$, then $x_1=x_2=\cdots=x_n$, and we can write
+  $(x_1,\dots,x_n)=(x_1,\dots,x_1)=x_1(1,\dots,1)$. Substituting this into the
+  eigenvalue equation gives
+  \[ \lambda(x_1,\dots,x_1)=T(x_1,\dots,x_1)=(nx_1,\dots,nx_1), \]
+  which implies $\lambda=n$. If $\lambda=0$, then $x_1+\cdots+x_n=0$, and the
+  eigenvectors are all nonzero vectors $(x_1,\dots,x_n)$ such that
+  $x_1+\cdots+x_n=0$. Hence, the eigenvalues of $T$ are $0$ and $n$, with
+  corresponding eigenvectors as described.
+\item The minimal polynomial of $T$ must have roots at the eigenvalues of $T$,
+  which are $0$ and $n$. Therefore, the minimal polynomial is of the form
+  $p(z)=z(z-n)$. We claim that $p(T)=0$. To verify this, let
+  $x=x_1+\cdots+x_n$. Then
+  \[ T(x_1,\dots,x_n)=(x,\dots,x), \]
+  and
+  \[ (T-nI)(x_1,\dots,x_n)=(x-nx_1,\dots,x-nx_n). \]
+  Observe that $(x-nx_1)+\cdots+(x-nx_n)=nx-n(x_1+\cdots+x_n)=0$. Therefore,
+  $(T-nI)(x_1,\dots,x_n)$ lies in $\nul T$, and applying $T$ again gives
+  \[ T(T-nI)(x_1,\dots,x_n)=0. \]
+  Hence, $p(T)=T(T-nI)=0$. To see that this is minimal, note that
+  $T(1,\dots,1)=n(1,\dots,1)\ne0$, so $T\ne0$. Also,
+  $(T-nI)(1,0,\dots,0)=(1-n,1,\dots,1)\ne0$, so $T-nI\ne0$. Therefore, the
+  minimal polynomial of $T$ is indeed $p(z)=z(z-n)$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $\F=\C$, $T\in\Lin(V)$, $p\in\Poly(\C)$ is a nonconstant polynomial,
+and $\alpha\in\C$. Prove that $\alpha$ is an eigenvalue of $p(T)$ if and only
+if $\alpha=p(\lambda)$ for some eigenvalue $\lambda$ of $T$.
+\end{exercise}
+\begin{solution}
+Suppose $\alpha$ is an eigenvalue of $p(T)$. Then there exists a nonzero
+vector $v\in V$ such that $p(T)v=\alpha v$. Then $p(T)-\alpha I$ is not
+injective. By the Fundamental Theorem of Algebra, we can factor $p(z)-\alpha$
+as
+\[ p(z)-\alpha=c(z-\lambda_1)(z-\lambda_2)\cdots(z-\lambda_m) \]
+for some $c\in\C\setminus\{0\}$ and $\lambda_1,\dots,\lambda_m\in\C$. Then
+\[ p(T)-\alpha I=c(T-\lambda_1I)(T-\lambda_2I)\cdots(T-\lambda_mI). \]
+Since $p(T)-\alpha I$ is not injective, at least one of the factors on the
+right-hand side is not injective. Therefore, $T-\lambda_jI$ is not injective
+for some $j$, which means $\lambda_j$ is an eigenvalue of $T$. Then
+$p(\lambda_j)-\alpha=0$, so $\alpha=p(\lambda_j)$ for some eigenvalue
+$\lambda_j$ of $T$.
+
+Conversely, if $\alpha=p(\lambda)$ for some eigenvalue $\lambda$ of $T$ with
+corresponding eigenvector $v$, then by $T^mv=\lambda^mv$ for any polynomial
+$p(z)=a_mz^m+\cdots+a_1z+a_0$, we have
+\[ p(T)v=a_mT^mv+\cdots+a_1Tv+a_0v=a_m\lambda^mv+\cdots+a_1\lambda v+a_0v
+   =p(\lambda)v=\alpha v. \]
+Hence, $\alpha$ is an eigenvalue of $p(T)$.
+\end{solution}
+
+\begin{exercise}
+Give an example of an operator on $\R^2$ that shows the result in Exercise~4
+does not hold if $\C$ is replaced with $\R$.
+\end{exercise}
+\begin{solution}
+Consider the operator $T\in\Lin(\R^2)$ defined by $T(x,y)=(-y,x)$, which
+represents a counterclockwise rotation by $90^\circ$. Observe that $T$ has no
+real eigenvalues as follows: If $(x,y)$ is an eigenvector of $T$ with
+eigenvalue $\lambda\in\R$, then $T(x,y)=\lambda(x,y)$ implies
+$(-y,x)=(\lambda x,\lambda y)$. This gives the system of equations:
+\[ -y=\lambda x \quad\text{and}\quad x=\lambda y. \]
+Since $x$ and $y$ cannot both be zero, one can work out that $\lambda^2=-1$,
+which has no real solutions. Therefore, $T$ has no real eigenvalues. Now
+consider the polynomial $p(z)=z^2+1$. Then
+\[ p(T)(x,y)=T^2(x,y)+(x,y)=(-x,-y)+(x,y)=(0,0). \]
+Thus, $0$ is an eigenvalue of $p(T)$ with corresponding eigenvector $(1,0)$
+(or any nonzero vector in $\R^2$). However, there is no real eigenvalue
+$\lambda$ of $T$ such that $p(\lambda)=0$, since the eigenvalues of $T$ are
+complex. This example demonstrates that the result in Exercise~5B4 does not
+hold when $\C$ is replaced with $\R$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(\F^2)$ is defined by $T(w,z)=(-z,w)$. Find the minimal
+polynomial of $T$.
+\end{exercise}
+\begin{solution}
+By the computation done in Exercise~5B5, we have $T^2(w,z)=(-w,-z)$, so
+$T^2+I=0$. Therefore, the polynomial $p(z)=z^2+1$ annihilates $T$. To see that
+this is the minimal polynomial, suppose $T=\alpha I$. Then
+$T(1,0)=(0,1)\ne\alpha(1,0)$ for any $\alpha\in\F$, so $T\ne\alpha I$. Hence,
+the minimal polynomial of $T$ is $p(z)=z^2+1$.
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Give an example of $S,T\in\Lin(\F^2)$ such that the minimal polynomial
+  of $ST$ does not equal the minimal polynomial of $TS$.
+\item Suppose $V$ is finite-dimensional and $S,T\in\Lin(V)$. Prove that if at
+  least one of $S,T$ is invertible, then the minimal polynomial of $ST$ equals
+  the minimal polynomial of $TS$.
+\end{parts}
+\exnote{Hint: Show that if $S$ is invertible and $p\in\Poly(\F)$, then
+$p(TS)=S^{-1}p(ST)S$.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Consider the operators $S,T\in\Lin(\F^2)$ defined by $S(w,z)=(0,w)$ and
+  $T(w,z)=(w,0)$. Then
+  \[ ST(w,z)=S(w,0)=(0,w) \quad\text{and}\quad TS(w,z)=T(0,w)=(0,0). \]
+  The minimal polynomial of $ST$ is $p(z)=z^2$, since $ST\ne0$ but
+  $(ST)^2=0$, while the minimal polynomial of $TS$ is $q(z)=z$. Hence, the
+  minimal polynomials of $ST$ and $TS$ are not equal.
+\item Suppose $S$ is invertible. We claim that $(TS)^n=S^{-1}(ST)^nS$ for all
+  positive integers $n$. We prove this by induction on $n$. For the base case
+  $n=1$, we have $(TS)^1=TS=S^{-1}(ST)S$. Now suppose the claim holds for some
+  positive integer $k$, i.e., $(TS)^k=S^{-1}(ST)^kS$. Then
+  \[ (TS)^{k+1}=(TS)^k(TS)=S^{-1}(ST)^kS(TS)=S^{-1}(ST)^k(ST)S
+     =S^{-1}(ST)^{k+1}S. \]
+  By induction, the claim holds for all positive integers $n$. Let
+  $p=z^m+a_{m-1}z^{m-1}+\cdots+a_1z+a_0$ be the minimal polynomial of $ST$.
+  Then
+  \begin{align*}
+  p(TS) &= (TS)^m+a_{m-1}(TS)^{m-1}+\cdots+a_1(TS)+a_0I\\
+        &= S^{-1}(ST)^mS+a_{m-1}S^{-1}(ST)^{m-1}S+\cdots+a_1S^{-1}(ST)S
+           +S^{-1}(a_0I)S\\
+        &= S^{-1}\bigl((ST)^m+a_{m-1}(ST)^{m-1}+\cdots+a_1(ST)+a_0I\bigr)S\\
+        &= S^{-1}p(ST)S=0,
+  \end{align*}
+  where $S^{-1}S=I$ implies $S^{-1}(a_0I)S=a_0I$. Hence, $p$ annihilates $TS$,
+  and since $p$ is the minimal polynomial of $ST$, it follows that the minimal
+  polynomial $q$ of $TS$ divides $p$. Observing that $ST=S(TS)S^{-1}$, we can
+  similarly show that $q$ annihilates $ST$, and thus $p$ divides $q$.
+  Therefore, $p=q$, and the minimal polynomials of $ST$ and $TS$ are equal.
+  \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(\R^2)$ is the operator of counterclockwise rotation by
+$1^\circ$. Find the minimal polynomial of $T$.
+\exnote{Because $\dim\R^2=2$, the degree of the minimal polynomial of $T$ is
+at most $2$. Thus the minimal polynomial of $T$ is not the tempting polynomial
+$x^{180}+1$, even though $T^{180}=-I$.}
+\end{exercise}
+\begin{solution}
+Since $T\ne0$, the minimal polynomial of $T$ is not linear. Moreover,
+$\dim\R^2=2$ implies that the degree of the minimal polynomial of $T$ must be
+$2$. Therefore, the minimal polynomial of $T$ is of the form
+\[ p(z)=z^2+bz+c. \]
+Consider the point $(1,0)\in\R^2$. Note that
+$T(x,y)=(x\cos1^\circ-y\sin1^\circ,\,x\sin1^\circ+y\cos1^\circ)$. Then
+\[ T(1,0)=(\cos1^\circ,\sin1^\circ),\quad T^2(1,0)=(\cos2^\circ,\sin2^\circ). \]
+Since $p(T)=0$, we have
+\begin{align*}
+p(T)(1,0) &= T^2(1,0)+bT(1,0)+c(1,0)\\
+          &= (\cos2^\circ+b\cos1^\circ+c,\,\sin2^\circ+b\sin1^\circ)=(0,0).
+\end{align*}
+This gives the system of equations:
+\[ \begin{cases} \cos2^\circ+b\cos1^\circ+c=0,\\
+   \sin2^\circ+b\sin1^\circ=0. \end{cases} \]
+From this, we get the values of $b$ and $c$:
+\[ b=-\frac{\sin2^\circ}{\sin1^\circ}=-2\cos1^\circ,\quad
+   c=-\cos2^\circ-b\cos1^\circ=1. \]
+Therefore, the minimal polynomial of $T$ is $p(z)=z^2-2\cos1^\circ z+1$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is such that with respect to some basis of $V$, all
+entries of the matrix of $T$ are rational numbers. Explain why all
+coefficients of the minimal polynomial of $T$ are rational numbers.
+\end{exercise}
+\begin{solution}
+Let $A$ be the matrix of $T$ with respect to some basis of $V$. Since all
+entries of $A$ are rational numbers, $A^k$ also has rational entries for any
+positive integer $k$. Then the minimal polynomial
+$p(z)=z^m+a_{m-1}z^{m-1}+\cdots+a_1z+a_0$ of $T$ in terms of the matrix $A$
+satisfies
+\[ p(A)=A^m+a_{m-1}A^{m-1}+\cdots+a_1A+a_0I=0. \]
+Then this gives a system of $(\dim V)^2$ linear equations in the coefficients
+$a_0,a_1,\allowbreak\dots,a_{m-1}$ with rational coefficients. By uniqueness of the
+minimal polynomial, this system has a unique solution. Since the system has
+rational coefficients and a unique solution, the solution must also be
+rational. Therefore, all coefficients of the minimal polynomial of $T$ are
+rational numbers.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $v\in V$. Prove that
+\[ \spn(v,Tv,\dots,T^mv)=\spn(v,Tv,\dots,T^{\dim V-1}v) \]
+for all integers $m\ge\dim V-1$.
+\end{exercise}
+\begin{solution}
+Let $n=\dim V$ and let $p(z)=z^d+a_{d-1}z^{d-1}+\cdots+a_0$ be the minimal
+polynomial of $T$. Then $d\le n$ and $p(T)=0$. For any $v\in V$,
+\begin{multline*}
+p(T)v=0 \implies T^dv=-a_{d-1}T^{d-1}v-\cdots-a_1Tv-a_0v\\
+  \implies T^dv\in\spn(v,Tv,\dots,T^{d-1}v).
+\end{multline*}
+Let $U=\spn(v,Tv,\dots,T^{d-1}v)$.
+
+We claim that $U$ is invariant under $T$. Take any
+$u=c_0v+c_1Tv+\cdots+c_{d-1}T^{d-1}v\in U$. Then,
+\[ Tu=c_0Tv+c_1T^2v+\cdots+c_{d-2}T^{d-1}v+c_{d-1}T^dv. \]
+Every term on the right-hand side except $T^dv$ is automatically in the
+spanning set of $U$. We also showed that $T^dv\in U$ earlier, so $Tu\in U$.
+Hence, $T(U)\subseteq U$.
+
+Because $v\in U$ and $U$ is invariant under $T$, we see that $T^mv\in U$ for
+every $m\ge0$ (this is immediate by induction). So, for any $m\ge n-1$, we
+have that
+\[ \spn(v,Tv,\dots,T^mv)\subseteq U\subseteq\spn(v,Tv,\dots,T^{n-1}v) \]
+by using $d-1\le n-1$ to obtain the second inclusion. Since
+$\{v,Tv,\dots,T^{n-1}v\}\subseteq\{v,Tv,\dots,T^mv\}$, the reverse inclusion
+is immediate, and so
+\[ \spn(v,Tv,\dots,T^mv)=\spn(v,Tv,\dots,T^{n-1}v). \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a two-dimensional vector space, $T\in\Lin(V)$, and the matrix
+of $T$ with respect to some basis of $V$ is
+$\begin{pmatrix} a & c\\ b & d \end{pmatrix}$.
+\begin{parts}
+\item Show that $T^2-(a+d)T+(ad-bc)I=0$.
+\item Show that the minimal polynomial of $T$ equals
+  \[ \begin{cases} z-a & \text{if } b=c=0 \text{ and } a=d,\\
+     z^2-(a+d)z+(ad-bc) & \text{otherwise}. \end{cases} \]
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item We compute $T^2$:
+  \[ T^2=\begin{pmatrix} a & c\\ b & d \end{pmatrix}
+         \begin{pmatrix} a & c\\ b & d \end{pmatrix}
+        =\begin{pmatrix} a^2+bc & ac+cd\\ ab+bd & bc+d^2 \end{pmatrix}. \]
+  Then
+  \begin{align*}
+  &T^2-(a+d)T+(ad-bc)I\\
+  &\quad=\begin{pmatrix} a^2+bc & ac+cd\\ ab+bd & bc+d^2 \end{pmatrix}
+     -(a+d)\begin{pmatrix} a & c\\ b & d \end{pmatrix}
+     +(ad-bc)\begin{pmatrix} 1 & 0\\ 0 & 1 \end{pmatrix}\\
+  &\quad=\begin{pmatrix} a^2+bc-(a+d)a+ad-bc & ac+cd-(a+d)c\\
+     ab+bd-(a+d)b & bc+d^2-(a+d)d+ad-bc \end{pmatrix}\\
+  &\quad=\begin{pmatrix} a^2+bc-a^2-ad+ad-bc & ac+cd-ac-cd\\
+     ab+bd-ab-bd & bc+d^2-d^2-ad+ad-bc \end{pmatrix}\\
+  &\quad=\begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix}.
+  \end{align*}
+\item If $b=c=0$ and $a=d$, then the matrix of $T$ is
+  \[ \begin{pmatrix} a & 0\\ 0 & a \end{pmatrix}, \]
+  which is a scalar multiple of the identity matrix. In this case, the minimal
+  polynomial of $T$ is $z-a$.
+
+  Otherwise, the polynomial $z^2-(a+d)z+(ad-bc)$ annihilates $T$ by part (a).
+  To see that this is the minimal polynomial, we need to check that $T$ is not
+  a scalar multiple of the identity matrix. If $T$ were a scalar multiple of
+  the identity matrix, then we would have $b=c=0$ and $a=d$, which contradicts
+  our assumption. Therefore, the minimal polynomial of $T$ has degree $2$ and
+  is $z^2-(a+d)z+(ad-bc)$ in this case. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Define $T\in\Lin(\F^n)$ by
+$T(x_1,x_2,x_3,\dots,x_n)=(x_1,2x_2,3x_3,\dots,nx_n)$. Find the minimal
+polynomial of $T$.
+\end{exercise}
+\begin{solution}
+By Exercise~5A42, the eigenvalues of $T$ are $1,2,\dots,n$, whose eigenvectors
+are scalar multiples of the standard basis vectors $e_1,e_2,\dots,e_n$. The
+minimal polynomial of $T$ must have roots at the eigenvalues of $T$, which are
+$1,2,\dots,n$. Therefore, the minimal polynomial is of the form
+$p(z)=(z-1)(z-2)\cdots(z-n)$. To verify that this is indeed the minimal
+polynomial, we can check that $p(T)=0$. Observe that $p(T)e_j=0$ for each
+$j=1,2,\dots,n$, since $Te_j=je_j$ and thus $(T-jI)e_j=0$. Since
+$\{e_1,e_2,\dots,e_n\}$ establishes a basis for $\F^n$, it follows that
+$p(T)=0$. Therefore, the minimal polynomial of $T$ is divisible by
+$(z-1)(z-2)\cdots(z-n)$ and has degree $n$.
+
+To see that this is minimal, note that if we remove any factor $(z-k)$ from
+$p(z)$, the resulting polynomial would not annihilate $T$ and would result in
+$(k-1)(k-2)\cdots\bigl(k-(k-1)\bigr)\bigl(k-(k+1)\bigr)\cdots(k-n)\ne0$ when
+applied to $e_k$. Therefore, the minimal polynomial of $T$ is
+$p(z)=(z-1)(z-2)\cdots(z-n)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $p\in\Poly(\F)$. Prove
+that there exists a unique $r\in\Poly(\F)$ such that $p(T)=r(T)$ and $\deg r$
+is less than the degree of the minimal polynomial of $T$.
+\end{exercise}
+\begin{solution}
+Let $m$ be the minimal polynomial of $T$ with degree $d$. By the Division
+Algorithm for polynomials, we can write
+\[ p(z)=q(z)m(z)+r(z), \]
+where $q,r\in\Poly(\F)$ and $\deg r<d$. Applying this to $T$, we have
+\[ p(T)=q(T)m(T)+r(T). \]
+Since $m(T)=0$, it follows that
+\[ p(T)=r(T). \]
+Thus, there exists a polynomial $r$ such that $p(T)=r(T)$ and $\deg r<d$.
+
+To show uniqueness, suppose there exists another polynomial $s\in\Poly(\F)$
+such that $p(T)=s(T)$ and $\deg s<d$. Then we have
+\[ r(T)=p(T)=s(T). \]
+This implies that $(r-s)(T)=0$. Since $\deg(r-s)<d$, it follows that $r-s$
+must be the zero polynomial (otherwise, it would contradict the minimality of
+$m$). Hence, $r=s$, proving uniqueness.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$ has minimal polynomial
+$4+5z-6z^2-7z^3+2z^4+z^5$. Find the minimal polynomial of $T^{-1}$.
+\end{exercise}
+\begin{solution}
+Let $p(z)=4+5z-6z^2-7z^3+2z^4+z^5$ be the minimal polynomial of $T$. We want
+to find the minimal polynomial of $T^{-1}$. Since $p(z)$ is the minimal
+polynomial of $T$, we have
+\[ p(T)=4I+5T-6T^2-7T^3+2T^4+T^5=0. \]
+To find the minimal polynomial of $T^{-1}$, apply $T^{-1}$ to both sides of
+the equation until we express it in terms of $T^{-1}$:
+\[ 4T^{-5}+5T^{-4}-6T^{-3}-7T^{-2}+2T^{-1}+I=0. \]
+Then the polynomial $q(z)=4z^5+5z^4-6z^3-7z^2+2z+1$ annihilates $T^{-1}$. To
+make it monic, we can divide by the leading coefficient:
+\[ q(z)=z^5+5/4z^4-3/2z^3-7/4z^2+1/2z+1/4. \]
+Moreover, suppose $T^{-1}$ has a minimal polynomial $r(z)$ of degree less than
+$5$. Then $r(T^{-1})=0$, which implies that $r(T)=0$ as well, contradicting
+the minimality of $p(z)$. Hence, the minimal polynomial of $T^{-1}$ is $q(z)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a finite-dimensional complex vector space with $\dim V>0$ and
+$T\in\Lin(V)$. Define $f\colon\C\to\R$ by
+\[ f(\lambda)=\dim\range(T-\lambda I). \]
+Prove that $f$ is not a continuous function.
+\end{exercise}
+\begin{solution}
+Since $V$ is a finite-dimensional complex vector space, the operator $T$ has
+at least one eigenvalue $\lambda_0\in\C$. By Exercise~5A11, there exists
+$\delta>0$ such that $T-\lambda I$ is invertible for all $\lambda\in\C$ with
+$0<\abs{\lambda-\lambda_0}<\delta$. This implies that for all such $\lambda$,
+we have $\dim\range(T-\lambda I)=\dim V$. However, at the eigenvalue
+$\lambda_0$, we have $\dim\range(T-\lambda_0I)<\dim V$ since the nullity is
+positive. Therefore, the function $f$ has a jump discontinuity at
+$\lambda_0$, and thus $f$ is not continuous.
+\end{solution}
+
+\begin{exercise}
+Suppose $a_0,\dots,a_{n-1}\in\F$. Let $T$ be the operator on $\F^n$ whose
+matrix (with respect to the standard basis) is
+\[ \begin{pmatrix}
+  0 &   &        &   & -a_0\\
+  1 & 0 &        &   & -a_1\\
+    & 1 & \ddots &   & -a_2\\
+    &   & \ddots &   & \vdots\\
+    &   &        & 0 & -a_{n-2}\\
+    &   &        & 1 & -a_{n-1}
+\end{pmatrix}. \]
+Here all entries of the matrix are $0$ except for all $1$'s on the line under
+the diagonal and the entries in the last column (some of which might also be
+$0$). Show that the minimal polynomial of $T$ is the polynomial
+\[ a_0+a_1z+\cdots+a_{n-1}z^{n-1}+z^n. \]
+\exnote{The matrix above is called the \textbf{companion matrix} of the
+polynomial above. This exercise shows that every monic polynomial is the
+minimal polynomial of some operator. Hence a formula or an algorithm that
+could produce exact eigenvalues for each operator on each $\F^n$ could then
+produce exact zeros for each polynomial [by \ref{ax:5.27}(a)]. Thus there is
+no such formula or algorithm. However, efficient numerical methods exist for
+obtaining very good approximations for the eigenvalues of an operator.}
+\end{exercise}
+\begin{solution}
+Let $p(z)=a_0+a_1z+\cdots+a_{n-1}z^{n-1}+z^n$. Let $e_1,\dots,e_n$ be the
+standard basis of $\F^n$. We will show that $p(T)=0$ and that no polynomial of
+lower degree annihilates $T$. First, we compute $T^ke_1$ for $k=0,1,\dots,n$:
+\begin{gather*}
+T^0e_1=e_1,\quad T^1e_1=e_2,\quad T^2e_1=e_3,\quad\dots,\quad
+T^{n-1}e_1=e_n,\\
+T^ne_1=-a_0e_1-a_1e_2-\cdots-a_{n-1}e_n.
+\end{gather*}
+Then we have
+\begin{align*}
+p(T)e_1 &= a_0T^0e_1+a_1T^1e_1+\cdots+a_{n-1}T^{n-1}e_1+T^ne_1\\
+        &= a_0e_1+a_1e_2+\cdots+a_{n-1}e_n-a_0e_1-a_1e_2-\cdots-a_{n-1}e_n\\
+        &= 0.
+\end{align*}
+Since $T^{j-1}e_1=e_j$ for $j=1,2,\dots,n$, and $p(T)$ commutes with $T$, we
+have
+\[ p(T)e_j=p(T)T^{j-1}e_1=T^{j-1}p(T)e_1=T^{j-1}0=0 \]
+for all $j=1,2,\dots,n$. Since $\{e_1,e_2,\dots,e_n\}$ is a basis for $\F^n$,
+it follows that $p(T)=0$.
+
+To show that $p$ is the minimal polynomial, suppose there exists a polynomial
+$q(z)=b_0+b_1z+\cdots+b_{m-1}z^{m-1}+z^m$ of degree $m<n$ such that $q(T)=0$.
+Then we would have
+\[ q(T)e_1=b_0e_1+b_1e_2+\cdots+b_{m-1}e_m+T^me_1=0. \]
+However, $T^me_1=e_{m+1}$, which is not in the span of $\{e_1,e_2,\dots,e_m\}$
+since $m<n$. This leads to a contradiction, as $e_{m+1}$ cannot be expressed
+as a linear combination of $e_1,e_2,\dots,e_m$. Therefore, no polynomial of
+degree less than $n$ annihilates $T$, and the minimal polynomial of $T$ is
+indeed $p(z)=a_0+a_1z+\cdots+a_{n-1}z^{n-1}+z^n$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $p$ is the minimal
+polynomial of $T$. Suppose $\lambda\in\F$. Show that the minimal polynomial of
+$T-\lambda I$ is the polynomial $q$ defined by $q(z)=p(z+\lambda)$.
+\end{exercise}
+\begin{solution}
+Let $p(z)$ be the minimal polynomial of $T$. Then we have
+\[ p(T)=0. \]
+Consider the polynomial $q(z)=p(z+\lambda)$. Then we have
+\[ q(T-\lambda I)=p\bigl((T-\lambda I)+\lambda I\bigr)=p(T)=0. \]
+Thus, $q$ annihilates $T-\lambda I$.
+
+To show that $q$ is the minimal polynomial, suppose there exists a polynomial
+$r(z)$ of degree less than $\deg q$ such that $r(T-\lambda I)=0$. Then we can
+write
+\[ r(z)=s(z+\lambda) \]
+for some polynomial $s(z)$ of degree less than $\deg p$. Then we have
+\[ r(T-\lambda I)=s\bigl((T-\lambda I)+\lambda I\bigr)=s(T)=0. \]
+However, this contradicts the minimality of $p$, since $\deg s<\deg p$ and
+$s(T)=0$. Therefore, no polynomial of degree less than $\deg q$ annihilates
+$T-\lambda I$, and the minimal polynomial of $T-\lambda I$ is indeed
+$q(z)=p(z+\lambda)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $p$ is the minimal
+polynomial of $T$. Suppose $\lambda\in\F\setminus\{0\}$. Show that the minimal
+polynomial of $\lambda T$ is the polynomial $q$ defined by
+$q(z)=\lambda^{\deg p}\,p\Bigl(z/\lambda\Bigr)$.
+\end{exercise}
+\begin{solution}
+Let $p(z)$ be the minimal polynomial of $T$. Then we have
+\[ p(T)=0. \]
+Consider the polynomial $q(z)=\lambda^{\deg p}p(z/\lambda)$. Then we
+have
+\[ q(\lambda T)=\lambda^{\deg p}p\Bigl(\frac{\lambda T}{\lambda}\Bigr)
+   =\lambda^{\deg p}p(T)=0. \]
+Moreover, $q$ has leading term
+$\lambda^{\deg p}(z/\lambda)^{\deg p}=z^{\deg p}$, so $q$ is monic and
+has the same degree as $p$. To show that $q$ is the minimal polynomial,
+suppose there exists a polynomial $r(z)$ of degree less than $\deg q$ such
+that $r(\lambda T)=0$. Define $s(z)=r(\lambda z)$. Then we have
+\[ s(T)=r(\lambda T)=0. \]
+However, $\deg s=\deg r<\deg q=\deg p$, which contradicts the minimality of
+$p$. Therefore, no polynomial of degree less than $\deg q$ annihilates
+$\lambda T$, and the minimal polynomial of $\lambda T$ is indeed
+$q(z)=\lambda^{\deg p}p(z/\lambda)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Let $\mathcal{E}$ be the
+subspace of $\Lin(V)$ defined by
+\[ \mathcal{E}=\{q(T) : q\in\Poly(\F)\}. \]
+Prove that $\dim\mathcal{E}$ equals the degree of the minimal polynomial of
+$T$.
+\end{exercise}
+\begin{solution}
+Let $p(z)$ be the minimal polynomial of $T$ with degree $d$. We will show that
+$\dim\mathcal{E}=d$.
+
+First, we show that $\dim\mathcal{E}\le d$. By the Division Algorithm for
+polynomials, for any polynomial $q\in\Poly(\F)$, we can write
+\[ q(z)=s(z)p(z)+r(z), \]
+where $s,r\in\Poly(\F)$ and $\deg r<d$. Then we have
+\[ q(T)=s(T)p(T)+r(T)=0+r(T)=r(T). \]
+Since $\deg r<d$, the set $\{I,T,T^2,\dots,T^{d-1}\}$ spans $\mathcal{E}$.
+Hence, $\dim\mathcal{E}\le d$.
+
+Next, we show that $\dim\mathcal{E}\ge d$. Suppose there exists a nontrivial
+linear combination of $\{I,T,T^2,\dots,T^{d-1}\}$ that equals zero:
+\[ a_0I+a_1T+a_2T^2+\cdots+a_{d-1}T^{d-1}=0. \]
+This would imply that the polynomial
+\[ q(z)=a_0+a_1z+a_2z^2+\cdots+a_{d-1}z^{d-1} \]
+annihilates $T$, contradicting the minimality of $p(z)$ since $\deg q<d$.
+Therefore, the set $\{I,T,T^2,\dots,T^{d-1}\}$ is linearly independent in
+$\mathcal{E}$, which implies that $\dim\mathcal{E}\ge d$.
+
+Combining both inequalities, we conclude that $\dim\mathcal{E}=d$, which is
+the degree of the minimal polynomial of $T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(\F^4)$ is such that the eigenvalues of $T$ are $3,5,8$.
+Prove that $(T-3I)^2(T-5I)^2(T-8I)^2=0$.
+\end{exercise}
+\begin{solution}
+Let $p(z)$ be the minimal polynomial of $T$. Since the eigenvalues of $T$ are
+$3,5,8$, the minimal polynomial must have these roots. Therefore, we can write
+\[ p(z)=(z-3)^{m_1}(z-5)^{m_2}(z-8)^{m_3}, \]
+where $m_1,m_2,m_3\ge1$ are the multiplicities of the eigenvalues in the
+minimal polynomial.
+
+Since $T\in\Lin(\F^4)$, the degree of the minimal polynomial cannot exceed
+$\dim\F^4=4$. Thus, we have
+\[ m_1+m_2+m_3\le4. \]
+
+To show that $(T-3I)^2(T-5I)^2(T-8I)^2=0$, we need to show that each
+$m_i\le2$. Without loss of generality, suppose $m_1\ge3$. Then
+$m_2+m_3\le1$, which implies that at least one of $m_2$ or $m_3$ is equal to
+$0$, contradicting the fact that both $5$ and $8$ are eigenvalues of $T$.
+Hence, $m_1\le2$. By similar reasoning, we can conclude that $m_2\le2$ and
+$m_3\le2$.
+
+Therefore, we have $m_1,m_2,m_3\le2$. Then $p(z)$ divides
+$(z-3)^2(z-5)^2(z-8)^2$ for some polynomial $q(z)$, and thus
+\[ (T-3I)^2(T-5I)^2(T-8I)^2=q(T)p(T)=q(T)\cdot0=0. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that the minimal
+polynomial of $T$ has degree at most $1+\dim\range T$.
+\exnote{If $\dim\range T<\dim V-1$, then this exercise gives a better upper
+bound than \ref{ax:5.22} for the degree of the minimal polynomial of $T$.}
+\end{exercise}
+\begin{solution}
+Let $r=\dim\range T$. Observe that $\range T$ is invariant under $T$, and we
+can consider the restriction of $T$ to $\range T$, denoted by
+$T|_{\range T}$. Let $p(z)$ be the minimal polynomial of $T$ and let $q(z)$ be
+the minimal polynomial of $T|_{\range T}$. Then $\deg q\le r$ since
+$T|_{\range T}$ is an operator on a space of dimension $r$.
+
+We now show that the polynomial $zq(z)$ annihilates $T$. For any $v\in V$, we
+know that $Tv\in\range T$. By invariance, we know that $w\in\range T$ implies
+$(T|_{\range T})^kw\in\range T$ for any $k\ge0$. Then
+\[ q(T)w=q(T|_{\range T})w=0. \]
+Therefore, for any $v\in V$, we have
+\[ zq(z)(T)v=Tq(T)v=q(T)Tv=T\cdot0=0, \]
+where we used the fact that $T$ commutes with $q(T)$ since $q(T)$ is a
+polynomial in $T$. This shows that $zq(z)$ annihilates $T$, and hence the
+minimal polynomial $p(z)$ of $T$ divides $zq(z)$. Since $\deg q\le r$, we have
+$\deg p\le1+r=1+\dim\range T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that $T$ is
+invertible if and only if $I\in\spn(T,T^2,\dots,T^{\dim V})$.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is invertible. Let $q(z)$ be the minimal polynomial of $T$. Since
+$T$ is invertible, $0$ is not an eigenvalue of $T$, and thus $q(0)\ne0$. We
+may write $q(z)$ as
+\[ q(z)=z^m+a_{m-1}z^{m-1}+\cdots+a_1z+a_0, \]
+where $a_0\ne0$ and $m\le\dim V$. Then we have
+\[ 0=q(T)=T^m+a_{m-1}T^{m-1}+\cdots+a_1T+a_0I. \]
+Rearranging gives
+\begin{align*}
+I &= -\frac{1}{a_0}(T^m+a_{m-1}T^{m-1}+\cdots+a_1T)\\
+  &\in \spn(T,T^2,\dots,T^m)\subseteq\spn(T,T^2,\dots,T^{\dim V}).
+\end{align*}
+Hence, if $T$ is invertible, then $I\in\spn(T,T^2,\dots,T^{\dim V})$.
+
+Conversely, suppose $I\in\spn(T,T^2,\dots,T^{\dim V})$. Then there exist
+scalars $a_1,a_2,\allowbreak\dots,a_{\dim V}$ such that
+\[ I=a_1T+a_2T^2+\cdots+a_{\dim V}T^{\dim V}. \]
+Rearranging gives
+\[ 0=-I+a_1T+a_2T^2+\cdots+a_{\dim V}T^{\dim V}=p(T), \]
+where $p(z)=-1+a_1z+a_2z^2+\cdots+a_{\dim V}z^{\dim V}$. Since the minimal
+polynomial of $T$ divides any polynomial that annihilates $T$, the minimal
+polynomial of $T$ must also have a nonzero constant term. Therefore, $0$ is
+not an eigenvalue of $T$, and hence $T$ is invertible.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Let $n=\dim V$. Prove
+that if $v\in V$, then $\spn(v,Tv,\dots,T^{n-1}v)$ is invariant under $T$.
+\end{exercise}
+\begin{solution}
+Let $W=\spn(v,Tv,\dots,T^{n-1}v)$. To show that $W$ is invariant under $T$, we
+may show that $Tv,T^2v,\dots,T^nv\in W$. Observe that $Tv$, $T(Tv)=T^2v$,
+$T(T^2v)=T^3v$, \dots, $T(T^{n-2}v)=T^{n-1}v$ are all in $W$ by definition. It
+remains to show that $T^nv\in W$.
+
+Let $p(z)$ be the minimal polynomial of $T$. Let $m=\deg p$. Since $m\le n$,
+we have
+\[ p(T)v=T^mv+a_{m-1}T^{m-1}v+\cdots+a_1Tv+a_0v=0. \]
+Rearranging gives
+\[ T^mv=-a_{m-1}T^{m-1}v-\cdots-a_1Tv-a_0v\in W. \]
+If $m=n$, then we are done. If $m<n$, then we can apply $T^{n-m}$ to both
+sides to get
+\[ T^nv=-a_{m-1}T^{n-1}v-\cdots-a_1T^{n-m+1}v-a_0T^{n-m}v\in W, \]
+where we used the fact that $T^{n-m}v,T^{n-m+1}v,\dots,T^{n-1}v\in W$ since
+$n-m<n$. Therefore, $T^nv\in W$, and hence $W$ is invariant under $T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a finite-dimensional complex vector space. Suppose
+$T\in\Lin(V)$ is such that $5$ and $6$ are eigenvalues of $T$ and that $T$ has
+no other eigenvalues. Prove that $(T-5I)^{\dim V-1}(T-6I)^{\dim V-1}=0$.
+\end{exercise}
+\begin{solution}
+Let $n=\dim V$. Since $5$ and $6$ are the only eigenvalues of $T$, the minimal
+polynomial of $T$ must be of the form
+\[ p(z)=(z-5)^{m_1}(z-6)^{m_2}, \]
+where $m_1,m_2\ge1$ are the multiplicities of the eigenvalues in the minimal
+polynomial.
+
+Since $T\in\Lin(V)$, we have $\deg p\le n$. Therefore, we have
+\[ m_1+m_2\le n. \]
+
+To show that $(T-5I)^{n-1}(T-6I)^{n-1}=0$, we need to show that each
+$m_i\le n-1$. Suppose $m_1\ge n$. Then $m_2\le0$, which contradicts the fact
+that $6$ is an eigenvalue of $T$. Hence, $m_1\le n-1$. By similar reasoning,
+we can conclude that $m_2\le n-1$.
+
+Therefore, we have $m_1,m_2\le n-1$. Then $p(z)$ divides
+$(z-5)^{n-1}(z-6)^{n-1}$, so there exists a polynomial $q(z)$ such that
+$p(z)q(z)=(z-5)^{n-1}(z-6)^{n-1}$. Applying this to $T$, we have
+\[ (T-5I)^{n-1}(T-6I)^{n-1}=p(T)q(T)=0\cdot q(T)=0. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $U$ is a subspace of $V$
+that is invariant under $T$.
+\begin{parts}
+\item Prove that the minimal polynomial of $T$ is a polynomial multiple of the
+  minimal polynomial of the quotient operator $T/U$.
+\item Prove that
+  \[ (\text{minimal polynomial of } T|_U)\times(\text{minimal polynomial of }
+     T/U) \]
+  is a polynomial multiple of the minimal polynomial of $T$.
+\end{parts}
+\exnote{The quotient operator $T/U$ was defined in Exercise~38 in
+Section~5A.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $p(z)$ be the minimal polynomial of $T$ and let $q(z)$ be the
+  minimal polynomial of $T/U$. Recall that $T/U$ is defined by
+  $(T/U)(v+U)=Tv+U$ for all $v\in V$. Inductively, we have
+  $(T/U)^k(v+U)=T^kv+U$ for all $k\ge0$. Then we have
+  \[ p(T/U)(v+U)=p(T)v+U=0+U=U, \]
+  where we used the fact that $p(T)=0$. Therefore, $p(T/U)=0$, which implies
+  that $q(z)$ divides $p(z)$. Hence, the minimal polynomial of $T$ is a
+  polynomial multiple of the minimal polynomial of the quotient operator
+  $T/U$.
+\item Let $p(z)$ be the minimal polynomial of $T$, let $q(z)$ be the minimal
+  polynomial of $T|_U$, and let $r(z)$ be the minimal polynomial of $T/U$. By
+  definition,
+  \[ r(T/U)(v+U)=r(T)v+U=U, \]
+  where we used the fact that $r(T/U)=0$. Then $r(T)v\in U$ for all $v\in V$.
+  Moreover, invariance of $U$ under $T$ implies that $q(T)u=q(T|_U)u=0$ for
+  all $u\in U$. Since $r(T)v\in U$, and $q(T)=q(T|_U)$ on $U$, we have
+  \[ q(T)r(T)v=q(T|_U)r(T)v=0 \]
+  for all $v\in V$. Therefore, $q(T)r(T)=0$, which implies $p(z)$ divides
+  $q(z)r(z)$. Hence, the product of the minimal polynomials of $T|_U$ and
+  $T/U$ is a polynomial multiple of the minimal polynomial of $T$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $T\in\Lin(V)$, and $U$ is a subspace of $V$
+that is invariant under $T$. Prove that the set of eigenvalues of $T$ equals
+the union of the set of eigenvalues of $T|_U$ and the set of eigenvalues of
+$T/U$.
+\end{exercise}
+\begin{solution}
+Let $\lambda$ be an eigenvalue of $T$ with corresponding eigenvector
+$v\in V\setminus\{0\}$. Then we have
+\[ Tv=\lambda v. \]
+If $v\in U$, then $\lambda$ is an eigenvalue of $T|_U$. If $v\notin U$, then
+consider the coset $v+U\in V/U$. We have
+\[ (T/U)(v+U)=Tv+U=\lambda v+U=\lambda(v+U), \]
+which shows that $\lambda$ is an eigenvalue of $T/U$.
+
+Conversely, suppose $\lambda$ is an eigenvalue of $T|_U$ with corresponding
+eigenvector $u\in U\setminus\{0\}$. Then we have
+\[ T|_Uu=Tu=\lambda u, \]
+which shows that $\lambda$ is also an eigenvalue of $T$.
+
+Now suppose $\lambda$ is an eigenvalue of $T/U$ with corresponding eigenvector
+$v+U\in V/U\setminus\{0\}$. From Exercise~5B25~(a), we know that the minimal
+polynomial of $T$ is a multiple of the minimal polynomial of $T/U$. Since
+$\lambda$ is an eigenvalue of $T/U$, it must be a root of the minimal
+polynomial of $T/U$. Therefore, $\lambda$ is also a root of the minimal
+polynomial of $T$, which implies that $\lambda$ is an eigenvalue of $T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $\F=\R$, $V$ is finite-dimensional, and $T\in\Lin(V)$. Prove that the
+minimal polynomial of $T_{\C}$ equals the minimal polynomial of $T$.
+\exnote{The complexification $T_{\C}$ was defined in Exercise~33 of
+Section~3B.}
+\end{exercise}
+\begin{solution}
+Let $p(z)$ be the minimal polynomial of $T$. Then we have
+\[ p(T)=0. \]
+Consider the complexification $T_{\C}$ of $T$. By definition, $T_{\C}$
+applied on $v+iw\in V_{\C}$ is given by
+\[ T_{\C}(v+iw)=T(v)+iT(w) \]
+for all $v,w\in V$. By induction, we can extend the polynomial $p(z)$ to act
+on $V_{\C}$ by defining
+\[ p(T_{\C})(v+iw)=p(T)v+ip(T)w. \]
+Since $p(T)=0$, it follows that
+\[ p(T_{\C})(v+iw)=0+i0=0 \]
+for all $v,w\in V$. Therefore, $p(T_{\C})=0$, which shows that the minimal
+polynomial of $T_{\C}$ divides $p(z)$.
+
+Conversely, let $q(z)$ be the minimal polynomial of $T_{\C}$. We can split
+$q(z)$ into its real and imaginary parts, say $q(z)=r(z)+is(z)$, where
+$r(z),s(z)\in\Poly(\R)$. Then for any $v\in V$ which can be viewed as
+$v+i0\in V_{\C}$, we have
+\[ q(T_{\C})(v+i0)=r(T)(v+i0)+is(T)(v+i0)=r(T)v+is(T)v. \]
+Since $q(T_{\C})=0$, it follows that $r(T)v=0$ and $s(T)v=0$ for all $v\in V$.
+Therefore, both $r(T)$ and $s(T)$ must be $0$, which implies that the minimal
+polynomial of $T$ divides $r(z)$ and $s(z)$. Since $q(z)=r(z)+is(z)$, it
+follows that the minimal polynomial of $T$ divides $q(z)$. Combining both
+directions, we conclude that the minimal polynomial of $T_{\C}$ equals the
+minimal polynomial of $T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that the minimal
+polynomial of $T'\in\Lin(V')$ equals the minimal polynomial of $T$.
+\exnote{The dual map $T'$ was defined in Section~3F.}
+\end{exercise}
+\begin{solution}
+Let $p(z)$ be the minimal polynomial of $T$. Then we have
+\[ p(T)=0. \]
+Consider the dual map $T'\in\Lin(V')$ defined by $T'(\varphi)=\varphi\circ T$
+for all $\varphi\in V'$. By induction, we can extend the polynomial $p(z)$ to
+act on $V'$ by defining
+\[ p(T')(\varphi)=p(T')(\varphi)=\varphi\circ p(T). \]
+Since $p(T)=0$, it follows that
+\[ p(T')(\varphi)=\varphi\circ0=0 \]
+for all $\varphi\in V'$. Therefore, $p(T')=0$, which shows that the minimal
+polynomial of $T'$ divides $p(z)$.
+
+Conversely, let $q(z)$ be the minimal polynomial of $T'$. Then we have
+\[ q(T')=0. \]
+This implies that $q(T')(\varphi)=\varphi\circ q(T)=0$ for all
+$\varphi\in V'$. By Exercise~3F32, we know that $V$ is isomorphic to $V''$,
+the double dual of $V$. Using the isomorphism $\Lambda\colon V\to V''$ defined
+in Exercise~3F32~(c), we can see that if $q(T')(\varphi)=0$ for all
+$\varphi\in V'$, then
+\[ \Lambda\bigl(q(T)v\bigr)(\varphi)=\varphi\bigl(q(T)v\bigr)
+   =q(T')(\varphi)(v)=0 \]
+for all $v\in V$ and $\varphi\in V'$. It follows that $q(T)v=0$ for all
+$v\in V$. Therefore, $q(T)=0$, which shows that the minimal polynomial of $T$
+divides $q(z)$. Combining both directions, we conclude that the minimal
+polynomial of $T'$ equals the minimal polynomial of $T$.
+\end{solution}
+
+\begin{exercise}
+Show that every operator on a finite-dimensional vector space of dimension at
+least two has an invariant subspace of dimension two.
+\exnote{Exercise~6 in Section~5C will give an improvement of this result when
+$\F=\C$.}
+\end{exercise}
+\begin{solution}
+Let $V$ be a finite-dimensional vector space with $\dim V\ge2$, and let
+$T\in\Lin(V)$. Let $p(z)$ be the minimal polynomial of $T$. Over $\F$, every
+nonconstant polynomial factors into linear and irreducible quadratic factors.
+We split the proof into two cases based on the factorization of $p(z)$.
+\begin{enumerate}[label=\arabic*)]
+\item Suppose $p(z)$ has a linear factor $z-\lambda$ for some $\lambda\in\F$.
+  If $\deg p(z)=1$, then $p(z)=z-\lambda$, which implies $T-\lambda I=0$, or
+  simply $T=\lambda I$. Since $T$ is just a scalar multiple of the identity,
+  every single subspace of $V$ is invariant under $T$. Because $\dim V\ge2$,
+  we can choose any two linearly independent vectors $v,w\in V$, and
+  $\spn(v,w)$ will form a $2$-dimensional invariant subspace.
+
+  If $\deg p(z)\ge2$, then $p(z)/(z-\lambda)$ has degree at least $1$ and must
+  itself contain either a linear factor or an irreducible quadratic factor.
+  The latter is handled by Case~2 below, so we consider the two linear cases:
+  \begin{itemize}
+  \item Repeated linear factor: $p(z)=(z-\lambda)^2q(z)$. Since $p(z)$ is the
+    minimal polynomial, there exists $v\in V$ such that
+    $(T-\lambda I)q(T)v\ne0$ but $(T-\lambda I)^2q(T)v=0$. Let $w=q(T)v$ and
+    $u=(T-\lambda I)w$. Then $u\ne0$ and
+    $(T-\lambda I)u=(T-\lambda I)^2w=0$, which implies $Tu=\lambda u$. Thus,
+    $u$ is an eigenvector corresponding to the eigenvalue $\lambda$.
+    Moreover, $Tw=(T-\lambda I)w+\lambda w=u+\lambda w$, which shows that
+    $Tw\in\spn(u,w)$.
+
+    To confirm linear independence, suppose $u=\alpha w$ for some
+    $\alpha\in\F$. Then $(T-\lambda I)w=\alpha w$, so $w$ is an eigenvector of
+    $T$ with eigenvalue $\lambda+\alpha$. But then
+    $(T-\lambda I)^2w=\alpha^2w$. Since $(T-\lambda I)^2w=0$ and $w\ne0$, this
+    forces $\alpha=0$, contradicting our deduction that $\alpha\ne0$ (since
+    $u\ne0$). Therefore, $u$ and $w$ are linearly independent, and
+    $\spn(u,w)$ is a $2$-dimensional invariant subspace of $V$ under $T$.
+  \item Distinct linear factor: $p(z)=(z-\lambda)(z-\mu)g(z)$ with
+    $\lambda\ne\mu$. Then $T$ has two distinct eigenvalues, yielding two
+    linearly independent eigenvectors $v$ and $u$. The subspace $\spn(v,u)$
+    is $2$-dimensional, and since $Tv=\lambda v\in\spn(v,u)$ and
+    $Tu=\mu u\in\spn(v,u)$, it is explicitly invariant.
+  \end{itemize}
+\item Suppose $p(z)$ has an irreducible quadratic factor, say $z^2+az+b$ for
+  some $a,b\in\F$. This means we can write $p(z)=(z^2+az+b)q(z)$ for some
+  polynomial $q(z)$. Since $p(z)$ is the minimal polynomial, $q(T)$ is not the
+  zero operator, meaning there exists some vector $x\in V$ such that
+  $q(T)x\ne0$.
+
+  Let $u_1=q(T)x$. Evaluating the minimal polynomial identity gives:
+  \[ 0=p(T)x=(T^2+aT+bI)q(T)x=(T^2+aT+bI)u_1. \]
+  Rearranging this provides the operator relation $T^2u_1=-bu_1-au_2$, where
+  we define $u_2=Tu_1$.
+
+  The vectors $u_1$ and $u_2$ must be linearly independent. If $Tu_1=cu_1$ for
+  some $c\in\F$, then $(T^2+aT+bI)u_1=(c^2+ac+b)u_1=0$. Since $u_1\ne0$, this
+  implies $c^2+ac+b=0$, meaning $c$ is a root of $z^2+az+b$ over $\F$,
+  contradicting its irreducibility.
+
+  Let $U=\spn(u_1,u_2)$, which has dimension two. Checking the images of our
+  basis elements under $T$ yields:
+  \begin{align*}
+  T(u_1) &= u_2\in U\\
+  T(u_2) &= T^2u_1=-bu_1-au_2\in U.
+  \end{align*}
+  Since $T$ maps the generating elements of $U$ back into $U$, the subspace
+  $U$ is a $2$-dimensional invariant subspace of $V$ under $T$.
+\end{enumerate}
+\end{solution}

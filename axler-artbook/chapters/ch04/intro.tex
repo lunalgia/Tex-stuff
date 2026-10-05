@@ -1,0 +1,842 @@
+% Source: book pp. 119--131 (PDF 133--145); solutions pp. 129--134, 174.
+\chapter{Polynomials}
+\renewcommand\thesection{\thechapter}
+
+This chapter contains material on polynomials that we will use to investigate
+linear maps from a vector space to itself. Many results in this chapter will
+already be familiar to you from other courses; they are included here for
+completeness.
+
+Because this chapter is not about linear algebra, your instructor may go
+through it rapidly. You may not be asked to scrutinize all the proofs. Make
+sure, however, that you at least read and understand the statements of all
+results in this chapter---they will be used in later chapters.
+
+This chapter begins with a brief discussion of algebraic properties of the
+complex numbers. Then we prove that a nonconstant polynomial cannot have more
+zeros than its degree. We also give a linear-algebra-based proof of the
+division algorithm for polynomials, which is worth reading even if you are
+already familiar with a proof that does not use linear algebra.
+
+As we will see, the fundamental theorem of algebra leads to a factorization of
+every polynomial into degree-one factors if the scalar field is $\C$ or to
+factors of degree at most two if the scalar field is $\R$.
+
+\begin{definition*}[Standing assumption for this chapter]\leavevmode
+\begin{itemize}
+\item $\F$ denotes $\R$ or $\C$.
+\end{itemize}
+\end{definition*}
+
+Before discussing polynomials with complex or real coefficients, we need to
+learn a bit more about the complex numbers.
+
+\begin{definition}[Real part, $\Re z$, imaginary part, $\Im z$]\label{ax:4.1}
+Suppose $z=a+bi$, where $a$ and $b$ are real numbers.
+\begin{itemize}
+\item The \emph{real part} of $z$, denoted by $\Re z$, is defined by
+  $\Re z=a$.
+\item The \emph{imaginary part} of $z$, denoted by $\Im z$, is defined by
+  $\Im z=b$.
+\end{itemize}
+\end{definition}
+
+Thus for every complex number $z$, we have
+\[ z = \Re z + (\Im z)i. \]
+
+\begin{definition}[Complex conjugate, $\overline{z}$, absolute value,
+$\abs{z}$]\label{ax:4.2}
+Suppose $z\in\C$.
+\begin{itemize}
+\item The \emph{complex conjugate} of $z\in\C$, denoted by $\overline{z}$, is
+  defined by
+  \[ \overline{z} = \Re z - (\Im z)i. \]
+\item The \emph{absolute value} of a complex number $z$, denoted by $\abs{z}$,
+  is defined by
+  \[ \abs{z} = \sqrt{(\Re z)^2+(\Im z)^2}. \]
+\end{itemize}
+\end{definition}
+
+\begin{example}[Real and imaginary part, complex conjugate, absolute
+value]\label{ax:4.3}
+Suppose $z=3+2i$. Then
+\begin{itemize}
+\item $\Re z=3$ and $\Im z=2$;
+\item $\overline{z}=3-2i$;
+\item $\abs{z}=\sqrt{3^2+2^2}=\sqrt{13}$.
+\end{itemize}
+\end{example}
+
+Identifying a complex number $z\in\C$ with the ordered pair
+$(\Re z,\Im z)\in\R^2$ identifies $\C$ with $\R^2$. Note that $\C$ is a
+one-dimensional complex vector space, but we can also think of $\C$
+(identified with $\R^2$) as a two-dimensional real vector space.
+
+The absolute value of each complex number is a nonnegative number.
+Specifically, if $z\in\C$, then $\abs{z}$ equals the distance from the origin in
+$\R^2$ to the point $(\Re z,\Im z)\in\R^2$.
+
+\marginnote{You should verify that $z=\overline{z}$ if and only if $z$ is a
+real number.}%
+The real and imaginary parts, complex conjugate, and absolute value have the
+properties listed in the following multipart result.
+
+\begin{result}[Properties of complex numbers]\label{ax:4.4}
+Suppose $w,z\in\C$. Then the following equalities and inequalities hold.
+\begin{axprops}
+\item[sum of $z$ and $\overline{z}$] $z+\overline{z}=2\Re z$.
+\item[difference of $z$ and $\overline{z}$] $z-\overline{z}=2(\Im z)i$.
+\item[product of $z$ and $\overline{z}$] $z\overline{z}=\abs{z}^2$.
+\item[additivity and multiplicativity of complex conjugate]
+  $\overline{w+z}=\overline{w}+\overline{z}$ and
+  $\overline{wz}=\overline{w}\,\overline{z}$.
+\item[double complex conjugate] $\overline{\overline{z}}=z$.
+\item[real and imaginary parts are bounded by $\abs{z}$]
+  $\abs{\Re z}\le\abs{z}$ and $\abs{\Im z}\le\abs{z}$.
+\item[absolute value of the complex conjugate]
+  $\abs{\overline{z}}=\abs{z}$.
+\item[multiplicativity of absolute value] $\abs{wz}=\abs{w}\,\abs{z}$.
+\item[triangle inequality] $\abs{w+z}\le\abs{w}+\abs{z}$.
+\end{axprops}
+\end{result}
+
+\begin{proof}
+\marginnote{See Exercise~2 for the reverse triangle inequality.}%
+Except for the last item above, the routine verifications of the assertions
+above are left to the reader. To verify the triangle inequality, we have
+\begin{align*}
+\abs{w+z}^2 &= (w+z)(\overline{w}+\overline{z})\\
+  &= w\overline{w}+z\overline{z}+w\overline{z}+z\overline{w}\\
+  &= \abs{w}^2+\abs{z}^2+w\overline{z}+\overline{w\overline{z}}\\
+  &= \abs{w}^2+\abs{z}^2+2\Re(w\overline{z})\\
+  &\le \abs{w}^2+\abs{z}^2+2\abs{w\overline{z}}\\
+  &= \abs{w}^2+\abs{z}^2+2\abs{w}\,\abs{z}\\
+  &= (\abs{w}+\abs{z})^2.
+\end{align*}
+Taking square roots now gives the desired inequality
+$\abs{w+z}\le\abs{w}+\abs{z}$.
+\end{proof}
+
+\marginfig[-5em]{\begin{tikzpicture}[scale=.55]
+  \draw[vec,red!75!black] (0,0)--node[above left=-2pt,font=\scriptsize]{$w$}
+    (1.9,2.2);
+  \draw[vec,red!75!black] (1.9,2.2)--node[above right=-1pt,font=\scriptsize]{$z$}
+    (3.8,1.6);
+  \draw[vec,red!75!black] (0,0)--node[below right=-2pt,font=\scriptsize]{$w+z$}
+    (3.8,1.6);
+\end{tikzpicture}}{Geometric interpretation of triangle inequality: The length
+of each side of a triangle is less than or equal to the sum of the lengths of
+the two other sides.}%
+
+\subsection{Zeros of Polynomials}
+
+Recall that a function $p\colon\F\to\F$ is called a polynomial of degree $m$
+if there exist $a_0,\dots,a_m\in\F$ with $a_m\ne0$ such that
+\[ p(z) = a_0+a_1z+\cdots+a_mz^m \]
+for all $z\in\F$. A polynomial could have more than one degree if the
+representation of $p$ in the form above were not unique. Our first task is to
+show that this cannot happen.
+
+The solutions to the equation $p(z)=0$ play a crucial role in the study of a
+polynomial $p\in\Poly(\F)$. Thus these solutions have a special name.
+
+\begin{definition}[Zero of a polynomial]\label{ax:4.5}
+A number $\lambda\in\F$ is called a \emph{zero} (or \emph{root}) of a
+polynomial $p\in\Poly(\F)$ if
+\[ p(\lambda)=0. \]
+\end{definition}
+
+The next result is the key tool that we will use to show that the degree of a
+polynomial is unique.
+
+\begin{result}[Each zero of a polynomial corresponds to a degree-one
+factor]\label{ax:4.6}
+Suppose $m$ is a positive integer and $p\in\Poly(\F)$ is a polynomial of degree
+$m$. Suppose $\lambda\in\F$. Then $p(\lambda)=0$ if and only if there exists a
+polynomial $q\in\Poly(\F)$ of degree $m-1$ such that
+\[ p(z) = (z-\lambda)q(z) \]
+for every $z\in\F$.
+\end{result}
+
+\begin{proof}
+First suppose $p(\lambda)=0$. Let $a_0,a_1,\dots,a_m\in\F$ be such that
+\[ p(z) = a_0+a_1z+\cdots+a_mz^m \]
+for all $z\in\F$. Then\refstepcounter{theorem}
+\begin{equation*}
+p(z) = p(z)-p(\lambda) = a_1(z-\lambda)+\cdots+a_m(z^m-\lambda^m)
+\tag*{\thetheorem}\label{ax:4.7}
+\end{equation*}
+for all $z\in\F$. For each $k\in\{1,\dots,m\}$, the equation
+\[ z^k-\lambda^k = (z-\lambda)\sum_{j=1}^{k}\lambda^{j-1}z^{k-j} \]
+shows that $z^k-\lambda^k$ equals $z-\lambda$ times some polynomial of degree
+$k-1$. Thus \ref{ax:4.7} shows that $p$ equals $z-\lambda$ times some
+polynomial of degree $m-1$, as desired.
+
+To prove the implication in the other direction, now suppose that there is a
+polynomial $q\in\Poly(\F)$ such that $p(z)=(z-\lambda)q(z)$ for every
+$z\in\F$. Then $p(\lambda)=(\lambda-\lambda)q(\lambda)=0$, as desired.
+\end{proof}
+
+Now we can prove that polynomials do not have too many zeros.
+
+\begin{result}[Degree $m$ implies at most $m$ zeros]\label{ax:4.8}
+Suppose $m$ is a positive integer and $p\in\Poly(\F)$ is a polynomial of degree
+$m$. Then $p$ has at most $m$ zeros in $\F$.
+\end{result}
+
+\begin{proof}
+We will use induction on $m$. The desired result holds if $m=1$ because if
+$a_1\ne0$ then the polynomial $a_0+a_1z$ has only one zero (which equals
+$-a_0/a_1$). Thus assume that $m>1$ and the desired result holds for $m-1$.
+
+If $p$ has no zeros in $\F$, then the desired result holds and we are done.
+Thus suppose $p$ has a zero $\lambda\in\F$. By \ref{ax:4.6}, there is
+polynomial $q\in\Poly(\F)$ of degree $m-1$ such that
+\[ p(z) = (z-\lambda)q(z) \]
+for every $z\in\F$. Our induction hypothesis implies that $q$ has at most $m-1$
+zeros in $\F$. The equation above shows that the zeros of $p$ in $\F$ are
+exactly the zeros of $q$ in $\F$ along with $\lambda$. Thus $p$ has at most $m$
+zeros in $\F$.
+\end{proof}
+
+The result above implies that the coefficients of a polynomial are uniquely
+determined (because if a polynomial had two different sets of coefficients,
+then subtracting the two representations of the polynomial would give a
+polynomial with some nonzero coefficients but infinitely many zeros). In
+particular, the degree of a polynomial is uniquely defined.
+
+\marginnote{The $0$ polynomial is declared to have degree $-\infty$ so that
+exceptions are not needed for various reasonable results such as
+$\deg(pq)=\deg p+\deg q$.}%
+Recall that the degree of the $0$ polynomial is defined to be $-\infty$. When
+necessary, use the expected arithmetic with $-\infty$. For example,
+$-\infty<m$ and $-\infty+m=-\infty$ for every integer $m$.
+
+\subsection{Division Algorithm for Polynomials}
+
+If $p$ and $s$ are nonnegative integers, with $s\ne0$, then there exist
+nonnegative integers $q$ and $r$ such that
+\[ p = sq+r \]
+and $r<s$. Think of dividing $p$ by $s$, getting quotient $q$ with remainder
+$r$. Our next result gives an analogous result for polynomials. Thus the next
+result is often called the division algorithm for polynomials, although as
+stated here it is not really an algorithm, just a useful result.
+
+\marginnote{Think of the division algorithm for polynomials as giving a
+remainder polynomial $r$ when the polynomial $p$ is divided by the polynomial
+$s$.}%
+The division algorithm for polynomials could be proved without using any linear
+algebra. However, as is appropriate for a linear algebra textbook, the proof
+given here uses linear algebra techniques and makes nice use of a basis of
+$\Poly_n(\F)$, which is the $(n+1)$-dimensional vector space of polynomials
+with coefficients in $\F$ and of degree at most $n$.
+
+\begin{result}[Division algorithm for polynomials]\label{ax:4.9}
+Suppose that $p,s\in\Poly(\F)$, with $s\ne0$. Then there exist unique
+polynomials $q,r\in\Poly(\F)$ such that
+\[ p = sq+r \]
+and $\deg r<\deg s$.
+\end{result}
+
+\begin{proof}
+Let $n=\deg p$ and let $m=\deg s$. If $n<m$, then take $q=0$ and $r=p$ to get
+the desired equation $p=sq+r$ with $\deg r<\deg s$. Thus we now assume that
+$n\ge m$.
+
+The list\refstepcounter{theorem}
+\begin{equation*}
+1,z,\dots,z^{m-1},s,zs,\dots,z^{n-m}s
+\tag*{\thetheorem}\label{ax:4.10}
+\end{equation*}
+is linearly independent in $\Poly_n(\F)$ because each polynomial in this list
+has a different degree. Also, the list \ref{ax:4.10} has length $n+1$, which
+equals $\dim\Poly_n(\F)$. Hence \ref{ax:4.10} is a basis of $\Poly_n(\F)$
+[by \ref{ax:2.38}].
+
+Because $p\in\Poly_n(\F)$ and \ref{ax:4.10} is a basis of $\Poly_n(\F)$, there
+exist unique constants $a_0,a_1,\dots,a_{m-1}\in\F$ and
+$b_0,b_1,\dots,b_{n-m}\in\F$ such that\refstepcounter{theorem}
+\begin{align*}
+p &= a_0+a_1z+\cdots+a_{m-1}z^{m-1}+b_0s+b_1zs+\cdots+b_{n-m}z^{n-m}s
+  \tag*{\thetheorem}\label{ax:4.11}\\
+  &= \underbrace{a_0+a_1z+\cdots+a_{m-1}z^{m-1}}_{r}
+     +s(\underbrace{b_0+b_1z+\cdots+b_{n-m}z^{n-m}}_{q}).
+\end{align*}
+With $r$ and $q$ as defined above, we see that $p$ can be written as
+$p=sq+r$ with $\deg r<\deg s$, as desired.
+
+The uniqueness of $q,r\in\Poly(\F)$ satisfying these conditions follows from
+the uniqueness of the constants $a_0,a_1,\dots,a_{m-1}\in\F$ and
+$b_0,b_1,\dots,b_{n-m}\in\F$ satisfying \ref{ax:4.11}.
+\end{proof}
+
+\subsection{\texorpdfstring{Factorization of Polynomials over $\C$}%
+{Factorization of Polynomials over C}}
+
+\marginnote[-4em]{The fundamental theorem of algebra is an existence theorem. Its
+proof does not lead to a method for finding zeros. The quadratic formula gives
+the zeros explicitly for polynomials of degree $2$. Similar but more
+complicated formulas exist for polynomials of degree $3$ and $4$. No such
+formulas exist for polynomials of degree $5$ and above.}%
+We have been handling polynomials with complex coefficients and polynomials
+with real coefficients simultaneously, letting $\F$ denote $\R$ or $\C$. Now we
+will see differences between these two cases. First we treat polynomials with
+complex coefficients. Then we will use those results to prove corresponding
+results for polynomials with real coefficients.
+
+Our proof of the fundamental theorem of algebra implicitly uses the result that
+a continuous real-valued function on a closed disk in $\R^2$ attains a minimum
+value. A web search can lead you to several other proofs of the fundamental
+theorem of algebra. The proof using Liouville's theorem is particularly nice if
+you are comfortable with analytic functions. All proofs of the fundamental
+theorem of algebra need to use some analysis, because the result is not true if
+$\C$ is replaced, for example, with the set of numbers of the form $c+di$ where
+$c,d$ are rational numbers.
+
+\begin{result}[Fundamental theorem of algebra, first version]\label{ax:4.12}
+Every nonconstant polynomial with complex coefficients has a zero in $\C$.
+\end{result}
+
+\begin{proof}
+De Moivre's theorem, which you can prove using induction on $k$ and the
+addition formulas for cosine and sine, states that if $k$ is a positive integer
+and $\theta\in\R$, then
+\[ (\cos\theta+i\sin\theta)^k = \cos k\theta+i\sin k\theta. \]
+
+Suppose $w\in\C$ and $k$ is a positive integer. Using polar coordinates, we
+know that there exist $r\ge0$ and $\theta\in\R$ such that
+\[ r(\cos\theta+i\sin\theta) = w. \]
+De Moivre's theorem implies that
+\[ \Bigl(r^{1/k}(\cos\tfrac{\theta}{k}+i\sin\tfrac{\theta}{k})
+   \Bigr)^{k} = w. \]
+Thus every complex number has a $k^{\text{th}}$ root, a fact that we will soon
+use.
+
+Suppose $p$ is a nonconstant polynomial with complex coefficients and
+highest-order nonzero term $c_mz^m$. Then $\abs{p(z)}\to\infty$ as
+$\abs{z}\to\infty$ (because $\abs{p(z)}/\abs{z^m}\to\abs{c_m}$ as
+$\abs{z}\to\infty$). Thus the continuous function $z\mapsto\abs{p(z)}$ has a
+global minimum at some point $\zeta\in\C$. To show that $p(\zeta)=0$, suppose
+that $p(\zeta)\ne0$.
+
+Define a new polynomial $q$ by
+\[ q(z) = \frac{p(z+\zeta)}{p(\zeta)}. \]
+The function $z\mapsto\abs{q(z)}$ has a global minimum value of $1$ at $z=0$.
+Write
+\[ q(z) = 1+a_kz^k+\cdots+a_mz^m, \]
+where $k$ is the smallest positive integer such that the coefficient of $z^k$
+is nonzero; in other words, $a_k\ne0$.
+
+Let $\beta\in\C$ be such that $\beta^k=-1/a_k$. There is a constant
+$c>1$ such that if $t\in(0,1)$, then
+\begin{align*}
+\abs{q(t\beta)} &\le \abs{1+a_kt^k\beta^k}+t^{k+1}c\\
+  &= 1-t^k(1-tc).
+\end{align*}
+Thus taking $t$ to be $1/(2c)$ in the inequality above, we have
+$\abs{q(t\beta)}<1$, which contradicts the assumption that the global minimum
+of $z\mapsto\abs{q(z)}$ is $1$. This contradiction implies that $p(\zeta)=0$,
+showing that $p$ has a zero, as desired.
+\end{proof}
+
+Computers can use clever numerical methods to find good approximations to the
+zeros of any polynomial, even when exact zeros cannot be found. For example, no
+one will ever give an exact formula for a zero of the polynomial $p$ defined by
+\[ p(x) = x^5-5x^4-6x^3+17x^2+4x-7. \]
+However, a computer can find that the zeros of $p$ are approximately the five
+numbers $-1.87$, $-0.74$, $0.62$, $1.47$, $5.51$.
+
+The first version of the fundamental theorem of algebra leads to the following
+factorization result for polynomials with complex coefficients. Note that in
+this factorization, the zeros of $p$ are the numbers $\lambda_1,\dots,\lambda_m$,
+which are the only values of $z$ for which the right side of the equation in the
+next result equals $0$.
+
+\begin{result}[Fundamental theorem of algebra, second version]\label{ax:4.13}
+If $p\in\Poly(\C)$ is a nonconstant polynomial, then $p$ has a unique
+factorization (except for the order of the factors) of the form
+\[ p(z) = c(z-\lambda_1)\cdots(z-\lambda_m), \]
+where $c,\lambda_1,\dots,\lambda_m\in\C$.
+\end{result}
+
+\begin{proof}
+Let $p\in\Poly(\C)$ and let $m=\deg p$. We will use induction on $m$. If
+$m=1$, then the desired factorization exists and is unique. So assume that
+$m>1$ and that the desired factorization exists and is unique for all
+polynomials of degree $m-1$.
+
+First we will show that the desired factorization of $p$ exists. By the first
+version of the fundamental theorem of algebra (\ref{ax:4.12}), $p$ has a zero
+$\lambda\in\C$. By \ref{ax:4.6}, there is a polynomial $q$ of degree $m-1$ such
+that
+\[ p(z) = (z-\lambda)q(z) \]
+for all $z\in\C$. Our induction hypothesis implies that $q$ has the desired
+factorization, which when plugged into the equation above gives the desired
+factorization of $p$.
+
+Now we turn to the question of uniqueness. The number $c$ is uniquely
+determined as the coefficient of $z^m$ in $p$. So we only need to show that
+except for the order, there is only one way to choose
+$\lambda_1,\dots,\lambda_m$. If
+\[ (z-\lambda_1)\cdots(z-\lambda_m) = (z-\tau_1)\cdots(z-\tau_m) \]
+for all $z\in\C$, then because the left side of the equation above equals $0$
+when $z=\lambda_1$, one of the $\tau$'s on the right side equals $\lambda_1$.
+Relabeling, we can assume that $\tau_1=\lambda_1$. Now if $z\ne\lambda_1$, we
+can divide both sides of the equation above by $z-\lambda_1$, getting
+\[ (z-\lambda_2)\cdots(z-\lambda_m) = (z-\tau_2)\cdots(z-\tau_m) \]
+for all $z\in\C$ except possibly $z=\lambda_1$. Actually the equation above
+holds for all $z\in\C$, because otherwise by subtracting the right side from
+the left side we would get a nonzero polynomial that has infinitely many zeros.
+The equation above and our induction hypothesis imply that except for the
+order, the $\lambda$'s are the same as the $\tau$'s, completing the proof of
+uniqueness.
+\end{proof}
+
+\subsection{\texorpdfstring{Factorization of Polynomials over $\R$}%
+{Factorization of Polynomials over R}}
+
+\marginnote{The failure of the fundamental theorem of algebra for $\R$ accounts
+for the differences between linear algebra on real and complex vector spaces,
+as we will see in later chapters.}%
+A polynomial with real coefficients may have no real zeros. For example, the
+polynomial $1+x^2$ has no real zeros.
+
+To obtain a factorization theorem over $\R$, we will use our factorization
+theorem over $\C$. We begin with the next result.
+
+\begin{result}[Polynomials with real coefficients have nonreal zeros in
+pairs]\label{ax:4.14}
+Suppose $p\in\Poly(\C)$ is a polynomial with real coefficients. If
+$\lambda\in\C$ is a zero of $p$, then so is $\overline{\lambda}$.
+\end{result}
+
+\begin{proof}
+Let
+\[ p(z) = a_0+a_1z+\cdots+a_mz^m, \]
+where $a_0,\dots,a_m$ are real numbers. Suppose $\lambda\in\C$ is a zero of
+$p$. Then
+\[ a_0+a_1\lambda+\cdots+a_m\lambda^m = 0. \]
+Take the complex conjugate of both sides of this equation, obtaining
+\[ a_0+a_1\overline{\lambda}+\cdots+a_m\overline{\lambda}^m = 0, \]
+where we have used basic properties of the complex conjugate (see
+\ref{ax:4.4}). The equation above shows that $\overline{\lambda}$ is a zero of
+$p$.
+\end{proof}
+
+\marginnote{Think about the quadratic formula in connection with the result
+below.}%
+We want a factorization theorem for polynomials with real coefficients. We
+begin with the following result.
+
+\begin{result}[Factorization of a quadratic polynomial]\label{ax:4.15}
+Suppose $b,c\in\R$. Then there is a polynomial factorization of the form
+\[ x^2+bx+c = (x-\lambda_1)(x-\lambda_2) \]
+with $\lambda_1,\lambda_2\in\R$ if and only if $b^2\ge4c$.
+\end{result}
+
+\begin{proof}
+Notice that
+\[ x^2+bx+c = \Bigl(x+\frac{b}{2}\Bigr)^2+\Bigl(c-\frac{b^2}{4}\Bigr). \]
+
+\marginnote{The equation above is the basis of the technique called completing
+the square.}%
+First suppose $b^2<4c$. Then the right side of the equation above is positive
+for every $x\in\R$. Hence the polynomial $x^2+bx+c$ has no real zeros and thus
+cannot be factored in the form $(x-\lambda_1)(x-\lambda_2)$ with
+$\lambda_1,\lambda_2\in\R$.
+
+Conversely, now suppose $b^2\ge4c$. Then there is a real number $d$ such that
+$d^2=b^2/4-c$. From the displayed equation above, we have
+\begin{align*}
+x^2+bx+c &= \Bigl(x+\frac{b}{2}\Bigr)^2-d^2\\
+  &= \Bigl(x+\frac{b}{2}+d\Bigr)\Bigl(x+\frac{b}{2}-d\Bigr),
+\end{align*}
+which gives the desired factorization.
+\end{proof}
+
+The next result gives a factorization of a polynomial over $\R$. The idea of
+the proof is to use the second version of the fundamental theorem of algebra
+(\ref{ax:4.13}), which gives a factorization of $p$ as a polynomial with
+complex coefficients. Complex but nonreal zeros of $p$ come in pairs; see
+\ref{ax:4.14}. Thus if the factorization of $p$ as an element of $\Poly(\C)$
+includes terms of the form $(x-\lambda)$ with $\lambda$ a nonreal complex
+number, then $(x-\overline{\lambda})$ is also a term in the factorization.
+Multiplying together these two terms, we get
+\[ x^2-2(\Re\lambda)x+\abs{\lambda}^2, \]
+which is a quadratic term of the required form.
+
+The idea sketched in the paragraph above almost provides a proof of the
+existence of our desired factorization. However, we need to be careful about
+one point. Suppose $\lambda$ is a nonreal complex number and $(x-\lambda)$ is a
+term in the factorization of $p$ as an element of $\Poly(\C)$. We are
+guaranteed by \ref{ax:4.14} that $(x-\overline{\lambda})$ also appears as a
+term in the factorization, but \ref{ax:4.14} does not state that these two
+factors appear the same number of times, as needed to make the idea above work.
+However, the proof works around this point.
+
+In the next result, either $m$ or $M$ may equal $0$. The numbers
+$\lambda_1,\dots,\lambda_m$ are precisely the real zeros of $p$, for these are
+the only real values of $x$ for which the right side of the equation in the
+next result equals $0$.
+
+\begin{result}[Factorization of a polynomial over $\R$]\label{ax:4.16}
+Suppose $p\in\Poly(\R)$ is a nonconstant polynomial. Then $p$ has a unique
+factorization (except for the order of the factors) of the form
+\[ p(x) = c(x-\lambda_1)\cdots(x-\lambda_m)(x^2+b_1x+c_1)\cdots(x^2+b_Mx+c_M), \]
+where $c,\lambda_1,\dots,\lambda_m,b_1,\dots,b_M,c_1,\dots,c_M\in\R$, with
+$b_k^2<4c_k$ for each $k$.
+\end{result}
+
+\begin{proof}
+First we will prove that the desired factorization exists, and after that we
+will prove the uniqueness.
+
+Think of $p$ as an element of $\Poly(\C)$. If all (complex) zeros of $p$ are
+real, then we have the desired factorization by \ref{ax:4.13}. Thus suppose
+$p$ has a zero $\lambda\in\C$ with $\lambda\notin\R$. By \ref{ax:4.14},
+$\overline{\lambda}$ is a zero of $p$. Thus we can write
+\begin{align*}
+p(x) &= (x-\lambda)(x-\overline{\lambda})q(x)\\
+     &= \bigl(x^2-2(\Re\lambda)x+\abs{\lambda}^2\bigr)q(x)
+\end{align*}
+for some polynomial $q\in\Poly(\C)$ of degree two less than the degree of $p$.
+If we can prove that $q$ has real coefficients, then using induction on the
+degree of $p$ completes the proof of the existence part of this result.
+
+To prove that $q$ has real coefficients, we solve the equation above for $q$,
+getting
+\[ q(x) = \frac{p(x)}{x^2-2(\Re\lambda)x+\abs{\lambda}^2} \]
+for all $x\in\R$. The equation above implies that $q(x)\in\R$ for all
+$x\in\R$. Writing
+\[ q(x) = a_0+a_1x+\cdots+a_{n-2}x^{n-2}, \]
+where $n=\deg p$ and $a_0,\dots,a_{n-2}\in\C$, we thus have
+\[ 0 = \Im q(x) = (\Im a_0)+(\Im a_1)x+\cdots+(\Im a_{n-2})x^{n-2} \]
+for all $x\in\R$. This implies that $\Im a_0,\dots,\Im a_{n-2}$ all equal $0$
+(by \ref{ax:4.8}). Thus all coefficients of $q$ are real, as desired. Hence the
+desired factorization exists.
+
+Now we turn to the question of uniqueness of our factorization. A factor of $p$
+of the form $x^2+b_kx+c_k$ with $b_k^2<4c_k$ can be uniquely written as
+$(x-\lambda_k)(x-\overline{\lambda_k})$ with $\lambda_k\in\C$. A moment's
+thought shows that two different factorizations of $p$ as an element of
+$\Poly(\R)$ would lead to two different factorizations of $p$ as an element of
+$\Poly(\C)$, contradicting \ref{ax:4.13}.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{4}
+
+\begin{exercise}
+Suppose $w,z\in\C$. Verify the following equalities and inequalities.
+\begin{parts}
+\item $z+\overline{z}=2\Re z$
+\item $z-\overline{z}=2(\Im z)i$
+\item $z\overline{z}=\abs{z}^2$
+\item $\overline{w+z}=\overline{w}+\overline{z}$ and
+  $\overline{wz}=\overline{w}\,\overline{z}$
+\item $\overline{\overline{z}}=z$
+\item $\abs{\Re z}\le\abs{z}$ and $\abs{\Im z}\le\abs{z}$
+\item $\abs{\overline{z}}=\abs{z}$
+\item $\abs{wz}=\abs{w}\,\abs{z}$
+\end{parts}
+\exnote{The results above are the parts of \ref{ax:4.4} that were left to the
+reader.}
+\end{exercise}
+\begin{solution}
+In this problem, let $z=a+bi$ and $w=c+di$ with $a,b,c,d\in\R$. Then
+\begin{parts}
+\item $z+\bar{z}=(a+bi)+(a-bi)=2a=2\mathfrak{R}z$.
+\item $z-\bar{z}=(a+bi)-(a-bi)=2bi=2(\mathfrak{I}z)i$.
+\item $z\bar{z}=(a+bi)(a-bi)=a^2+b^2=\abs{z}^2$.
+\item $\overline{w+z}=\overline{(c+di)+(a+bi)}=\overline{(a+c)+(b+d)i}
+  =(a+c)-(b+d)i=(a-bi)+(c-di)=\overline{w}+\bar{z}$ and
+  $\overline{wz}=\overline{(c+di)(a+bi)}=\overline{(ac-bd)+(ad+bc)i}
+  =(ac-bd)-(ad+bc)i=(c-di)(a-bi)=\overline{w}\bar{z}$.
+\item $\bar{\bar{z}}=\overline{a-bi}=a+bi=z$.
+\item $\abs{\mathfrak{R}z}=\abs{a}\le\sqrt{a^2+b^2}=\abs{z}$ and
+  $\abs{\mathfrak{I}z}=\abs{b}\le\sqrt{a^2+b^2}=\abs{z}$.
+\item $\abs{\bar{z}}=\abs{a-bi}=\sqrt{a^2+b^2}=\abs{z}$.
+\item $\abs{wz}=\abs{(c+di)(a+bi)}=\abs{(ac-bd)+(ad+bc)i}
+  =\sqrt{(ac-bd)^2+(ad+bc)^2}=\sqrt{(a^2+b^2)(c^2+d^2)}
+  =\abs{a+bi}\abs{c+di}=\abs{z}\abs{w}$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Prove that if $w,z\in\C$, then $\bigl\lvert\abs{w}-\abs{z}\bigr\rvert
+\le\abs{w-z}$.
+\exnote{The inequality above is called the \textbf{reverse triangle
+inequality}.}
+\end{exercise}
+\begin{solution}
+Let $w,z\in\C$. By the triangle inequality, we have
+\[ \abs{w}=\abs{(w-z)+z}\le\abs{w-z}+\abs{z}. \]
+Rearranging gives $\abs{w}-\abs{z}\le\abs{w-z}$. Similarly,
+\[ \abs{z}=\abs{(z-w)+w}\le\abs{z-w}+\abs{w}=\abs{w-z}+\abs{w}, \]
+which gives $\abs{z}-\abs{w}\le\abs{w-z}$, or equivalently
+$-\abs{w-z}\le\abs{w}-\abs{z}$. Combining these inequalities, we get
+\[ \bigl\lvert\abs{w}-\abs{z}\bigr\rvert\le\abs{w-z}. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a complex vector space and $\varphi\in V'$. Define
+$\sigma\colon V\to\R$ by $\sigma(v)=\Re\varphi(v)$ for each $v\in V$. Show that
+\[ \varphi(v) = \sigma(v)-i\sigma(iv) \]
+for all $v\in V$.
+\end{exercise}
+\begin{solution}
+Let $v\in V$. Then there exist $s,t\in\R$ such that
+\[ \varphi(v)=s+ti. \]
+Then
+\[ \sigma(v)=\mathfrak{R}\varphi(v)=s \quad\text{and}\quad
+   \sigma(iv)=\mathfrak{R}\varphi(iv)=\mathfrak{R}\bigl(i(s+ti)\bigr)
+   =\mathfrak{R}(-t+si)=-t. \]
+Therefore,
+\[ \sigma(v)-i\sigma(iv)=s-i(-t)=s+ti=\varphi(v). \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ is a positive integer. Is the set
+\[ \{0\}\cup\{p\in\Poly(\F) : \deg p=m\} \]
+a subspace of $\Poly(\F)$?
+\end{exercise}
+\begin{solution}
+No, the set is not a subspace of $\Poly(\F)$. To see this, consider two
+polynomials $p,q\in\Poly(\F)$ with $p(x)=x^m$ and $q(x)=-x^m+x^{m-1}$. Then
+$p+q=x^{m-1}$, which has degree $m-1$ and is not in the set. Therefore, the set
+is not closed under addition and hence not a subspace.
+\end{solution}
+
+\begin{exercise}
+Is the set
+\[ \{0\}\cup\{p\in\Poly(\F) : \deg p \text{ is even}\} \]
+a subspace of $\Poly(\F)$?
+\end{exercise}
+\begin{solution}
+No, the set is not a subspace of $\Poly(\F)$. To see this, consider two
+polynomials $p,q\in\Poly(\F)$ with $p(x)=x^2$ and $q(x)=x-x^2$. Then $p+q=x$,
+which has degree $1$ and is not even. Therefore, the set is not closed under
+addition and hence not a subspace.
+\end{solution}
+
+\begin{exercise}
+Suppose that $m$ and $n$ are positive integers with $m\le n$, and suppose
+$\lambda_1,\dots,\lambda_m\in\F$. Prove that there exists a polynomial
+$p\in\Poly(\F)$ with $\deg p=n$ such that
+$0=p(\lambda_1)=\cdots=p(\lambda_m)$ and such that $p$ has no other zeros.
+\end{exercise}
+\begin{solution}
+Consider the polynomial
+\[ p(x)=(x-\lambda_1)^{n-m+1}(x-\lambda_2)\cdots(x-\lambda_m). \]
+This polynomial has degree $n$, vanishes at $\lambda_1,\dots,\lambda_m$, and
+has no other zeros. Therefore, it satisfies the required conditions.
+\end{solution}
+
+\begin{exercise}
+Suppose that $m$ is a nonnegative integer, $z_1,\dots,z_{m+1}$ are distinct
+elements of $\F$, and $w_1,\dots,w_{m+1}\in\F$. Prove that there exists a
+unique polynomial $p\in\Poly_m(\F)$ such that
+\[ p(z_k)=w_k \]
+for each $k=1,\dots,m+1$.
+\exnote{This result can be proved without using linear algebra. However, try to
+find the clearer, shorter proof that uses some linear algebra.}
+\end{exercise}
+\begin{solution}
+Consider the linear map $T\colon\Poly_m(\F)\to\F^{m+1}$ defined by
+\[ T(p)=\bigl(p(z_1),\dots,p(z_{m+1})\bigr). \]
+Since $\dim\Poly_m(\F)=m+1$ and $\dim\F^{m+1}=m+1$, it suffices to show that
+$T$ is injective to conclude that it is also surjective. Suppose $T(p)=0$,
+i.e., $p(z_k)=0$ for all $k=1,\dots,m+1$. Since $p$ has degree at most $m$ and
+has $m+1$ distinct zeros, it must be the zero polynomial. Therefore, $T$ is
+injective, and hence bijective. This shows that for any
+$(w_1,\dots,w_{m+1})\in\F^{m+1}$, there exists a unique $p\in\Poly_m(\F)$ such
+that $T(p)=(w_1,\dots,w_{m+1})$, which is exactly the desired polynomial.
+\end{solution}
+
+\begin{exercise}
+Suppose $p\in\Poly(\C)$ has degree $m$. Prove that $p$ has $m$ distinct zeros
+if and only if $p$ and its derivative $p'$ have no zeros in common.
+\end{exercise}
+\begin{solution}
+Suppose $p$ has $m$ distinct zeros, say $z_1,\dots,z_m$. If $p$ and $p'$ have
+a common zero $z_k$, then $z_k$ would be a multiple zero of $p$, contradicting
+the assumption that all zeros are distinct. Hence, $p$ and $p'$ have no zeros
+in common.
+
+Conversely, suppose $p$ and $p'$ have no zeros in common. If $p$ had a
+multiple zero $z$, then $p(z)=0$ and $p'(z)=0$, which would contradict the
+assumption. Therefore, all zeros of $p$ are distinct.
+\end{solution}
+
+\begin{exercise}
+Prove that every polynomial of odd degree with real coefficients has a real
+zero.
+\end{exercise}
+\begin{solution}
+\solnote{Appendix}{See the alternate proof at the end of this solution, which
+uses the intermediate value theorem.}
+Let $p(x)$ be a polynomial of odd degree with real coefficients. Since complex
+zeros come in pairs, there are an even number of complex zeros. Therefore,
+there must be at least one real zero.
+
+\emph{Alternate proof.} Let $p(x)$ be a polynomial of odd degree with real
+coefficients. As $x\to\infty$, $p(x)\to\infty$ or $p(x)\to-\infty$ depending
+on the leading coefficient. Similarly, as $x\to-\infty$, $p(x)\to-\infty$ or
+$p(x)\to\infty$. By the intermediate value theorem, since $p(x)$ is continuous
+and takes on both positive and negative values, there must exist some
+$x\in\R$ such that $p(x)=0$. Therefore, $p$ has a real zero.
+\end{solution}
+
+\begin{exercise}
+For $p\in\Poly(\R)$, define $Tp\colon\R\to\R$ by
+\[ (Tp)(x) = \begin{cases}
+  \dfrac{p(x)-p(3)}{x-3} & \text{if } x\ne3,\\[2ex]
+  p'(3) & \text{if } x=3
+\end{cases} \]
+for each $x\in\R$. Show that $Tp\in\Poly(\R)$ for every polynomial
+$p\in\Poly(\R)$ and also show that $T\colon\Poly(\R)\to\Poly(\R)$ is a linear
+map.
+\end{exercise}
+\begin{solution}
+Let $p\in\Poly(\R)$. Since $p(x)-p(3)$ has a zero at $x=3$, we can factor it
+as $(x-3)q(x)$ for some polynomial $q\in\Poly(\R)$. Then for $x\ne3$,
+\[ (Tp)(x)=\frac{p(x)-p(3)}{x-3}=q(x), \]
+and differentiating $p$ gives $p'(3)=q(3)$. Since $Tp(3)=p'(3)=q(3)$, we have
+$Tp(x)=q(x)$ for all $x\in\R$. Therefore, $Tp\in\Poly(\R)$.
+
+Let $p_1,p_2\in\Poly(\R)$ and $\alpha,\beta\in\R$. Let
+$p_1(x)-p_1(3)=(x-3)q_1(x)$ and $p_2(x)-p_2(3)=(x-3)q_2(x)$ for some
+$q_1,q_2\in\Poly(\R)$. Then
+\[ (\alpha p_1+\beta p_2)(x)=\bigl(\alpha p_1(3)+\beta p_2(3)\bigr)
+   +(x-3)\bigl(\alpha q_1(x)+\beta q_2(x)\bigr). \]
+Hence, $T(\alpha p_1+\beta p_2)(x)=\alpha q_1(x)+\beta q_2(x)
+=\alpha Tp_1(x)+\beta Tp_2(x)$ for all $x\in\R$. Therefore, $T$ is a linear
+map.
+\end{solution}
+
+\begin{exercise}
+Suppose $p\in\Poly(\C)$. Define $q\colon\C\to\C$ by
+\[ q(z) = p(z)\,\overline{p(\overline{z})}. \]
+Prove that $q$ is a polynomial with real coefficients.
+\end{exercise}
+\begin{solution}
+\solnote{Appendix}{See the alternate proof at the end of this solution, which
+looks at the roots of $p$.}
+Let $p\in\Poly(\C)$ have the form $p(z)=a_0+a_1z+\cdots+a_nz^n$ with
+$a_k\in\C$. Then
+\[ \overline{p(\bar{z})}=\overline{\sum_{i=0}^{n}a_i\bar{z}^i}
+   =\sum_{i=0}^{n}\bar{a}_iz^i. \]
+Therefore,
+\[ q(z)=p(z)\overline{p(\bar{z})}
+   =\biggl(\sum_{i=0}^{n}a_iz^i\biggr)\biggl(\sum_{j=0}^{n}\bar{a}_jz^j\biggr)
+   =\sum_{k=0}^{2n}\biggl(\sum_{i+j=k}a_i\bar{a}_j\biggr)z^k. \]
+Let $b_m$ denote the coefficient of $z^m$ in $q(z)$. Then
+\[ b_m=\sum_{i+j=m}a_i\bar{a}_j=\sum_{i+j=m}\bar{a}_ja_i=\overline{b_m}. \]
+Hence, $b_m\in\R$ for each $m=0,1,\dots,2n$. Therefore, $q$ is a polynomial
+with real coefficients.
+
+\emph{Alternate proof.} If $p=0$, then $q=0$ is a polynomial with real
+coefficients. Otherwise, let $n=\deg p$. Then we may write
+\[ p(z)=\alpha(z-\lambda_1)(z-\lambda_2)\cdots(z-\lambda_n), \]
+where $\alpha\in\C$ and $\lambda_1,\lambda_2,\dots,\lambda_n\in\C$ are the
+roots of $p$. Then
+\begin{align*}
+q(z)=p(z)\overline{p(\bar{z})}
+  &=\alpha(z-\lambda_1)(z-\lambda_2)\cdots(z-\lambda_n)\\
+  &\quad\cdot\bar{\alpha}(z-\overline{\lambda_1})(z-\overline{\lambda_2})
+    \cdots(z-\overline{\lambda_n}).
+\end{align*}
+Note that the product contains the term $\alpha\bar{\alpha}=\abs{\alpha}^2\in\R$,
+as well as the pairs
+\[ (z-\lambda_i)(z-\overline{\lambda_i})=z^2-2\mathfrak{R}(\lambda_i)z
+   +\abs{\lambda_i}^2. \]
+Each such pair contributes a quadratic polynomial with real coefficients. Since
+the product of polynomials with real coefficients also has real coefficients,
+it follows that $q(z)$ is a polynomial with real coefficients.
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ is a nonnegative integer and $p\in\Poly_m(\C)$ is such that there
+are distinct real numbers $x_0,x_1,\dots,x_m$ with $p(x_k)\in\R$ for each
+$k=0,1,\dots,m$. Prove that all coefficients of $p$ are real.
+\end{exercise}
+\begin{solution}
+Let $p(x_k)=y_k\in\R$ for each $k=0,1,\dots,m$. By Exercise~4.7 with $\F=\R$,
+there exists a polynomial $q\in\Poly_m(\R)$ that satisfies $q(x_k)=y_k$ for
+each $k=0,1,\dots,m$. Note that this polynomial must be the same as the
+original $p\in\Poly_m(\C)$ because a polynomial of degree at most $m$ is
+uniquely determined by its values at $m+1$ distinct points. Therefore, all
+coefficients of $p$ are real.
+\end{solution}
+
+\begin{exercise}
+Suppose $p\in\Poly(\F)$ with $p\ne0$. Let $U=\{pq : q\in\Poly(\F)\}$.
+\begin{parts}
+\item Show that $\dim\Poly(\F)/U=\deg p$.
+\item Find a basis of $\Poly(\F)/U$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item We first show that $U$ is a subspace of $\Poly(\F)$. Clearly, $0\in U$
+  since $0=p\cdot0$. If $u_1,u_2\in U$, then $u_1=pq_1$ and $u_2=pq_2$ for some
+  $q_1,q_2\in\Poly(\F)$. For any scalars $\alpha,\beta\in\F$, we have
+  $\alpha u_1+\beta u_2=\alpha pq_1+\beta pq_2=p(\alpha q_1+\beta q_2)\in U$.
+  Therefore, $U$ is closed under addition and scalar multiplication, and hence
+  $U$ is a subspace of $\Poly(\F)$.
+
+  Now let $r\in\Poly(\F)$. By the division algorithm for polynomials, there
+  exist unique polynomials $q_0\in\Poly(\F)$ and $s\in\Poly(\F)$ with
+  $\deg s<\deg p$ such that $r=pq_0+s$. This shows that every polynomial in
+  $\Poly(\F)$ can be written as an element of $U$ plus a polynomial of degree
+  less than $\deg p$. Consider the map
+  $T\colon\Poly_{\deg p-1}(\F)\to\Poly(\F)/U$ defined by $T(s)=s+U$. This map
+  is linear and surjective, and $\nul T$ is trivial since if $s+U=U$, then
+  $s\in U$, which implies $s=pq$ for some $q\in\Poly(\F)$. But
+  $\deg s<\deg p$, so $s$ must be zero. Therefore, $T$ is an isomorphism, and
+  we conclude that $\dim\Poly(\F)/U=\dim\Poly_{\deg p-1}(\F)=\deg p$.
+\item A basis of $\Poly(\F)/U$ is given by the images of the standard basis of
+  $\Poly_{\deg p-1}(\F)$ under $T$, namely
+  $\{1+U,x+U,\dots,x^{\deg p-1}+U\}$. \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $p,q\in\Poly(\C)$ are nonconstant polynomials with no zeros in common.
+Let $m=\deg p$ and $n=\deg q$. Use linear algebra as outlined below in
+(a)--(c) to prove that there exist $r\in\Poly_{n-1}(\C)$ and
+$s\in\Poly_{m-1}(\C)$ such that
+\[ rp+sq=1. \]
+\begin{parts}
+\item Define $T\colon\Poly_{n-1}(\C)\times\Poly_{m-1}(\C)\to\Poly_{m+n-1}(\C)$
+  by
+  \[ T(r,s)=rp+sq. \]
+  Show that the linear map $T$ is injective.
+\item Show that the linear map $T$ in (a) is surjective.
+\item Use (b) to conclude that there exist $r\in\Poly_{n-1}(\C)$ and
+  $s\in\Poly_{m-1}(\C)$ such that $rp+sq=1$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{In part (a), one may also observe that a multiple of
+$p$ and $q$ must have $\deg p+\deg q$, but
+$\deg rp=\deg r+\deg p\le n-1+m$.}
+\begin{parts}
+\item To show that $T$ is injective, suppose that $T(r,s)=rp+sq=0$ for some
+  $(r,s)\in\Poly_{n-1}(\C)\times\Poly_{m-1}(\C)$. Then $rp=-sq$ so that $q$
+  divides $rp$. Since $p$ and $q$ have no zeros in common, $q$ must divide
+  $r$. But $\deg r<\deg q$, so the only possibility is that $r=0$. Then
+  $-sq=0$. Since $q$ is nonconstant, this implies that $s=0$. Therefore,
+  $\nul T=\{(0,0)\}$, and hence $T$ is injective.
+\item To show that $T$ is surjective, note that
+  $\dim\bigl(\Poly_{n-1}(\C)\times\Poly_{m-1}(\C)\bigr)=n+m
+  =\dim\Poly_{m+n-1}(\C)$. Since $T$ is a linear map between vector spaces of
+  the same finite dimension, and we have already shown that $T$ is injective,
+  it follows that $T$ is also surjective.
+\item Since $T$ is surjective, for the polynomial $1\in\Poly_{m+n-1}(\C)$,
+  there exist $r\in\Poly_{n-1}(\C)$ and $s\in\Poly_{m-1}(\C)$ such that
+  $T(r,s)=rp+sq=1$. \qedhere
+\end{parts}
+\end{solution}
+
+\renewcommand\thesection{\thechapter\Alph{section}}

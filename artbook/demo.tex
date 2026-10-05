@@ -1,0 +1,176 @@
+\documentclass[9pt,openany,oneside]{book}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[paperwidth=200mm,paperheight=250mm,
+            top=10mm,bottom=10mm,left=10mm,right=8mm,
+            headheight=4mm,headsep=0pt,footskip=5mm]{geometry}
+
+% ------------------------------------------------------------ load order
+% (1) artbook no longer cares where caption/subcaption are loaded.  It sets
+%     them up (captions in the label column) if they are loaded.
+% (2) hyperref must come BEFORE macros.tex: macros.tex loads cleveref (which
+%     insists on being loaded after hyperref) and uses \UrlFont (from url).
+% The option `exercises' loads xsim and sets up exercises and solutions.
+\usepackage{caption,subcaption}
+\usepackage[exercises]{../artbook}
+\usepackage{hyperref}
+\input{macros.tex}
+%for better bold symbols
+\usepackage{bm}
+% ------------------------------------------- extra packages for the chapter
+\usepackage{booktabs}                        % \toprule, \midrule, \bottomrule
+\usepackage{pgfplots}                        % axis environments in the figures
+\pgfplotsset{compat=newest}
+\usetikzlibrary{decorations.pathreplacing}   % brace in the margin figure
+\usetikzlibrary{backgrounds}                 % white box behind full-width figures
+\usepackage{thm-restate}                     % restatable theorem
+
+\setmainfont{Sabon}          % document text font
+
+\usepackage[lite, zswash, subscriptcorrection]{mtpro2}
+%\DeclareMathSizes{9 }{9}{6}{4}
+%
+%\setSingleSpace{1.1}
+%\SingleSpacing
+%
+%
+%\DeclareFontFamily{U} {cmsy}{}
+%\DeclareFontShape{U}{cmsy}{m}{n}{
+%  <-8> cmsy7
+%  <8-9> cmsy8
+%  <9-10> cmsy9
+%  <10-> cmsy10}{}
+%
+%\DeclareSymbolFont{Xcmsy} {U} {cmsy}{m}{n}
+%
+%\DeclareMathSymbol{\times}{\mathord}{Xcmsy}{2}
+%%for fixing the font that operators like \lim use
+%\DeclareSymbolFont{operators}{TU}{\rmdefault}{m}{n}
+%\SetSymbolFont{operators}{bold}{TU}{\rmdefault}{b}{n}
+% --------------------------------------------------------------- settings
+\definecolor{niceblue}{HTML}{53A2BE}
+\definecolor{paleyellow}{HTML}{FFE324}
+
+% ------------------------------------------------------------------ cover
+% \maketitle: a huge letter (the first letter of the title; \covermark{..}
+% sets another text), the title, and a row for the author, each \coverfield
+% and the date.  The footer text of the pages and the running text in the
+% margin come from \title as well.
+\title{Linear Algebra Done Right}
+\author{Sheldon Axler}
+\date{October 2026}
+\coverfield{Edition}{First draft}
+
+\artbooksetup{
+  accent         = niceblue,          % part pages, TOC headings, chapter numbers
+  ink            = black,
+  link color     = artbook@accent,    % colour of all hyperlinks
+  contents label = Table of Contents,
+  part shift=-1.2mm,
+  % rule gap     = 0.8mm,               % break of the rules at vertical lines
+  %
+  % ---- fonts: any code that switches font -------------------------------
+  part font       = {\fontspec{PP Mori}\bfseries\fontsize{22pt}{22pt}\selectfont},
+  part title font = {\fontspec{PP Mori}\bfseries\fontsize{52pt}{50pt}\selectfont},
+  label font  = {\fontspec{Jetbrains Mono Light}\fontsize{8pt}{12pt}\selectfont},
+  title font  = {\fontspec{Sabon}\fontsize{9pt}{11pt}\selectfont},
+  %
+  % the round badge and the chapter titles next to it on the part pages
+  badge font  = {\fontspec{PP Mori}\bfseries\fontsize{8pt}{8pt}\selectfont},
+  mini font   = {\fontspec{PP Mori}\bfseries\fontsize{17pt}{19pt}\selectfont},
+  % badge size = 5.6mm,
+  %
+  % ---- chapter pages -----------------------------------------------------
+   chapter title font  = {\fontspec{EB Garamond}\itshape\fontsize{34pt}{36pt}\selectfont},
+   chapter number font = {\fontspec{PP Mori}\bfseries\fontsize{500pt}{500pt}\selectfont},
+    chapter number x    = -5mm,
+    chapter shift       = -10mm,
+    chapter drop        = 8mm,
+    % ---- ordinary pages ------------------------------------------------------
+    % The divider sits where the chapter page's divider sits (chapter split);
+    % to move it: body split = 40mm, body gap = 5mm.
+    body top            = 6mm,
+    body bottom         = 10mm,
+    section font        = {\fontspec{EB Garamond}\itshape\fontsize{17pt}{19pt}\selectfont},
+    subsection font     = {\fontspec{EB Garamond}\bfseries\fontsize{11pt}{14pt}\selectfont},
+    % section pad = 2.2mm,  section before = {2.4\baselineskip plus ...},
+    % footnotes = margin | normal,  footnote font = \itshape,
+    % ---- theorems, lemmas, ... (names in the label column) ------------------
+    % theorem head font  = {...},   % default: the label font
+    % theorem title font = {\bfseries},
+    % theorem box sep = 2mm,  theorem skip = {9pt plus 2pt minus 2pt},
+    % theorems = off,               % use your own \newtheorem instead
+    % ---- \begin{fullwidth}[top=2mm,bottom=2mm,above=..,below=..,fill=white]
+    % fullwidth top = 2mm,  fullwidth bottom = 2mm,   % rule-to-content offsets
+    % fullwidth above = ..,  fullwidth below = ..,  fullwidth fill = white,
+    % ---- cover ---------------------------------------------------------------
+    % cover color = none,           % or a colour: then set cover mark color
+    % cover rule = 0.52\textheight, % the hairline the big letter stands on
+    % cover mark font = {...}, cover mark color = artbook@accent,
+    % cover mark x = -5mm, cover mark shift = 0pt,
+    % cover title font = {...}, cover subtitle font = {...},
+    % cover author label = Author, cover date label = Date,
+  % chapter split = 0.25\textwidth,  chapter rule 1 = 0.30\textheight,
+  % chapter rule 2 = 0.58\textheight, epigraph x = 0.5\textwidth,
+  %
+  % ---- page number and running text in the outer margin -------------------
+  % margin text = \rightmark,           % section title instead of chapter title
+  % margin gap  = 6mm,  margin shift = 0pt,
+  % margin font = {...},  margin page font = {...},
+}
+
+\makeatletter
+\artbooksetup{number font={\artbook@opt@fontlabel\fontsize{6pt}{8pt}\selectfont}}
+\makeatother
+
+% ======================================================================
+%  What artbook now provides (it used to be glue in this preamble)
+% ======================================================================
+%  - qedsymbol (black square), claim, the margin captions of figures and
+%    tables (\captionsetup), \margincaption, coloured links
+%  - \begin{fullwidth}[top=,bottom=,above=,below=,fill=] ... \end{fullwidth}:
+%    the full text block, a hairline above and below it running from the
+%    paper edge to the margin bar, and a filled background (the divider does
+%    not run through it).  It replaces the version of macros.tex.
+%  - exercise / solution (xsim, template "custom"), \printsolutionsbysection
+
+\hypersetup{pdftitle={Análise Matemática I}}
+
+% ======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+
+\part{Introduction}
+\chapterepigraph{The infinite is only strange until you learn to count it.}{Author, Work}
+\chapter{Sequences}
+
+\section{Convergence}
+\begin{definition}[Convergent sequence]
+A sequence $(a_n)$ \emph{converges} to $L$ if for every $\varepsilon>0$
+there is $N$ with $|a_n-L|<\varepsilon$ for all $n\ge N$.
+\end{definition}
+\begin{theorem}[Bolzano--Weierstrass]
+Every bounded sequence of real numbers has a convergent subsequence.
+\end{theorem}
+\begin{proof}
+Bisect the interval, and keep a half that holds infinitely many terms.
+\end{proof}
+\begin{example}
+$a_n=1/n$ converges to $0$.
+\end{example}
+
+\begin{fullwidth}
+\centering\rule{0pt}{25mm}\rule{150mm}{0pt}
+\captionof{figure}{A full-width figure, between two hairlines.}
+\end{fullwidth}
+
+\begin{exercise}
+Prove that $1+1=2$.
+\end{exercise}
+\begin{solution}
+By definition.
+\end{solution}
+
+\chapter{Solutions}
+\printsolutionsbysection
+\end{document}

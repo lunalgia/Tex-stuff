@@ -1,0 +1,1443 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{5}\setcounter{theorem}{107}
+\fi % TEST-ONLY-END
+% Source: book pp. 105--118 (PDF 119--132); solutions pp. 113--128, 172--173.
+% A short note set in small italics under an exercise, as Axler does.
+\section{Duality}
+
+\subsection{Dual Space and Dual Map}
+
+Linear maps into the scalar field $\F$ play a special role in linear algebra, and
+thus they get a special name.
+
+\begin{definition}[Linear functional]\label{ax:3.108}
+A \emph{linear functional} on $V$ is a linear map from $V$ to $\F$. In other
+words, a linear functional is an element of $\Lin(V,\F)$.
+\end{definition}
+
+\begin{example}[Linear functionals]\label{ax:3.109}\leavevmode
+\begin{itemize}
+\item Define $\varphi\colon\R^3\to\R$ by $\varphi(x,y,z)=4x-5y+2z$. Then
+  $\varphi$ is a linear functional on $\R^3$.
+\item Fix $(c_1,\dots,c_n)\in\F^n$. Define $\varphi\colon\F^n\to\F$ by
+  $\varphi(x_1,\dots,x_n)=c_1x_1+\cdots+c_nx_n$. Then $\varphi$ is a linear
+  functional on $\F^n$.
+\item Define $\varphi\colon\Poly(\R)\to\R$ by
+  \[ \varphi(p) = 3p''(5)+7p(4). \]
+  Then $\varphi$ is a linear functional on $\Poly(\R)$.
+\item Define $\varphi\colon\Poly(\R)\to\R$ by
+  \[ \varphi(p) = \int_0^1 p \]
+  for each $p\in\Poly(\R)$. Then $\varphi$ is a linear functional on
+  $\Poly(\R)$.
+\end{itemize}
+\end{example}
+
+The vector space $\Lin(V,\F)$ also gets a special name and special notation.
+
+\begin{definition}[Dual space, $V'$]\label{ax:3.110}
+The \emph{dual space} of $V$, denoted by $V'$, is the vector space of all linear
+functionals on $V$. In other words, $V'=\Lin(V,\F)$.
+\end{definition}
+
+\begin{result}[$\dim V'=\dim V$]\label{ax:3.111}
+Suppose $V$ is finite-dimensional. Then $V'$ is also finite-dimensional and
+\[ \dim V' = \dim V. \]
+\end{result}
+
+\begin{proof}
+By \ref{ax:3.72} we have
+\[ \dim V' = \dim\Lin(V,\F) = (\dim V)(\dim\F) = \dim V, \]
+as desired.
+\end{proof}
+
+In the following definition, the linear map lemma (\ref{ax:3.4}) implies that
+each $\varphi_j$ is well defined.
+
+\begin{definition}[Dual basis]\label{ax:3.112}
+If $v_1,\dots,v_n$ is a basis of $V$, then the \emph{dual basis} of
+$v_1,\dots,v_n$ is the list $\varphi_1,\dots,\varphi_n$ of elements of $V'$,
+where each $\varphi_j$ is the linear functional on $V$ such that
+\[ \varphi_j(v_k) = \begin{cases} 1 & \text{if } k=j,\\
+                                 0 & \text{if } k\ne j. \end{cases} \]
+\end{definition}
+
+\begin{example}[The dual basis of the standard basis of $\F^n$]\label{ax:3.113}
+Suppose $n$ is a positive integer. For $1\le j\le n$, define $\varphi_j$ to be
+the linear functional on $\F^n$ that selects the $j^{\text{th}}$ coordinate of a
+vector in $\F^n$. Thus
+\[ \varphi_j(x_1,\dots,x_n) = x_j \]
+for each $(x_1,\dots,x_n)\in\F^n$.
+
+Let $e_1,\dots,e_n$ be the standard basis of $\F^n$. Then
+\[ \varphi_j(e_k) = \begin{cases} 1 & \text{if } k=j,\\
+                                 0 & \text{if } k\ne j. \end{cases} \]
+Thus $\varphi_1,\dots,\varphi_n$ is the dual basis of the standard basis
+$e_1,\dots,e_n$ of $\F^n$.
+\end{example}
+
+The next result shows that the dual basis of a basis of $V$ consists of the
+linear functionals on $V$ that give the coefficients for expressing a vector in
+$V$ as a linear combination of the basis vectors.
+
+\begin{result}[Dual basis gives coefficients for linear combination]\label{ax:3.114}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $\varphi_1,\dots,\varphi_n$ is the
+dual basis. Then
+\[ v = \varphi_1(v)v_1+\cdots+\varphi_n(v)v_n \]
+for each $v\in V$.
+\end{result}
+
+\begin{proof}
+Suppose $v\in V$. Then there exist $c_1,\dots,c_n\in\F$ such
+that\refstepcounter{theorem}
+\begin{equation*}
+v = c_1v_1+\cdots+c_nv_n. \tag*{\thetheorem}\label{ax:3.115}
+\end{equation*}
+If $j\in\{1,\dots,n\}$, then applying $\varphi_j$ to both sides of the equation
+above gives
+\[ \varphi_j(v) = c_j. \]
+Substituting the values for $c_1,\dots,c_n$ given by the equation above into
+\ref{ax:3.115} shows that $v=\varphi_1(v)v_1+\cdots+\varphi_n(v)v_n$.
+\end{proof}
+
+The next result shows that the dual basis is indeed a basis of the dual space.
+Thus the terminology ``dual basis'' is justified.
+
+\begin{result}[Dual basis is a basis of the dual space]\label{ax:3.116}
+Suppose $V$ is finite-dimensional. Then the dual basis of a basis of $V$ is a
+basis of $V'$.
+\end{result}
+
+\begin{proof}
+Suppose $v_1,\dots,v_n$ is a basis of $V$. Let $\varphi_1,\dots,\varphi_n$ denote
+the dual basis.
+
+To show that $\varphi_1,\dots,\varphi_n$ is a linearly independent list of
+elements of $V'$, suppose $a_1,\dots,a_n\in\F$ are such
+that\refstepcounter{theorem}
+\begin{equation*}
+a_1\varphi_1+\cdots+a_n\varphi_n = 0. \tag*{\thetheorem}\label{ax:3.117}
+\end{equation*}
+Now
+\[ (a_1\varphi_1+\cdots+a_n\varphi_n)(v_k) = a_k \]
+for each $k=1,\dots,n$. Thus \ref{ax:3.117} shows that $a_1=\cdots=a_n=0$. Hence
+$\varphi_1,\dots,\varphi_n$ is linearly independent.
+
+Because $\varphi_1,\dots,\varphi_n$ is a linearly independent list in $V'$ whose
+length equals $\dim V'$ (by \ref{ax:3.111}), we can conclude that
+$\varphi_1,\dots,\varphi_n$ is a basis of $V'$ (see \ref{ax:2.38}).
+\end{proof}
+
+In the definition below, note that if $T$ is a linear map from $V$ to $W$ then
+$T'$ is a linear map from $W'$ to $V'$.
+
+\begin{definition}[Dual map, $T'$]\label{ax:3.118}
+Suppose $T\in\Lin(V,W)$. The \emph{dual map} of $T$ is the linear map
+$T'\in\Lin(W',V')$ defined for each $\varphi\in W'$ by
+\[ T'(\varphi) = \varphi\circ T. \]
+\end{definition}
+
+If $T\in\Lin(V,W)$ and $\varphi\in W'$, then $T'(\varphi)$ is defined above to be
+the composition of the linear maps $\varphi$ and $T$. Thus $T'(\varphi)$ is
+indeed a linear map from $V$ to $\F$; in other words, $T'(\varphi)\in V'$.
+
+The following two bullet points show that $T'$ is a linear map from $W'$ to
+$V'$.
+\begin{itemize}
+\item If $\varphi,\psi\in W'$, then
+  \[ T'(\varphi+\psi) = (\varphi+\psi)\circ T = \varphi\circ T+\psi\circ T
+     = T'(\varphi)+T'(\psi). \]
+\item If $\lambda\in\F$ and $\varphi\in W'$, then
+  \[ T'(\lambda\varphi) = (\lambda\varphi)\circ T = \lambda(\varphi\circ T)
+     = \lambda T'(\varphi). \]
+\end{itemize}
+
+The prime notation appears with two unrelated meanings in the next example: $D'$
+denotes the dual of the linear map $D$, and $p'$ denotes the derivative of a
+polynomial $p$.
+
+\begin{example}[Dual map of the differentiation linear map]\label{ax:3.119}
+Define $D\colon\Poly(\R)\to\Poly(\R)$ by $Dp=p'$.
+\begin{itemize}
+\item Suppose $\varphi$ is the linear functional on $\Poly(\R)$ defined by
+  $\varphi(p)=p(3)$. Then $D'(\varphi)$ is the linear functional on $\Poly(\R)$
+  given by
+  \[ \bigl(D'(\varphi)\bigr)(p) = (\varphi\circ D)(p) = \varphi(Dp)
+     = \varphi(p') = p'(3). \]
+  Thus $D'(\varphi)$ is the linear functional on $\Poly(\R)$ taking $p$ to
+  $p'(3)$.
+\item Suppose $\varphi$ is the linear functional on $\Poly(\R)$ defined by
+  $\varphi(p)=\int_0^1p$. Then $D'(\varphi)$ is the linear functional on
+  $\Poly(\R)$ given by
+  \begin{align*}
+  \bigl(D'(\varphi)\bigr)(p) &= (\varphi\circ D)(p)\\
+    &= \varphi(Dp)\\
+    &= \varphi(p')\\
+    &= \int_0^1 p'\\
+    &= p(1)-p(0).
+  \end{align*}
+  Thus $D'(\varphi)$ is the linear functional on $\Poly(\R)$ taking $p$ to
+  $p(1)-p(0)$.
+\end{itemize}
+\end{example}
+
+In the next result, (a) and (b) imply that the function that takes $T$ to $T'$
+is a linear map from $\Lin(V,W)$ to $\Lin(W',V')$.
+
+In (c) below, note the reversal of order from $ST$ on the left to $T'S'$ on the
+right.
+
+\begin{result}[Algebraic properties of dual maps]\label{ax:3.120}
+Suppose $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $(S+T)'=S'+T'$ for all $S\in\Lin(V,W)$;
+\item $(\lambda T)'=\lambda T'$ for all $\lambda\in\F$;
+\item $(ST)'=T'S'$ for all $S\in\Lin(W,U)$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+The proofs of (a) and (b) are left to the reader.
+
+To prove (c), suppose $\varphi\in U'$. Then
+\[ (ST)'(\varphi) = \varphi\circ(ST) = (\varphi\circ S)\circ T
+   = T'(\varphi\circ S) = T'\bigl(S'(\varphi)\bigr) = (T'S')(\varphi), \]
+\marginnote{Some books use the notation $V^*$ and $T^*$ for duality instead of
+$V'$ and $T'$. However, here we reserve the notation $T^*$ for the adjoint,
+which will be introduced when we study linear maps on inner product spaces in
+Chapter~7.}%
+where the first, third, and fourth equalities above hold because of the
+definition of the dual map, the second equality holds because composition of
+functions is associative, and the last equality follows from the definition of
+composition.
+
+The equation above shows that $(ST)'(\varphi)=(T'S')(\varphi)$ for all
+$\varphi\in U'$. Thus $(ST)'=T'S'$.
+\end{proof}
+
+\subsection{Null Space and Range of Dual of Linear Map}
+
+Our goal in this subsection is to describe $\nul T'$ and $\range T'$ in terms of
+$\range T$ and $\nul T$. To do this, we will need the next definition.
+
+\begin{definition}[Annihilator, $U^0$]\label{ax:3.121}
+For $U\subseteq V$, the \emph{annihilator} of $U$, denoted by $U^0$, is defined
+by
+\[ U^0 = \{\varphi\in V' : \varphi(u)=0 \text{ for all } u\in U\}. \]
+\end{definition}
+
+\begin{example}[Element of an annihilator]\label{ax:3.122}
+Suppose $U$ is the subspace of $\Poly(\R)$ consisting of polynomial multiples of
+$x^2$. If $\varphi$ is the linear functional on $\Poly(\R)$ defined by
+$\varphi(p)=p'(0)$, then $\varphi\in U^0$.
+\end{example}
+
+For $U\subseteq V$, the annihilator $U^0$ is a subset of the dual space $V'$.
+Thus $U^0$ depends on the vector space containing $U$, so a notation such as
+$U_V^0$ would be more precise. However, the containing vector space will always
+be clear from the context, so we will use the simpler notation $U^0$.
+
+\begin{example}[The annihilator of a two-dimensional subspace of
+$\R^5$]\label{ax:3.123}
+Let $e_1,e_2,e_3,e_4,e_5$ denote the standard basis of $\R^5$; let
+$\varphi_1,\varphi_2,\varphi_3,\varphi_4,\varphi_5\in(\R^5)'$ denote the dual
+basis of $e_1,e_2,e_3,e_4,e_5$. Suppose
+\[ U = \spn(e_1,e_2) = \{(x_1,x_2,0,0,0)\in\R^5 : x_1,x_2\in\R\}. \]
+We want to show that $U^0=\spn(\varphi_3,\varphi_4,\varphi_5)$.
+
+Recall (see \ref{ax:3.113}) that $\varphi_j$ is the linear functional on $\R^5$
+that selects the $j^{\text{th}}$ coordinate:
+$\varphi_j(x_1,x_2,x_3,x_4,x_5)=x_j$.
+
+First suppose $\varphi\in\spn(\varphi_3,\varphi_4,\varphi_5)$. Then there exist
+$c_3,c_4,c_5\in\R$ such that $\varphi=c_3\varphi_3+c_4\varphi_4+c_5\varphi_5$.
+If $(x_1,x_2,0,0,0)\in U$, then
+\[ \varphi(x_1,x_2,0,0,0)
+   = (c_3\varphi_3+c_4\varphi_4+c_5\varphi_5)(x_1,x_2,0,0,0) = 0. \]
+Thus $\varphi\in U^0$. Hence we have shown that
+$\spn(\varphi_3,\varphi_4,\varphi_5)\subseteq U^0$.
+
+To show the inclusion in the other direction, suppose that $\varphi\in U^0$.
+Because the dual basis is a basis of $(\R^5)'$, there exist
+$c_1,c_2,c_3,c_4,c_5\in\R$ such that
+$\varphi=c_1\varphi_1+c_2\varphi_2+c_3\varphi_3+c_4\varphi_4+c_5\varphi_5$.
+Because $e_1\in U$ and $\varphi\in U^0$, we have
+\[ 0 = \varphi(e_1)
+   = (c_1\varphi_1+c_2\varphi_2+c_3\varphi_3+c_4\varphi_4+c_5\varphi_5)(e_1)
+   = c_1. \]
+Similarly, $e_2\in U$ and thus $c_2=0$. Hence
+$\varphi=c_3\varphi_3+c_4\varphi_4+c_5\varphi_5$. Thus
+$\varphi\in\spn(\varphi_3,\varphi_4,\varphi_5)$, which shows that
+$U^0\subseteq\spn(\varphi_3,\varphi_4,\varphi_5)$.
+
+Thus $U^0=\spn(\varphi_3,\varphi_4,\varphi_5)$.
+\end{example}
+
+\begin{result}[The annihilator is a subspace]\label{ax:3.124}
+Suppose $U\subseteq V$. Then $U^0$ is a subspace of $V'$.
+\end{result}
+
+\begin{proof}
+Note that $0\in U^0$ (here $0$ is the zero linear functional on $V$) because the
+zero linear functional applied to every vector in $U$ equals $0\in\F$.
+
+Suppose $\varphi,\psi\in U^0$. Thus $\varphi,\psi\in V'$ and
+$\varphi(u)=\psi(u)=0$ for every $u\in U$. If $u\in U$, then
+\[ (\varphi+\psi)(u) = \varphi(u)+\psi(u) = 0+0 = 0. \]
+Thus $\varphi+\psi\in U^0$.
+
+Similarly, $U^0$ is closed under scalar multiplication. Thus \ref{ax:1.34}
+implies that $U^0$ is a subspace of $V'$.
+\end{proof}
+
+The next result shows that $\dim U^0$ is the difference of $\dim V$ and
+$\dim U$. For example, this shows that if $U$ is a two-dimensional subspace of
+$\R^5$, then $U^0$ is a three-dimensional subspace of $(\R^5)'$, as in Example
+\ref{ax:3.123}.
+
+The next result can be proved following the pattern of Example \ref{ax:3.123}:
+choose a basis $u_1,\dots,u_m$ of $U$, extend to a basis
+$u_1,\dots,u_m,\dots,u_n$ of $V$, let $\varphi_1,\dots,\varphi_m,\dots,\varphi_n$
+be the dual basis of $V'$, and then show that $\varphi_{m+1},\dots,\varphi_n$ is
+a basis of $U^0$, which implies the desired result. You should construct the
+proof just outlined, even though a slicker proof is presented here.
+
+\begin{result}[Dimension of the annihilator]\label{ax:3.125}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$. Then
+\[ \dim U^0 = \dim V-\dim U. \]
+\end{result}
+
+\begin{proof}
+Let $i\in\Lin(U,V)$ be the inclusion map defined by $i(u)=u$ for each $u\in U$.
+Thus $i'$ is a linear map from $V'$ to $U'$. The fundamental theorem of linear
+maps (\ref{ax:3.21}) applied to $i'$ shows that
+\[ \dim\range i'+\dim\nul i' = \dim V'. \]
+However, $\nul i'=U^0$ (as can be seen by thinking about the definitions) and
+$\dim V'=\dim V$ (by \ref{ax:3.111}), so we can rewrite the equation above
+as\refstepcounter{theorem}
+\begin{equation*}
+\dim\range i'+\dim U^0 = \dim V. \tag*{\thetheorem}\label{ax:3.126}
+\end{equation*}
+
+If $\varphi\in U'$, then $\varphi$ can be extended to a linear functional $\psi$
+on $V$ (see, for example, Exercise~13 in Section~3A). The definition of $i'$
+shows that $i'(\psi)=\varphi$. Thus $\varphi\in\range i'$, which implies that
+$\range i'=U'$. Hence
+\[ \dim\range i' = \dim U' = \dim U, \]
+and then \ref{ax:3.126} becomes the equation $\dim U+\dim U^0=\dim V$, as
+desired.
+\end{proof}
+
+The next result can be a useful tool to show that a subspace is as big as
+possible---see (a)---or to show that a subspace is as small as possible---see
+(b).
+
+\begin{result}[Condition for the annihilator to equal $\{0\}$ or the whole
+space]\label{ax:3.127}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$. Then
+\begin{parts}
+\item $U^0=\{0\}\iff U=V$;
+\item $U^0=V'\iff U=\{0\}$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+To prove (a), we have
+\begin{align*}
+U^0=\{0\} &\iff \dim U^0=0\\
+          &\iff \dim U=\dim V\\
+          &\iff U=V,
+\end{align*}
+where the second equivalence follows from \ref{ax:3.125} and the third
+equivalence follows from \ref{ax:2.39}.
+
+Similarly, to prove (b) we have
+\begin{align*}
+U^0=V' &\iff \dim U^0=\dim V'\\
+       &\iff \dim U^0=\dim V\\
+       &\iff \dim U=0\\
+       &\iff U=\{0\},
+\end{align*}
+where one direction of the first equivalence follows from \ref{ax:2.39}, the
+second equivalence follows from \ref{ax:3.111}, and the third equivalence
+follows from \ref{ax:3.125}.
+\end{proof}
+
+The proof of (a) in the next result does not use the hypothesis that $V$ and
+$W$ are finite-dimensional.
+
+\begin{result}[The null space of $T'$]\label{ax:3.128}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $\nul T'=(\range T)^0$;
+\item $\dim\nul T'=\dim\nul T+\dim W-\dim V$.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item First suppose $\varphi\in\nul T'$. Thus $0=T'(\varphi)=\varphi\circ T$.
+  Hence
+  \[ 0 = (\varphi\circ T)(v) = \varphi(Tv) \quad\text{for every } v\in V. \]
+  Thus $\varphi\in(\range T)^0$. This implies that
+  $\nul T'\subseteq(\range T)^0$.
+
+  To prove the inclusion in the opposite direction, now suppose
+  $\varphi\in(\range T)^0$. Thus $\varphi(Tv)=0$ for every vector $v\in V$.
+  Hence $0=\varphi\circ T=T'(\varphi)$. In other words, $\varphi\in\nul T'$,
+  which shows that $(\range T)^0\subseteq\nul T'$, completing the proof of (a).
+\item We have
+  \begin{align*}
+  \dim\nul T' &= \dim(\range T)^0\\
+              &= \dim W-\dim\range T\\
+              &= \dim W-(\dim V-\dim\nul T)\\
+              &= \dim\nul T+\dim W-\dim V,
+  \end{align*}
+  where the first equality comes from (a), the second equality comes from
+  \ref{ax:3.125}, and the third equality comes from the fundamental theorem of
+  linear maps (\ref{ax:3.21}). \qedhere
+\end{parts}
+\end{proof}
+
+The next result can be useful because sometimes it is easier to verify that $T'$
+is injective than to show directly that $T$ is surjective.
+
+\begin{result}[$T$ surjective is equivalent to $T'$ injective]\label{ax:3.129}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Then
+\[ T \text{ is surjective} \iff T' \text{ is injective}. \]
+\end{result}
+
+\begin{proof}
+We have
+\begin{align*}
+T\in\Lin(V,W)\text{ is surjective} &\iff \range T=W\\
+  &\iff (\range T)^0=\{0\}\\
+  &\iff \nul T'=\{0\}\\
+  &\iff T'\text{ is injective},
+\end{align*}
+where the second equivalence comes from \ref{ax:3.127}(a) and the third
+equivalence comes from \ref{ax:3.128}(a).
+\end{proof}
+
+\begin{result}[The range of $T'$]\label{ax:3.130}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Then
+\begin{parts}
+\item $\dim\range T'=\dim\range T$;
+\item $\range T'=(\nul T)^0$.
+\end{parts}
+\end{result}
+
+\begin{proof}\leavevmode
+\begin{parts}
+\item We have
+  \begin{align*}
+  \dim\range T' &= \dim W'-\dim\nul T'\\
+                &= \dim W-\dim(\range T)^0\\
+                &= \dim\range T,
+  \end{align*}
+  where the first equality comes from \ref{ax:3.21}, the second equality comes
+  from \ref{ax:3.111} and \ref{ax:3.128}(a), and the third equality comes from
+  \ref{ax:3.125}.
+\item First suppose $\varphi\in\range T'$. Thus there exists $\psi\in W'$ such
+  that $\varphi=T'(\psi)$. If $v\in\nul T$, then
+  \[ \varphi(v) = \bigl(T'(\psi)\bigr)v = (\psi\circ T)(v) = \psi(Tv)
+     = \psi(0) = 0. \]
+  Hence $\varphi\in(\nul T)^0$. This implies that $\range T'\subseteq(\nul T)^0$.
+
+  We will complete the proof by showing that $\range T'$ and $(\nul T)^0$ have
+  the same dimension. To do this, note that
+  \begin{align*}
+  \dim\range T' &= \dim\range T\\
+                &= \dim V-\dim\nul T\\
+                &= \dim(\nul T)^0,
+  \end{align*}
+  where the first equality comes from (a), the second equality comes from
+  \ref{ax:3.21}, and the third equality comes from \ref{ax:3.125}. \qedhere
+\end{parts}
+\end{proof}
+
+The next result should be compared to \ref{ax:3.129}.
+
+\begin{result}[$T$ injective is equivalent to $T'$ surjective]\label{ax:3.131}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Then
+\[ T \text{ is injective} \iff T' \text{ is surjective}. \]
+\end{result}
+
+\begin{proof}
+We have
+\begin{align*}
+T\text{ is injective} &\iff \nul T=\{0\}\\
+  &\iff (\nul T)^0=V'\\
+  &\iff \range T'=V',
+\end{align*}
+where the second equivalence follows from \ref{ax:3.127}(b) and the third
+equivalence follows from \ref{ax:3.130}(b).
+\end{proof}
+
+\subsection{Matrix of Dual of Linear Map}
+
+The setting for the next result is the assumption that we have a basis
+$v_1,\dots,v_n$ of $V$, along with its dual basis $\varphi_1,\dots,\varphi_n$ of
+$V'$. We also have a basis $w_1,\dots,w_m$ of $W$, along with its dual basis
+$\psi_1,\dots,\psi_m$ of $W'$. Thus $\Mat(T)$ is computed with respect to the
+bases just mentioned of $V$ and $W$, and $\Mat(T')$ is computed with respect to
+the dual bases just mentioned of $W'$ and $V'$. Using these bases gives the
+following pretty result.
+
+\begin{result}[Matrix of $T'$ is transpose of matrix of $T$]\label{ax:3.132}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Then
+\[ \Mat(T') = \bigl(\Mat(T)\bigr)^{\mathrm{t}}. \]
+\end{result}
+
+\begin{proof}
+Let $A=\Mat(T)$ and $C=\Mat(T')$. Suppose $1\le j\le m$ and $1\le k\le n$.
+
+From the definition of $\Mat(T')$ we have
+\[ T'(\psi_j) = \sum_{r=1}^n C_{r,j}\varphi_r. \]
+The left side of the equation above equals $\psi_j\circ T$. Thus applying both
+sides of the equation above to $v_k$ gives
+\begin{align*}
+(\psi_j\circ T)(v_k) &= \sum_{r=1}^n C_{r,j}\varphi_r(v_k)\\
+                     &= C_{k,j}.
+\end{align*}
+We also have
+\begin{align*}
+(\psi_j\circ T)(v_k) &= \psi_j(Tv_k)\\
+  &= \psi_j\Bigl(\sum_{r=1}^m A_{r,k}w_r\Bigr)\\
+  &= \sum_{r=1}^m A_{r,k}\psi_j(w_r)\\
+  &= A_{j,k}.
+\end{align*}
+Comparing the last line of the last two sets of equations, we have
+$C_{k,j}=A_{j,k}$. Thus $C=A^{\mathrm{t}}$. In other words,
+$\Mat(T')=\bigl(\Mat(T)\bigr)^{\mathrm{t}}$, as desired.
+\end{proof}
+
+Now we use duality to give an alternative proof that the column rank of a matrix
+equals the row rank of the matrix. This result was previously proved using
+different tools---see \ref{ax:3.57}.
+
+\begin{result}[Column rank equals row rank]\label{ax:3.133}
+Suppose $A\in\F^{m,n}$. Then the column rank of $A$ equals the row rank of $A$.
+\end{result}
+
+\begin{proof}
+Define $T\colon\F^{n,1}\to\F^{m,1}$ by $Tx=Ax$. Thus $\Mat(T)=A$, where
+$\Mat(T)$ is computed with respect to the standard bases of $\F^{n,1}$ and
+$\F^{m,1}$. Now
+\begin{align*}
+\text{column rank of } A &= \text{column rank of } \Mat(T)\\
+  &= \dim\range T\\
+  &= \dim\range T'\\
+  &= \text{column rank of } \Mat(T')\\
+  &= \text{column rank of } A^{\mathrm{t}}\\
+  &= \text{row rank of } A,
+\end{align*}
+where the second equality comes from \ref{ax:3.78}, the third equality comes
+from \ref{ax:3.130}(a), the fourth equality comes from \ref{ax:3.78}, the fifth
+equality comes from \ref{ax:3.132}, and the last equality follows from the
+definitions of row and column rank.
+\end{proof}
+
+See Exercise~8 in Section~7A for another alternative proof of the result above.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{3F}
+
+\begin{exercise}
+Explain why each linear functional is surjective or is the zero map.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{For the rest of the solutions manual, unless otherwise stated, we
+will be using the Kronecker delta notation, i.e., we define $\delta_{ij}=1$ if
+$i=j$ and $\delta_{ij}=0$ if $i\ne j$.}
+
+Let $\varphi\in V'$. If $\varphi=0$, then it is the zero map. Otherwise, there
+exists $v\in V$ such that $\varphi(v)\ne0$, say $\varphi(v)=c\ne0$. Then for any
+$x\in\F$, we have
+\[ \varphi\Bigl(\frac{x}{c}v\Bigr) = \frac{x}{c}\varphi(v) = \frac{x}{c}c = x. \]
+Hence, $\varphi$ is surjective.
+\end{solution}
+
+\begin{exercise}
+Give three distinct examples of linear functionals on $\R^{[0,1]}$.
+\end{exercise}
+\begin{solution}
+Consider the linear functionals on $\R^{[0,1]}$ defined by
+\[ \varphi_1(f)=f(0), \quad \varphi_2(f)=f(1), \quad
+   \varphi_3(f)=f\Bigl(1/2\Bigr). \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $v\in V$ with $v\ne0$. Prove that there
+exists $\varphi\in V'$ such that $\varphi(v)=1$.
+\end{exercise}
+\begin{solution}
+Since $V$ is finite-dimensional, we can extend $v$ to a basis of $V$, say
+$v,v_2,\dots,v_n$. Define $\varphi\in V'$ by setting $\varphi(v)=1$ and
+$\varphi(v_i)=0$ for $i=2,\dots,n$. This defines a linear functional because it
+is defined on a basis and extended linearly. Clearly, $\varphi(v)=1$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$ such that
+$U\ne V$. Prove that there exists $\varphi\in V'$ such that $\varphi(u)=0$ for
+every $u\in U$ but $\varphi\ne0$.
+\end{exercise}
+\begin{solution}
+Since $U\ne V$, there exists $v_1\in V$ such that $v_1\notin U$. Extend a basis
+of $U$ to a basis of $V$, say $u_1,\dots,u_k,v_1,\dots,v_m$. Define
+$\varphi\in V'$ by setting $\varphi(u_i)=0$ for all $i=1,\dots,k$ and
+$\varphi(v_j)=0$ for all $j=2,\dots,m$ but $\varphi(v_1)=1$. This defines a
+linear functional because it is defined on a basis and extended linearly.
+Clearly, $\varphi(u)=0$ for all $u\in U$ and $\varphi\ne0$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ and $w_1,\dots,w_m$ is a basis of $\range T$. Hence for
+each $v\in V$, there exist unique numbers $\varphi_1(v),\dots,\varphi_m(v)$ such
+that
+\[ Tv = \varphi_1(v)w_1+\cdots+\varphi_m(v)w_m, \]
+thus defining functions $\varphi_1,\dots,\varphi_m$ from $V$ to $\F$. Show that
+each of the functions $\varphi_1,\dots,\varphi_m$ is a linear functional on $V$.
+\end{exercise}
+\begin{solution}
+Let $v\in V$. Since $w_1,\dots,w_m$ is a basis of $\range T$, there exist unique
+scalars $\varphi_1(v),\dots,\varphi_m(v)$ such that
+\[ Tv = \varphi_1(v)w_1+\cdots+\varphi_m(v)w_m. \]
+To show that each $\varphi_i$ is a linear functional, let $v,u\in V$ and
+$a,b\in\F$. Then
+\begin{multline*}
+T(av+bu) = aTv+bTu\\
+ = a\bigl(\varphi_1(v)w_1+\cdots+\varphi_m(v)w_m\bigr)
+   +b\bigl(\varphi_1(u)w_1+\cdots+\varphi_m(u)w_m\bigr).
+\end{multline*}
+By the uniqueness of the representation in terms of the basis $w_1,\dots,w_m$,
+we must have
+\[ \varphi_i(av+bu) = a\varphi_i(v)+b\varphi_i(u) \quad\text{for each }
+   i=1,\dots,m. \]
+Hence, each $\varphi_i$ is a linear functional on $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $\varphi,\beta\in V'$. Prove that $\nul\varphi\subseteq\nul\beta$ if and
+only if there exists $c\in\F$ such that $\beta=c\varphi$.
+\end{exercise}
+\begin{solution}
+Suppose $\nul\varphi\subseteq\nul\beta$. If $\varphi=0$, then $\nul\varphi=V$,
+and hence $\nul\beta=V$, which implies $\beta=0$. In this case, we can take
+$c=0$ and have $\beta=c\varphi$. Now assume $\varphi\ne0$. Pick $v_0\in V$ such
+that $\varphi(v_0)\ne0$. Define
+\[ c = \frac{\beta(v_0)}{\varphi(v_0)}. \]
+For any $v\in V$, consider
+\[ v-\frac{\varphi(v)}{\varphi(v_0)}v_0. \]
+This vector is in $\nul\varphi$, so it is also in $\nul\beta$. Hence,
+\[ \beta\Bigl(v-\frac{\varphi(v)}{\varphi(v_0)}v_0\Bigr) = 0
+   \implies \beta(v) = \frac{\varphi(v)}{\varphi(v_0)}\beta(v_0) = c\varphi(v). \]
+Therefore, $\beta=c\varphi$.
+
+Conversely, if $\beta=c\varphi$, then clearly $\nul\varphi\subseteq\nul\beta$
+because if $\varphi(v)=0$, then $\beta(v)=c\varphi(v)=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V_1,\dots,V_m$ are vector spaces. Prove that
+$(V_1\times\cdots\times V_m)'$ and ${V_1}'\times\cdots\times{V_m}'$ are
+isomorphic vector spaces.
+\end{exercise}
+\begin{solution}
+Define a map
+$\Phi\colon(V_1\times\cdots\times V_m)'\to{V_1}'\times\cdots\times{V_m}'$ by
+\[ \Phi(\varphi) = (\varphi_1,\dots,\varphi_m), \]
+where $\varphi_i\in{V_i}'$ is defined by
+$\varphi_i(v_i)=\varphi(0,\dots,0,v_i,0,\dots,0)$, with $v_i$ in the
+$i$th position.
+
+First, we show that $\Phi$ is linear. Let
+$\varphi,\psi\in(V_1\times\cdots\times V_m)'$ and $a,b\in\F$. Then
+\begin{align*}
+\Phi(a\varphi+b\psi)
+ &= \bigl((a\varphi+b\psi)_1,\dots,(a\varphi+b\psi)_m\bigr)\\
+ &= (a\varphi_1+b\psi_1,\dots,a\varphi_m+b\psi_m) = a\Phi(\varphi)+b\Phi(\psi).
+\end{align*}
+
+Next, we show that $\Phi$ is bijective. For injectivity, suppose
+$\Phi(\varphi)=0$. Then $\varphi_i=0$ for all $i$, which implies
+$\varphi(0,\dots,0,v_i,0,\dots,0)=0$ for all $v_i\in V_i$. By linearity,
+$\varphi$ must be zero on all of $V_1\times\cdots\times V_m$, so $\varphi=0$.
+For surjectivity, given
+$(\varphi_1,\dots,\varphi_m)\in{V_1}'\times\cdots\times{V_m}'$, define
+$\varphi\in(V_1\times\cdots\times V_m)'$ by
+\[ \varphi(v_1,\dots,v_m) = \varphi_1(v_1)+\cdots+\varphi_m(v_m). \]
+Then $\Phi(\varphi)=(\varphi_1,\dots,\varphi_m)$, so $\Phi$ is surjective.
+
+Therefore, $\Phi$ is a linear isomorphism, and $(V_1\times\cdots\times V_m)'$
+and ${V_1}'\times\cdots\times{V_m}'$ are isomorphic vector spaces.
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $\varphi_1,\dots,\varphi_n$ is the
+dual basis of $V'$. Define $\Gamma\colon V\to\F^n$ and $\Lambda\colon\F^n\to V$
+by
+\[ \Gamma(v) = \bigl(\varphi_1(v),\dots,\varphi_n(v)\bigr) \quad\text{and}\quad
+   \Lambda(a_1,\dots,a_n) = a_1v_1+\cdots+a_nv_n. \]
+Explain why $\Gamma$ and $\Lambda$ are inverses of each other.
+\end{exercise}
+\begin{solution}
+To show that $\Gamma$ and $\Lambda$ are inverses of each other, we need to check
+that $\Gamma\bigl(\Lambda(a_1,\dots,a_n)\bigr)=(a_1,\dots,a_n)$ for all
+$(a_1,\dots,a_n)\in\F^n$ and $\Lambda\bigl(\Gamma(v)\bigr)=v$ for all $v\in V$.
+
+First, let $(a_1,\dots,a_n)\in\F^n$. Then
+\begin{align*}
+\Gamma\bigl(\Lambda(a_1,\dots,a_n)\bigr) &= \Gamma(a_1v_1+\cdots+a_nv_n)\\
+ &= \bigl(\varphi_1(a_1v_1+\cdots+a_nv_n),\dots,
+    \varphi_n(a_1v_1+\cdots+a_nv_n)\bigr).
+\end{align*}
+By the definition of the dual basis, we have $\varphi_i(v_j)=\delta_{ij}$ for all
+$i,j$. Therefore,
+\[ \varphi_i(a_1v_1+\cdots+a_nv_n) = a_i. \]
+Therefore,
+\[ \Gamma\bigl(\Lambda(a_1,\dots,a_n)\bigr) = (a_1,\dots,a_n). \]
+Next, let $v\in V$. Write $v=b_1v_1+\cdots+b_nv_n$ for some scalars
+$b_1,\dots,b_n$. Then
+\[ \Lambda\bigl(\Gamma(v)\bigr) = \Lambda\bigl(\varphi_1(v),\dots,\varphi_n(v)\bigr)
+   = \Lambda(b_1,\dots,b_n) = b_1v_1+\cdots+b_nv_n = v. \]
+
+Hence, $\Gamma$ and $\Lambda$ are inverses of each other.
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ is a positive integer. Show that the dual basis of the basis
+$1,x,\dots,x^m$ of $\Poly_m(\R)$ is $\varphi_0,\varphi_1,\dots,\varphi_m$, where
+\[ \varphi_k(p) = \frac{p^{(k)}(0)}{k!}. \]
+\exnote{Here $p^{(k)}$ denotes the $k^{\text{th}}$ derivative of $p$, with the
+understanding that the $0^{\text{th}}$ derivative of $p$ is $p$.}
+\end{exercise}
+\begin{solution}
+Let $p\in\Poly_m(\R)$. We can write $p(x)=a_0+a_1x+\cdots+a_mx^m$ for some
+scalars $a_0,\dots,a_m$. Then for each $k=0,1,\dots,m$, we have
+\begin{align*}
+p(x) &= a_0+a_1x+a_2x^2+\cdots+a_mx^m\\
+p'(x) &= a_1+2a_2x+\cdots+ma_mx^{m-1}\\
+p''(x) &= 2a_2+\cdots+m(m-1)a_mx^{m-2}\\
+&\;\;\vdots\\
+p^{(k)}(x) &= k!a_k+\cdots+\frac{m!}{(m-k)!}a_mx^{m-k}
+\end{align*}
+Then
+\[ \varphi_k(p) = \frac{p^{(k)}(0)}{k!} = a_k. \]
+Therefore, $\varphi_k(x^j)=\delta_{kj}$ for all $0\le k,j\le m$, which shows
+that $\varphi_0,\varphi_1,\dots,\varphi_m$ is indeed the dual basis of
+$1,x,\dots,x^m$.
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ is a positive integer.
+\begin{parts}
+\item Show that $1,x-5,\dots,(x-5)^m$ is a basis of $\Poly_m(\R)$.
+\item What is the dual basis of the basis in (a)?
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Note that $1,x-5,\dots,(x-5)^m$ is a list of $m+1$ polynomials in
+  $\Poly_m(\R)$ with differing degrees, and since $\Poly_m(\R)$ has dimension
+  $m+1$, this list forms a basis of $\Poly_m(\R)$.
+\item Substitute $y=x-5$. Then the basis $1,x-5,\dots,(x-5)^m$ becomes
+  $1,y,\dots,y^m$. By Exercise~3F9, the dual basis of $1,y,\dots,y^m$ is
+  $\varphi_0,\varphi_1,\dots,\varphi_m$, where
+  \[ \varphi_k(p) = \frac{p^{(k)}(0)}{k!}. \]
+  Since $y=x-5$, then
+  \[ \varphi_k(p) = \frac{p^{(k)}(5)}{k!}. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $\varphi_1,\dots,\varphi_n$ is the
+corresponding dual basis of $V'$. Suppose $\psi\in V'$. Prove that
+\[ \psi = \psi(v_1)\varphi_1+\cdots+\psi(v_n)\varphi_n. \]
+\end{exercise}
+\begin{solution}
+Let $v\in V$. Since $\varphi_1,\dots,\varphi_n$ is the dual basis of
+$v_1,\dots,v_n$, we have $\varphi_i(v_j)=\delta_{ij}$ for all $1\le i,j\le n$.
+Let $v=\alpha_1v_1+\cdots+\alpha_nv_n$ for some scalars
+$\alpha_1,\dots,\alpha_n$. Then
+\begin{align*}
+\bigl(\psi(v_1)\varphi_1+\cdots+\psi(v_n)\varphi_n\bigr)(v)
+ &= \psi(v_1)\varphi_1(v)+\cdots+\psi(v_n)\varphi_n(v)\\
+ &= \psi(v_1)\alpha_1+\cdots+\psi(v_n)\alpha_n\\
+ &= \psi(\alpha_1v_1+\cdots+\alpha_nv_n)\\
+ &= \psi(v)
+\end{align*}
+Since this holds for all $v\in V$, we conclude that
+\[ \psi = \psi(v_1)\varphi_1+\cdots+\psi(v_n)\varphi_n. \]
+
+\emph{Alternate proof.} \emph{Civil Service Pigeon.} Because
+$\varphi_1,\dots,\varphi_n$ is the dual basis, $\varphi_i(v_j)=\delta_{i,j}$.
+For each basis vector $v_j$,
+\[ \Bigl(\sum_{i=1}^n\psi(v_i)\varphi_i\Bigr)(v_j)
+   = \sum_{i=1}^n\psi(v_i)\varphi_i(v_j) = \psi(v_j). \]
+Since the two linear functionals agree on a basis of $V$, they are equal on all
+of $V$.
+\end{solution}
+
+\begin{exercise}
+Suppose $S,T\in\Lin(V,W)$.
+\begin{parts}
+\item Prove that $(S+T)'=S'+T'$.
+\item Prove that $(\lambda T)'=\lambda T'$ for all $\lambda\in\F$.
+\end{parts}
+\exnote{This exercise asks you to verify \textup{(a)} and \textup{(b)} in
+\ref{ax:3.120}.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $\psi\in W'$. Then for any $v\in V$, we have
+  \begin{align*}
+  \bigl((S+T)'(\psi)\bigr)(v) &= \psi\bigl((S+T)(v)\bigr)\\
+   &= \psi\bigl(S(v)+T(v)\bigr)\\
+   &= \psi\bigl(S(v)\bigr)+\psi\bigl(T(v)\bigr)\\
+   &= \bigl(S'(\psi)\bigr)(v)+\bigl(T'(\psi)\bigr)(v)\\
+   &= \bigl(S'(\psi)+T'(\psi)\bigr)(v).
+  \end{align*}
+  Since this holds for all $v\in V$, we conclude that
+  \[ (S+T)'(\psi) = S'(\psi)+T'(\psi). \]
+  Since this holds for all $\psi\in W'$, we have
+  \[ (S+T)' = S'+T'. \]
+\item Let $\psi\in W'$. Then for any $v\in V$, we have
+  \begin{align*}
+  \bigl((\lambda T)'(\psi)\bigr)(v) &= \psi\bigl((\lambda T)(v)\bigr)\\
+   &= \psi\bigl(\lambda T(v)\bigr)\\
+   &= \lambda\psi\bigl(T(v)\bigr)\\
+   &= \bigl(\lambda T'(\psi)\bigr)(v).
+  \end{align*}
+  Since this holds for all $v\in V$, we conclude that
+  \[ (\lambda T)'(\psi) = \lambda T'(\psi). \]
+  Since this holds for all $\psi\in W'$, we have
+  \[ (\lambda T)' = \lambda T'. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Show that the dual map of the identity operator on $V$ is the identity operator
+on $V'$.
+\end{exercise}
+\begin{solution}
+Let $\psi\in V'$. Let $I'$ denote the dual map of the identity operator $I$ on
+$V$. Then for any $v\in V$, we have
+\begin{align*}
+\bigl(I'(\psi)\bigr)(v) &= \psi\bigl(I(v)\bigr)\\
+ &= \psi(v).
+\end{align*}
+Since this holds for all $v\in V$, we conclude that
+\[ I'(\psi) = \psi. \]
+Since this holds for all $\psi\in V'$, then $I'$ must be the identity operator
+on $V'$.
+\end{solution}
+
+\begin{exercise}
+Define $T\colon\R^3\to\R^2$ by
+\[ T(x,y,z) = (4x+5y+6z,7x+8y+9z). \]
+Suppose $\varphi_1,\varphi_2$ denotes the dual basis of the standard basis of
+$\R^2$ and $\psi_1,\psi_2,\psi_3$ denotes the dual basis of the standard basis
+of $\R^3$.
+\begin{parts}
+\item Describe the linear functionals $T'(\varphi_1)$ and $T'(\varphi_2)$.
+\item Write $T'(\varphi_1)$ and $T'(\varphi_2)$ as linear combinations of
+  $\psi_1,\psi_2,\psi_3$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $(x,y,z)\in\R^3$. Then we have
+  \begin{align*}
+  \bigl(T'(\varphi_1)\bigr)\bigl((x,y,z)\bigr)
+   &= \varphi_1\bigl(T(x,y,z)\bigr)\\
+   &= \varphi_1(4x+5y+6z,7x+8y+9z)\\
+   &= 4x+5y+6z,\\
+  \bigl(T'(\varphi_2)\bigr)\bigl((x,y,z)\bigr)
+   &= \varphi_2\bigl(T(x,y,z)\bigr)\\
+   &= \varphi_2(4x+5y+6z,7x+8y+9z)\\
+   &= 7x+8y+9z.
+  \end{align*}
+\item We can write $T'(\varphi_1)$ and $T'(\varphi_2)$ as linear combinations
+  of $\psi_1,\psi_2,\psi_3$ as follows:
+  \begin{align*}
+  T'(\varphi_1) &= 4\psi_1+5\psi_2+6\psi_3,\\
+  T'(\varphi_2) &= 7\psi_1+8\psi_2+9\psi_3. \qedhere
+  \end{align*}
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Define $T\colon\Poly(\R)\to\Poly(\R)$ by
+\[ (Tp)(x) = x^2p(x)+p''(x) \]
+for each $x\in\R$.
+\begin{parts}
+\item Suppose $\varphi\in\Poly(\R)'$ is defined by $\varphi(p)=p'(4)$. Describe
+  the linear functional $T'(\varphi)$ on $\Poly(\R)$.
+\item Suppose $\varphi\in\Poly(\R)'$ is defined by $\varphi(p)=\int_0^1p$.
+  Evaluate $\bigl(T'(\varphi)\bigr)(x^3)$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $p\in\Poly(\R)$. Then we have
+  \begin{align*}
+  \bigl(T'(\varphi)\bigr)(p) &= \varphi\bigl(T(p)\bigr)\\
+   &= (Tp)'(4)\\
+   &= \bigl(2xp(x)+x^2p'(x)+p'''(x)\bigr)\big|_{x=4}\\
+   &= 8p(4)+16p'(4)+p'''(4).
+  \end{align*}
+\item Let $p(x)=x^3$. Then we have
+  \begin{align*}
+  \bigl(T'(\varphi)\bigr)(x^3) &= \varphi\bigl(T(x^3)\bigr)\\
+   &= \int_0^1 T(x^3)\,\mathrm{d}x\\
+   &= \int_0^1 \bigl(x^2\cdot x^3+(x^3)''\bigr)\,\mathrm{d}x\\
+   &= \int_0^1 (x^5+6x)\,\mathrm{d}x\\
+   &= 1/6+18/6\\
+   &= 19/6. \qedhere
+  \end{align*}
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $W$ is finite-dimensional and $T\in\Lin(V,W)$. Prove that
+\[ T'=0 \iff T=0. \]
+\end{exercise}
+\begin{solution}
+Suppose $T'=0$. Then for every $\varphi\in W'$ and every $v\in V$, we have
+\[ \bigl(T'(\varphi)\bigr)(v) = \varphi\bigl(T(v)\bigr) = 0. \]
+If $T(v)\ne0$ for some $v\in V$, then $T(v)\in W$. Since $W$ is
+finite-dimensional, then by Exercise~3F3, there exists $\psi\in W'$ such that
+$\psi\bigl(T(v)\bigr)\ne0$, which contradicts the fact that
+$\bigl(T'(\psi)\bigr)(v)=\psi\bigl(T(v)\bigr)=0$. Hence, $T(v)=0$ for every
+$v\in V$, and so $T=0$.
+
+Conversely, suppose $T=0$. Then for every $\varphi\in W'$ and every $v\in V$, we
+have
+\[ \bigl(T'(\varphi)\bigr)(v) = \varphi\bigl(T(v)\bigr) = \varphi(0) = 0. \]
+Hence, $T'=0$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Prove that $T$
+is invertible if and only if $T'\in\Lin(W',V')$ is invertible.
+\end{exercise}
+\begin{solution}
+Suppose $T$ is invertible. Then there exists $S\in\Lin(W,V)$ such that
+$ST=I_V$ and $TS=I_W$. Taking the dual of both sides, we get $T'S'=I_{W'}$ and
+$S'T'=I_{V'}$, which shows that $T'$ is invertible with inverse $S'$.
+
+Conversely, suppose $T'$ is invertible. Then $T'$ is an isomorphism. Then
+\[ \dim V = \dim V' = \dim W' = \dim W. \]
+By injectivity of $T'$, we have $\nul T'=\{0\}$. Since
+$\nul T'=(\range T)^0$, we have $(\range T)^0=\{0\}$ so that $\range T=W$.
+Hence, $T$ is surjective. Since $\dim V=\dim W$, we conclude that $T$ is
+injective as well. Therefore, $T$ is invertible.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional. Prove that the map that takes
+$T\in\Lin(V,W)$ to $T'\in\Lin(W',V')$ is an isomorphism of $\Lin(V,W)$ onto
+$\Lin(W',V')$.
+\end{exercise}
+\begin{solution}
+Let $\Phi\colon\Lin(V,W)\to\Lin(W',V')$ be the map defined by $\Phi(T)=T'$. We
+need to show that $\Phi$ is linear, injective, and surjective.
+
+Linearity: For $T_1,T_2\in\Lin(V,W)$ and $a\in\F$, we have
+\[ \Phi(T_1+T_2) = (T_1+T_2)' = {T_1}'+{T_2}' = \Phi(T_1)+\Phi(T_2), \]
+and
+\[ \Phi(aT_1) = (aT_1)' = a{T_1}' = a\Phi(T_1). \]
+Hence, $\Phi$ is linear.
+
+To see that $\Phi$ is injective, suppose $\Phi(T)=T'=0$. By Exercise~3F16, this
+implies $T=0$. Hence, $\Phi$ is injective.
+
+To see that $\Phi$ is surjective, note that since $V$ and $W$ are
+finite-dimensional,
+$\dim\Lin(V,W)=\dim V\cdot\dim W=\dim W'\cdot\dim V'=\dim\Lin(W',V')$. A linear
+map between finite-dimensional vector spaces of the same dimension that is
+injective is also surjective. Hence, $\Phi$ is surjective and therefore an
+isomorphism.
+\end{solution}
+
+\begin{exercise}
+Suppose $U\subseteq V$. Explain why
+\[ U^0 = \{\varphi\in V' : U\subseteq\nul\varphi\}. \]
+\end{exercise}
+\begin{solution}
+By definition, the annihilator $U^0$ of $U$ is the set of all linear
+functionals $\varphi\in V'$ such that $\varphi(u)=0$ for all $u\in U$.
+Equivalently, this means that $U\subseteq\nul\varphi$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$. Show that
+\[ U = \{v\in V : \varphi(v)=0 \text{ for every } \varphi\in U^0\}. \]
+\end{exercise}
+\begin{solution}
+Let $S=\{v\in V \mid \varphi(v)=0 \text{ for every } \varphi\in U^0\}$. We need
+to show that $S=U$.
+
+First, if $v\in U$, then for any $\varphi\in U^0$, we have $\varphi(v)=0$ by
+definition of the annihilator. Hence, $v\in S$, so $U\subseteq S$.
+
+Conversely, suppose $v\in S$. If $v\notin U$, then by Exercise~3F4, there
+exists a linear functional $\varphi\in V'$ such that $\varphi(u)=0$ for all
+$u\in U$ and $\varphi(v)\ne0$. But this $\varphi$ is in $U^0$, which
+contradicts $v\in S$. Hence, $v\in U$, and therefore $S\subseteq U$.
+
+Combining both inclusions, we get $S=U$, as desired.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $U$ and $W$ are subspaces of $V$.
+\begin{parts}
+\item Prove that $W^0\subseteq U^0$ if and only if $U\subseteq W$.
+\item Prove that $W^0=U^0$ if and only if $U=W$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $W^0\subseteq U^0$. If $u\in U$, then for any $\varphi\in W^0$,
+  we have $\varphi(u)=0$ because $\varphi\in U^0$. Hence, by Exercise~3F20, we
+  have $u\in W$, so $U\subseteq W$. Conversely, if $U\subseteq W$ and
+  $\varphi\in W^0$, then $\varphi(w)=0$ for all $w\in W$, and in particular for
+  all $u\in U$. Hence, $\varphi\in U^0$, so $W^0\subseteq U^0$.
+\item Suppose $W^0=U^0$. Then $W^0\subseteq U^0$ and $U^0\subseteq W^0$. By
+  part (a), this implies that $U\subseteq W$ and $W\subseteq U$. Hence, $U=W$.
+  Conversely, if $U=W$, then clearly $U^0=W^0$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $U$ and $W$ are subspaces of $V$.
+\begin{parts}
+\item Show that $(U+W)^0=U^0\cap W^0$.
+\item Show that $(U\cap W)^0=U^0+W^0$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Let $\varphi\in(U+W)^0$. Then for any $u\in U$ and $w\in W$, we have
+  $\varphi(u+w)=0$. In particular, taking $w=0$ gives $\varphi(u)=0$ for all
+  $u\in U$, so $\varphi\in U^0$. Similarly, taking $u=0$ gives $\varphi(w)=0$
+  for all $w\in W$, so $\varphi\in W^0$. Hence, $\varphi\in U^0\cap W^0$, and we
+  have shown that $(U+W)^0\subseteq U^0\cap W^0$.
+
+  Conversely, let $\varphi\in U^0\cap W^0$. Then for any $u\in U$ and $w\in W$,
+  we have $\varphi(u)=0$ and $\varphi(w)=0$, so
+  $\varphi(u+w)=\varphi(u)+\varphi(w)=0$. Hence, $\varphi\in(U+W)^0$, and we
+  have shown that $U^0\cap W^0\subseteq(U+W)^0$. Combining both inclusions, we
+  get $(U+W)^0=U^0\cap W^0$.
+\item From part (a), we know that $(U+W)^0=U^0\cap W^0$. Then
+  \[ \dim(U+W)^0 = \dim V-\dim(U+W). \]
+  Applying the dimension formula for a sum of subspaces, we have
+  \[ \dim(U^0+W^0) = \dim U^0+\dim W^0-\dim(U^0\cap W^0). \]
+  Since $(U+W)^0=U^0\cap W^0$, we have
+  $\dim(U^0\cap W^0)=\dim(U+W)^0=\dim V-\dim(U+W)$. Therefore,
+  \[ \dim(U^0+W^0) = \dim U^0+\dim W^0-\bigl(\dim V-\dim(U+W)\bigr). \]
+  Using the fact that $\dim U^0=\dim V-\dim U$ and $\dim W^0=\dim V-\dim W$, we
+  get
+  \begin{align*}
+  \dim(U^0+W^0)
+   &= \dim U^0+\dim W^0-\dim(U^0\cap W^0)\\
+   &= (\dim V-\dim U)+(\dim V-\dim W)-\bigl(\dim V-\dim(U+W)\bigr)\\
+   &= \dim V-\dim U+\dim V-\dim W-\dim V+\dim(U+W)\\
+   &= \dim V-\bigl(\dim U+\dim W-\dim(U+W)\bigr)\\
+   &= \dim V-\dim(U\cap W).
+  \end{align*}
+  Hence, $\dim(U^0+W^0)=\dim(U\cap W)^0$. To see equality, we just need to
+  prove one inclusion. If $\varphi=\varphi_U+\varphi_W\in U^0+W^0$, then for any
+  $v\in U\cap W$, we have $\varphi(v)=\varphi_U(v)+\varphi_W(v)=0+0=0$, so
+  $\varphi\in(U\cap W)^0$. Therefore, $U^0+W^0\subseteq(U\cap W)^0$. Since the
+  dimensions are equal, we conclude that $(U\cap W)^0=U^0+W^0$.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $\varphi_1,\dots,\varphi_m\in V'$. Prove
+that the following three sets are equal to each other.
+\begin{parts}
+\item $\spn(\varphi_1,\dots,\varphi_m)$
+\item $\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0$
+\item $\{\varphi\in V' : (\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)
+  \subseteq\nul\varphi\}$
+\end{parts}
+\end{exercise}
+\begin{solution}
+For ease of notation, let $A,B,C$ be the sets in the exercise, i.e.,
+\begin{align*}
+A &= \spn(\varphi_1,\dots,\varphi_m),\\
+B &= \bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0,\\
+C &= \{\varphi\in V' \mid (\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)
+      \subseteq\nul\varphi\}.
+\end{align*}
+We will show that $A=B$ and $B=C$. Starting off with $B=C$, note that by
+definition,
+\begin{align*}
+B &= \bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0\\
+  &= \{\varphi\in V' \mid (\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)
+     \subseteq\nul\varphi\} = C,
+\end{align*}
+where the reformulation of the annihilator subspace was shown in
+Exercise~3F19.
+
+To show that $A=B$, we may use Exercise~3F22(b) repeatedly to rewrite $B$ as
+\[ B = (\nul\varphi_1)^0+\cdots+(\nul\varphi_m)^0. \]
+By Exercise~3F6, we have $(\nul\varphi_i)^0=\spn(\varphi_i)$ for each
+$i=1,\dots,m$. Therefore,
+\begin{align*}
+B &= (\nul\varphi_1)^0+\cdots+(\nul\varphi_m)^0\\
+  &= \spn(\varphi_1)+\cdots+\spn(\varphi_m) = \spn(\varphi_1,\dots,\varphi_m)
+   = A.
+\end{align*}
+We conclude that $A=B$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $v_1,\dots,v_m\in V$. Define a linear map
+$\Gamma\colon V'\to\F^m$ by
+$\Gamma(\varphi)=\bigl(\varphi(v_1),\dots,\varphi(v_m)\bigr)$.
+\begin{parts}
+\item Prove that $v_1,\dots,v_m$ spans $V$ if and only if $\Gamma$ is injective.
+\item Prove that $v_1,\dots,v_m$ is linearly independent if and only if
+  $\Gamma$ is surjective.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $v_1,\dots,v_m$ spans $V$. If $\Gamma(\varphi)=0$, then
+  $\varphi(v_i)=0$ for all $i=1,\dots,m$. Since $v_1,\dots,v_m$ spans $V$, it
+  follows that $\varphi(v)=0$ for all $v\in V$, i.e., $\varphi=0$. Hence,
+  $\Gamma$ is injective.
+
+  Conversely, suppose $\Gamma$ is injective. If $v_1,\dots,v_m$ does not span
+  $V$, then by Exercise~3F4, there exists a nonzero $\varphi\in V'$ that
+  vanishes on $v_1,\dots,v_m$. But then $\Gamma(\varphi)=0$, contradicting the
+  injectivity of $\Gamma$. Hence, $v_1,\dots,v_m$ must span $V$.
+\item Suppose $v_1,\dots,v_m$ is linearly independent. Extend this list to a
+  basis $v_1,\dots,v_m,\allowbreak v_{m+1},\dots,v_n$ of $V$. Define linear functionals
+  $\varphi_1,\dots,\varphi_m\in V'$ by setting $\varphi_i(v_j)=\delta_{ij}$ for
+  $i,j=1,\dots,m$ and $\varphi_i(v_j)=0$ for $j=m+1,\dots,n$. Then for any
+  $(a_1,\dots,a_m)\in\F^m$, the linear functional
+  $\varphi=a_1\varphi_1+\cdots+a_m\varphi_m$ satisfies
+  $\Gamma(\varphi)=(a_1,\dots,a_m)$. Hence, $\Gamma$ is surjective.
+
+  Conversely, suppose $\Gamma$ is surjective. If $v_1,\dots,v_m$ is not
+  linearly independent, then there exist scalars $a_1,\dots,a_m$, not all zero,
+  such that $a_1v_1+\cdots+a_mv_m=0$. Consider some index $j$ such that
+  $a_j\ne0$. Since $\Gamma$ is surjective, there exists $\varphi\in V'$ such
+  that $\varphi(v_j)=1$ and $\varphi(v_i)=0$ for all $i\ne j$. Then
+  \[ 0 = \varphi(a_1v_1+\cdots+a_mv_m)
+       = a_1\varphi(v_1)+\cdots+a_m\varphi(v_m) = a_j\ne0, \]
+  a contradiction. Hence, $v_1,\dots,v_m$ must be linearly independent.
+  \qedhere
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $\varphi_1,\dots,\varphi_m\in V'$. Define
+a linear map $\Gamma\colon V\to\F^m$ by
+$\Gamma(v)=\bigl(\varphi_1(v),\dots,\varphi_m(v)\bigr)$.
+\begin{parts}
+\item Prove that $\varphi_1,\dots,\varphi_m$ spans $V'$ if and only if $\Gamma$
+  is injective.
+\item Prove that $\varphi_1,\dots,\varphi_m$ is linearly independent if and only
+  if $\Gamma$ is surjective.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $\varphi_1,\dots,\varphi_m$ spans $V'$. If $\Gamma(v)=0$, then
+  $\varphi_i(v)=0$ for all $i=1,\dots,m$. Since $\varphi_1,\dots,\varphi_m$
+  spans $V'$, then by Exercise~3F3, it follows that $\psi(v)=0$ for all
+  $\psi\in V'$, i.e., $v=0$. Hence, $\Gamma$ is injective.
+
+  Conversely, suppose $\Gamma$ is injective. Then $\nul\Gamma=\{0\}$. By
+  definition, we have
+  \[ \nul\Gamma = \nul\varphi_1\cap\cdots\cap\nul\varphi_m. \]
+  By Exercise~3F23, we have
+  \begin{align*}
+  \spn(\varphi_1,\dots,\varphi_m)
+   &= \bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0\\
+   &= (\nul\Gamma)^0 = \{\psi\in V' \mid \nul\Gamma\subseteq\nul\psi\} = V'.
+  \end{align*}
+  Hence, $\varphi_1,\dots,\varphi_m$ spans $V'$.
+\item Suppose $\varphi_1,\dots,\varphi_m$ is linearly independent. Then
+  $\dim\spn(\varphi_1,\dots,\varphi_m)=m$. By the fundamental theorem of linear
+  maps and Exercise~3F23, we have
+  \begin{align*}
+  \dim\range\Gamma &= \dim V-\dim\nul\Gamma\\
+   &= \dim V-\dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr) = m.
+  \end{align*}
+  Since $\range\Gamma$ is a subspace of $\F^m$ and has dimension $m$, we
+  conclude that $\range\Gamma=\F^m$, so $\Gamma$ is surjective.
+
+  Conversely, suppose $\Gamma$ is surjective. Then $\range\Gamma=\F^m$, so
+  $\dim\range\Gamma=m$. By the fundamental theorem of linear maps, we have
+  \[ \dim\range\Gamma = \dim V-\dim\nul\Gamma
+     = \dim V-\dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr). \]
+  By Exercise~3F23, we have
+  \[ \spn(\varphi_1,\dots,\varphi_m)
+     = \bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0, \]
+  so $\dim\spn(\varphi_1,\dots,\varphi_m)
+  =\dim V-\dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)=m$.
+  Hence, $\varphi_1,\dots,\varphi_m$ is linearly independent.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $\Omega$ is a subspace of $V'$. Prove that
+\[ \Omega = \{v\in V : \varphi(v)=0 \text{ for every } \varphi\in\Omega\}^0. \]
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{This says $\Omega=(\Omega^0)^0$.}
+
+Let $S=\{v\in V \mid \varphi(v)=0 \text{ for every } \varphi\in\Omega\}$. We
+need to show that $\Omega=S^0$. Let $\varphi_1,\dots,\varphi_m$ be a basis of
+$\Omega$. Then $S=(\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)$. By
+Exercise~3F23, we have
+\[ \Omega = \spn(\varphi_1,\dots,\varphi_m)
+   = \bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0 = S^0.
+   \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin\bigl(\Poly_5(\R)\bigr)$ and $\nul T'=\spn(\varphi)$, where
+$\varphi$ is the linear functional on $\Poly_5(\R)$ defined by
+$\varphi(p)=p(8)$. Prove that
+\[ \range T = \{p\in\Poly_5(\R) : p(8)=0\}. \]
+\end{exercise}
+\begin{solution}
+Let $W=\{p\in\Poly_5(\R) \mid p(8)=0\}$. We need to show that $\range T=W$.
+
+First, if $p\in\range T$, then there exists $q\in\Poly_5(\R)$ such that
+$T(q)=p$. Since $\varphi\in\nul T'$, we have
+\[ \varphi\bigl(T(q)\bigr) = \bigl(T'(\varphi)\bigr)(q) = 0. \]
+But $\varphi\bigl(T(q)\bigr)=T(q)(8)=p(8)$, so $p(8)=0$. Hence, $p\in W$, and
+we have shown that $\range T\subseteq W$.
+
+Now we compare the dimensions of $\range T$ and $W$. Recall that
+$(\range T)^0=\nul T'=\spn(\varphi)$, so $\dim(\range T)^0=1$. Since
+$\Poly_5(\R)$ has dimension $6$, we have $\dim\range T=6-1=5$. On the other
+hand, $W$ is the set of all polynomials in $\Poly_5(\R)$ that vanish at $8$.
+Using the fundamental theorem of linear maps and the fact that $\varphi\ne0$ is
+surjective by Exercise~3F1, we have $\dim W=\dim\Poly_5(\R)-1=5$. Hence,
+$\range T$ and $W$ are subspaces of $\Poly_5(\R)$ with the same dimension, and
+$\range T\subseteq W$. We conclude that $\range T=W$, as desired.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $\varphi_1,\dots,\varphi_m$ is a linearly
+independent list in $V'$. Prove that
+\[ \dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)
+   = (\dim V)-m. \]
+\end{exercise}
+\begin{solution}
+Since $\varphi_1,\dots,\varphi_m$ is linearly independent, we have
+$\dim\spn(\varphi_1,\allowbreak\dots,\varphi_m)=m$. By Exercise~3F23, we have
+\[ \spn(\varphi_1,\dots,\varphi_m)
+   = \bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0. \]
+Hence, $\dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0=m$.
+Since $V$ is finite-dimensional, we have
+\begin{align*}
+\dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)
+ &= \dim V-\dim\bigl((\nul\varphi_1)\cap\cdots\cap(\nul\varphi_m)\bigr)^0\\
+ &= \dim V-m,
+\end{align*}
+as desired.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$.
+\begin{parts}
+\item Prove that if $\varphi\in W'$ and $\nul T'=\spn(\varphi)$, then
+  $\range T=\nul\varphi$.
+\item Prove that if $\psi\in V'$ and $\range T'=\spn(\psi)$, then
+  $\nul T=\nul\psi$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Since $(\range T)^0=\nul T'$ and $\nul T'=\spn(\varphi)$, we have
+  $(\range T)^0=\spn(\varphi)$. Since $(U^0)^0=U$ in finite dimensions, taking
+  annihilators yields
+  \[ \range T = \bigl(\spn(\varphi)\bigr)^0 = \nul\varphi. \]
+\item Using $\nul T=(\range T')^0$ and $\range T'=\spn(\psi)$ immediately
+  yields
+  \[ \nul T = \bigl(\spn(\psi)\bigr)^0 = \nul\psi. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $\varphi_1,\dots,\varphi_n$ is a basis of
+$V'$. Show that there exists a basis of $V$ whose dual basis is
+$\varphi_1,\dots,\varphi_n$.
+\end{exercise}
+\begin{solution}
+Let $\varphi_1,\dots,\varphi_n$ be a basis of $V'$. From Exercise~3F25, there
+exists a map $\Gamma\colon V\to\F^n$ that is an isomorphism, since
+$\varphi_1,\dots,\varphi_n$ is a basis for $V'$. Let $e_1,\dots,e_n$ be the
+standard basis of $\F^n$. Since $\Gamma$ is an isomorphism, there exist
+$v_1,\dots,v_n\in V$ such that $\Gamma(v_i)=e_i$ for each $i=1,\dots,n$. We
+claim that $v_1,\dots,v_n$ is a basis of $V$ whose dual basis is
+$\varphi_1,\dots,\varphi_n$.
+
+To see that $v_1,\dots,v_n$ is a basis of $V$, we show linear independence.
+Suppose $a_1,\dots,a_n$ are scalars such that $a_1v_1+\cdots+a_nv_n=0$.
+Applying $\Gamma$ to both sides gives
+\[ a_1e_1+\cdots+a_ne_n = \Gamma(a_1v_1+\cdots+a_nv_n) = \Gamma(0) = 0. \]
+Since $e_1,\dots,e_n$ is a basis of $\F^n$, it follows that
+$a_1=\cdots=a_n=0$. Hence, $v_1,\dots,v_n$ is linearly independent. Since
+$\dim V=n$, we conclude that $v_1,\dots,v_n$ is a basis of $V$. To see that the
+dual basis of $v_1,\dots,v_n$ is $\varphi_1,\dots,\varphi_n$, we need to show
+that $\varphi_i(v_j)=\delta_{ij}$ for each $i,j=1,\dots,n$. Since
+$\Gamma(v_j)=e_j$, we have
+\[ \varphi_i(v_j) = \bigl(\Gamma(v_j)\bigr)_i = (e_j)_i = \delta_{ij}, \]
+as desired.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$. Let $i\colon U\to V$ be the inclusion map
+defined by $i(u)=u$. Thus $i'\in\Lin(V',U')$.
+\begin{parts}
+\item Show that $\nul i'=U^0$.
+\item Prove that if $V$ is finite-dimensional, then $\range i'=U'$.
+\item Prove that if $V$ is finite-dimensional, then $\tilde{\imath}'$ is an
+  isomorphism from $V'/U^0$ onto $U'$.
+\end{parts}
+\exnote{The isomorphism in \textup{(c)} is natural in that it does not depend on
+a choice of basis in either vector space.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Note that if $\varphi\in\nul i'$, then $i'(\varphi)=0$, so
+  $\varphi\bigl(i(u)\bigr)=0$ for all $u\in U$. Since $i(u)=u$, we have
+  $\varphi(u)=0$ for all $u\in U$, so $\varphi\in U^0$. Hence,
+  $\nul i'\subseteq U^0$. Conversely, if $\varphi\in U^0$, then $\varphi(u)=0$
+  for all $u\in U$, so $i'(\varphi)=0$. Hence, $U^0\subseteq\nul i'$, and we
+  conclude that $\nul i'=U^0$.
+\item To see $\range i'\subseteq U'$, note that if $\varphi\in V'$, then
+  $i'(\varphi)\in U'$ since $i'(\varphi)(u)=\varphi\bigl(i(u)\bigr)=\varphi(u)$
+  for all $u\in U$. Hence, $\range i'\subseteq U'$.
+
+  Since $V$ is finite-dimensional, we have $\dim V'=\dim V$. By the fundamental
+  theorem of linear maps, we have
+  \[ \dim\range i' = \dim V'-\dim\nul i' = \dim V-\dim U^0. \]
+  By the annihilator dimension formula, we have $\dim U^0=\dim V-\dim U$.
+  Hence,
+  \[ \dim\range i' = \dim V-(\dim V-\dim U) = \dim U = \dim U'. \]
+  Since $\range i'$ is a subspace of $U'$ and has the same dimension, we
+  conclude that $\range i'=U'$, as desired.
+\item From part (a), we have $\nul i'=U^0$. Then we know that $V'/U^0$ is
+  isomorphic to $\range i'$. Then the induced map
+  $\tilde{\imath}'\colon V'/U^0\to\range i'$ defined by
+  $\tilde{\imath}'(\varphi+U^0)=i'(\varphi)$ is an isomorphism. Since
+  $\range i'=U'$ by part (b), we conclude that $i'$ induces an isomorphism from
+  $V'/U^0$ onto $U'$, as desired.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+The \emph{double dual space} of $V$, denoted by $V''$, is defined to be the
+dual space of $V'$. In other words, $V''=(V')'$. Define $\Lambda\colon V\to V''$
+by
+\[ (\Lambda v)(\varphi) = \varphi(v) \]
+for each $v\in V$ and each $\varphi\in V'$.
+\begin{parts}
+\item Show that $\Lambda$ is a linear map from $V$ to $V''$.
+\item Show that if $T\in\Lin(V)$, then $T''\circ\Lambda=\Lambda\circ T$, where
+  $T''=(T')'$.
+\item Show that if $V$ is finite-dimensional, then $\Lambda$ is an isomorphism
+  from $V$ onto $V''$.
+\end{parts}
+\exnote{Suppose $V$ is finite-dimensional. Then $V$ and $V'$ are isomorphic, but
+finding an isomorphism from $V$ onto $V'$ generally requires choosing a basis of
+$V$. In contrast, the isomorphism $\Lambda$ from $V$ onto $V''$ does not require
+a choice of basis and thus is considered more natural.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item To see that $\Lambda$ is linear, let $v,w\in V$ and $a\in\F$. Then for
+  any $\varphi\in V'$, we have
+  \begin{align*}
+  \bigl(\Lambda(v+w)\bigr)(\varphi) &= \varphi(v+w) = \varphi(v)+\varphi(w)
+    = (\Lambda v)(\varphi)+(\Lambda w)(\varphi),\\
+  \bigl(\Lambda(av)\bigr)(\varphi) &= \varphi(av) = a\varphi(v)
+    = a(\Lambda v)(\varphi).
+  \end{align*}
+  Hence, $\Lambda$ is linear.
+\item Let $v\in V$ and $\varphi\in V'$. Then
+  \begin{align*}
+  \bigl((T''\circ\Lambda)(v)\bigr)(\varphi)
+   &= \bigl(T''(\Lambda v)\bigr)(\varphi)\\
+   &= (\Lambda v)\bigl(T'(\varphi)\bigr)\\
+   &= T'(\varphi)(v)\\
+   &= \varphi\bigl(T(v)\bigr)\\
+   &= \Bigl(\Lambda\bigl(T(v)\bigr)\Bigr)(\varphi)
+    = \bigl((\Lambda\circ T)(v)\bigr)(\varphi).
+  \end{align*}
+  Hence, $T''\circ\Lambda=\Lambda\circ T$.
+\item Since $V$ is finite-dimensional, we have $\dim V=\dim V'$. Then
+  $\dim V''=\dim(V')'=\dim V'=\dim V$. By the fundamental theorem of linear
+  maps, we have
+  \[ \dim\range\Lambda = \dim V-\dim\nul\Lambda. \]
+  To see that $\Lambda$ is injective, suppose $\Lambda v=0$ for some $v\in V$.
+  Then for any $\varphi\in V'$, we have $\varphi(v)=(\Lambda v)(\varphi)=0$.
+  Since this holds for all $\varphi\in V'$ by Exercise~3F3, it follows that
+  $v=0$. Hence, $\Lambda$ is injective, so $\nul\Lambda=\{0\}$. Therefore,
+  $\dim\range\Lambda=\dim V-0=\dim V$. Since $\range\Lambda$ is a subspace of
+  $V''$ and has the same dimension as $V''$, we conclude that
+  $\range\Lambda=V''$, so $\Lambda$ is surjective. Combining injectivity and
+  surjectivity, we conclude that $\Lambda$ is an isomorphism from $V$ onto
+  $V''$, as desired.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ is a subspace of $V$. Let $\pi\colon V\to V/U$ be the usual quotient
+map. Thus $\pi'\in\Lin\bigl((V/U)',V'\bigr)$.
+\begin{parts}
+\item Show that $\pi'$ is injective.
+\item Show that $\range\pi'=U^0$.
+\item Conclude that $\pi'$ is an isomorphism from $(V/U)'$ onto $U^0$.
+\end{parts}
+\exnote{The isomorphism in \textup{(c)} is natural in that it does not depend on
+a choice of basis in either vector space. In fact, there is no assumption here
+that any of these vector spaces are finite-dimensional.}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose $\pi'(\varphi)=0$ for some $\varphi\in(V/U)'$. Then
+  $\varphi\bigl(\pi(v)\bigr)=0$ for all $v\in V$. Since $\pi(v)=v+U$, we have
+  $\varphi(v+U)=0$ for all $v\in V$. Since this holds for all $v\in V$ by
+  surjectivity of $\pi$, it follows that $\varphi=0$. Hence, $\pi'$ is
+  injective.
+\item To see $\range\pi'\subseteq U^0$, note that if $\varphi\in(V/U)'$, then
+  for any $u\in U$, we have
+  $\pi'(\varphi)(u)=\varphi\bigl(\pi(u)\bigr)=\varphi(0+U)=0$. Hence,
+  $\range\pi'\subseteq U^0$.
+
+  To see the other inclusion, let $\psi\in U^0$. We want to find
+  $\varphi\in(V/U)'$ such that $\pi'(\varphi)=\psi$. Define
+  $\varphi\colon V/U\to\F$ by $\varphi(v+U)=\psi(v)$ for each $v\in V$. We need
+  to check that $\varphi$ is well-defined. If $v+U=w+U$, then $v-w\in U$, so
+  $\psi(v-w)=0$, which implies that $\psi(v)=\psi(w)$. Hence, $\varphi$ is
+  well-defined. It is also linear since for any $a,b\in\F$ and $v,w\in V$, we
+  have
+  \begin{align*}
+  \varphi\bigl(a(v+U)+b(w+U)\bigr) &= \varphi\bigl((av+bw)+U\bigr)
+    = \psi(av+bw)\\
+   &= a\psi(v)+b\psi(w) = a\varphi(v+U)+b\varphi(w+U).
+  \end{align*}
+  Finally, we have
+  $\pi'(\varphi)(v)=\varphi\bigl(\pi(v)\bigr)=\varphi(v+U)=\psi(v)$ for all
+  $v\in V$, so $\pi'(\varphi)=\psi$. Hence, $U^0\subseteq\range\pi'$, and we
+  conclude that $\range\pi'=U^0$.
+\item From part (a), we have $\pi'$ is injective. From part (b), we have
+  $\range\pi'=U^0$. Then the induced map $\tilde{\pi}'\colon(V/U)'\to U^0$
+  defined by $\tilde{\pi}'(\varphi)=\pi'(\varphi)$ is an isomorphism. Hence,
+  $\pi'$ is an isomorphism from $(V/U)'$ onto $U^0$, as desired.
+\end{parts}
+\end{solution}

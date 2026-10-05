@@ -1,0 +1,432 @@
+% Source: book pp. 243--250 (PDF 257--264). No solutions in the manual.
+% a numbered display (Axler numbers a few equations with the item counter):
+%   text\axeqstep{ax:7.28}  \[ ... \tag{\thetheorem} \]
+\DeclareRobustCommand\axeqstep[1]{\refstepcounter{theorem}\label{#1}}
+% the small italic comment that follows some exercises
+\section{Spectral Theorem}
+
+Recall that a diagonal matrix is a square matrix that is $0$ everywhere except
+possibly on the diagonal. Recall that an operator on $V$ is called
+diagonalizable if the operator has a diagonal matrix with respect to some basis
+of $V$. Recall also that this happens if and only if there is a basis of $V$
+consisting of eigenvectors of the operator (see \ref{ax:5.55}).
+
+The nicest operators on $V$ are those for which there is an \emph{orthonormal}
+basis of $V$ with respect to which the operator has a diagonal matrix. These are
+precisely the operators $T\in\Lin(V)$ such that there is an orthonormal basis of
+$V$ consisting of eigenvectors of $T$. Our goal in this section is to prove the
+spectral theorem, which characterizes these operators as the self-adjoint
+operators when $\F=\R$ and as the normal operators when $\F=\C$.
+
+The spectral theorem is probably the most useful tool in the study of operators
+on inner product spaces. Its extension to certain infinite-dimensional inner
+product spaces (see, for example, Section~10D of the author's book
+\emph{Measure, Integration \& Real Analysis}) plays a key role in functional
+analysis.
+
+Because the conclusion of the spectral theorem depends on $\F$, we will break
+the spectral theorem into two pieces, called the real spectral theorem and the
+complex spectral theorem.
+
+\subsection{Real Spectral Theorem}
+
+To prove the real spectral theorem, we will need two preliminary results. These
+preliminary results hold on both real and complex inner product spaces, but
+they are not needed for the proof of the complex spectral theorem.
+
+\marginnote{This completing-the-square technique can be used to derive the
+quadratic formula.}%
+You could guess that the next result is true and even discover its proof by
+thinking about quadratic polynomials with real coefficients. Specifically,
+suppose $b,c\in\R$ and $b^2<4c$. Let $x$ be a real number. Then
+\[ x^2+bx+c = \Bigl(x+\frac{b}{2}\Bigr)^2+\Bigl(c-\frac{b^2}{4}\Bigr) > 0. \]
+In particular, $x^2+bx+c$ is an invertible real number (a convoluted way of
+saying that it is not $0$). Replacing the real number $x$ with a self-adjoint
+operator (recall the analogy between real numbers and self-adjoint operators)
+leads to the next result.
+
+\begin{result}[Invertible quadratic expressions]\label{ax:7.26}
+Suppose $T\in\Lin(V)$ is self-adjoint and $b,c\in\R$ are such that $b^2<4c$.
+Then
+\[ T^2+bT+cI \]
+is an invertible operator.
+\end{result}
+
+\begin{proof}
+Let $v$ be a nonzero vector in $V$. Then
+\begin{align*}
+\bigl\langle (T^2+bT+cI)v,v\bigr\rangle
+  &= \ip{T^2v}{v}+b\ip{Tv}{v}+c\ip{v}{v}\\
+  &= \ip{Tv}{Tv}+b\ip{Tv}{v}+c\norm{v}^2\\
+  &\ge \norm{Tv}^2-\abs{b}\,\norm{Tv}\,\norm{v}+c\norm{v}^2\\
+  &= \Bigl(\norm{Tv}-\frac{\abs{b}\,\norm{v}}{2}\Bigr)^2
+     +\Bigl(c-\frac{b^2}{4}\Bigr)\norm{v}^2\\
+  &> 0,
+\end{align*}
+where the third line above holds by the Cauchy--Schwarz inequality
+(\ref{ax:6.14}). The last inequality implies that $(T^2+bT+cI)v\ne0$. Thus
+$T^2+bT+cI$ is injective, which implies that it is invertible (see
+\ref{ax:3.65}).
+\end{proof}
+
+The next result will be a key tool in our proof of the real spectral theorem.
+
+\begin{result}[Minimal polynomial of self-adjoint operator]\label{ax:7.27}
+Suppose $T\in\Lin(V)$ is self-adjoint. Then the minimal polynomial of $T$
+equals $(z-\lambda_1)\cdots(z-\lambda_m)$ for some
+$\lambda_1,\dots,\lambda_m\in\R$.
+\end{result}
+
+\begin{proof}
+First suppose $\F=\C$. The zeros of the minimal polynomial of $T$ are the
+eigenvalues of $T$ [by \ref{ax:5.27}(a)]. All eigenvalues of $T$ are real (by
+\ref{ax:7.12}). Thus the second version of the fundamental theorem of algebra
+(see \ref{ax:4.13}) tells us that the minimal polynomial of $T$ has the desired
+form.
+
+Now suppose $\F=\R$. By the factorization of a polynomial over $\R$ (see
+\ref{ax:4.16}) there exist $\lambda_1,\dots,\lambda_m\in\R$ and
+$b_1,\dots,b_N,c_1,\dots,c_N\in\R$ with $b_k^2<4c_k$ for each $k$ such that the
+minimal polynomial of $T$ equals\axeqstep{ax:7.28}
+\[ (z-\lambda_1)\cdots(z-\lambda_m)(z^2+b_1z+c_1)\cdots(z^2+b_Nz+c_N);
+   \tag{\thetheorem} \]
+here either $m$ or $N$ might equal $0$, meaning that there are no terms of the
+corresponding form. Now
+\[ (T-\lambda_1I)\cdots(T-\lambda_mI)(T^2+b_1T+c_1I)\cdots(T^2+b_NT+c_NI) = 0. \]
+If $N>0$, then we could multiply both sides of the equation above on the right
+by the inverse of $T^2+b_NT+c_NI$ (which is an invertible operator by
+\ref{ax:7.26}) to obtain a polynomial expression of $T$ that equals $0$. The
+corresponding polynomial would have degree two less than the degree of
+\ref{ax:7.28}, violating the minimality of the degree of the polynomial with
+this property. Thus we must have $N=0$, which means that the minimal polynomial
+in \ref{ax:7.28} has the form $(z-\lambda_1)\cdots(z-\lambda_m)$, as desired.
+\end{proof}
+
+The result above along with \ref{ax:5.27}(a) implies that every self-adjoint
+operator has an eigenvalue. In fact, as we will see in the next result,
+self-adjoint operators have enough eigenvectors to form a basis.
+
+The next result, which gives a complete description of the self-adjoint
+operators on a real inner product space, is one of the major theorems in linear
+algebra.
+
+\begin{result}[Real spectral theorem]\label{ax:7.29}
+Suppose $\F=\R$ and $T\in\Lin(V)$. Then the following are equivalent.
+\begin{parts}
+\item $T$ is self-adjoint.
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $V$.
+\item $V$ has an orthonormal basis consisting of eigenvectors of $T$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+First suppose (a) holds, so $T$ is self-adjoint. Our results on minimal
+polynomials, specifically \ref{ax:6.37} and \ref{ax:7.27}, imply that $T$ has
+an upper-triangular matrix with respect to some orthonormal basis of $V$. With
+respect to this orthonormal basis, the matrix of $T^*$ is the transpose of the
+matrix of $T$. However, $T^*=T$. Thus the transpose of the matrix of $T$ equals
+the matrix of $T$. Because the matrix of $T$ is upper-triangular, this means
+that all entries of the matrix above and below the diagonal are $0$. Hence the
+matrix of $T$ is a diagonal matrix with respect to the orthonormal basis. Thus
+(a) implies (b).
+
+Conversely, now suppose (b) holds, so $T$ has a diagonal matrix with respect to
+some orthonormal basis of $V$. That diagonal matrix equals its transpose. Thus
+with respect to that basis, the matrix of $T^*$ equals the matrix of $T$. Hence
+$T^*=T$, proving that (b) implies (a).
+
+The equivalence of (b) and (c) follows from the definitions [or see the proof
+that (a) and (b) are equivalent in \ref{ax:5.55}].
+\end{proof}
+
+\begin{example}[An orthonormal basis of eigenvectors for an operator]%
+\label{ax:7.30}
+Consider the operator $T$ on $\R^3$ whose matrix (with respect to the standard
+basis) is
+\[ \begin{pmatrix} 14 & -13 & 8\\ -13 & 14 & 8\\ 8 & 8 & -7 \end{pmatrix}. \]
+This matrix with real entries equals its transpose; thus $T$ is self-adjoint.
+As you can verify,
+\[ \frac{(1,-1,0)}{\sqrt2},\ \frac{(1,1,1)}{\sqrt3},\ \frac{(1,1,-2)}{\sqrt6} \]
+is an orthonormal basis of $\R^3$ consisting of eigenvectors of $T$. With
+respect to this basis, the matrix of $T$ is the diagonal matrix
+\[ \begin{pmatrix} 27 & 0 & 0\\ 0 & 9 & 0\\ 0 & 0 & -15 \end{pmatrix}. \]
+\end{example}
+
+See Exercise~17 for a version of the real spectral theorem that applies
+simultaneously to more than one operator.
+
+\subsection{Complex Spectral Theorem}
+
+The next result gives a complete description of the normal operators on a
+complex inner product space.
+
+\begin{result}[Complex spectral theorem]\label{ax:7.31}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then the following are equivalent.
+\begin{parts}
+\item $T$ is normal.
+\item $T$ has a diagonal matrix with respect to some orthonormal basis of $V$.
+\item $V$ has an orthonormal basis consisting of eigenvectors of $T$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+First suppose (a) holds, so $T$ is normal. By Schur's theorem (\ref{ax:6.38}),
+there is an orthonormal basis $e_1,\dots,e_n$ of $V$ with respect to which $T$
+has an upper-triangular matrix. Thus we can write\axeqstep{ax:7.32}
+\[ \Mat\bigl(T,(e_1,\dots,e_n)\bigr) =
+   \begin{pmatrix} a_{1,1} & \cdots & a_{1,n}\\ & \ddots & \vdots\\
+   0 & & a_{n,n} \end{pmatrix}. \tag{\thetheorem} \]
+We will show that this matrix is actually a diagonal matrix.
+
+We see from the matrix above that
+\begin{align*}
+\norm{Te_1}^2 &= \abs{a_{1,1}}^2,\\
+\norm{T^*e_1}^2 &= \abs{a_{1,1}}^2+\abs{a_{1,2}}^2+\cdots+\abs{a_{1,n}}^2.
+\end{align*}
+
+Because $T$ is normal, $\norm{Te_1}=\norm{T^*e_1}$ (see \ref{ax:7.20}). Thus the
+two equations above imply that all entries in the first row of the matrix in
+\ref{ax:7.32}, except possibly the first entry $a_{1,1}$, equal $0$.
+
+Now \ref{ax:7.32} implies
+\[ \norm{Te_2}^2 = \abs{a_{2,2}}^2 \]
+(because $a_{1,2}=0$, as we showed in the paragraph above) and
+\[ \norm{T^*e_2}^2 = \abs{a_{2,2}}^2+\abs{a_{2,3}}^2+\cdots+\abs{a_{2,n}}^2. \]
+Because $T$ is normal, $\norm{Te_2}=\norm{T^*e_2}$. Thus the two equations
+above imply that all entries in the second row of the matrix in \ref{ax:7.32},
+except possibly the diagonal entry $a_{2,2}$, equal $0$.
+
+Continuing in this fashion, we see that all nondiagonal entries in the matrix
+\ref{ax:7.32} equal $0$. Thus (b) holds, completing the proof that (a) implies
+(b).
+
+Now suppose (b) holds, so $T$ has a diagonal matrix with respect to some
+orthonormal basis of $V$. The matrix of $T^*$ (with respect to the same basis)
+is obtained by taking the conjugate transpose of the matrix of $T$; hence $T^*$
+also has a diagonal matrix. Any two diagonal matrices commute; thus $T$
+commutes with $T^*$, which means that $T$ is normal. In other words, (a) holds,
+completing the proof that (b) implies (a).
+
+The equivalence of (b) and (c) follows from the definitions (also see
+\ref{ax:5.55}).
+\end{proof}
+
+See Exercises~13 and~20 for alternative proofs that (a) implies (b) in the
+previous result.
+
+Exercises~14 and~15 interpret the real spectral theorem and the complex
+spectral theorem by expressing the domain space as an orthogonal direct sum of
+eigenspaces.
+
+See Exercise~16 for a version of the complex spectral theorem that applies
+simultaneously to more than one operator.
+
+The main conclusion of the complex spectral theorem is that every normal
+operator on a complex finite-dimensional inner product space is diagonalizable
+by an orthonormal basis, as illustrated by the next example.
+
+\begin{example}[An orthonormal basis of eigenvectors for an operator]%
+\label{ax:7.33}
+Consider the operator $T\in\Lin(\C^2)$ defined by $T(w,z)=(2w-3z,3w+2z)$. The
+matrix of $T$ (with respect to the standard basis) is
+\[ \begin{pmatrix} 2 & -3\\ 3 & 2 \end{pmatrix}. \]
+As we saw in Example~\ref{ax:7.19}, $T$ is a normal operator.
+
+As you can verify,
+\[ (1/\sqrt2)(i,1),\ (1/\sqrt2)(-i,1) \]
+is an orthonormal basis of $\C^2$ consisting of eigenvectors of $T$, and with
+respect to this basis the matrix of $T$ is the diagonal matrix
+\[ \begin{pmatrix} 2+3i & 0\\ 0 & 2-3i \end{pmatrix}. \]
+\end{example}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{7B}
+
+\begin{exercise}
+Prove that a normal operator on a complex inner product space is self-adjoint
+if and only if all its eigenvalues are real.
+\exercisenote{This exercise strengthens the analogy (for normal operators)
+between self-adjoint operators and real numbers.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$. Suppose $T\in\Lin(V)$ is normal and has only one eigenvalue.
+Prove that $T$ is a scalar multiple of the identity operator.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$ is normal. Prove that the set of eigenvalues
+of $T$ is contained in $\{0,1\}$ if and only if there is a subspace $U$ of $V$
+such that $T=P_U$.
+\end{exercise}
+
+\begin{exercise}
+Prove that a normal operator on a complex inner product space is skew (meaning
+it equals the negative of its adjoint) if and only if all its eigenvalues are
+purely imaginary (meaning that they have real part equal to $0$).
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $T\in\Lin(\C^3)$ is a diagonalizable
+operator, then $T$ is normal (with respect to the usual inner product).
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a complex inner product space and $T\in\Lin(V)$ is a normal
+operator such that $T^9=T^8$. Prove that $T$ is self-adjoint and $T^2=T$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator $T$ on a complex vector space such that
+$T^9=T^8$ but $T^2\ne T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Prove that $T$ is normal if and only if
+every eigenvector of $T$ is also an eigenvector of $T^*$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Prove that $T$ is normal if and only if
+there exists a polynomial $p\in\Poly(\C)$ such that $T^*=p(T)$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a complex inner product space. Prove that every normal operator
+on $V$ has a square root.
+\exercisenote{An operator $S\in\Lin(V)$ is called a \textbf{square root} of
+$T\in\Lin(V)$ if $S^2=T$. We will discuss more about square roots of operators
+in Sections~7C and~8C.}
+\end{exercise}
+
+\begin{exercise}
+Prove that every self-adjoint operator on $V$ has a cube root.
+\exercisenote{An operator $S\in\Lin(V)$ is called a \textbf{cube root} of
+$T\in\Lin(V)$ if $S^3=T$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a complex vector space and $T\in\Lin(V)$ is normal. Prove that
+if $S$ is an operator on $V$ that commutes with $T$, then $S$ commutes with
+$T^*$.
+\exercisenote{The result in this exercise is called Fuglede's theorem.}
+\end{exercise}
+
+\begin{exercise}
+Without using the complex spectral theorem, use the version of Schur's theorem
+that applies to two commuting operators (take $\mathcal{E}=\{T,T^*\}$ in
+Exercise~20 in Section~6B) to give a different proof that if $\F=\C$ and
+$T\in\Lin(V)$ is normal, then $T$ has a diagonal matrix with respect to some
+orthonormal basis of $V$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\R$ and $T\in\Lin(V)$. Prove that $T$ is self-adjoint if and only
+if all pairs of eigenvectors corresponding to distinct eigenvalues of $T$ are
+orthogonal and $V=E(\lambda_1,T)\oplus\cdots\oplus E(\lambda_m,T)$, where
+$\lambda_1,\dots,\lambda_m$ denote the distinct eigenvalues of $T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Prove that $T$ is normal if and only if all
+pairs of eigenvectors corresponding to distinct eigenvalues of $T$ are
+orthogonal and $V=E(\lambda_1,T)\oplus\cdots\oplus E(\lambda_m,T)$, where
+$\lambda_1,\dots,\lambda_m$ denote the distinct eigenvalues of $T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $\mathcal{E}\subseteq\Lin(V)$. Prove that there is an
+orthonormal basis of $V$ with respect to which every element of $\mathcal{E}$
+has a diagonal matrix if and only if $S$ and $T$ are commuting normal operators
+for all $S,T\in\mathcal{E}$.
+\exercisenote{This exercise extends the complex spectral theorem to the context
+of a collection of commuting normal operators.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\R$ and $\mathcal{E}\subseteq\Lin(V)$. Prove that there is an
+orthonormal basis of $V$ with respect to which every element of $\mathcal{E}$
+has a diagonal matrix if and only if $S$ and $T$ are commuting self-adjoint
+operators for all $S,T\in\mathcal{E}$.
+\exercisenote{This exercise extends the real spectral theorem to the context of
+a collection of commuting self-adjoint operators.}
+\end{exercise}
+
+\begin{exercise}
+Give an example of a real inner product space $V$, an operator $T\in\Lin(V)$,
+and real numbers $b,c$ with $b^2<4c$ such that
+\[ T^2+bT+cI \]
+is not invertible.
+\exercisenote{This exercise shows that the hypothesis that $T$ is self-adjoint
+cannot be deleted in \ref{ax:7.26}, even for real vector spaces.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is self-adjoint and $U$ is a subspace of $V$ that is
+invariant under $T$.
+\begin{parts}
+\item Prove that $U^\perp$ is invariant under $T$.
+\item Prove that $T|_U\in\Lin(U)$ is self-adjoint.
+\item Prove that $T|_{U^\perp}\in\Lin(U^\perp)$ is self-adjoint.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is normal and $U$ is a subspace of $V$ that is invariant
+under $T$.
+\begin{parts}
+\item Prove that $U^\perp$ is invariant under $T$.
+\item Prove that $U$ is invariant under $T^*$.
+\item Prove that $(T|_U)^*=(T^*)|_U$.
+\item Prove that $T|_U\in\Lin(U)$ and $T|_{U^\perp}\in\Lin(U^\perp)$ are normal
+  operators.
+\end{parts}
+\exercisenote{This exercise can be used to give yet another proof of the
+complex spectral theorem (use induction on $\dim V$ and the result that $T$ has
+an eigenvector).}
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T$ is a self-adjoint operator on a finite-dimensional inner
+product space and that $2$ and $3$ are the only eigenvalues of $T$. Prove that
+\[ T^2-5T+6I = 0. \]
+\end{exercise}
+
+\begin{exercise}
+Give an example of an operator $T\in\Lin(\C^3)$ such that $2$ and $3$ are the
+only eigenvalues of $T$ and $T^2-5T+6I\ne0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is self-adjoint, $\lambda\in\F$, and $\epsilon>0$.
+Suppose there exists $v\in V$ such that $\norm{v}=1$ and
+\[ \norm{Tv-\lambda v} < \epsilon. \]
+Prove that $T$ has an eigenvalue $\lambda'$ such that
+$\abs{\lambda-\lambda'}<\epsilon$.
+\exercisenote{This exercise shows that for a self-adjoint operator, a number
+that is close to satisfying an equation that would make it an eigenvalue is
+close to an eigenvalue.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $U$ is a finite-dimensional vector space and $T\in\Lin(U)$.
+\begin{parts}
+\item Suppose $\F=\R$. Prove that $T$ is diagonalizable if and only if there is
+  a basis of $U$ such that the matrix of $T$ with respect to this basis equals
+  its transpose.
+\item Suppose $\F=\C$. Prove that $T$ is diagonalizable if and only if there is
+  a basis of $U$ such that the matrix of $T$ with respect to this basis
+  commutes with its conjugate transpose.
+\end{parts}
+\exercisenote{This exercise adds another equivalence to the list of conditions
+equivalent to diagonalizability in \ref{ax:5.55}.}
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V)$ and there is an orthonormal basis $e_1,\dots,e_n$ of
+$V$ consisting of eigenvectors of $T$, with corresponding eigenvalues
+$\lambda_1,\dots,\lambda_n$. Show that if $k\in\{1,\dots,n\}$, then the
+pseudoinverse $T^\dagger$ satisfies the equation
+\[ T^\dagger e_k = \begin{cases} \frac{1}{\lambda_k}e_k & \text{if }
+   \lambda_k\ne0,\\ 0 & \text{if } \lambda_k=0. \end{cases} \]
+\end{exercise}

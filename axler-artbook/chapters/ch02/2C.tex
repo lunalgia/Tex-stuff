@@ -1,0 +1,865 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{2}\setcounter{theorem}{33}
+\fi % TEST-ONLY-END
+% Source: book pp. 44--50 (PDF 58--64); solutions pp. 42--53, 169.
+% A numbered display (Axler's 2.44, 2.45) takes its number from the shared
+% item counter: \axeqnum{2.44} inside equation* (also defined in 2B.tex).
+\providecommand\axeqnum[1]{\refstepcounter{theorem}\tag*{\thetheorem}\label{ax:#1}}
+\section{Dimension}
+
+Although we have been discussing finite-dimensional vector spaces, we have not
+yet defined the dimension of such an object. How should dimension be defined? A
+reasonable definition should force the dimension of $\F^n$ to equal $n$. Notice
+that the standard basis
+\[ (1,0,\dots,0),\ (0,1,0,\dots,0),\ \dots,\ (0,\dots,0,1) \]
+of $\F^n$ has length $n$. Thus we are tempted to define the dimension as the
+length of a basis. However, a finite-dimensional vector space in general has
+many different bases, and our attempted definition makes sense only if all bases
+in a given vector space have the same length. Fortunately that turns out to be
+the case, as we now show.
+
+\begin{result}[Basis length does not depend on basis]\label{ax:2.34}
+Any two bases of a finite-dimensional vector space have the same length.
+\end{result}
+
+\begin{proof}
+Suppose $V$ is finite-dimensional. Let $B_1$ and $B_2$ be two bases of $V$. Then
+$B_1$ is linearly independent in $V$ and $B_2$ spans $V$, so the length of $B_1$
+is at most the length of $B_2$ (by \ref{ax:2.22}). Interchanging the roles of
+$B_1$ and $B_2$, we also see that the length of $B_2$ is at most the length of
+$B_1$. Thus the length of $B_1$ equals the length of $B_2$, as desired.
+\end{proof}
+
+Now that we know that any two bases of a finite-dimensional vector space have
+the same length, we can formally define the dimension of such spaces.
+
+\begin{definition}[Dimension, $\dim V$]\label{ax:2.35}\leavevmode
+\begin{itemize}
+\item The \emph{dimension} of a finite-dimensional vector space is the length
+  of any basis of the vector space.
+\item The dimension of a finite-dimensional vector space $V$ is denoted by
+  $\dim V$.
+\end{itemize}
+\end{definition}
+
+\begin{example}[Dimensions]\label{ax:2.36}\leavevmode
+\begin{itemize}
+\item $\dim\F^n=n$ because the standard basis of $\F^n$ has length $n$.
+\item $\dim\Poly_m(\F)=m+1$ because the standard basis $1,z,\dots,z^m$ of
+  $\Poly_m(\F)$ has length $m+1$.
+\item If $U=\{(x,x,y)\in\F^3 : x,y\in\F\}$, then $\dim U=2$ because
+  $(1,1,0),(0,0,1)$ is a basis of $U$.
+\item If $U=\{(x,y,z)\in\F^3 : x+y+z=0\}$, then $\dim U=2$ because the list
+  $(1,-1,0),(1,0,-1)$ is a basis of $U$.
+\end{itemize}
+\end{example}
+
+Every subspace of a finite-dimensional vector space is finite-dimensional
+(by \ref{ax:2.25}) and so has a dimension. The next result gives the expected
+inequality about the dimension of a subspace.
+
+\begin{result}[Dimension of a subspace]\label{ax:2.37}
+If $V$ is finite-dimensional and $U$ is a subspace of $V$, then
+$\dim U\le\dim V$.
+\end{result}
+
+\begin{proof}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$. Think of a basis
+of $U$ as a linearly independent list in $V$, and think of a basis of $V$ as a
+spanning list in $V$. Now use \ref{ax:2.22} to conclude that
+$\dim U\le\dim V$.
+\end{proof}
+
+\marginnote[-4mm]{The real vector space $\R^2$ has dimension two; the complex vector
+space $\C$ has dimension one. As sets, $\R^2$ can be identified with $\C$ (and
+addition is the same on both spaces, as is scalar multiplication by real
+numbers). Thus when we talk about the dimension of a vector space, the role
+played by the choice of $\F$ cannot be neglected.}%
+To check that a list of vectors in $V$ is a basis of $V$, we must, according to
+the definition, show that the list in question satisfies two properties: it
+must be linearly independent and it must span $V$. The next two results show
+that if the list in question has the right length, then we only need to check
+that it satisfies one of the two required properties. First we prove that every
+linearly independent list of the right length is a basis.
+
+\begin{result}[Linearly independent list of the right length is a basis]%
+\label{ax:2.38}
+Suppose $V$ is finite-dimensional. Then every linearly independent list of
+vectors in $V$ of length $\dim V$ is a basis of $V$.
+\end{result}
+
+\begin{proof}
+Suppose $\dim V=n$ and $v_1,\dots,v_n$ is linearly independent in $V$. The list
+$v_1,\dots,v_n$ can be extended to a basis of $V$ (by \ref{ax:2.32}). However,
+every basis of $V$ has length $n$, so in this case the extension is the trivial
+one, meaning that no elements are adjoined to $v_1,\dots,v_n$. Thus
+$v_1,\dots,v_n$ is a basis of $V$, as desired.
+\end{proof}
+
+The next result is a useful consequence of the previous result.
+
+\begin{result}[Subspace of full dimension equals the whole space]\label{ax:2.39}
+Suppose that $V$ is finite-dimensional and $U$ is a subspace of $V$ such that
+$\dim U=\dim V$. Then $U=V$.
+\end{result}
+
+\begin{proof}
+Let $u_1,\dots,u_n$ be a basis of $U$. Thus $n=\dim U$, and by hypothesis we
+also have $n=\dim V$. Thus $u_1,\dots,u_n$ is a linearly independent list of
+vectors in $V$ (because it is a basis of $U$) of length $\dim V$. From
+\ref{ax:2.38}, we see that $u_1,\dots,u_n$ is a basis of $V$. In particular
+every vector in $V$ is a linear combination of $u_1,\dots,u_n$. Thus $U=V$.
+\end{proof}
+
+\begin{example}[A basis of $\F^2$]\label{ax:2.40}
+Consider the list $(5,7),(4,3)$ of vectors in $\F^2$. This list of length two
+is linearly independent in $\F^2$ (because neither vector is a scalar multiple
+of the other). Note that $\F^2$ has dimension two. Thus \ref{ax:2.38} implies
+that the linearly independent list $(5,7),(4,3)$ of length two is a basis of
+$\F^2$ (we do not need to bother checking that it spans $\F^2$).
+\end{example}
+
+\begin{example}[A basis of a subspace of $\Poly_3(\R)$]\label{ax:2.41}
+Let $U$ be the subspace of $\Poly_3(\R)$ defined by
+\[ U = \{p\in\Poly_3(\R) : p'(5)=0\}. \]
+To find a basis of $U$, first note that each of the polynomials $1$, $(x-5)^2$,
+and $(x-5)^3$ is in $U$.
+
+Suppose $a,b,c\in\R$ and
+\[ a+b(x-5)^2+c(x-5)^3 = 0 \]
+for every $x\in\R$. Without explicitly expanding the left side of the equation
+above, we can see that the left side has a $cx^3$ term. Because the right side
+has no $x^3$ term, this implies that $c=0$. Because $c=0$, we see that the left
+side has a $bx^2$ term, which implies that $b=0$. Because $b=c=0$, we can also
+conclude that $a=0$. Thus the equation above implies that $a=b=c=0$. Hence the
+list $1,(x-5)^2,(x-5)^3$ is linearly independent in $U$. Thus $3\le\dim U$.
+Hence
+\[ 3 \le \dim U \le \dim\Poly_3(\R) = 4, \]
+where we have used \ref{ax:2.37}.
+
+The polynomial $x$ is not in $U$ because its derivative is the constant
+function $1$. Thus $U\ne\Poly_3(\R)$. Hence $\dim U\ne4$ (by \ref{ax:2.39}). The
+inequality above now implies that $\dim U=3$. Thus the linearly independent list
+$1,(x-5)^2,(x-5)^3$ in $U$ has length $\dim U$ and hence is a basis of $U$
+(by \ref{ax:2.38}).
+\end{example}
+
+Now we prove that a spanning list of the right length is a basis.
+
+\begin{result}[Spanning list of the right length is a basis]\label{ax:2.42}
+Suppose $V$ is finite-dimensional. Then every list of vectors in $V$ that spans
+$V$ and has length $\dim V$ is a basis of $V$.
+\end{result}
+
+\begin{proof}
+Suppose $\dim V=n$ and $v_1,\dots,v_n$ spans $V$. The list $v_1,\dots,v_n$ can
+be reduced to a basis of $V$ (by \ref{ax:2.30}). However, every basis of $V$ has
+length $n$, so in this case the reduction is the trivial one, meaning that no
+elements are deleted from $v_1,\dots,v_n$. Thus $v_1,\dots,v_n$ is a basis of
+$V$, as desired.
+\end{proof}
+
+The next result gives a formula for the dimension of the sum of two subspaces
+of a finite-dimensional vector space. This formula is analogous to a familiar
+counting formula: the number of elements in the union of two finite sets equals
+the number of elements in the first set, plus the number of elements in the
+second set, minus the number of elements in the intersection of the two sets.
+
+\begin{result}[Dimension of a sum]\label{ax:2.43}
+If $V_1$ and $V_2$ are subspaces of a finite-dimensional vector space, then
+\[ \dim(V_1+V_2) = \dim V_1+\dim V_2-\dim(V_1\cap V_2). \]
+\end{result}
+
+\begin{proof}
+Let $v_1,\dots,v_m$ be a basis of $V_1\cap V_2$; thus $\dim(V_1\cap V_2)=m$.
+Because $v_1,\dots,v_m$ is a basis of $V_1\cap V_2$, it is linearly independent
+in $V_1$. Hence this list can be extended to a basis
+$v_1,\dots,v_m,u_1,\dots,u_j$ of $V_1$ (by \ref{ax:2.32}). Thus
+$\dim V_1=m+j$. Also extend $v_1,\dots,v_m$ to a basis
+$v_1,\dots,v_m,w_1,\dots,w_k$ of $V_2$; thus $\dim V_2=m+k$.
+
+We will show that
+\begin{equation*}
+v_1,\dots,v_m,u_1,\dots,u_j,w_1,\dots,w_k \axeqnum{2.44}
+\end{equation*}
+is a basis of $V_1+V_2$. This will complete the proof, because then we will have
+\begin{align*}
+\dim(V_1+V_2) &= m+j+k\\
+  &= (m+j)+(m+k)-m\\
+  &= \dim V_1+\dim V_2-\dim(V_1\cap V_2).
+\end{align*}
+
+The list \ref{ax:2.44} is contained in $V_1\cup V_2$ and thus is contained in
+$V_1+V_2$. The span of this list contains $V_1$ and contains $V_2$ and hence is
+equal to $V_1+V_2$. Thus to show that \ref{ax:2.44} is a basis of $V_1+V_2$ we
+only need to show that it is linearly independent.
+
+To prove that \ref{ax:2.44} is linearly independent, suppose
+\[ a_1v_1+\cdots+a_mv_m+b_1u_1+\cdots+b_ju_j+c_1w_1+\cdots+c_kw_k = 0, \]
+where all the $a$'s, $b$'s, and $c$'s are scalars. We need to prove that all the
+$a$'s, $b$'s, and $c$'s equal $0$. The equation above can be rewritten as
+\begin{equation*}
+c_1w_1+\cdots+c_kw_k = -a_1v_1-\cdots-a_mv_m-b_1u_1-\cdots-b_ju_j,
+\axeqnum{2.45}
+\end{equation*}
+which shows that $c_1w_1+\cdots+c_kw_k\in V_1$. All the $w$'s are in $V_2$, so
+this implies that $c_1w_1+\cdots+c_kw_k\in V_1\cap V_2$. Because
+$v_1,\dots,v_m$ is a basis of $V_1\cap V_2$, we have
+\[ c_1w_1+\cdots+c_kw_k = d_1v_1+\cdots+d_mv_m \]
+for some scalars $d_1,\dots,d_m$. But $v_1,\dots,v_m,w_1,\dots,w_k$ is linearly
+independent, so the last equation implies that all the $c$'s (and $d$'s)
+equal $0$. Thus \ref{ax:2.45} becomes the equation
+\[ a_1v_1+\cdots+a_mv_m+b_1u_1+\cdots+b_ju_j = 0. \]
+Because the list $v_1,\dots,v_m,u_1,\dots,u_j$ is linearly independent, this
+equation implies that all the $a$'s and $b$'s are $0$, completing the proof.
+\end{proof}
+
+For $S$ a finite set, let $\#S$ denote the number of elements of $S$. The table
+below compares finite sets with finite-dimensional vector spaces, showing the
+analogy between $\#S$ (for sets) and $\dim V$ (for vector spaces), as well as
+the analogy between unions of subsets (in the context of sets) and sums of
+subspaces (in the context of vector spaces).
+
+\begin{center}\small
+\begin{tabular}{|p{.44\linewidth}|p{.44\linewidth}|}
+\hline
+\multicolumn{1}{|c|}{\textbf{sets}} &
+\multicolumn{1}{c|}{\textbf{vector spaces}}\\
+\hline
+$S$ is a finite set & $V$ is a finite-dimensional vector space\\
+\hline
+$\#S$ & $\dim V$\\
+\hline
+for subsets $S_1,S_2$ of $S$, the union $S_1\cup S_2$ is the smallest subset of
+$S$ containing $S_1$ and $S_2$ &
+for subspaces $V_1,V_2$ of $V$, the sum $V_1+V_2$ is the smallest subspace of
+$V$ containing $V_1$ and $V_2$\\
+\hline
+$\#(S_1\cup S_2)$\newline $=\#S_1+\#S_2-\#(S_1\cap S_2)$ &
+$\dim(V_1+V_2)$\newline $=\dim V_1+\dim V_2-\dim(V_1\cap V_2)$\\
+\hline
+$\#(S_1\cup S_2)=\#S_1+\#S_2$\newline $\iff S_1\cap S_2=\varnothing$ &
+$\dim(V_1+V_2)=\dim V_1+\dim V_2$\newline $\iff V_1\cap V_2=\{0\}$\\
+\hline
+$S_1\cup\cdots\cup S_m$ is a disjoint union $\iff$\newline
+$\#(S_1\cup\cdots\cup S_m)=\#S_1+\cdots+\#S_m$ &
+$V_1+\cdots+V_m$ is a direct sum $\iff$\newline
+$\dim(V_1+\cdots+V_m)$\newline $=\dim V_1+\cdots+\dim V_m$\\
+\hline
+\end{tabular}
+\end{center}
+
+The last row above focuses on the analogy between disjoint unions (for sets) and
+direct sums (for vector spaces). The proof of the result in the last box above
+will be given in \ref{ax:3.94}.
+
+You should be able to find results about sets that correspond, via analogy, to
+the results about vector spaces in Exercises 12 through 18.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{2C}
+
+\begin{exercise}
+Show that the subspaces of $\R^2$ are precisely $\{0\}$, all lines in $\R^2$
+containing the origin, and $\R^2$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{In Exercise~2C3 through Exercise~2C7, each problem
+gives a set $U$ that satisfies some linear condition on the polynomials in
+$\Poly_4(\F)$. In each case, the polynomials we exhibit span $U$, since
+expressing a general element of $U$ in terms of the free parameters allowed by
+the defining condition writes it directly as a linear combination of them. They
+are also linearly independent: since they have different degrees, a linear
+combination of them can equal the zero polynomial only if every coefficient is
+zero, as otherwise the highest-degree term present could not cancel. We will
+therefore omit this reasoning going forward and simply exhibit a basis for each
+such $U$.}
+
+Since $\dim(\R^2)=2$, any subspace of $\R^2$ must have dimension $0$, $1$, or
+$2$. The only subspace of dimension $0$ is $\{0\}$, and the only subspace of
+dimension $2$ is $\R^2$. Any subspace with dimension $1$ consists of all scalar
+multiples of some nonzero $(x,y)\in\R^2$, which is precisely the line with
+direction $(x,y)$ containing the origin. Thus, the subspaces of $\R^2$ are
+precisely $\{0\}$, all lines in $\R^2$ containing the origin, and $\R^2$.
+\end{solution}
+
+\begin{exercise}
+Show that the subspaces of $\R^3$ are precisely $\{0\}$, all lines in $\R^3$
+containing the origin, all planes in $\R^3$ containing the origin, and $\R^3$.
+\end{exercise}
+\begin{solution}
+Since $\dim(\R^3)=3$, any subspace of $\R^3$ must have dimension $0$, $1$, $2$,
+or $3$. The only subspace of dimension $0$ is $\{0\}$, and the only subspace of
+dimension $3$ is $\R^3$. Any subspace with dimension $1$ consists of all scalar
+multiples of some nonzero $(x,y,z)\in\R^3$, which is precisely the line
+containing the origin in the direction of $(x,y,z)$. Any subspace with
+dimension $2$ consists of all linear combinations of two linearly independent
+vectors in $\R^3$, which is precisely a plane containing the origin. Thus, the
+subspaces of $\R^3$ are precisely $\{0\}$, all lines in $\R^3$ containing the
+origin, all planes in $\R^3$ containing the origin, and $\R^3$.
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U=\{p\in\Poly_4(\F) : p(6)=0\}$. Find a basis of $U$.
+\item Extend the basis in (a) to a basis of $\Poly_4(\F)$.
+\item Find a subspace $W$ of $\Poly_4(\F)$ such that $\Poly_4(\F)=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Please see remark at the beginning of this section
+regarding the basis of $U$.}
+\begin{parts}
+\item Let $p=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4\in U$. Then we have $p(6)=0$, which
+  gives us the equation
+  \[ a_0+6a_1+36a_2+216a_3+1296a_4 = 0. \]
+  We can solve this equation for $a_0$ in terms of $a_1,a_2,a_3,a_4$:
+  \[ a_0 = -6a_1-36a_2-216a_3-1296a_4. \]
+  Then we can write any polynomial in $U$ as a linear combination of the
+  following four polynomials:
+  \begin{gather*}
+  u_1=-6+x, \quad u_2=-36+x^2,\\
+  u_3=-216+x^3, \quad u_4=-1296+x^4.
+  \end{gather*}
+\item We can extend the basis $\{u_1,u_2,u_3,u_4\}$ of $U$ to a basis of
+  $\Poly_4(\F)$ by adding one more polynomial that is linearly independent of
+  $u_1,u_2,u_3,u_4$. For example, we can add the polynomial
+  \[ u_5 = 1, \]
+  which is linearly independent of $u_1,u_2,u_3,u_4$: since $u_5$ has no
+  higher-degree terms, it cannot be expressed as a linear combination of
+  $u_1,u_2,u_3,u_4$. Thus, $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis of
+  $\Poly_4(\F)$.
+\item Let $W=\spn u_5=\spn 1$. Then we have
+  \[ \Poly_4(\F) = U+W, \]
+  since every polynomial in $\Poly_4(\F)$ can be written as a sum of a
+  polynomial in $U$ and a polynomial in $W$. Moreover, if $p\in U\cap W$, then
+  $p=\alpha$ for some $\alpha\in\F$. Since $p(6)=0$, we have $\alpha=0$. Thus,
+  $U\cap W=\{0\}$, and so we have
+  \[ \Poly_4(\F) = U\oplus W. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U=\{p\in\Poly_4(\R) : p''(6)=0\}$. Find a basis of $U$.
+\item Extend the basis in (a) to a basis of $\Poly_4(\R)$.
+\item Find a subspace $W$ of $\Poly_4(\R)$ such that $\Poly_4(\R)=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Please see remark at the beginning of this section
+regarding the basis of $U$.}
+\begin{parts}
+\item Let $p=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4\in U$. Then we have
+  \[ p''(x) = 2a_2+6a_3x+12a_4x^2, \]
+  and so $p''(6)=0$ gives us the equation
+  \[ 2a_2+36a_3+432a_4 = 0. \]
+  We can solve this equation for $a_2$ in terms of $a_3,a_4$:
+  \[ a_2 = -18a_3-216a_4. \]
+  Then we can write any polynomial in $U$ as a linear combination of the
+  following four polynomials:
+  \begin{gather*}
+  u_1=1, \quad u_2=x,\\
+  u_3=-18x^2+x^3, \quad u_4=-216x^2+x^4.
+  \end{gather*}
+\item We can extend the basis $\{u_1,u_2,u_3,u_4\}$ of $U$ to a basis of
+  $\Poly_4(\R)$ by adding one more polynomial that is linearly independent of
+  $u_1,u_2,u_3,u_4$. For example, we can add the polynomial
+  \[ u_5 = x^2, \]
+  which is linearly independent of $u_1,u_2,u_3,u_4$: since only $u_3$ and
+  $u_4$ have $x^2$ terms but contain other higher-degree terms, $u_5$ cannot be
+  expressed as a linear combination of $u_1,u_2,u_3,u_4$. Thus,
+  $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis of $\Poly_4(\R)$.
+\item Let $W=\spn u_5=\spn x^2$. Then we have
+  \[ \Poly_4(\R) = U+W, \]
+  since every polynomial in $\Poly_4(\R)$ can be written as a sum of a
+  polynomial in $U$ and a polynomial in $W$. Moreover, if $p\in U\cap W$, then
+  $p=\alpha x^2$ for some $\alpha\in\R$. Since $p''(6)=0$, we have $2\alpha=0$,
+  which implies that $\alpha=0$. Thus, $U\cap W=\{0\}$, and so we have
+  \[ \Poly_4(\R) = U\oplus W. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U=\{p\in\Poly_4(\F) : p(2)=p(5)\}$. Find a basis of $U$.
+\item Extend the basis in (a) to a basis of $\Poly_4(\F)$.
+\item Find a subspace $W$ of $\Poly_4(\F)$ such that $\Poly_4(\F)=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Please see remark at the beginning of this section
+regarding the basis of $U$.}
+\begin{parts}
+\item Let $p=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4\in U$. Then we have $p(2)=p(5)$,
+  which gives us the equation
+  \begin{align*}
+  &a_0+2a_1+4a_2+8a_3+16a_4\\
+  &\quad= a_0+5a_1+25a_2+125a_3+625a_4.
+  \end{align*}
+  We can simplify this equation to get
+  \[ -3a_1-21a_2-117a_3-609a_4 = 0. \]
+  We can solve this equation for $a_1$ in terms of $a_2,a_3,a_4$:
+  \[ a_1 = -7a_2-39a_3-203a_4. \]
+  Then we can write any polynomial in $U$ as a linear combination of the
+  following four polynomials:
+  \begin{gather*}
+  u_1=1, \quad u_2=-7x+x^2,\\
+  u_3=-39x+x^3, \quad u_4=-203x+x^4.
+  \end{gather*}
+\item We can extend the basis $\{u_1,u_2,u_3,u_4\}$ of $U$ to a basis of
+  $\Poly_4(\F)$ by adding one more polynomial that is linearly independent of
+  $u_1,u_2,u_3,u_4$. For example, we can add the polynomial
+  \[ u_5 = x, \]
+  which is linearly independent of $u_1,u_2,u_3,u_4$: since only
+  $u_2,u_3,u_4$ have $x$ terms but contain other higher-degree terms, $u_5$
+  cannot be expressed as a linear combination of $u_1,u_2,u_3,u_4$. Thus,
+  $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis of $\Poly_4(\F)$.
+\item Let $W=\spn u_5=\spn x$. Then we have
+  \[ \Poly_4(\F) = U+W, \]
+  since every polynomial in $\Poly_4(\F)$ can be written as a sum of a
+  polynomial in $U$ and a polynomial in $W$. Moreover, if $p\in U\cap W$, then
+  $p=\alpha x$ for some $\alpha\in\F$. Since $p(2)=p(5)$, we have
+  $2\alpha=5\alpha$, which implies that $\alpha=0$. Thus, $U\cap W=\{0\}$, and
+  so we have
+  \[ \Poly_4(\F) = U\oplus W. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U=\{p\in\Poly_4(\F) : p(2)=p(5)=p(6)\}$. Find a basis of $U$.
+\item Extend the basis in (a) to a basis of $\Poly_4(\F)$.
+\item Find a subspace $W$ of $\Poly_4(\F)$ such that $\Poly_4(\F)=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Please see remark at the beginning of this section
+regarding the basis of $U$.}
+\begin{parts}
+\item Let $p=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4\in U$. Then we have
+  $p(2)=p(5)=p(6)$. We know from Exercise~2C5 that the condition $p(2)=p(5)$
+  gives us the equation
+  \[ a_1 = -7a_2-39a_3-203a_4. \]
+  The condition $p(5)=p(6)$ gives us the equation
+  \begin{align*}
+  &5a_1+25a_2+125a_3+625a_4\\
+  &\quad= 6a_1+36a_2+216a_3+1296a_4,
+  \end{align*}
+  which simplifies to
+  \[ a_1+11a_2+91a_3+671a_4 = 0. \]
+  Since we know that $a_1=-7a_2-39a_3-203a_4$, we can substitute this into the
+  second equation to get
+  \[ 4a_2+52a_3+468a_4 = 0. \]
+  We can solve this equation for $a_2$ in terms of $a_3,a_4$:
+  \[ a_2 = -13a_3-117a_4. \]
+  Then $a_1=52a_3+616a_4$. Thus, we can write any polynomial in $U$ as a linear
+  combination of the following three polynomials:
+  \begin{gather*}
+  u_1=1, \quad u_2=52x-13x^2+x^3,\\
+  u_3=616x-117x^2+x^4.
+  \end{gather*}
+\item We can extend the basis $\{u_1,u_2,u_3\}$ of $U$ to a basis of
+  $\Poly_4(\F)$ by adding two more polynomials that are linearly independent of
+  $u_1,u_2,u_3$. For example, we can add the polynomials
+  \[ u_4=x^2, \quad u_5=x^3, \]
+  which are linearly independent of $u_1,u_2,u_3$: since only $u_2$ and $u_3$
+  have $x^2$ terms but contain other higher-degree terms, $u_4$ cannot be
+  expressed as a linear combination of $u_1,u_2,u_3$. Similarly, $u_5$ has an
+  $x^3$ term but no higher-degree terms, so it cannot be expressed as a linear
+  combination of $u_1,u_2,u_3,u_4$. Thus, $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis
+  of $\Poly_4(\F)$.
+\item Let $W=\spn(u_4,u_5)=\spn(x^2,x^3)$. Then we have
+  \[ \Poly_4(\F) = U+W, \]
+  since every polynomial in $\Poly_4(\F)$ can be written as a sum of a
+  polynomial in $U$ and a polynomial in $W$. Moreover, if $p\in U\cap W$, then
+  $p=\alpha x^2+\beta x^3$ for some $\alpha,\beta\in\F$. Since
+  $p(2)=p(5)=p(6)$, we have
+  \[ 4\alpha+8\beta = 25\alpha+125\beta = 36\alpha+216\beta. \]
+  Solving this system of equations, we find that $\alpha=\beta=0$. Thus,
+  $U\cap W=\{0\}$, and so we have
+  \[ \Poly_4(\F) = U\oplus W. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Let $U=\bigl\{p\in\Poly_4(\R) : \int_{-1}^1p=0\bigr\}$. Find a basis
+  of $U$.
+\item Extend the basis in (a) to a basis of $\Poly_4(\R)$.
+\item Find a subspace $W$ of $\Poly_4(\R)$ such that $\Poly_4(\R)=U\oplus W$.
+\end{parts}
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{Please see remark at the beginning of this section
+regarding the basis of $U$.}
+\begin{parts}
+\item Let $p=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4\in U$. Then we have
+  \begin{align*}
+  \int_{-1}^1p &= \int_{-1}^1(a_0+a_1x+a_2x^2+a_3x^3+a_4x^4)\,\mathrm{d}x\\
+    &= \int_{-1}^1(a_0+a_2x^2+a_4x^4)\,\mathrm{d}x\\
+    &= 2\int_0^1(a_0+a_2x^2+a_4x^4)\,\mathrm{d}x\\
+    &= 2\Bigl(a_0+\frac{a_2}{3}+\frac{a_4}{5}\Bigr) = 0.
+  \end{align*}
+  We can solve this equation for $a_0$ in terms of $a_2,a_4$:
+  \[ a_0 = -\frac{a_2}{3}-\frac{a_4}{5}. \]
+  Then we can write any polynomial in $U$ as a linear combination of the
+  following four polynomials:
+  \[ u_1=x, \quad u_2=x^2-1/3, \quad u_3=x^3, \quad u_4=x^4-1/5. \]
+\item We can extend the basis $\{u_1,u_2,u_3,u_4\}$ of $U$ to a basis of
+  $\Poly_4(\R)$ by adding one more polynomial that is linearly independent of
+  $u_1,u_2,u_3,u_4$. For example, we can add the polynomial
+  \[ u_5 = 1, \]
+  which is linearly independent of $u_1,u_2,u_3,u_4$: since $u_5$ has no
+  higher-degree terms, it cannot be expressed as a linear combination of
+  $u_1,u_2,u_3,u_4$. Thus, $\{u_1,u_2,u_3,u_4,u_5\}$ is a basis of
+  $\Poly_4(\R)$.
+\item Let $W=\spn u_5=\spn 1$. Then we have
+  \[ \Poly_4(\R) = U+W, \]
+  since every polynomial in $\Poly_4(\R)$ can be written as a sum of a
+  polynomial in $U$ and a polynomial in $W$. Moreover, if $p\in U\cap W$, then
+  $p=\alpha$ for some $\alpha\in\R$. Since the integral of a constant over a
+  symmetric interval is nonzero unless the function is identically zero, we
+  have $\alpha=0$. Thus, $U\cap W=\{0\}$, and so we have
+  \[ \Poly_4(\R) = U\oplus W. \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $v_1,\dots,v_m$ is linearly independent in $V$ and $w\in V$. Prove that
+\[ \dim\spn(v_1+w,\dots,v_m+w) \ge m-1. \]
+\end{exercise}
+\begin{solution}
+Observe that $(v_i+w)-(v_{i+1}+w)=v_i-v_{i+1}$ for $1\le i\le m-1$. Then the
+list of vectors
+\[ v_1-v_2,\,v_2-v_3,\,\dots,\,v_{m-1}-v_m \]
+is contained in $\spn(v_1+w,\dots,v_m+w)$. We claim that this list is linearly
+independent. Suppose that
+\[ \alpha_1(v_1-v_2)+\alpha_2(v_2-v_3)+\cdots+\alpha_{m-1}(v_{m-1}-v_m) = 0 \]
+for some $\alpha_1,\dots,\alpha_{m-1}\in\F$. Then we can rewrite this equation
+as
+\begin{align*}
+&\alpha_1v_1+(\alpha_2-\alpha_1)v_2+\cdots\\
+&\quad+(\alpha_{m-1}-\alpha_{m-2})v_{m-1}-\alpha_{m-1}v_m = 0.
+\end{align*}
+Since $v_1,\dots,v_m$ is linearly independent, we must have $\alpha_1=0$,
+$\alpha_2-\alpha_1=0$, \dots, $\alpha_{m-1}-\alpha_{m-2}=0$, and
+$-\alpha_{m-1}=0$. This implies that $\alpha_1=\cdots=\alpha_{m-1}=0$. Thus, the
+list is linearly independent, and so we have
+\[ \dim\spn(v_1+w,\dots,v_m+w) \ge m-1. \]
+
+\emph{Alternate proof.} \emph{Civil Service Pigeon.} Let
+$S=\spn(v_1+w,\dots,v_m+w)$. Since each $v_i=(v_i+w)-w$, we have
+\[ S+\spn(w) = \spn(v_1,\dots,v_m,w). \]
+Since $v_1,\dots,v_m$ are linearly independent, we have
+\begin{align*}
+m &\le \dim\bigl(S+\spn(w)\bigr) \le \dim S+\dim\spn(w)\\
+  &\le \dim S+1 \implies \dim S\ge m-1. \qedhere
+\end{align*}
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ is a positive integer and $p_0,p_1,\dots,p_m\in\Poly(\F)$ are such
+that each $p_k$ has degree $k$. Prove that $p_0,p_1,\dots,p_m$ is a basis of
+$\Poly_m(\F)$.
+\end{exercise}
+\begin{solution}
+Suppose that
+\[ \alpha_0p_0+\alpha_1p_1+\cdots+\alpha_mp_m = 0 \]
+for some $\alpha_0,\dots,\alpha_m\in\F$. Since $p_m$ is the only polynomial with
+nonzero coefficient of $x^m$, we must have $\alpha_m=0$. Next, since $p_{m-1}$
+is the only polynomial with nonzero coefficient of $x^{m-1}$, we must have
+$\alpha_{m-1}=0$. Continuing in this way, we find that
+$\alpha_0=\cdots=\alpha_m=0$. Thus, the list is linearly independent. Moreover,
+since $\dim\Poly_m(\F)=m+1$, any linearly independent list of $m+1$ vectors in
+$\Poly_m(\F)$ is a basis. Therefore, $p_0,p_1,\dots,p_m$ is a basis of
+$\Poly_m(\F)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $m$ is a positive integer. For $0\le k\le m$, let
+\[ p_k(x) = x^k(1-x)^{m-k}. \]
+Show that $p_0,\dots,p_m$ is a basis of $\Poly_m(\F)$.
+\exnote{The basis in this exercise leads to what are called \textbf{Bernstein
+polynomials}. You can do a web search to learn how Bernstein polynomials are
+used to approximate continuous functions on $[0,1]$.}
+\end{exercise}
+\begin{solution}
+Suppose that
+\[ \alpha_0p_0+\alpha_1p_1+\cdots+\alpha_mp_m = 0 \]
+for some $\alpha_0,\dots,\alpha_m\in\F$. Since $p_0$ is the only polynomial with
+nonzero constant term, we must have $\alpha_0=0$, hence the sum above becomes
+\[ \alpha_1p_1+\cdots+\alpha_mp_m = 0. \]
+Next, since $p_1$ is the only polynomial with nonzero coefficient of $x$ in the
+sum above, we must have $\alpha_1=0$. Continuing in this way, we find that
+$\alpha_0=\cdots=\alpha_m=0$. Thus, the list is linearly independent. Moreover,
+since $\dim\Poly_m(\F)=m+1$, any linearly independent list of $m+1$ vectors in
+$\Poly_m(\F)$ is a basis. Therefore, $p_0,\dots,p_m$ is a basis of
+$\Poly_m(\F)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ and $W$ are both four-dimensional subspaces of $\C^6$. Prove that
+there exist two vectors in $U\cap W$ such that neither of these vectors is a
+scalar multiple of the other.
+\end{exercise}
+\begin{solution}
+Let $U$ and $W$ be four-dimensional subspaces of $\C^6$. By the dimension
+formula for the sum of two subspaces, we have
+\begin{align*}
+\dim(U+W) &= \dim U+\dim W-\dim(U\cap W)\\
+  &= 4+4-\dim(U\cap W) = 8-\dim(U\cap W).
+\end{align*}
+Since $U+W$ is a subspace of $\C^6$, we have $\dim(U+W)\le6$. Thus, we have
+\[ 8-\dim(U\cap W) \le 6, \]
+which implies that $\dim(U\cap W)\ge2$. Therefore, there exist at least two
+linearly independent vectors in $U\cap W$, and neither of these vectors is a
+scalar multiple of the other.
+\end{solution}
+
+\begin{exercise}
+Suppose that $U$ and $W$ are subspaces of $\R^8$ such that $\dim U=3$,
+$\dim W=5$, and $U+W=\R^8$. Prove that $\R^8=U\oplus W$.
+\end{exercise}
+\begin{solution}
+By the dimension formula for the sum of two subspaces, we have
+\begin{align*}
+\dim(U+W) &= \dim U+\dim W-\dim(U\cap W)\\
+  &= 3+5-\dim(U\cap W) = 8-\dim(U\cap W).
+\end{align*}
+Since $U+W=\R^8$, we have $\dim(U+W)=8$. Thus, we have
+\[ 8-\dim(U\cap W) = 8, \]
+which implies that $\dim(U\cap W)=0$. Therefore, $U\cap W=\{0\}$, and so we
+have
+\[ \R^8 = U\oplus W. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $U$ and $W$ are both five-dimensional subspaces of $\R^9$. Prove that
+$U\cap W\ne\{0\}$.
+\end{exercise}
+\begin{solution}
+By the dimension formula for the sum of two subspaces, we have
+\begin{align*}
+\dim(U+W) &= \dim U+\dim W-\dim(U\cap W)\\
+  &= 5+5-\dim(U\cap W) = 10-\dim(U\cap W).
+\end{align*}
+Since $U+W$ is a subspace of $\R^8$, we have $\dim(U+W)\le8$. Thus, we have
+\[ 10-\dim(U\cap W) \le 8, \]
+which implies that $\dim(U\cap W)\ge2$. Therefore, $U\cap W$ is nontrivial, and
+so we have $U\cap W\ne\{0\}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a ten-dimensional vector space and $V_1,V_2,V_3$ are subspaces
+of $V$ with $\dim V_1=\dim V_2=\dim V_3=7$. Prove that
+$V_1\cap V_2\cap V_3\ne\{0\}$.
+\end{exercise}
+\begin{solution}
+Let $W=V_1\cap V_2$. By the dimension formula for the sum of two subspaces, we
+have
+\begin{align*}
+\dim(V_1+V_2) &= \dim V_1+\dim V_2-\dim W\\
+  &= 7+7-\dim W = 14-\dim W.
+\end{align*}
+Since $V_1+V_2$ is a subspace of $V$, we have $\dim(V_1+V_2)\le10$. Thus, we
+have $14-\dim W\le10$, which implies that $\dim W\ge4$. Therefore, $V_1\cap V_2$
+is at least four-dimensional. Now, consider the subspace
+$W\cap V_3=V_1\cap V_2\cap V_3$. By the dimension formula for the sum of two
+subspaces, we have
+\begin{align*}
+\dim(W+V_3) &= \dim W+\dim V_3-\dim(W\cap V_3)\\
+  &= \dim W+7-\dim(W\cap V_3).
+\end{align*}
+Since $W+V_3$ is a subspace of $V$, we have $\dim(W+V_3)\le10$. Thus, we have
+\[ \dim W+7-\dim(W\cap V_3) \le 10, \]
+which implies that $\dim(W\cap V_3)\ge\dim W+7-10=\dim W-3$. Since
+$\dim W\ge4$, we have $\dim(W\cap V_3)\ge1$. Therefore, $V_1\cap V_2\cap V_3$ is
+nontrivial, and so we have $V_1\cap V_2\cap V_3\ne\{0\}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $V_1,V_2,V_3$ are subspaces of $V$ with
+$\dim V_1+\dim V_2+\dim V_3>2\dim V$. Prove that $V_1\cap V_2\cap V_3\ne\{0\}$.
+\end{exercise}
+\begin{solution}
+Let $W=V_1\cap V_2$. By the dimension formula for the sum of two subspaces, we
+have
+\[ \dim(V_1+V_2) = \dim V_1+\dim V_2-\dim W. \]
+Since $V_1+V_2$ is a subspace of $V$, we have $\dim(V_1+V_2)\le\dim V$. Thus, we
+have
+\[ \dim V_1+\dim V_2-\dim W \le \dim V, \]
+which implies that $\dim W\ge\dim V_1+\dim V_2-\dim V$. Now, consider the
+subspace $W\cap V_3=V_1\cap V_2\cap V_3$. By the dimension formula for the sum
+of two subspaces, we have
+\[ \dim(W+V_3) = \dim W+\dim V_3-\dim(W\cap V_3). \]
+Since $W+V_3$ is a subspace of $V$, we have $\dim(W+V_3)\le\dim V$. Thus, we
+have
+\[ \dim W+\dim V_3-\dim(W\cap V_3) \le \dim V, \]
+which implies that $\dim(W\cap V_3)\ge\dim W+\dim V_3-\dim V$. Since
+$\dim W\ge\dim V_1+\dim V_2-\dim V$, we have
+\begin{align*}
+\dim(W\cap V_3) &\ge (\dim V_1+\dim V_2-\dim V)+\dim V_3-\dim V\\
+  &= \dim V_1+\dim V_2+\dim V_3-2\dim V.
+\end{align*}
+Since $\dim V_1+\dim V_2+\dim V_3>2\dim V$, we have $\dim(W\cap V_3)>0$.
+Therefore, $V_1\cap V_2\cap V_3$ is nontrivial, and so we have
+$V_1\cap V_2\cap V_3\ne\{0\}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $U$ is a subspace of $V$ with $U\ne V$.
+Let $n=\dim V$ and $m=\dim U$. Prove that there exist $n-m$ subspaces of $V$,
+each of dimension $n-1$, whose intersection equals $U$.
+\end{exercise}
+\begin{solution}
+Let $U$ be a subspace of $V$ with $\dim U=m<n=\dim V$. We can extend a basis of
+$U$ to a basis of $V$. Let $\{u_1,\dots,u_m\}$ be a basis of $U$, and extend it
+to a basis of $V$ by adding vectors $v_1,\dots,v_{n-m}$. Then
+$\{u_1,\dots,u_m,v_1,\dots,v_{n-m}\}$ is a basis of $V$. For each
+$i=1,\dots,n-m$, let
+\[ W_i = \spn(u_1,\dots,u_m,v_1,\dots,v_{i-1},v_{i+1},\dots,v_{n-m}). \]
+By construction, $W_i$ does not contain the extended basis vector $v_i$.
+Moreover, each $W_i$ is a subspace of $V$ with dimension $n-1$, since it is
+spanned by $n-1$ linearly independent vectors. Additionally, we have
+\[ U = W_1\cap W_2\cap\cdots\cap W_{n-m}, \]
+since any vector in the intersection containing nonzero $v_i$ would not be in
+$W_i$, leaving behind only the basis vectors in $U$. Therefore, there exist
+$n-m$ subspaces of $V$, each of dimension $n-1$, whose intersection equals $U$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V_1,\dots,V_m$ are finite-dimensional subspaces of $V$. Prove that
+$V_1+\cdots+V_m$ is finite-dimensional and
+\[ \dim(V_1+\cdots+V_m) \le \dim V_1+\cdots+\dim V_m. \]
+\exnote{The inequality above is an equality if and only if $V_1+\cdots+V_m$ is
+a direct sum, as will be shown in \ref{ax:3.94}.}
+\end{exercise}
+\begin{solution}
+We will prove the statement by induction on $m$. For the base case, let $m=2$.
+Then the sum $V_1+V_2$ is finite-dimensional. By the dimension formula for the
+sum of two subspaces, we have
+\begin{align*}
+\dim(V_1+V_2) &= \dim V_1+\dim V_2-\dim(V_1\cap V_2)\\
+  &\le \dim V_1+\dim V_2.
+\end{align*}
+Hence, the statement holds for $m=2$. Now, suppose that the statement holds for
+some positive integer $m$. That is, suppose that if $V_1,\dots,V_m$ are
+finite-dimensional subspaces of $V$, then $V_1+\cdots+V_m$ is finite-dimensional
+and
+\[ \dim(V_1+\cdots+V_m) \le \dim V_1+\cdots+\dim V_m. \]
+We want to show that the statement holds for $m+1$. Let $V_1,\dots,V_{m+1}$ be
+finite-dimensional subspaces of $V$. By the induction hypothesis, we know that
+$W=V_1+\cdots+V_m$ is finite-dimensional and
+\[ \dim W \le \dim V_1+\cdots+\dim V_m. \]
+Then we have
+\[ \dim(W+V_{m+1}) = \dim W+\dim V_{m+1}-\dim(W\cap V_{m+1}). \]
+Since $W\cap V_{m+1}$ is a subspace of $V$, we have $\dim(W\cap V_{m+1})\ge0$.
+Thus, we have
+\begin{align*}
+\dim(W+V_{m+1}) &\le \dim W+\dim V_{m+1}\\
+  &\le \dim V_1+\cdots+\dim V_m+\dim V_{m+1}.
+\end{align*}
+Therefore, $V_1+\cdots+V_{m+1}$ is finite-dimensional and
+\[ \dim(V_1+\cdots+V_{m+1}) \le \dim V_1+\cdots+\dim V_m+\dim V_{m+1}.
+   \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, with $\dim V=n\ge1$. Prove that there exist
+one-dimensional subspaces $V_1,\dots,V_n$ of $V$ such that
+\[ V = V_1\oplus\cdots\oplus V_n. \]
+\end{exercise}
+\begin{solution}
+Let $v_1,\dots,v_n$ be a basis of $V$. For each $i=1,\dots,n$, let
+$V_i=\spn v_i$. Then each $V_i$ is a one-dimensional subspace of $V$, since it
+is spanned by a single nonzero vector. Moreover, we have
+\[ V = V_1+\cdots+V_n, \]
+and the sum is direct because the basis vectors are linearly independent.
+Therefore, we have
+\[ V = V_1\oplus\cdots\oplus V_n. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Explain why you might guess, motivated by analogy with the formula for the
+number of elements in the union of three finite sets, that if $V_1,V_2,V_3$ are
+subspaces of a finite-dimensional vector space, then
+\begin{align*}
+\dim(V_1&+V_2+V_3)\\
+  &= \dim V_1+\dim V_2+\dim V_3\\
+  &\quad-\dim(V_1\cap V_2)-\dim(V_1\cap V_3)-\dim(V_2\cap V_3)\\
+  &\quad+\dim(V_1\cap V_2\cap V_3).
+\end{align*}
+Then either prove the formula above or give a counterexample.
+\end{exercise}
+\begin{solution}
+One may guess that the given formula above is true by analogy with the formula
+for the number of elements in the union of three finite sets. However, this
+erroneously conflates the idea of subspace sums with the idea of set unions. In
+fact, the formula is not true in general. For example, let $V=\R^2$, and let
+\[ V_1=\spn\bigl((1,0)\bigr), \quad V_2=\spn\bigl((0,1)\bigr), \quad
+   V_3=\spn\bigl((1,1)\bigr). \]
+It is easy to see that $\dim V_1=\dim V_2=\dim V_3=1$, but
+$\dim(V_1\cap V_2)=\dim(V_1\cap V_3)=\dim(V_2\cap V_3)=0$ and
+$\dim(V_1\cap V_2\cap V_3)=0$. Thus, the right-hand side of the formula is
+\[ 1+1+1-0-0-0+0 = 3, \]
+but the left-hand side is $\dim(V_1+V_2+V_3)=\dim\R^2=2$. Therefore, the
+formula is not true in general.
+\end{solution}
+
+\begin{exercise}
+Prove that if $V_1$, $V_2$, and $V_3$ are subspaces of a finite-dimensional
+vector space, then
+\begin{align*}
+&\dim(V_1+V_2+V_3)\\
+&\quad= \dim V_1+\dim V_2+\dim V_3\\
+&\qquad-\frac{\dim(V_1\cap V_2)+\dim(V_1\cap V_3)+\dim(V_2\cap V_3)}{3}\\
+&\qquad-\frac{\dim\bigl((V_1+V_2)\cap V_3\bigr)+\dim\bigl((V_1+V_3)\cap V_2\bigr)
+  +\dim\bigl((V_2+V_3)\cap V_1\bigr)}{3}.
+\end{align*}
+\exnote{The formula above may seem strange because the right side does not look
+like an integer.}
+\end{exercise}
+\begin{solution}
+Note that we need to account for all pairs of subspaces and all pairs of sums of
+subspaces, since the sum of subspaces is not equivalent to the union of sets. We
+can use the dimension formula repeatedly to obtain the answer. To that end,
+define the following subspaces:
+\[ W_1=V_1+V_2, \quad W_2=V_1+V_3, \quad W_3=V_2+V_3. \]
+Applying the dimension formula to each of $W_1,W_2,W_3$, we have
+\begin{align*}
+\dim W_1 &= \dim V_1+\dim V_2-\dim(V_1\cap V_2),\\
+\dim W_2 &= \dim V_1+\dim V_3-\dim(V_1\cap V_3),\\
+\dim W_3 &= \dim V_2+\dim V_3-\dim(V_2\cap V_3).
+\end{align*}
+Next, we can apply the dimension formula to each of the sums $W_1+V_3$,
+$W_2+V_2$, $W_3+V_1$:
+\begin{align*}
+\dim(W_1+V_3) &= \dim W_1+\dim V_3-\dim(W_1\cap V_3),\\
+  &= \dim V_1+\dim V_2-\dim(V_1\cap V_2)\\
+  &\qquad+\dim V_3-\dim(W_1\cap V_3)\\
+\dim(W_2+V_2) &= \dim W_2+\dim V_2-\dim(W_2\cap V_2),\\
+  &= \dim V_1+\dim V_3-\dim(V_1\cap V_3)\\
+  &\qquad+\dim V_2-\dim(W_2\cap V_2)\\
+\dim(W_3+V_1) &= \dim W_3+\dim V_1-\dim(W_3\cap V_1),\\
+  &= \dim V_2+\dim V_3-\dim(V_2\cap V_3)\\
+  &\qquad+\dim V_1-\dim(W_3\cap V_1).
+\end{align*}
+Note that $W_1+V_3=W_2+V_2=W_3+V_1=V_1+V_2+V_3$. Thus, we can add the three
+equations above and divide by $3$ to obtain the desired formula:
+\begin{align*}
+&\dim(V_1+V_2+V_3)\\
+&\quad= \dim V_1+\dim V_2+\dim V_3\\
+&\qquad-\frac{\dim(V_1\cap V_2)+\dim(V_1\cap V_3)+\dim(V_2\cap V_3)}{3}\\
+&\qquad-\frac{\dim\bigl((V_1+V_2)\cap V_3\bigr)+\dim\bigl((V_1+V_3)\cap V_2\bigr)
+  +\dim\bigl((V_2+V_3)\cap V_1\bigr)}{3}. \qedhere
+\end{align*}
+\end{solution}
+
+\axquote{I at once gave up my former occupations, set down natural history and
+all its progeny as a deformed and abortive creation, and entertained the
+greatest disdain for a would-be science which could never even step within the
+threshold of real knowledge. In this mood I betook myself to the mathematics
+and the branches of study appertaining to that science as being built upon
+secure foundations, and so worthy of my consideration.}{\emph{Frankenstein},
+Mary Wollstonecraft Shelley}

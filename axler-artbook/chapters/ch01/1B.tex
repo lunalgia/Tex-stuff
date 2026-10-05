@@ -1,0 +1,458 @@
+% Source: book pp. 12--17 (PDF 26--31); solutions pp. 9--13.
+\section{Definition of Vector Space}
+
+The motivation for the definition of a vector space comes from properties of
+addition and scalar multiplication in $\F^n$: Addition is commutative,
+associative, and has an identity. Every element has an additive inverse. Scalar
+multiplication is associative. Scalar multiplication by $1$ acts as expected.
+Addition and scalar multiplication are connected by distributive properties.
+
+We will define a vector space to be a set $V$ with an addition and a scalar
+multiplication on $V$ that satisfy the properties in the paragraph above.
+
+\begin{definition}[Addition, scalar multiplication]\label{ax:1.19}\leavevmode
+\begin{itemize}
+\item An \emph{addition} on a set $V$ is a function that assigns an element
+  $u+v\in V$ to each pair of elements $u,v\in V$.
+\item A \emph{scalar multiplication} on a set $V$ is a function that assigns an
+  element $\lambda v\in V$ to each $\lambda\in\F$ and each $v\in V$.
+\end{itemize}
+\end{definition}
+
+Now we are ready to give the formal definition of a vector space.
+
+\begin{definition}[Vector space]\label{ax:1.20}
+A \emph{vector space} is a set $V$ along with an addition on $V$ and a scalar
+multiplication on $V$ such that the following properties hold.
+\begin{axprops}
+\item[commutativity] $u+v=v+u$ for all $u,v\in V$.
+\item[associativity] $(u+v)+w=u+(v+w)$ and $(ab)v=a(bv)$ for all
+  $u,v,w\in V$ and for all $a,b\in\F$.
+\item[additive identity] There exists an element $0\in V$ such that $v+0=v$
+  for all $v\in V$.
+\item[additive inverse] For every $v\in V$, there exists $w\in V$ such that
+  $v+w=0$.
+\item[multiplicative identity] $1v=v$ for all $v\in V$.
+\item[distributive properties] $a(u+v)=au+av$ and $(a+b)v=av+bv$ for all
+  $a,b\in\F$ and all $u,v\in V$.
+\end{axprops}
+\end{definition}
+
+The following geometric language sometimes aids our intuition.
+
+\begin{definition}[Vector, point]\label{ax:1.21}
+Elements of a vector space are called \emph{vectors} or \emph{points}.
+\end{definition}
+
+The scalar multiplication in a vector space depends on $\F$. Thus when we need
+to be precise, we will say that $V$ is a \emph{vector space over} $\F$ instead
+of saying simply that $V$ is a vector space. For example, $\R^n$ is a vector
+space over $\R$, and $\C^n$ is a vector space over $\C$.
+
+\begin{definition}[Real vector space, complex vector space]\label{ax:1.22}\leavevmode
+\begin{itemize}
+\item A vector space over $\R$ is called a \emph{real vector space}.
+\item A vector space over $\C$ is called a \emph{complex vector space}.
+\end{itemize}
+\end{definition}
+
+Usually the choice of $\F$ is either clear from the context or irrelevant. Thus
+we often assume that $\F$ is lurking in the background without specifically
+mentioning it.
+
+\marginnote{The simplest vector space is $\{0\}$, which contains only one
+point.}%
+With the usual operations of addition and scalar multiplication, $\F^n$ is a
+vector space over $\F$, as you should verify. The example of $\F^n$ motivated
+our definition of vector space.
+
+\begin{example}[$\F^\infty$]\label{ax:1.23}
+$\F^\infty$ is defined to be the set of all sequences of elements of $\F$:
+\[ \F^\infty = \{(x_1,x_2,\dots) : x_k\in\F \text{ for } k=1,2,\dots\}. \]
+Addition and scalar multiplication on $\F^\infty$ are defined as expected:
+\begin{align*}
+(x_1,x_2,\dots)+(y_1,y_2,\dots) &= (x_1+y_1,x_2+y_2,\dots),\\
+\lambda(x_1,x_2,\dots) &= (\lambda x_1,\lambda x_2,\dots).
+\end{align*}
+With these definitions, $\F^\infty$ becomes a vector space over $\F$, as you
+should verify. The additive identity in this vector space is the sequence of
+all $0$'s.
+\end{example}
+
+Our next example of a vector space involves a set of functions.
+
+\begin{notation}[$\F^S$]\label{ax:1.24}\leavevmode
+\begin{itemize}
+\item If $S$ is a set, then $\F^S$ denotes the set of functions from $S$ to
+  $\F$.
+\item For $f,g\in\F^S$, the \emph{sum} $f+g\in\F^S$ is the function defined by
+  \[ (f+g)(x) = f(x)+g(x) \]
+  for all $x\in S$.
+\item For $\lambda\in\F$ and $f\in\F^S$, the \emph{product} $\lambda f\in\F^S$
+  is the function defined by
+  \[ (\lambda f)(x) = \lambda f(x) \]
+  for all $x\in S$.
+\end{itemize}
+\end{notation}
+
+As an example of the notation above, if $S$ is the interval $[0,1]$ and
+$\F=\R$, then $\R^{[0,1]}$ is the set of real-valued functions on the interval
+$[0,1]$.
+
+You should verify all three bullet points in the next example.
+
+\begin{example}[$\F^S$ is a vector space]\label{ax:1.25}\leavevmode
+\begin{itemize}
+\item If $S$ is a nonempty set, then $\F^S$ (with the operations of addition
+  and scalar multiplication as defined above) is a vector space over $\F$.
+\item The additive identity of $\F^S$ is the function $0\colon S\to\F$ defined
+  by
+  \[ 0(x) = 0 \]
+  for all $x\in S$.
+\item For $f\in\F^S$, the additive inverse of $f$ is the function
+  $-f\colon S\to\F$ defined by
+  \[ (-f)(x) = -f(x) \]
+  for all $x\in S$.
+\end{itemize}
+\end{example}
+
+\marginnote{The elements of the vector space $\R^{[0,1]}$ are real-valued
+functions on $[0,1]$, not lists. In general, a vector space is an abstract
+entity whose elements might be lists, functions, or weird objects.}%
+{\emergencystretch=2em
+The vector space $\F^n$ is a special case of the vector space $\F^S$ because
+each $(x_1,\dots,x_n)\in\F^n$ can be thought of as a function $x$ from the set
+$\{1,2,\dots,n\}$ to $\F$ by writing $x(k)$ instead of $x_k$ for the
+$k^{\text{th}}$ coordinate of $(x_1,\dots,x_n)$. In other words, we can think
+of $\F^n$ as $\F^{\{1,2,\dots,n\}}$. Similarly, we can think of $\F^\infty$ as
+$\F^{\{1,2,\dots\}}$.\par}
+
+Soon we will see further examples of vector spaces, but first we need to
+develop some of the elementary properties of vector spaces.
+
+The definition of a vector space requires it to have an additive identity. The
+next result states that this identity is unique.
+
+\begin{result}[Unique additive identity]\label{ax:1.26}
+A vector space has a unique additive identity.
+\end{result}
+
+\begin{proof}
+Suppose $0$ and $0'$ are both additive identities for some vector space $V$.
+Then
+\[ 0' = 0'+0 = 0+0' = 0, \]
+where the first equality holds because $0$ is an additive identity, the second
+equality comes from commutativity, and the third equality holds because $0'$
+is an additive identity. Thus $0'=0$, proving that $V$ has only one additive
+identity.
+\end{proof}
+
+Each element $v$ in a vector space has an additive inverse, an element $w$ in
+the vector space such that $v+w=0$. The next result shows that each element in
+a vector space has only one additive inverse.
+
+\begin{result}[Unique additive inverse]\label{ax:1.27}
+Every element in a vector space has a unique additive inverse.
+\end{result}
+
+\begin{proof}
+Suppose $V$ is a vector space. Let $v\in V$. Suppose $w$ and $w'$ are additive
+inverses of $v$. Then
+\[ w = w+0 = w+(v+w') = (w+v)+w' = 0+w' = w'. \]
+Thus $w=w'$, as desired.
+\end{proof}
+
+Because additive inverses are unique, the following notation now makes sense.
+
+\begin{notation}[$-v$, $w-v$]\label{ax:1.28}
+Let $v,w\in V$. Then
+\begin{itemize}
+\item $-v$ denotes the additive inverse of $v$;
+\item $w-v$ is defined to be $w+(-v)$.
+\end{itemize}
+\end{notation}
+
+Almost all results in this book involve some vector space. To avoid having to
+restate frequently that $V$ is a vector space, we now make the necessary
+declaration once and for all.
+
+\begin{notation}[$V$]\label{ax:1.29}
+For the rest of this book, $V$ denotes a vector space over $\F$.
+\end{notation}
+
+In the next result, $0$ denotes a scalar (the number $0\in\F$) on the left side
+of the equation and a vector (the additive identity of $V$) on the right side
+of the equation.
+
+\begin{result}[The number $0$ times a vector]\label{ax:1.30}
+$0v=0$ for every $v\in V$.
+\end{result}
+
+\begin{proof}
+For $v\in V$, we have
+\[ 0v = (0+0)v = 0v+0v. \]
+Adding the additive inverse of $0v$ to both sides of the equation above gives
+$0=0v$, as desired.
+\end{proof}
+
+\marginnote[-14mm]{The result in \ref{ax:1.30} involves the additive identity of $V$
+and scalar multiplication. The only part of the definition of a vector space
+that connects vector addition and scalar multiplication is the distributive
+property. Thus the distributive property must be used in the proof of
+\ref{ax:1.30}.}%
+In the next result, $0$ denotes the additive identity of $V$. Although their
+proofs are similar, \ref{ax:1.30} and \ref{ax:1.31} are not identical. More
+precisely, \ref{ax:1.30} states that the product of the scalar $0$ and any
+vector equals the vector $0$, whereas \ref{ax:1.31} states that the product of
+any scalar and the vector $0$ equals the vector $0$.
+
+\begin{result}[A number times the vector $0$]\label{ax:1.31}
+$a0=0$ for every $a\in\F$.
+\end{result}
+
+\begin{proof}
+For $a\in\F$, we have
+\[ a0 = a(0+0) = a0+a0. \]
+Adding the additive inverse of $a0$ to both sides of the equation above gives
+$0=a0$, as desired.
+\end{proof}
+
+Now we show that if an element of $V$ is multiplied by the scalar $-1$, then
+the result is the additive inverse of the element of $V$.
+
+\begin{result}[The number $-1$ times a vector]\label{ax:1.32}
+$(-1)v=-v$ for every $v\in V$.
+\end{result}
+
+\begin{proof}
+For $v\in V$, we have
+\[ v+(-1)v = 1v+(-1)v = \bigl(1+(-1)\bigr)v = 0v = 0. \]
+This equation says that $(-1)v$, when added to $v$, gives $0$. Thus $(-1)v$ is
+the additive inverse of $v$, as desired.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{1B}
+
+\begin{exercise}
+Prove that $-(-v)=v$ for every $v\in V$.
+\end{exercise}
+\begin{solution}
+Let $v\in V$. By the definition of additive inverse, we have
+\[ v+(-v) = 0 = -(-v)+(-v). \]
+Since additive inverses are unique, we conclude that $-(-v)=v$.
+\end{solution}
+
+\begin{exercise}
+Suppose $a\in\F$, $v\in V$, and $av=0$. Prove that $a=0$ or $v=0$.
+\end{exercise}
+\begin{solution}
+If $a=0$, then we are done. Suppose $a\ne0$. Then
+\[ v = 1v = \frac1a(av) = \frac1a\cdot0 = 0. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $v,w\in V$. Explain why there exists a unique $x\in V$ such that
+$v+3x=w$.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{The solution says ``dividing by $3$'' in the sense that
+we're dividing by the scalar $3$ in the field $\F$, not a vector in $V$.}
+Solving for $x$ explicitly, we obtain
+\[ 3x = w-v \implies x = (1/3)(w-v). \]
+This shows that there exists $x\in V$ such that $v+3x=w$. To see that $x$ is
+unique, suppose there exists another $y\in V$ such that $v+3y=w$. Then dividing
+by $3$, we get
+\[ 3x = w-v = 3y \implies x = y. \qedhere \]
+\end{solution}
+
+\begin{exercise}
+The empty set is not a vector space. The empty set fails to satisfy only one of
+the requirements listed in the definition of a vector space (\ref{ax:1.20}).
+Which one?
+\end{exercise}
+\begin{solution}
+The empty set fails to satisfy the requirement that there exists a zero vector
+$0\in V$ such that $v+0=v$ for all $v\in V$ since it contains no elements.
+\end{solution}
+
+\begin{exercise}
+Show that in the definition of a vector space (\ref{ax:1.20}), the additive
+inverse condition can be replaced with the condition that
+\[ 0v=0 \text{ for all } v\in V. \]
+Here the $0$ on the left side is the number $0$, and the $0$ on the right side
+is the additive identity of $V$.
+\exnote{The phrase a ``condition can be replaced'' in a definition means that
+the collection of objects satisfying the definition is unchanged if the
+original condition is replaced with the new condition.}
+\end{exercise}
+\begin{solution}
+Suppose that $0v=0$ for all $v\in V$. Let $v\in V$. Then
+\[ v+(-1)v = 1v+(-1)v = \bigl(1+(-1)\bigr)v = 0v = 0. \]
+Hence, $(-1)v$ is the additive inverse of $v$.
+
+Conversely, suppose that for every $v\in V$, there exists an additive inverse
+$-v\in V$ such that $v+(-v)=0$. Then $0v=(0+0)v=0v+0v$. Adding $-0v$ to both
+sides, we get $0=0v$. Hence, $0v=0$ for all $v\in V$.
+\end{solution}
+
+\begin{exercise}
+Let $\infty$ and $-\infty$ denote two distinct objects, neither of which is in
+$\R$. Define an addition and scalar multiplication on $\R\cup\{\infty,-\infty\}$
+as you could guess from the notation. Specifically, the sum and product of two
+real numbers is as usual, and for $t\in\R$ define
+\[ t\infty = \begin{cases} -\infty & \text{if } t<0,\\ 0 & \text{if } t=0,\\
+     \infty & \text{if } t>0, \end{cases}
+   \qquad
+   t(-\infty) = \begin{cases} \infty & \text{if } t<0,\\ 0 & \text{if } t=0,\\
+     -\infty & \text{if } t>0, \end{cases} \]
+and
+\begin{align*}
+t+\infty = \infty+t = \infty+\infty &= \infty,\\
+t+(-\infty) = (-\infty)+t = (-\infty)+(-\infty) &= -\infty,\\
+\infty+(-\infty) = (-\infty)+\infty &= 0.
+\end{align*}
+With these operations of addition and scalar multiplication, is
+$\R\cup\{\infty,-\infty\}$ a vector space over $\R$? Explain.
+\end{exercise}
+\begin{solution}
+No, $\R\cup\{\infty,-\infty\}$ is not a vector space over $\R$ as it does not
+satisfy the associative property of addition. Let $t\in\R\setminus\{0\}$. Then
+\[ (t+\infty)+(-\infty) = \infty+(-\infty) = 0 \ne t = t+0
+   = t+\bigl(\infty+(-\infty)\bigr). \qedhere \]
+\end{solution}
+
+\begin{exercise}
+Suppose $S$ is a nonempty set. Let $V^S$ denote the set of functions from $S$
+to $V$. Define a natural addition and scalar multiplication on $V^S$, and show
+that $V^S$ is a vector space with these definitions.
+\end{exercise}
+\begin{solution}
+Let $f,g\in V^S$ and $t\in\F$. Define addition and scalar multiplication as
+follows:
+\[ (f+g)(s) = f(s)+g(s), \quad (tf)(s) = t\bigl(f(s)\bigr) \]
+for all $s\in S$. We will show that $V^S$ is a vector space with these
+operations.
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Commutativity}: Let $f,g\in V^S$. Then for all $s\in S$,
+  \[ (f+g)(s) = f(s)+g(s) = g(s)+f(s) = (g+f)(s). \]
+\item \textbf{Associativity}: Let $f,g,h\in V^S$ and $t,u\in\F$. Then for all
+  $s\in S$,
+  \begin{align*}
+  \bigl((f+g)+h\bigr)(s) &= (f+g)(s)+h(s)\\
+    &= \bigl(f(s)+g(s)\bigr)+h(s)\\
+    &= f(s)+\bigl(g(s)+h(s)\bigr)\\
+    &= f(s)+(g+h)(s)\\
+    &= \bigl(f+(g+h)\bigr)(s),
+  \end{align*}
+  and
+  \begin{align*}
+  \bigl((tu)f\bigr)(s) &= (tu)\bigl(f(s)\bigr)\\
+    &= t\bigl(u(f(s))\bigr)\\
+    &= t(uf)(s)\\
+    &= \bigl(t(uf)\bigr)(s).
+  \end{align*}
+\item \textbf{Additive identity}: Let $0\in V$ be the additive identity in $V$.
+  Define the zero function $0_S\in V^S$ by $0_S(s)=0$ for all $s\in S$. Then
+  for all $f\in V^S$ and $s\in S$,
+  \[ (f+0_S)(s) = f(s)+0_S(s) = f(s)+0 = f(s) = 0+f(s) = (0_S+f)(s). \]
+  Hence, $0_S$ is the additive identity in $V^S$.
+\item \textbf{Additive inverse}: Let $f\in V^S$. Define the function
+  $-f\in V^S$ by $(-f)(s)=-f(s)$ for all $s\in S$. Then for all $s\in S$,
+  \[ \bigl(f+(-f)\bigr)(s) = f(s)+(-f)(s) = f(s)+\bigl(-f(s)\bigr) = 0
+     = 0_S(s). \]
+  Hence, $-f$ is the additive inverse of $f$ in $V^S$.
+\item \textbf{Multiplicative identity}: For all $f\in V^S$ and $s\in S$,
+  \[ (1f)(s) = 1\bigl(f(s)\bigr) = f(s). \]
+\item \textbf{Distributive properties}: Let $f,g\in V^S$ and $t,u\in\F$. Then
+  for all $s\in S$,
+  \begin{align*}
+  \bigl((t+u)f\bigr)(s) &= (t+u)\bigl(f(s)\bigr)\\
+    &= t\bigl(f(s)\bigr)+u\bigl(f(s)\bigr)\\
+    &= (tf)(s)+(uf)(s)\\
+    &= (tf+uf)(s),
+  \end{align*}
+  and
+  \begin{align*}
+  \bigl(t(f+g)\bigr)(s) &= t\bigl((f+g)(s)\bigr)\\
+    &= t\bigl(f(s)+g(s)\bigr)\\
+    &= t\bigl(f(s)\bigr)+t\bigl(g(s)\bigr)\\
+    &= (tf)(s)+(tg)(s)\\
+    &= (tf+tg)(s). \qedhere
+  \end{align*}
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is a real vector space.
+\begin{itemize}
+\item The \emph{complexification} of $V$, denoted by $V_{\C}$, equals
+  $V\times V$. An element of $V_{\C}$ is an ordered pair $(u,v)$, where
+  $u,v\in V$, but we write this as $u+iv$.
+\item Addition on $V_{\C}$ is defined by
+  \[ (u_1+iv_1)+(u_2+iv_2) = (u_1+u_2)+i(v_1+v_2) \]
+  for all $u_1,v_1,u_2,v_2\in V$.
+\item Complex scalar multiplication on $V_{\C}$ is defined by
+  \[ (a+bi)(u+iv) = (au-bv)+i(av+bu) \]
+  for all $a,b\in\R$ and all $u,v\in V$.
+\end{itemize}
+Prove that with the definitions of addition and scalar multiplication as
+above, $V_{\C}$ is a complex vector space.
+\exnote{Think of $V$ as a subset of $V_{\C}$ by identifying $u\in V$ with
+$u+i0$. The construction of $V_{\C}$ from $V$ can then be thought of as
+generalizing the construction of $\C^n$ from $\R^n$.}
+\end{exercise}
+\begin{solution}
+We prove that $V_{\C}$ is a complex vector space by verifying the vector space
+axioms.
+\begin{enumerate}[label=\arabic*)]
+\item \textbf{Commutativity}: Let $u_1+v_1i,u_2+v_2i\in V_{\C}$. Then
+  \begin{align*}
+  (u_1+v_1i)+(u_2+v_2i) &= (u_1+u_2)+i(v_1+v_2)\\
+    &= (u_2+u_1)+i(v_2+v_1) = (u_2+v_2i)+(u_1+v_1i).
+  \end{align*}
+\item \textbf{Associativity}: Let $u_1+v_1i,u_2+v_2i,u_3+v_3i\in V_{\C}$. Then
+  \begin{align*}
+  \bigl((u_1+v_1i)+(u_2+v_2i)\bigr)+(u_3+v_3i)
+    &= \bigl((u_1+u_2)+i(v_1+v_2)\bigr)+(u_3+v_3i)\\
+    &= \bigl((u_1+u_2)+u_3\bigr)+i\bigl((v_1+v_2)+v_3\bigr)\\
+    &= \bigl(u_1+(u_2+u_3)\bigr)+i\bigl(v_1+(v_2+v_3)\bigr)\\
+    &= (u_1+v_1i)+\bigl((u_2+v_2i)+(u_3+v_3i)\bigr).
+  \end{align*}
+  Similarly, let $a+bi,c+di\in\C$ and $u+vi\in V_{\C}$. Then
+  \begin{align*}
+  &\bigl((a+bi)(c+di)\bigr)(u+vi)\\
+    &\qquad= \bigl((ac-bd)+i(ad+bc)\bigr)(u+vi)\\
+    &\qquad= \bigl((ac-bd)u-(ad+bc)v\bigr)+i\bigl((ac-bd)v+(ad+bc)u\bigr)\\
+    &\qquad= \bigl(a(cu-dv)-b(du+cv)\bigr)+i\bigl(a(du+cv)+b(cu-dv)\bigr)\\
+    &\qquad= (a+bi)\bigl((cu-dv)+i(du+cv)\bigr)\\
+    &\qquad= (a+bi)\bigl((c+di)(u+vi)\bigr).
+  \end{align*}
+\item \textbf{Additive identity}: Let $0\in V$ be the additive identity in $V$.
+  Then for all $u+vi\in V_{\C}$,
+  \[ (u+vi)+(0+0i) = (u+0)+i(v+0) = u+vi = (0+0i)+(u+vi). \]
+  Hence, $0+0i$ is the additive identity in $V_{\C}$.
+\item \textbf{Additive inverse}: Let $u+vi\in V_{\C}$. Then
+  \[ (u+vi)+\bigl(-u+(-v)i\bigr) = (u-u)+i(v-v) = 0+0i. \]
+  Hence, $-u+(-v)i$ is the additive inverse of $u+vi$ in $V_{\C}$.
+\item \textbf{Multiplicative identity}: For all $u+vi\in V_{\C}$,
+  \[ (1+0i)(u+vi) = (1u-0v)+i(1v+0u) = u+vi. \]
+\item \textbf{Distributive properties}: Let $a+bi,c+di\in\C$ and
+  $u_1+v_1i,u_2+v_2i\in V_{\C}$. Then
+  \begin{align*}
+  &(a+bi)\bigl((u_1+v_1i)+(u_2+v_2i)\bigr)\\
+    &\qquad= (a+bi)\bigl((u_1+u_2)+i(v_1+v_2)\bigr)\\
+    &\qquad= \bigl(a(u_1+u_2)-b(v_1+v_2)\bigr)+i\bigl(a(v_1+v_2)+b(u_1+u_2)\bigr)\\
+    &\qquad= (au_1-bv_1)+i(av_1+bu_1)+(au_2-bv_2)+i(av_2+bu_2)\\
+    &\qquad= (a+bi)(u_1+v_1i)+(a+bi)(u_2+v_2i),
+  \end{align*}
+  and
+  \begin{align*}
+  &\bigl((a+bi)+(c+di)\bigr)(u_1+v_1i)\\
+    &\qquad= \bigl((a+c)+(b+d)i\bigr)(u_1+v_1i)\\
+    &\qquad= \bigl((a+c)u_1-(b+d)v_1\bigr)+i\bigl((a+c)v_1+(b+d)u_1\bigr)\\
+    &\qquad= (au_1-bv_1)+i(av_1+bu_1)+(cu_1-dv_1)+i(cv_1+du_1)\\
+    &\qquad= (a+bi)(u_1+v_1i)+(c+di)(u_1+v_1i). \qedhere
+  \end{align*}
+\end{enumerate}
+\end{solution}

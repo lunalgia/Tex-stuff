@@ -1,0 +1,1771 @@
+%% ======================================================================
+%%  artbook.sty  v3.0  --  print-on-demand-catalogue style book structure
+%%
+%%  Requires LuaLaTeX or XeLaTeX (fontspec), graphicx, and the book (or
+%%  report) class.  Build three times: .toc, then the part / chapter pages
+%%  (they read the .toc), then hyperlinks.
+%%
+%%  Structure           in the table of contents         on its own page
+%%  ------------------  -------------------------------  ---------------------
+%%  \part{...}          big coloured heading, full rule  full-colour part page
+%%                      (title only, no part number)     with a mini contents
+%%                                                       listing its chapters
+%%  \chapter{...}       "1  TITLE" label, middle column  opener: huge number,
+%%                                                       grid, section list,
+%%                                                       epigraph, title
+%%  \section{...}       row: "SECTION 1.2" above the title + page number
+%%
+%%  In the TOC only the divider between chapters and sections breaks the
+%%  horizontal rules; the other two vertical lines run through unbroken.
+%%  The TOC may run over several pages.  On ordinary pages the page number
+%%  and a running text (chapter title) stand vertically in the outer margin,
+%%  on a solid bar of the accent colour.
+%%
+%%  Ordinary pages use the grid of the chapter openers: a hairline divider
+%%  (at the same x as on the chapter page) with a column of small labels to
+%%  its left and the text to its right.  The column holds the section label
+%%  (SECTION 1.2), the names of theorems, and the margin notes and footnotes.
+%%  A section starts with a hairline across the page, broken around the
+%%  divider like the rules of the TOC; the label sits under it, the title
+%%  to the right.  A footer rule closes the page.
+%%
+%%  Commands
+%%     \artbooksetup{key=value, ...}   configure (keys below)
+%%     \sectionpages{34--37}        before a \section: override its page number
+%%     \chapterepigraph{quote}{source}   before a \chapter: epigraph on its page
+%%     \marginnote[offset]{text}    unnumbered note in the right margin
+%%     \sidenote[offset]{text}      numbered note in the right margin
+%%                                  (offset: + moves down, - moves up)
+%%     \maketitle                   the cover page; \subtitle{text} and
+%%                                  \coverfield{label}{value} add to it (13)
+%%     \begin{fullwidth}[top=,bottom=,above=,below=,fill=] ... \end{fullwidth}
+%%                                  a block over the full text block, with a
+%%                                  hairline above and below (14)
+%%     \margincaption{text}         caption of a figure in the label column
+%%
+%%  Package option:  \usepackage[exercises]{artbook}  loads xsim and sets up
+%%     exercises, solutions and \printsolutionsbysection (15)
+%%
+%%  Theorem-like environments (amsthm, defined at \begin{document})
+%%     theorem  lemma  definition      plain amsthm style, in a square box
+%%     example  remark                 plain amsthm style, in a rule-only box:
+%%                                     top and bottom rule, no right side,
+%%                                     running out to the margin bar
+%%     proposition  corollary  question  proof
+%%                                     plain amsthm style, no box
+%%     Each also exists unnumbered:  theorem*  lemma*  definition*  ...
+%%     All numbered ones share one counter, reset in every \section.
+%%     The name and number (THEOREM 1.2.3) stand in the label column left
+%%     of the divider; the optional title  \begin{theorem}[Title]  stays in
+%%     the text, in bold.  A box hangs on the divider like a cell of the TOC.
+%%     `theorems = off' skips all of this (use it if the document defines
+%%     its own theorems).
+%%
+%%  Keys (defaults in brackets)
+%%   TOC layout   split          x of the main divider           [0.5\textwidth]
+%%                sub split      x of the chapter-column divider [0.25\textwidth]
+%%                page width     width of the page-number column [10mm]
+%%                padding        space next to rules             [2mm]
+%%                chapter pad    space between the chapter name  [4mm]
+%%                               in the TOC and the vertical rules
+%%                rule           rule thickness                  [0.5pt]
+%%                rule gap       white gap on each side of the   [0.8mm]
+%%                               chapter/section divider (0pt = no break)
+%%                top padding    row with number: space above    [2.6mm]
+%%                bottom padding row with number: space below    [2.2mm]
+%%                plain padding  row without number: centred     [2.6mm]
+%%                top space      space above the first rule      [8mm]
+%%                part shift     raise (+) / lower (-) heading   [-0.3mm]
+%%                label shift    raise running label             [1mm]
+%%   TOC text     contents label text of the small top label     [Table of Contents]
+%%                section label  word before the section number  [Section]
+%%                               (empty = number only)
+%%                footer text    text left of the page number    [the \title]
+%%                               (the job name if there is no \title)
+%%                label case     \MakeUppercase, or empty        [\MakeUppercase]
+%%                body page style page style after the TOC       [artbookbody]
+%%   links        link toc       hyperref: page | all | none     [page]
+%%                link style     code run inside the TOC         [no boxes/colours]
+%%   part pages   part logo      any code (empty = none)         [concentric squares]
+%%                part label     word before the part number on  [empty = none]
+%%                               the part page, e.g. "Part"
+%%                mini width     width of the chapter list       [0.5\textwidth]
+%%                mini rule      thickness of its two rules      [1.5pt]
+%%                mini gap       space between chapters          [3.5mm]
+%%                badge size     diameter of the number badge    [5.6mm]
+%%   chapter      chapter label  word before the chapter number  [Chapter]
+%%   pages        chapter split  x of the divider                [0.25\textwidth]
+%%                chapter rule 1 y of the upper rule (from the   [0.30\textheight]
+%%                               top of the text block)
+%%                chapter rule 2 y of the rule above the title;  [0.58\textheight]
+%%                               the number stands on it
+%%                chapter drop   lowers rules, number, section   [8mm]
+%%                               list, title and epigraph together
+%%                chapter shift  raise (+) / lower (-) the       [-0.3mm]
+%%                               number relative to rule 2
+%%                chapter number x
+%%                               left edge of the number, measured from
+%%                               the PAPER edge; negative = cut off by
+%%                               the page edge                   [-2mm]
+%%                epigraph x     x of the epigraph               [0.5\textwidth]
+%%   ordinary     The TOC, part pages and chapter openers use the full text
+%%   pages        block set in the geometry.  Ordinary pages are set in a
+%%                smaller block inside it:
+%%                body split     x of the divider (= the label     [= chapter split]
+%%                               column's width)
+%%                body gap       space between divider and text  [5mm]
+%%                body right     space between text and the      [6mm]
+%%                               outer margin strip
+%%                body top       extra space above the text      [6mm]
+%%                body bottom    extra space below the text      [10mm]
+%%                body leading   \linespread of ordinary pages   [1.2]
+%%   sections     section label  word before the section number  [Section]
+%%                               (shared with the TOC)
+%%                section before / section after   vertical space
+%%                               [2.4\baselineskip plus .. / 1.2\baselineskip]
+%%                section pad    space between the hairline and  [2.2mm]
+%%                               the title
+%%                section font   the title (complete font        [serif 15/18pt]
+%%                               switch: family, size, shape)
+%%                section number font  the label in the column   [label font]
+%%                               (complete font switch)
+%%                subsection font  the title of a \subsection     [bold serif 10pt]
+%%   margin       margin text    running text, any code          [\leftmark = chapter
+%%                               (\rightmark = section)           title, or the part
+%%                                                                title, or the
+%%                                                                document title]
+%%                margin gap     space between number and text   [6mm]
+%%                margin shift   move both towards the paper     [0pt]
+%%                               edge (+) or the text block (-)
+%%                margin bar width  width of the accent-coloured [auto]
+%%                               bar behind number and text:
+%%                               auto = the whole outer margin,
+%%                               a length, or none
+%%   notes        note gap       space between notes and the     [4mm]
+%%                               divider; the notes fill the
+%%                               column left of it
+%%                note font      font of the notes               [8pt serif]
+%%                footnotes      margin | normal  (margin turns  [margin]
+%%                               \footnote into \sidenote)
+%%                footnote font  applied to the text of          [\itshape]
+%%                               footnotes (not to \marginnote)
+%%   theorems     theorems       on | off                        [on]
+%%                theorem head font   name and number in the     [label font]
+%%                               label column (complete switch)
+%%                theorem title font  the [Title] in the text    [\bfseries]
+%%                theorem box sep     space above and below the   [2mm]
+%%                               text inside a box (measured to the
+%%                               cap height and the baseline, so the
+%%                               text is centred between the rules)
+%%                theorem skip   space above and below           [9pt plus 2pt
+%%                                                                 minus 2pt]
+%%   cover        cover color    colour of the page, or none    [none = white]
+%%                cover rule     y of the hairline the big letter  [0.52\textheight]
+%%                               stands on, and the title hangs from
+%%                cover pad      space around the title and in the  [4mm]
+%%                               rows
+%%                cover mark font, cover mark color, cover mark x,
+%%                cover mark shift   the big letter: complete font switch,
+%%                               colour, left edge from the paper edge,
+%%                               raise (+) / lower (-)  [chapter number font
+%%                               at 420pt, accent, chapter number x, 0pt]
+%%                cover title font, cover subtitle font, cover label font,
+%%                cover field font   complete font switches    [chapter title
+%%                               font at 48pt, title font at 16pt, label font,
+%%                               title font at 12pt]
+%%                cover author label, cover date label           [Author, Date]
+%%   fullwidth    fullwidth top, fullwidth bottom    distance between the hairline
+%%                               and the content                [2mm, 2mm]
+%%                fullwidth above, fullwidth below   space outside the
+%%                               hairlines                      [9pt plus 2pt minus 2pt]
+%%                fullwidth fill  colour of the block (covers    [white]
+%%                               the divider), or none
+%%   links        link color     colour of all links, or none   [none]
+%%   colours      accent         background of part pages, TOC headings,
+%%                               chapter numbers, margin bar
+%%                ink            text colour on part pages
+%%   fonts        part font        big heading in the TOC
+%%                label font       small mono labels (TOC, footer, chapter pages)
+%%                number font      section number above a title in the TOC
+%%                title font       section titles in the TOC
+%%                page font        page numbers
+%%                part label font  "Part I" on the part page
+%%                part title font  huge title on the part page
+%%                mini font        chapter titles in the mini contents
+%%                badge font       number inside the round badge next to them
+%%                chapter number font  huge number on a chapter page
+%%                chapter title font   title on a chapter page
+%%                epigraph font        epigraph on a chapter page
+%%                section font         section title on ordinary pages
+%%                section number font  section number on ordinary pages
+%%                margin font          running text in the margin
+%%                margin page font     page number in the margin
+%%                note font            margin notes
+%%                -- each is arbitrary code that switches font, usually
+%%                   \fontspec[Ligatures=TeX]{...} then \fontsize{..}{..}\selectfont
+%% ======================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{artbook}[2026/10/02 v3.0 print-on-demand style book structure]
+
+\newif\if@artbook@exercises
+\DeclareOption{exercises}{\@artbook@exercisestrue}
+\DeclareOption*{\PackageWarning{artbook}{Unknown option `\CurrentOption'}}
+\ProcessOptions\relax
+
+\RequirePackage{fontspec}
+\RequirePackage{xcolor}
+\RequirePackage{pgfkeys}
+\RequirePackage{pict2e}
+\RequirePackage{graphicx}   % \rotatebox for the margin text, \raisebox
+\RequirePackage{amssymb}    % \blacksquare, the end-of-proof mark
+\RequirePackage{amsthm}     % theorem-like environments (section 12)
+\RequirePackage{mdframed}   % the boxes around theorems, lemmas, definitions
+\if@artbook@exercises          % package option `exercises' (section 15)
+  \RequirePackage{xsim}
+  \RequirePackage{needspace}
+\fi
+
+% the report class has no front/main matter switch: treat it as main matter
+\@ifundefined{if@mainmatter}{\newif\if@mainmatter \@mainmattertrue}{}
+
+
+%% ----------------------------------------------------------------------
+%%  1. Options and their defaults
+%% ----------------------------------------------------------------------
+\definecolor{artbook@default}{HTML}{FFC400}
+\definecolor{artbook@inkdefault}{HTML}{1F1B1D}
+
+% Default fonts (TeX Gyre ships with TeX Live; fall back to the standard
+% families if it is missing).  Replace them freely via the font keys.
+\newcommand*\artbook@sans{%
+  \IfFontExistsTF{TeX Gyre Heros}{\fontspec[Ligatures=TeX]{TeX Gyre Heros}}{\sffamily}%
+  \bfseries}
+\newcommand*\artbook@serif{%
+  \IfFontExistsTF{TeX Gyre Pagella}{\fontspec[Ligatures=TeX]{TeX Gyre Pagella}}{\rmfamily}}
+\newcommand*\artbook@mono{%
+  \IfFontExistsTF{TeX Gyre Cursor}%
+    {\fontspec[Ligatures=TeX,LetterSpace=12]{TeX Gyre Cursor}}{\ttfamily}}
+
+\pgfkeys{/artbook/.cd,
+  % --- TOC layout (lengths are evaluated when the TOC is typeset)
+  split/.store in          = \artbook@opt@split,
+  sub split/.store in      = \artbook@opt@subsplit,
+  page width/.store in     = \artbook@opt@pagewidth,
+  padding/.store in        = \artbook@opt@padding,
+  chapter pad/.store in    = \artbook@opt@chpad,
+  rule/.store in           = \artbook@opt@rule,
+  top padding/.store in    = \artbook@opt@toppad,
+  bottom padding/.store in = \artbook@opt@botpad,
+  plain padding/.store in  = \artbook@opt@plainpad,
+  top space/.store in      = \artbook@opt@topspace,
+  part shift/.store in     = \artbook@opt@partshift,
+  label shift/.store in    = \artbook@opt@labelshift,
+  rule gap/.store in       = \artbook@opt@rulegap,
+  % --- TOC text
+  contents label/.store in = \artbook@opt@contentslabel,
+  section label/.store in  = \artbook@opt@sectionlabel,
+  footer text/.store in    = \artbook@opt@footertext,
+  label case/.store in     = \artbook@opt@case,
+  body page style/.store in= \artbook@opt@bodystyle,
+  % --- links
+  link toc/.store in       = \artbook@opt@linktoc,
+  link style/.store in     = \artbook@opt@linkstyle,
+  % --- part pages
+  part logo/.store in      = \artbook@opt@partlogo,
+  part label/.store in     = \artbook@opt@partlabel,
+  mini width/.store in     = \artbook@opt@miniwidth,
+  mini rule/.store in      = \artbook@opt@minirule,
+  mini gap/.store in       = \artbook@opt@minigap,
+  badge size/.store in     = \artbook@opt@badgesize,
+  % --- chapter pages
+  chapter label/.store in  = \artbook@opt@chapterlabel,
+  chapter split/.store in  = \artbook@opt@chapsplit,
+  chapter rule 1/.store in = \artbook@opt@chapruleone,
+  chapter rule 2/.store in = \artbook@opt@chapruletwo,
+  chapter shift/.store in  = \artbook@opt@chapshift,
+  chapter drop/.store in   = \artbook@opt@chapdrop,
+  chapter number x/.store in = \artbook@opt@chapnumx,
+  epigraph x/.store in     = \artbook@opt@epix,
+  % --- airy body pages
+  body split/.store in     = \artbook@opt@bodysplit,
+  body gap/.store in       = \artbook@opt@bodygap,
+  body right/.store in     = \artbook@opt@bodyright,
+  body top/.store in       = \artbook@opt@bodytop,
+  body bottom/.store in    = \artbook@opt@bodybottom,
+  body leading/.store in   = \artbook@opt@bodyleading,
+  % --- sections on ordinary pages
+  section pad/.store in    = \artbook@opt@secpad,
+  section before/.store in = \artbook@opt@secbefore,
+  section after/.store in  = \artbook@opt@secafter,
+  section font/.store in   = \artbook@opt@fontsection,
+  section number font/.store in = \artbook@opt@fontsecnum,
+  subsection font/.store in = \artbook@opt@fontsubsection,
+  % --- margin text on ordinary pages
+  margin text/.store in    = \artbook@opt@margintext,
+  margin gap/.store in     = \artbook@opt@margingap,
+  margin shift/.store in   = \artbook@opt@marginshift,
+  margin bar width/.store in = \artbook@opt@barwidth,
+  % --- margin notes
+  note gap/.store in       = \artbook@opt@notegap,
+  footnotes/.store in      = \artbook@opt@footnotes,
+  footnote font/.store in  = \artbook@opt@fontfootnote,
+  % --- theorem-like environments
+  theorems/.store in       = \artbook@opt@theorems,
+  theorem head font/.store in  = \artbook@opt@fontthmhead,
+  theorem title font/.store in = \artbook@opt@fontthmtitle,
+  theorem box sep/.store in    = \artbook@opt@thmboxsep,
+  theorem skip/.store in       = \artbook@opt@thmskip,
+  % --- cover page
+  cover color/.store in    = \artbook@opt@covercolor,
+  cover rule/.store in     = \artbook@opt@coverrule,
+  cover pad/.store in      = \artbook@opt@coverpad,
+  cover mark font/.store in     = \artbook@opt@fontcovermark,
+  cover mark color/.store in    = \artbook@opt@covermarkcolor,
+  cover mark x/.store in        = \artbook@opt@covermarkx,
+  cover mark shift/.store in    = \artbook@opt@covermarkshift,
+  cover title font/.store in    = \artbook@opt@fontcovertitle,
+  cover subtitle font/.store in = \artbook@opt@fontcoversub,
+  cover label font/.store in    = \artbook@opt@fontcoverlabel,
+  cover field font/.store in    = \artbook@opt@fontcoverfield,
+  cover author label/.store in  = \artbook@opt@coverauthorlabel,
+  cover date label/.store in    = \artbook@opt@coverdatelabel,
+  % --- full-width blocks, links
+  fullwidth top/.store in    = \artbook@opt@fwtop,
+  fullwidth bottom/.store in = \artbook@opt@fwbottom,
+  fullwidth above/.store in  = \artbook@opt@fwabove,
+  fullwidth below/.store in  = \artbook@opt@fwbelow,
+  fullwidth fill/.store in   = \artbook@opt@fwfill,
+  link color/.store in       = \artbook@opt@linkcolor,
+  % --- colours
+  accent/.code             = {\colorlet{artbook@accent}{#1}},
+  ink/.code                = {\colorlet{artbook@ink}{#1}},
+  % --- fonts
+  part font/.store in      = \artbook@opt@fontpart,
+  label font/.store in     = \artbook@opt@fontlabel,
+  number font/.store in    = \artbook@opt@fontnumber,
+  title font/.store in     = \artbook@opt@fonttitle,
+  page font/.store in      = \artbook@opt@fontpage,
+  part label font/.store in= \artbook@opt@fontpartlabel,
+  part title font/.store in= \artbook@opt@fontparttitle,
+  mini font/.store in      = \artbook@opt@fontmini,
+  badge font/.store in     = \artbook@opt@fontbadge,
+  chapter number font/.store in = \artbook@opt@fontchapnum,
+  chapter title font/.store in  = \artbook@opt@fontchaptitle,
+  epigraph font/.store in       = \artbook@opt@fontepigraph,
+  margin font/.store in         = \artbook@opt@fontmargin,
+  margin page font/.store in    = \artbook@opt@fontmarginpage,
+  note font/.store in           = \artbook@opt@fontnote,
+  %
+  % ---- defaults ----
+  split            = 0.5\textwidth,
+  sub split        = 0.25\textwidth,
+  page width       = 10mm,
+  padding          = 2mm,
+  chapter pad      = 4mm,
+  rule             = 0.5pt,
+  top padding      = 2.6mm,
+  bottom padding   = 2.2mm,
+  plain padding    = 2.6mm,
+  top space        = 8mm,
+  part shift       = -0.3mm,
+  label shift      = 1mm,
+  rule gap         = 0.8mm,
+  contents label   = Table of Contents,
+  section label    = Section,
+  footer text      = \artbook@doctitle,
+  label case       = \MakeUppercase,
+  body page style  = artbookbody,
+  link toc         = page,
+  link style       = {\hypersetup{colorlinks=false,pdfborder={0 0 0}}},
+  part logo        = \artbook@logo,
+  part label       = {},
+  chapter label    = Chapter,
+  chapter split    = 0.25\textwidth,
+  chapter rule 1   = 0.30\textheight,
+  chapter rule 2   = 0.58\textheight,
+  chapter shift    = -0.3mm,
+  chapter drop     = 8mm,
+  chapter number x = -2mm,
+  epigraph x       = 0.5\textwidth,
+  body split       = \artbook@opt@chapsplit,
+  body gap         = 5mm,
+  body right       = 6mm,
+  body top         = 6mm,
+  body bottom      = 10mm,
+  body leading     = 1.2,
+  section pad      = 2.2mm,
+  section before   = {2.4\baselineskip plus 0.5\baselineskip minus 0.3\baselineskip},
+  section after    = {1.2\baselineskip},
+  section font     = {\artbook@serif\fontsize{15pt}{18pt}\selectfont},
+  section number font = \artbook@opt@fontlabel,
+  subsection font  = {\artbook@serif\bfseries\fontsize{10pt}{13pt}\selectfont},
+  margin text      = \leftmark,
+  margin gap       = 6mm,
+  margin shift     = 0pt,
+  margin bar width = auto,
+  note gap         = 4mm,
+  footnotes        = margin,
+  footnote font    = \itshape,
+  theorems         = on,
+  theorem head font  = \artbook@opt@fontlabel,
+  theorem title font = \bfseries,
+  theorem box sep    = 2mm,
+  theorem skip       = {9pt plus 2pt minus 2pt},
+  cover color      = none,
+  cover rule       = 0.52\textheight,
+  cover pad        = 4mm,
+  cover mark font  = {\artbook@opt@fontchapnum\fontsize{420pt}{420pt}\selectfont},
+  cover mark color = artbook@accent,
+  cover mark x     = \artbook@opt@chapnumx,
+  cover mark shift = 0pt,
+  cover title font = {\artbook@opt@fontchaptitle\fontsize{48pt}{50pt}\selectfont},
+  cover subtitle font = {\artbook@opt@fonttitle\fontsize{16pt}{19pt}\selectfont},
+  cover label font = \artbook@opt@fontlabel,
+  cover field font = {\artbook@opt@fonttitle\fontsize{12pt}{15pt}\selectfont},
+  cover author label = Author,
+  cover date label = Date,
+  fullwidth top    = 2mm,
+  fullwidth bottom = 2mm,
+  fullwidth above  = {9pt plus 2pt minus 2pt},
+  fullwidth below  = {9pt plus 2pt minus 2pt},
+  fullwidth fill   = white,
+  link color       = none,
+  mini width       = 0.5\textwidth,
+  mini rule        = 1.5pt,
+  mini gap         = 3.5mm,
+  badge size       = 5.6mm,
+  accent           = artbook@default,
+  ink              = artbook@inkdefault,
+  part font        = {\artbook@sans\fontsize{22pt}{22pt}\selectfont},
+  label font       = {\artbook@mono\fontsize{5.6pt}{6pt}\selectfont},
+  number font      = \artbook@opt@fontlabel,
+  title font       = {\artbook@serif\fontsize{9pt}{11pt}\selectfont},
+  page font        = \artbook@opt@fonttitle,
+  part label font  = {\artbook@sans\fontsize{16pt}{18pt}\selectfont},
+  part title font  = {\artbook@sans\fontsize{52pt}{50pt}\selectfont},
+  mini font        = {\artbook@sans\fontsize{17pt}{19pt}\selectfont},
+  badge font       = {\artbook@sans\fontsize{8pt}{8pt}\selectfont},
+  chapter number font = {\artbook@sans\fontsize{300pt}{300pt}\selectfont},
+  chapter title font  = {\artbook@serif\fontsize{34pt}{36pt}\selectfont},
+  epigraph font       = {\artbook@serif\itshape\fontsize{13pt}{16pt}\selectfont},
+  margin font         = \artbook@opt@fontlabel,
+  margin page font    = \artbook@opt@fontpage,
+  note font           = {\artbook@serif\fontsize{8pt}{10pt}\selectfont},
+}
+
+\newcommand*\artbooksetup[1]{\pgfkeys{/artbook/.cd,#1}}
+
+% The footer text defaults to the document's \title (or to the job name when
+% no \title was given).  \thanks and line breaks are neutralised.
+\let\artbook@notitle\@title
+\newcommand*\artbook@doctitle{%
+  \ifx\@title\artbook@notitle \jobname
+  \else {\let\thanks\@gobble \def\\{\space}\@title}\fi}
+
+
+%% ----------------------------------------------------------------------
+%%  2. Lengths, state, small helpers
+%% ----------------------------------------------------------------------
+\newlength\artbook@split    % x of the main vertical divider
+\newlength\artbook@subsplit % x of the chapter-column divider
+\newlength\artbook@pagew    % width of the page-number text
+\newlength\artbook@pad      % padding beside rules
+\newlength\artbook@chpad    % padding around the chapter name in the TOC
+\newlength\artbook@rule     % rule thickness
+\newlength\artbook@toppad   % strut above a row's text (rows with a number)
+\newlength\artbook@botpad   % strut below a row's text (rows with a number)
+\newlength\artbook@plainpad % padding of rows without a number
+\newlength\artbook@titlew   % width of the number/title text
+\newlength\artbook@miniw    % width of the chapter list on part pages
+\newlength\artbook@minirulew
+\newlength\artbook@minisep
+\newlength\artbook@badgew
+\newlength\artbook@savedtopskip % \topskip outside the TOC
+\newlength\artbook@gap    % white gap left on each side of a vertical line
+\newlength\artbook@pdx    % x of the page-number divider
+\newlength\artbook@csplit % x of the divider on chapter pages
+\newlength\artbook@cra    % y of the first / second rule on chapter pages
+\newlength\artbook@crb
+\newlength\artbook@epix   % x of the epigraph
+\newlength\artbook@edge   % distance from the paper's left edge to the text block
+\newlength\artbook@mw     % width of the outer margin
+\newlength\artbook@mx     % x of the centre line of the outer margin text
+\newlength\artbook@bx     % x of the centre line of the outer margin strip
+\newlength\artbook@bw     % width of the margin bar
+\newlength\artbook@bh     % distance from the paper top to the header baseline
+\newdimen\artbook@pos     % helpers of \artbook@gaprule
+\newdimen\artbook@cur
+\newdimen\artbook@cutl
+\newdimen\artbook@cutr
+\newdimen\artbook@ruleleft  % where the current row's top rule starts
+
+\newif\if@artbook@sub       % current part has chapters -> draw the sub-column
+\newif\if@artbook@first     % first row of the TOC -> print the running label
+\newif\if@artbook@hasnum    % current row has a section-number line
+\newif\if@artbook@prevsub   % previous row had the chapter-column divider
+\newif\if@artbook@inchap    % the sections read from the .toc belong to a chapter
+\newif\if@artbook@keep      % previous row opened a part -> no page break after it
+\newbox\artbook@titlebox    % the typeset number/title cell of the current row
+\newbox\artbook@pagebox     % the typeset page number of the current row
+\newcount\artbook@partno    % parts met while typesetting the TOC
+\newcount\artbook@partcnt   % parts met in the body
+\newcount\artbook@chapno    % chapters met while typesetting the TOC
+\newcount\artbook@chapcnt   % chapters met in the body
+\newbox\artbook@nbox \newbox\artbook@mbox \newbox\artbook@rbox
+\newbox\artbook@bxa \newbox\artbook@bxb \newbox\artbook@bxc \newbox\artbook@bxd
+\let\artbook@part\@empty    % part title waiting for its first row
+\let\artbook@chap\@empty    % chapter title waiting for its first row
+\gdef\artbook@pages{}       % page-number override for the current row
+\let\artbook@nextpages\@empty
+\expandafter\gdef\csname artbook@mini@0\endcsname{}
+
+% ---- full-size / body-size page geometry ----
+% The TOC, the part pages and the chapter openers are laid out on the full
+% text block of the geometry; ordinary pages use a smaller, "airy" block
+% inside it (more room above, below and to the left, room for margin notes).
+\newlength\artbook@fulltw   % full text width
+\newlength\artbook@bodytw   % body text width
+\newlength\artbook@fullth   % full text height
+\newlength\artbook@fulltopm % \topmargin of the full layout
+\newlength\artbook@fullodd  % \oddsidemargin of the full layout
+\newlength\artbook@fulleven % \evensidemargin of the full layout
+\newlength\artbook@bodyleft
+\newlength\artbook@bodyright
+\newlength\artbook@bodytop
+\newlength\artbook@bodybot
+\newlength\artbook@bsplit   % x of the divider on ordinary pages (from the full block)
+\newlength\artbook@bodygap  % space between the divider and the text
+\newlength\artbook@fr       % distance from the header baseline to the footer rule
+
+\newcommand*\artbook@settextwidth[1]{%
+  \setlength\textwidth{#1}\setlength\columnwidth{#1}%
+  \setlength\linewidth{#1}\hsize=#1\relax}
+% #1 = extra space above the text, #2 = extra space below it,
+% #3 = extra space left of it, #4 = \linespread.  Always called on a fresh
+% page (after \clearpage), so the new height is what the next page gets.
+\newcommand*\artbook@setgeometry[4]{%
+  \setlength\textheight{\dimexpr\artbook@fullth-#1-#2\relax}%
+  \setlength\topmargin{\dimexpr\artbook@fulltopm+#1\relax}%
+  \setlength\oddsidemargin{\dimexpr\artbook@fullodd+#3\relax}%
+  \setlength\evensidemargin{\dimexpr\artbook@fulleven+#3\relax}%
+  \global\@colht\textheight \global\@colroom\@colht
+  \vsize\@colroom
+  \linespread{#4}\selectfont}
+\newcommand*\artbook@fulllayout{%
+  \artbook@settextwidth{\artbook@fulltw}%
+  \artbook@setgeometry{\z@}{\z@}{\z@}{1}}
+\newcommand*\artbook@bodylayout{%
+  \artbook@settextwidth{\artbook@bodytw}%
+  \artbook@setgeometry{\artbook@bodytop}{\artbook@bodybot}{\artbook@bodyleft}%
+    {\artbook@opt@bodyleading}}
+% left / right paper margin of the FULL layout on the page being shipped
+\newcommand*\artbook@fullside{%
+  \if@twoside\ifodd\c@page\artbook@fullodd\else\artbook@fulleven\fi
+  \else\artbook@fullodd\fi}
+
+% Evaluated at the start of every TOC (globally, so the page style sees them).
+\newcommand*\artbook@setlengths{%
+  \global\artbook@split    =\artbook@opt@split\relax
+  \global\artbook@subsplit =\artbook@opt@subsplit\relax
+  \global\artbook@pagew    =\artbook@opt@pagewidth\relax
+  \global\artbook@pad      =\artbook@opt@padding\relax
+  \global\artbook@chpad    =\artbook@opt@chpad\relax
+  \global\artbook@rule     =\artbook@opt@rule\relax
+  \global\artbook@toppad   =\artbook@opt@toppad\relax
+  \global\artbook@botpad   =\artbook@opt@botpad\relax
+  \global\artbook@plainpad =\artbook@opt@plainpad\relax
+  \global\artbook@titlew   =\dimexpr\textwidth-\artbook@split-3\artbook@pad
+                                 -\artbook@rule-\artbook@pagew\relax
+  \global\artbook@pdx    =\dimexpr\artbook@split+2\artbook@pad+\artbook@titlew\relax
+  \global\artbook@gap    =\artbook@opt@rulegap\relax
+  \global\artbook@csplit =\artbook@opt@chapsplit\relax
+  \global\artbook@cra    =\dimexpr\artbook@opt@chapruleone+\artbook@opt@chapdrop\relax
+  \global\artbook@crb    =\dimexpr\artbook@opt@chapruletwo+\artbook@opt@chapdrop\relax
+  \global\artbook@epix   =\artbook@opt@epix\relax}
+\AtBeginDocument{\artbook@setlengths}
+
+% Lengths for the part pages (evaluated when a part page is made).
+\newcommand*\artbook@setminilengths{%
+  \global\artbook@miniw    =\artbook@opt@miniwidth\relax
+  \global\artbook@minirulew=\artbook@opt@minirule\relax
+  \global\artbook@minisep  =\artbook@opt@minigap\relax
+  \global\artbook@badgew   =\artbook@opt@badgesize\relax}
+
+% A small label: label font, optionally upper-cased.
+\newcommand*\artbook@label[1]{{\artbook@opt@fontlabel\artbook@opt@case{#1}}}
+
+% Rectangles made of rules.
+\newcommand*\artbook@hbar[1]{\vrule width#1 height\artbook@rule depth\z@}   % ----
+\newcommand*\artbook@vbar{\vrule width\artbook@rule}                        %  |
+% An invisible strut: #1 above the baseline, #2 below it.
+\newcommand*\artbook@strut[2]{\vrule width\z@ height#1 depth#2\relax}
+
+% A horizontal rule from x=#1 to x=#2 (an \hbox of width \textwidth) that
+% leaves a small white gap on both sides of every vertical line listed in #3
+% (ascending x, a comma list of lengths, each line \artbook@rule wide).  A rule
+% that ends at a vertical line stops short of it by the same gap.  Where a
+% vertical line passes through, a rule-sized square keeps it unbroken.
+% Vertical lines that are NOT listed are simply run over by the rule.
+\def\artbook@dseg#1#2{%
+  \ifdim#2>#1\relax
+    \hskip\dimexpr#1-\artbook@pos\relax
+    \artbook@hbar{\dimexpr#2-#1\relax}%
+    \artbook@pos=#2\relax
+  \fi}
+\newcommand*\artbook@gaprulew[4]{%       % #1 = width of the box
+  \hbox to#1{%
+    \artbook@pos=\z@ \artbook@cur=#2\relax
+    \@for\artbook@v:=#4\do{%
+      \artbook@cutl=\dimexpr\artbook@v-\artbook@gap\relax
+      \artbook@cutr=\dimexpr\artbook@v+\artbook@rule+\artbook@gap\relax
+      \ifdim\artbook@cutr>\artbook@cur\relax
+        \ifdim\artbook@cutl>#3\relax
+          \artbook@dseg{\artbook@cur}{#3}%
+        \else
+          \artbook@dseg{\artbook@cur}{\artbook@cutl}%
+        \fi
+        \artbook@cur=\artbook@cutr\relax
+      \fi
+      \ifdim\artbook@v<#3\relax
+        \artbook@dseg{\artbook@v}{\dimexpr\artbook@v+\artbook@rule\relax}%
+      \fi}%
+    \artbook@dseg{\artbook@cur}{#3}%
+    \hfil}}
+\newcommand*\artbook@gaprule[3]{\artbook@gaprulew{\textwidth}{#1}{#2}{#3}}
+
+
+% Links must not survive inside upper-cased labels.
+\newcommand*\artbook@nolinks{\let\hyper@linkstart\@gobbletwo \let\hyper@linkend\@empty}
+
+% Chapter number in the TOC label:  "1  TITLE"
+\newcommand*\artbook@numlabel[1]{#1\hskip 1mm\relax}
+
+
+%% ----------------------------------------------------------------------
+%%  3. User command
+%% ----------------------------------------------------------------------
+% \sectionpages{34--37} before a \section overrides its page number.  It writes
+% a line into the .toc just before the section's own line.
+\newcommand*\sectionpages[1]{\addtocontents{toc}{\protect\artbook@setpages{#1}}}
+\newcommand*\artbook@setpages[1]{\gdef\artbook@nextpages{#1}}
+\DeclareRobustCommand\tocpages[1]{\gdef\artbook@pages{#1}}
+
+
+%% ----------------------------------------------------------------------
+%%  3b. Hyperlinks (only active when hyperref is loaded)
+%% ----------------------------------------------------------------------
+\AtBeginDocument{%
+  \@ifpackageloaded{hyperref}{%
+    \edef\artbook@x{\noexpand\hypersetup{linktoc=\artbook@opt@linktoc}}\artbook@x}{}}
+
+\newcommand*\artbook@applylinkstyle{%
+  \@ifpackageloaded{hyperref}{\artbook@opt@linkstyle}{}}
+
+% #1 = page as written by hyperref, e.g. \hyper@linkstart{link}{sec.3}5\hyper@linkend
+% Print \artbook@pages (e.g. 34--37) inside the SAME link.
+\def\artbook@grab#1#2{\gdef\artbook@anchor{#2}}
+\newcommand*\artbook@relink[1]{%
+  \gdef\artbook@anchor{}%
+  \setbox\z@\hbox{\let\hyper@linkstart\artbook@grab \let\hyper@linkend\relax #1}%
+  \ifx\artbook@anchor\@empty
+    \artbook@pages
+  \else
+    \hyper@linkstart{link}{\artbook@anchor}\artbook@pages\hyper@linkend
+  \fi}
+
+
+%% ----------------------------------------------------------------------
+%%  4. Hooks: what a \part / \chapter / \section line in the .toc does
+%% ----------------------------------------------------------------------
+% (plain \def, not \renewcommand, so that they also exist in any class)
+\def\l@part#1#2{%
+  \global\@artbook@inchapfalse
+  \gdef\artbook@part{#1}\global\let\artbook@chap\@empty \global\@artbook@subfalse
+  \global\advance\artbook@partno\@ne
+  \expandafter\gdef\csname artbook@mini@\the\artbook@partno\endcsname{}}
+\def\l@chapter#1#2{%
+  \global\advance\artbook@chapno\@ne \global\@artbook@inchaptrue
+  \expandafter\gdef\csname artbook@sec@\the\artbook@chapno\endcsname{}%
+  \gdef\artbook@chap{#1}\global\@artbook@subtrue
+  % remember the chapter for the mini contents on this part's page
+  \expandafter\g@addto@macro\csname artbook@mini@\the\artbook@partno\endcsname
+    {\artbook@miniitem{#1}}}
+\def\l@section#1#2{%
+  \edef\artbook@rowargs{%
+    \noexpand\tocpages{\unexpanded\expandafter{\artbook@nextpages}}}%
+  \expandafter\artbook@row\expandafter{\artbook@rowargs #1}{#2}%
+  \global\let\artbook@nextpages\@empty
+  % remember the section for the list on its chapter's opening page
+  \if@artbook@inchap
+    \expandafter\g@addto@macro\csname artbook@sec@\the\artbook@chapno\endcsname
+      {\artbook@secitem{#1}}%
+  \fi}
+% deeper levels are not part of this design: drop them from the TOC.  Done at
+% \begin{document}, so that packages loaded after this one (caption!) still
+% see the class's \l@subsection when they load.
+\AtBeginDocument{%
+  \def\l@subsection#1#2{}%
+  \def\l@subsubsection#1#2{}%
+  \def\l@paragraph#1#2{}%
+  \def\l@subparagraph#1#2{}}
+
+
+%% ----------------------------------------------------------------------
+%%  5. A row.  Boxes with no glue between them, so all rules touch.
+%%
+%%      [ yellow heading ...................... running label ]  zero height
+%%      ------------------------------------------------------  top rule
+%%      [ chapter label |] number / title            | page      content
+%% ----------------------------------------------------------------------
+
+% Zero-height box that hangs above the top rule.
+\newcommand*\artbook@hanging{%
+  \hbox to\textwidth{%
+    \ifx\artbook@part\@empty\else
+      \raisebox{\artbook@opt@partshift}[0pt][0pt]{%
+        {\color{artbook@accent}\artbook@opt@fontpart
+         \let\numberline\@gobble \artbook@nolinks \artbook@part}}%
+    \fi
+    \hfil
+    \if@artbook@first
+      \raisebox{\artbook@opt@labelshift}[0pt][0pt]{%
+        \artbook@label{\artbook@opt@contentslabel}}%
+      \hskip\dimexpr\textwidth-\artbook@split+\artbook@pad\relax
+    \fi}}
+
+% The horizontal rule of a row.  Of the vertical lines it meets (chapter-column
+% divider, main divider, page-number divider) only the MAIN divider, between
+% chapters and sections, interrupts it; the others are run over.
+\newcommand*\artbook@toprule{%
+  \artbook@gaprule{\artbook@ruleleft}{\textwidth}{\artbook@split}}
+
+% Left zone: chapter divider and label (or just empty space).
+\newcommand*\artbook@leftzone{%
+  \if@artbook@sub
+    \hskip\artbook@subsplit \artbook@vbar
+    \ifx\artbook@chap\@empty
+      \hskip\dimexpr\artbook@split-\artbook@subsplit-\artbook@rule\relax
+    \else
+      \hskip\artbook@chpad
+      \vtop{\hsize=\dimexpr\artbook@split-\artbook@subsplit-\artbook@rule-2\artbook@chpad\relax
+            \artbook@opt@fontlabel \raggedleft \parindent=\z@ \noindent
+            \let\numberline\artbook@numlabel \artbook@nolinks
+            \artbook@opt@case{\vskip -1.5mm\artbook@chap}\par}%
+      \hskip\artbook@chpad
+    \fi
+  \else
+    \hskip\artbook@split
+  \fi}
+
+% The number/title cell is built into a box first, so that the page number
+% can be centred against its height.  Typeset twice: the first pass finds
+% out (via \numberline) whether the row has a section number, which decides
+% the padding -- a numbered row keeps its number line near the top, a row
+% without one is centred between its rules.
+% The number line reads "SECTION 1.2" (see the `section label' key).
+\newcommand*\artbook@numline[1]{%
+  \global\@artbook@hasnumtrue
+  {\artbook@opt@fontnumber
+   \ifx\artbook@opt@sectionlabel\@empty\else
+     \artbook@opt@case{\artbook@opt@sectionlabel}\nobreakspace
+   \fi
+   #1}\newline}
+
+\newcommand*\artbook@titlebody[1]{%
+  \vtop{\hsize=\artbook@titlew \artbook@opt@fonttitle \raggedright
+        \parindent=\z@ \noindent
+        \setbox\z@\hbox{H}%                     % cap height of the title font
+        \if@artbook@hasnum
+          \artbook@strut{\artbook@toppad}{\z@}%
+        \else
+          \artbook@strut{\dimexpr\ht\z@+\artbook@plainpad\relax}{\z@}%
+        \fi
+        \let\numberline\artbook@numline #1%
+        \if@artbook@hasnum
+          \artbook@strut{\z@}{\artbook@botpad}%
+        \else
+          \artbook@strut{\z@}{\artbook@plainpad}%
+        \fi
+        \par}}
+
+\newcommand*\artbook@buildtitle[1]{%
+  \global\@artbook@hasnumfalse
+  \setbox\artbook@titlebox\artbook@titlebody{#1}%
+  \setbox\artbook@titlebox\artbook@titlebody{#1}}
+
+% Page number: vertically centred on the title cell.
+\newcommand*\artbook@pagecell[1]{%
+  \setbox\artbook@pagebox\hbox{\artbook@opt@fontpage
+    \ifx\artbook@pages\@empty #1\else\artbook@relink{#1}\fi}%
+  \raise\dimexpr(\ht\artbook@titlebox-\dp\artbook@titlebox
+                  -\ht\artbook@pagebox+\dp\artbook@pagebox)/2\relax
+  \hbox to\artbook@pagew{\box\artbook@pagebox\hfil}}
+
+\newcommand*\artbook@row[2]{%    #1 = number+title, #2 = page from the .toc
+  \gdef\artbook@pages{}%
+  \par
+  % The rows are stacked boxes with no glue between them, so TeX has no
+  % place to break the page.  Offer one between rows (but keep the first
+  % row of a part together with the next one).
+  \if@artbook@first\else
+    \if@artbook@keep\penalty\@M\else\penalty\z@\fi
+  \fi
+  \artbook@mark
+  \nointerlineskip
+  % The rule starts at the page edge for a part, at the chapter column
+  % for a chapter, at the main divider otherwise.
+  \ifx\artbook@part\@empty
+    \ifx\artbook@chap\@empty \artbook@ruleleft=\artbook@split
+    \else                 \artbook@ruleleft=\artbook@subsplit \fi
+  \else \artbook@ruleleft=\z@ \fi
+  \artbook@buildtitle{#1}%
+  \artbook@hanging                                   \nointerlineskip
+  \artbook@toprule                                   \nointerlineskip
+  \hbox to\textwidth{%
+    \artbook@leftzone
+    \hskip\artbook@pad \copy\artbook@titlebox
+    \hskip\artbook@pad \artbook@vbar \hskip\artbook@pad
+    \artbook@pagecell{#2}\hfil}%
+  \ifx\artbook@part\@empty \global\@artbook@keepfalse \else \global\@artbook@keeptrue \fi
+  \if@artbook@sub \global\@artbook@prevsubtrue \else \global\@artbook@prevsubfalse \fi
+  \global\let\artbook@part\@empty \global\let\artbook@chap\@empty
+  \global\@artbook@firstfalse}
+
+% Multi-page support.  Every row leaves a mark "AS" for the page builder:
+%   A = 1  the chapter-column divider is already running above this row
+%   S = 1  the chapter-column divider runs below this row
+% The page header uses A of the first row on a page, the filler at the
+% bottom of the page uses S of the last one, so the dividers continue
+% across page breaks.
+\newcommand*\artbook@mark{%
+  \if@artbook@sub
+    \ifx\artbook@part\@empty
+      \if@artbook@first \def\artbook@mk{01}\else \def\artbook@mk{11}\fi
+    \else \def\artbook@mk{01}\fi
+  \else \def\artbook@mk{00}\fi
+  \expandafter\mark\expandafter{\artbook@mk}}
+\def\artbook@parsemark#1#2#3\relax{\def\artbook@mkA{#1}\def\artbook@mkS{#2}}
+
+% Filler at the bottom of every TOC page (installed as \@textbottom): keeps
+% the vertical rules running down to the footer rule.
+\newcommand*\artbook@textbottom{%
+  \expandafter\artbook@parsemark\botmark 00\relax
+  \cleaders\hbox to\textwidth{%
+    \if 1\artbook@mkS
+      \hskip\artbook@subsplit \vrule width\artbook@rule height 2pt depth\z@
+      \hskip\dimexpr\artbook@pdx-\artbook@subsplit-\artbook@rule\relax
+    \else
+      \hskip\artbook@pdx
+    \fi
+    \vrule width\artbook@rule height 2pt depth\z@ \hfil}\vfill}
+
+
+%% ----------------------------------------------------------------------
+%%  6. \tableofcontents
+%% ----------------------------------------------------------------------
+\def\tableofcontents{%
+  \clearpage
+  \artbook@fulllayout
+  \artbook@setlengths
+  \pagestyle{artbook}%
+  \artbook@savedtopskip=\topskip
+  \let\artbook@oldtextbottom\@textbottom
+  \let\@textbottom\artbook@textbottom
+  \begingroup
+    \parindent\z@ \parskip\z@
+    \topskip=\z@   % rows on continuation pages start flush with the text top
+    \artbook@applylinkstyle
+    \global\@artbook@firsttrue \global\@artbook@subfalse \global\@artbook@keepfalse
+    \global\let\artbook@part\@empty \global\let\artbook@chap\@empty
+    \global\artbook@partno=\z@ \global\artbook@chapno=\z@
+    \global\@artbook@inchapfalse \global\@artbook@prevsubfalse
+    \expandafter\gdef\csname artbook@mini@0\endcsname{}%
+    \vspace*{\dimexpr\artbook@opt@topspace+\artbook@savedtopskip\relax}%
+    \@starttoc{toc}%
+  \endgroup
+  \clearpage
+  \artbook@bodylayout
+  \let\@textbottom\artbook@oldtextbottom
+  \mark{{}{}}%   forget the TOC marks
+  \pagestyle{\artbook@opt@bodystyle}}
+
+
+%% ----------------------------------------------------------------------
+%%  7. Page style for the TOC: full-height divider, footer rule and text
+%%     (drawn with rules only -- no TikZ, no extra LaTeX runs)
+%% ----------------------------------------------------------------------
+\newcommand*\artbook@header{%
+  % chapter-column divider, when it is already running at the top of the page
+  \expandafter\artbook@parsemark\firstmark 00\relax
+  \let\artbook@topA\artbook@mkA
+  \expandafter\artbook@parsemark\botmark 00\relax
+  \if 1\artbook@topA
+    \rlap{\smash{\hbox{\hskip\artbook@subsplit
+      \vrule width\artbook@rule
+             height\dimexpr 1in+\voffset+\topmargin+\headheight\relax
+             depth \headsep}}}%
+  \fi
+  % main divider, from the page top to just below the footer text
+  \rlap{\smash{\hbox{%
+    \hskip\artbook@split
+    \vrule width\artbook@rule
+           height\dimexpr 1in+\voffset+\topmargin+\headheight\relax
+           depth \dimexpr \headsep+\textheight+\footskip+1.5mm\relax}}}%
+  % footer rule, at the bottom of the text block; it breaks around the main
+  % divider only
+  \rlap{\smash{\lower\dimexpr\headsep+\textheight\relax
+    \artbook@gaprule{\z@}{\textwidth}{\artbook@split}}}}
+
+\newcommand*\artbook@footer{%
+  \hbox to\textwidth{%
+    \hbox to\artbook@split{\hss\artbook@label{\artbook@opt@footertext}\hskip\artbook@pad}%
+    \hskip\artbook@pad {\artbook@opt@fontpage\thepage}\hfil}}
+
+\newcommand*\ps@artbook{%
+  \let\@mkboth\@gobbletwo
+  \def\@oddhead{\artbook@header}\let\@evenhead\@oddhead
+  \def\@oddfoot{\artbook@footer}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  8. Part pages:   logo / title ........ mini contents
+%% ----------------------------------------------------------------------
+
+% Default logo: black square, colour gap, black core.
+\newcommand*\artbook@logo{%
+  \begingroup
+    \@tempdima=13mm
+    \@tempdimb=\dimexpr0.13\@tempdima\relax      % ring thickness
+    \@tempdimc=\dimexpr0.29\@tempdima\relax      % inset of the core
+    \hbox to\@tempdima{%
+      \rlap{\color{artbook@ink}\vrule width\@tempdima height\@tempdima depth\z@}%
+      \rlap{\hskip\@tempdimb\raise\@tempdimb\hbox{\color{artbook@accent}%
+            \vrule width\dimexpr\@tempdima-2\@tempdimb\relax
+                   height\dimexpr\@tempdima-2\@tempdimb\relax depth\z@}}%
+      \rlap{\hskip\@tempdimc\raise\@tempdimc\hbox{\color{artbook@ink}%
+            \vrule width\dimexpr\@tempdima-2\@tempdimc\relax
+                   height\dimexpr\@tempdima-2\@tempdimc\relax depth\z@}}%
+      \hss}%
+  \endgroup}
+
+% Round badge with a number (ink disc, accent-coloured number).
+\newcommand*\artbook@badge[1]{%
+  \setbox\tw@\hbox{\artbook@opt@fontbadge #1}%
+  \hbox to\artbook@badgew{%
+    \rlap{\hbox to\artbook@badgew{\hss
+      \raise\dimexpr\ht\tw@/2\relax\hbox{\unitlength=\artbook@badgew
+        \begin{picture}(0,0)\put(0,0){\color{artbook@ink}\circle*{1}}\end{picture}}%
+      \hss}}%
+    \hss{\color{artbook@accent}\box\tw@}\hss}}
+
+% One chapter in the mini contents.  #1 = \numberline{n}Title (as in the .toc)
+\newcommand*\artbook@miniitem[1]{%
+  \gdef\artbook@bnum{}%
+  \setbox\z@\hbox{\def\numberline##1{\gdef\artbook@bnum{##1}}#1}% grab the number
+  \setbox\z@\hbox{\artbook@opt@fontmini H}%                 cap height of the title
+  \setbox\tw@\hbox{\artbook@opt@fontbadge 1}%               digit height in badge
+  \nointerlineskip
+  \hbox{\raise\dimexpr(\ht\z@-\ht\tw@)/2\relax\hbox{\artbook@badge{\artbook@bnum}}%
+        \hskip 3mm
+        \vtop{\hsize=\dimexpr\artbook@miniw-\artbook@badgew-3mm\relax
+              \artbook@opt@fontmini \raggedright \parindent=\z@ \noindent
+              \let\numberline\@gobble #1\par}}%
+  \vskip\artbook@minisep}
+
+% #1 = number of the part; prints nothing when it has no chapters.
+\newcommand*\artbook@minitoc[1]{%
+  \expandafter\ifx\csname artbook@mini@#1\endcsname\relax\else
+    \expandafter\ifx\csname artbook@mini@#1\endcsname\@empty\else
+      \vbox{\hsize=\artbook@miniw \parindent=\z@
+        \hrule height\artbook@minirulew \vskip 6mm
+        \csname artbook@mini@#1\endcsname
+        \vskip-\artbook@minisep \vskip 6mm
+        \hrule height\artbook@minirulew}%
+    \fi
+  \fi}
+
+% #1 = number of the part (only shown with a non-empty `part label'),
+% #2 = title
+\newcommand*\artbook@partpage[2]{%
+  % (no \clearpage here: \part and \@part have just made one, and a second
+  %  one would ship the page holding hyperref's anchor as a blank page)
+  \artbook@fulllayout
+  \artbook@setminilengths
+  \thispagestyle{empty}%
+  \pagecolor{artbook@accent}%
+  \begingroup
+    \color{artbook@ink}\parindent\z@ \raggedright
+    \artbook@opt@partlogo\par
+    \vskip 5mm
+    \ifx\artbook@opt@partlabel\@empty\else\ifx\relax#1\relax\else
+      {\artbook@opt@fontpartlabel \artbook@opt@partlabel\nobreakspace#1\par}\vskip 1mm
+    \fi\fi
+    {\artbook@opt@fontparttitle #2\par}%
+    \vfill
+    \artbook@minitoc{\the\artbook@partcnt}%
+  \endgroup
+  \clearpage
+  \nopagecolor
+  \artbook@bodylayout}
+
+% Replace the class's part page.  The part number is not written to the .toc
+% (only the title): a \numberline written here without \protect is expanded
+% at write time into a fixed-width \hbox, which pushed the title off the page.
+% The class's \part puts \null\vfil on the fresh page before calling \@part; with
+% our own \@part that page was shipped as a blank one in the `plain' style
+% right after the TOC.  Same command without it.
+% The part title also becomes the running text of the pages that follow
+% (until a chapter starts), so a part without chapters is not headed by the
+% document title.
+\renewcommand\part{%
+  \if@openright \cleardoublepage \else \clearpage \fi
+  \thispagestyle{empty}%
+  \secdef\@part\@spart}
+\def\@part[#1]#2{%
+  \global\advance\artbook@partcnt\@ne
+  \markboth{#1}{}%
+  \ifnum\c@secnumdepth>-2\relax
+    \refstepcounter{part}%
+    \addcontentsline{toc}{part}{#1}%
+    \artbook@partpage{\thepart}{#2}%
+  \else
+    \addcontentsline{toc}{part}{#1}%
+    \artbook@partpage{}{#2}%
+  \fi}
+\def\@spart#1{\artbook@partpage{}{#1}}
+
+
+%% ----------------------------------------------------------------------
+%%  9. Chapter pages
+%%
+%%  A full-page opener in the language of the TOC: hairline grid with small
+%%  breaks, a huge accent-coloured number that the lines run over, mono
+%%  labels in the left column (chapter, then its sections as read from the
+%%  .toc), the title in the big column, an optional epigraph.
+%%
+%%      \chapterepigraph{The quote}{Author, Work}   % before \chapter
+%%
+%%  The number is placed by `chapter number x' (from the paper edge, so a
+%%  negative value is clipped by the page) and `chapter shift' (relative to
+%%  the second rule).  It is drawn first: rules, labels and title print
+%%  over it.  `chapter drop' lowers the whole grid.
+%% ----------------------------------------------------------------------
+\let\artbook@epiquote\@empty
+\let\artbook@episource\@empty
+\newcommand*\chapterepigraph[2]{\gdef\artbook@epiquote{#1}\gdef\artbook@episource{#2}}
+
+% Material placed at (x, y) below the top left corner of the text block.
+% #1 = x, #2 = y (may be negative), #3 = material.  Takes up no space.
+\newcommand*\artbook@put[3]{%
+  \vbox to\z@{\vskip#2\relax \hbox to\z@{\hskip#1\relax #3\hss}\vss}}
+
+% One section in the list on the chapter page (#1 = \numberline{3.1}Title).
+\newcommand*\artbook@secitem[1]{%
+  {\artbook@opt@fontlabel \let\numberline\artbook@numlabel \artbook@nolinks
+   \artbook@opt@case{#1}\par}\vskip 1.8mm}
+
+% #1 = title, #2 = 1 for a numbered chapter, 0 for \chapter*
+\newcommand*\artbook@chapterpage[2]{%
+  \par
+  \artbook@fulllayout
+  \artbook@setlengths
+  \thispagestyle{artbookchapter}%
+  % distance from the paper's left edge to the text block
+  \artbook@edge=\dimexpr1in+\hoffset
+    +\if@twoside\ifodd\c@page\oddsidemargin\else\evensidemargin\fi
+     \else\oddsidemargin\fi\relax
+  \ifnum#2>\z@
+    \gdef\artbook@chapfoot{\artbook@opt@chapterlabel\nobreakspace\thechapter}%
+    \setbox\artbook@bxa\hbox{{\color{artbook@accent}\artbook@opt@fontchapnum\thechapter}}%
+  \else
+    \gdef\artbook@chapfoot{#1}%
+    \setbox\artbook@bxa\hbox{}%
+  \fi
+  % epigraph
+  \ifx\artbook@epiquote\@empty
+    \setbox\artbook@bxb\hbox{}%
+  \else
+    \setbox\artbook@bxb\vbox{\hsize=\dimexpr\textwidth-\artbook@epix\relax
+      \parindent\z@ \raggedright
+      {\artbook@opt@fontepigraph \artbook@epiquote\par}%
+      \ifx\artbook@episource\@empty\else
+        \vskip 3mm {\artbook@opt@fontlabel\artbook@opt@case{\artbook@episource}\par}%
+      \fi}%
+  \fi
+  \global\let\artbook@epiquote\@empty \global\let\artbook@episource\@empty
+  % left column: chapter label and the sections
+  \setbox\artbook@bxc\vtop{\hsize=\dimexpr\artbook@csplit-\artbook@pad\relax
+    \parindent\z@ \raggedleft
+    \ifnum#2>\z@
+      {\artbook@opt@fontlabel
+       \artbook@opt@case{\artbook@opt@chapterlabel\nobreakspace\thechapter}\par}%
+      \vskip 6mm
+      \@ifundefined{artbook@sec@\the\artbook@chapcnt}{}%
+        {\csname artbook@sec@\the\artbook@chapcnt\endcsname}%
+    \fi}%
+  % title
+  \setbox\artbook@bxd\vtop{\hsize=\dimexpr\textwidth-\artbook@csplit-2\artbook@pad\relax
+    \parindent\z@ \raggedright \artbook@opt@fontchaptitle #1\par}%
+  \vbox to\textheight{%
+    \offinterlineskip \parindent\z@ \parskip\z@
+    % the number is drawn FIRST, so everything else prints over it
+    \artbook@put{\dimexpr\artbook@opt@chapnumx-\artbook@edge\relax}
+             {\dimexpr\artbook@crb-\artbook@opt@chapshift-\ht\artbook@bxa\relax}
+             {\box\artbook@bxa}%
+    \artbook@put{\artbook@epix}
+             {\dimexpr\artbook@crb-\artbook@toppad-\ht\artbook@bxb-\dp\artbook@bxb\relax}
+             {\box\artbook@bxb}%
+    \artbook@put{\z@}{\dimexpr\artbook@crb+\artbook@toppad\relax}{\box\artbook@bxc}%
+    \artbook@put{\dimexpr\artbook@csplit+\artbook@pad\relax}
+             {\dimexpr\artbook@crb+\artbook@toppad\relax}{\box\artbook@bxd}%
+    % the lines come last so that they print over the number
+    \artbook@put{\artbook@csplit}
+             {-\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax}
+             {\vrule width\artbook@rule height\z@
+                     depth\dimexpr1in+\voffset+\topmargin+\headheight+\headsep
+                                  +\textheight+\footskip+1.5mm\relax}%
+    \artbook@put{\z@}{\artbook@cra}{\artbook@gaprule{\z@}{\textwidth}{\artbook@csplit}}%
+    \artbook@put{\z@}{\artbook@crb}{\artbook@gaprule{\z@}{\textwidth}{\artbook@csplit}}%
+    \vss}%
+  \par\clearpage
+  \artbook@bodylayout}
+
+\def\@makechapterhead#1{%
+  \global\advance\artbook@chapcnt\@ne
+  \ifnum\c@secnumdepth>\m@ne
+    \if@mainmatter \artbook@chapterpage{#1}{1}\else \artbook@chapterpage{#1}{0}\fi
+  \else \artbook@chapterpage{#1}{0}\fi}
+\def\@makeschapterhead#1{\chaptermark{#1}\artbook@chapterpage{#1}{0}}
+
+% Page style of a chapter page: the footer of the TOC, around the chapter divider.
+\newcommand*\artbook@chapfooter{%
+  \rlap{\smash{\raise\footskip
+    \artbook@gaprule{\z@}{\textwidth}{\artbook@csplit}}}%
+  \hbox to\textwidth{%
+    \hbox to\artbook@csplit{\hss\hskip\artbook@pad}%
+    \hskip\artbook@pad {\artbook@opt@fontpage\thepage}\hfil}}
+\newcommand*\ps@artbookchapter{%
+  \let\@mkboth\@gobbletwo
+  \def\@oddhead{}\let\@evenhead\@oddhead
+  \def\@oddfoot{\artbook@chapfooter}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  10. Ordinary pages: page number and running text in the outer margin
+%%
+%%      page number  (top of the margin)
+%%
+%%      R U N N I N G   T E X T   (reads downwards, tops of the letters
+%%                                  point to the paper edge)
+%%
+%%  The text is `margin text' (default: the chapter title; before the first
+%%  chapter the part title, before that the document title).  A solid bar of
+%%  the accent colour runs down the whole outer margin behind them (`margin
+%%  bar width').  With twoside the margin is the right one on odd pages and
+%%  the left one, mirrored, on even pages.  With margin notes the number and
+%%  text stay in the strip between the notes and the paper edge (they use
+%%  the FULL text width).
+%% ----------------------------------------------------------------------
+\def\artbook@str@auto{auto}
+\def\artbook@str@none{none}
+
+% The bar: full paper height, centred on x=\artbook@bx, \artbook@mw wide when `auto'.
+\newcommand*\artbook@drawbar{%
+  \ifx\artbook@opt@barwidth\artbook@str@none\else
+    \ifx\artbook@opt@barwidth\artbook@str@auto
+      \artbook@bw=\artbook@mw
+    \else
+      \artbook@bw=\artbook@opt@barwidth\relax
+    \fi
+    \artbook@bh=\dimexpr1in+\voffset+\topmargin+\headheight\relax
+    \rlap{\hskip\dimexpr\artbook@bx-\artbook@bw/2\relax
+          \smash{{\color{artbook@accent}%
+            \vrule width\artbook@bw height\artbook@bh
+                   depth\dimexpr\paperheight-\artbook@bh\relax}}}%
+  \fi}
+
+% #1 = +1: outer margin on the right, -1: on the left
+\newcommand*\artbook@marginside[1]{%
+  \ifnum#1>\z@
+    \setbox\artbook@rbox\hbox{\rotatebox[origin=c]{-90}{\box\artbook@mbox}}%
+    \artbook@mw=\dimexpr\paperwidth-\artbook@fulltw-\artbook@fullside-1in-\hoffset\relax
+    \artbook@bx=\dimexpr\artbook@fulltw-\artbook@bodyleft+\artbook@mw/2\relax
+    \artbook@mx=\dimexpr\artbook@bx+\artbook@opt@marginshift\relax
+  \else
+    \setbox\artbook@rbox\hbox{\rotatebox[origin=c]{90}{\box\artbook@mbox}}%
+    \artbook@mw=\dimexpr\artbook@fullside+1in+\hoffset\relax
+    \artbook@bx=\dimexpr-\artbook@mw/2-\artbook@bodyleft\relax
+    \artbook@mx=\dimexpr\artbook@bx-\artbook@opt@marginshift\relax
+  \fi
+  \artbook@drawbar
+  \rlap{\hskip\dimexpr\artbook@mx-\wd\artbook@nbox/2\relax
+        \smash{\lower\dimexpr\headsep+\ht\artbook@nbox\relax\box\artbook@nbox}}%
+  \rlap{\hskip\dimexpr\artbook@mx-\wd\artbook@rbox/2\relax
+        \smash{\lower\dimexpr\headsep+\ht\artbook@nbox+\artbook@opt@margingap
+                             +\ht\artbook@rbox\relax\box\artbook@rbox}}}
+
+% The grid of an ordinary page, drawn from the header (everything is placed
+% relative to the left edge of the text, hence the negative skips): the
+% divider from the top of the paper to just below the footer, the footer
+% rule across the full block (broken around the divider like the rules of the
+% TOC) and the footer text left of the divider.
+\newcommand*\artbook@pageframe{%
+  \artbook@bh=\dimexpr1in+\voffset+\topmargin+\headheight\relax
+  \artbook@fr=\dimexpr\headsep+\textheight+\artbook@bodybot\relax
+  \rlap{\hskip\dimexpr\artbook@bsplit-\artbook@bodyleft\relax
+        \smash{\vrule width\artbook@rule height\artbook@bh
+                      depth\dimexpr\artbook@fr+\footskip+1.5mm\relax}}%
+  \rlap{\hskip-\artbook@bodyleft
+        \smash{\lower\artbook@fr
+          \artbook@gaprulew{\artbook@fulltw}{\z@}{\artbook@fulltw}{\artbook@bsplit}}}%
+  \rlap{\hskip-\artbook@bodyleft
+        \smash{\lower\dimexpr\artbook@fr+\footskip\relax
+          \hbox to\artbook@bsplit{\hss\artbook@label{\artbook@opt@footertext}\hskip\artbook@pad}}}}
+
+\newcommand*\artbook@marginhead{%
+  \artbook@pageframe
+  \setbox\artbook@nbox\hbox{\artbook@opt@fontmarginpage\thepage}%
+  \setbox\artbook@mbox\hbox{\artbook@opt@fontmargin\artbook@opt@case{\artbook@opt@margintext}}%
+  \ifdim\wd\artbook@mbox=\z@
+    \setbox\artbook@mbox\hbox{\artbook@opt@fontmargin\artbook@opt@case{\artbook@doctitle}}%
+  \fi
+  \if@twoside
+    \ifodd\c@page \artbook@marginside\@ne \else \artbook@marginside\m@ne \fi
+  \else \artbook@marginside\@ne \fi}
+
+\newcommand*\ps@artbookbody{%
+  \let\@mkboth\markboth
+  \def\chaptermark##1{\markboth{##1}{}}%
+  \def\sectionmark##1{\markright{##1}}%
+  \def\@oddhead{\artbook@marginhead}\let\@evenhead\@oddhead
+  \def\@oddfoot{}\let\@evenfoot\@oddfoot}
+
+
+%% ----------------------------------------------------------------------
+%%  10b. Sections on ordinary pages
+%%
+%%  The structure of a chapter opener in small:
+%%
+%%      ------------------+-----------------------------   hairline, broken
+%%             SECTION 1.2| Title of the section             around the divider
+%%
+%%  The label stands in the column left of the divider, flush against it
+%%  (the number in the accent colour); the title is in `section font'.  The
+%%  heading is not followed by an indented paragraph.  \subsection has the
+%%  number in the label column and no hairline.
+%%
+%%  `section font', `section number font' and `subsection font' are complete
+%%  font switches.
+%% ----------------------------------------------------------------------
+% A label in the column left of the divider: right-aligned, flush against
+% the divider, zero width, first baseline on the baseline of the text.
+% #1 = font switch, #2 = word (may be empty), #3 = number (may be empty).
+\DeclareRobustCommand*\artbook@leftlabel[3]{%
+  \protected@edef\artbook@tmpa{#2}\protected@edef\artbook@tmpb{#3}%
+  \setbox\z@\hbox{\normalfont #1%
+    \ifx\artbook@tmpa\@empty\else
+      \artbook@opt@case{#2}%
+      \ifx\artbook@tmpb\@empty\else\nobreakspace\fi
+    \fi
+    \ifx\artbook@tmpb\@empty\else{\color{artbook@accent}#3}\fi}%
+  \dimen@=\dimexpr\artbook@bsplit-\artbook@pad\relax
+  \llap{%
+    \ifdim\wd\z@>\dimen@
+      % too long for one line: wrap it, flush right
+      \vtop{\everypar{}% (a paragraph in here must not fire amsthm's \everypar)
+        \hsize=\dimen@ \raggedleft \parindent\z@ \normalfont #1%
+        \ifx\artbook@tmpa\@empty\else
+          \artbook@opt@case{#2}%
+          \ifx\artbook@tmpb\@empty\else\nobreakspace\fi
+        \fi
+        \ifx\artbook@tmpb\@empty\else{\color{artbook@accent}#3}\fi\par}%
+    \else
+      \box\z@
+    \fi
+    \hskip\dimexpr\artbook@bodyleft-\artbook@bsplit+\artbook@pad\relax}}
+% (robust: \@sect expands this with \protected@edef, which must not touch the
+% font switches inside)
+\DeclareRobustCommand*\artbook@seclabel{%
+  \artbook@leftlabel{\artbook@opt@fontsecnum}{\artbook@opt@sectionlabel}{\thesection}}
+\DeclareRobustCommand*\artbook@subseclabel{%
+  \artbook@leftlabel{\artbook@opt@fontsecnum}{}{\thesubsection}}
+\expandafter\def\csname artbook@seccnt@section\endcsname{\artbook@seclabel}
+\expandafter\def\csname artbook@seccnt@subsection\endcsname{\artbook@subseclabel}
+\let\artbook@oldseccntformat\@seccntformat
+\renewcommand*\@seccntformat[1]{%
+  \@ifundefined{artbook@seccnt@#1}%
+    {\artbook@oldseccntformat{#1}}%
+    {\csname artbook@seccnt@#1\endcsname}}
+% The hairline above a section title: across the full block, broken around
+% the divider.  Runs in the heading's own group, before its first line.
+\newcommand*\artbook@secrule{%
+  \nointerlineskip
+  \hbox to\z@{\hskip-\artbook@bodyleft
+    \artbook@gaprulew{\artbook@fulltw}{\z@}{\artbook@fulltw}{\artbook@bsplit}\hss}%
+  \nobreak\vskip\artbook@opt@secpad \nointerlineskip}
+\newcommand*\artbook@sectionstyle{\artbook@secrule\raggedright\artbook@opt@fontsection}
+\newcommand*\artbook@subsectionstyle{\raggedright\artbook@opt@fontsubsection}
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-\artbook@opt@secbefore}{\artbook@opt@secafter}{\artbook@sectionstyle}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.5\baselineskip plus 0.3\baselineskip minus 0.2\baselineskip}%
+  {0.6\baselineskip}{\artbook@subsectionstyle}}
+
+
+%% ----------------------------------------------------------------------
+%%  11. Margin notes, sidenotes, footnotes in the label column (Tufte style)
+%%
+%%      \marginnote[offset]{text}   unnumbered
+%%      \sidenote[offset]{text}     numbered (resets per chapter)
+%%      footnotes = margin          makes \footnote = \sidenote, with the
+%%                                  text in `footnote font' (italic)
+%%
+%%  The notes stand in the column left of the divider (\reversemarginpar),
+%%  flush left, as wide as the column less `note gap'.
+%%  offset: positive moves the note down, negative up.
+%%  Limits: built on \marginpar, so not inside floats, minipages or
+%%  section titles.  Assumes oneside.  A note and a theorem or section label
+%%  at the same height will overlap: move the note with the offset.
+%%
+%%  `footnote font' also applies to ordinary (bottom-of-page) footnotes,
+%%  i.e. with `footnotes = normal'.
+%% ----------------------------------------------------------------------
+\reversemarginpar
+\newcommand*\artbook@notestyle{%
+  \renewcommand\baselinestretch{1}%
+  \artbook@opt@fontnote \raggedright \parindent\z@ \parskip\z@}
+
+% offset #1 (down = +), material #2; keeps the first baseline on the text line
+\newcommand\artbook@noteput[2]{%
+  \noindent
+  \setbox\z@\vtop{\hsize=\marginparwidth \artbook@notestyle #2\par}%
+  \raisebox{-#1}[\ht\z@][\dp\z@]{\box\z@}}
+
+\newcommand\marginnote[2][\z@]{\marginpar{\artbook@noteput{#1}{#2}}}
+
+\newcounter{sidenote}
+\@ifundefined{c@chapter}{}{\@addtoreset{sidenote}{chapter}}
+% #1 = offset, #2 = font switch for the text (may be empty), #3 = text.
+% The number stays upright in both places.
+\newcommand\artbook@sidenote[3]{%
+  \stepcounter{sidenote}%
+  \edef\artbook@sn{\thesidenote}%
+  \textsuperscript{\artbook@sn}%
+  \marginpar{\artbook@noteput{#1}{\textsuperscript{\artbook@sn}\nobreakspace {#2#3}}}}
+\newcommand\sidenote[2][\z@]{\artbook@sidenote{#1}{}{#2}}
+\newcommand\artbook@footnote[2][\z@]{\artbook@sidenote{#1}{\artbook@opt@fontfootnote}{#2}}
+
+% Ordinary footnotes: the text goes through `footnote font', the mark does not.
+\newcommand*\artbook@italicfootnotes{%
+  \let\artbook@oldmakefntext\@makefntext
+  \long\def\@makefntext##1{\artbook@oldmakefntext{\artbook@opt@fontfootnote ##1}}}
+
+\def\artbook@str@margin{margin}
+\AtBeginDocument{%
+  % the geometry as set by the user is the FULL layout
+  \artbook@fulltw=\textwidth
+  \artbook@fullth=\textheight
+  \artbook@fulltopm=\topmargin
+  \artbook@fullodd=\oddsidemargin
+  \artbook@fulleven=\evensidemargin
+  \artbook@bsplit=\artbook@opt@bodysplit\relax
+  \artbook@bodygap=\artbook@opt@bodygap\relax
+  \artbook@bodyleft=\dimexpr\artbook@bsplit+\artbook@bodygap\relax
+  \artbook@bodyright=\artbook@opt@bodyright\relax
+  \artbook@bodytop=\artbook@opt@bodytop\relax
+  \artbook@bodybot=\artbook@opt@bodybottom\relax
+  \artbook@bodytw=\dimexpr\artbook@fulltw-\artbook@bodyleft-\artbook@bodyright\relax
+  % margin notes fill the label column, up to `note gap' from the divider
+  \marginparwidth=\dimexpr\artbook@bsplit-\artbook@opt@notegap\relax
+  \marginparsep=\dimexpr\artbook@bodygap+\artbook@opt@notegap\relax
+  \marginparpush=2mm
+  \ifx\artbook@opt@footnotes\artbook@str@margin \let\footnote\artbook@footnote \fi
+  \ifx\footnote\artbook@footnote\else \artbook@italicfootnotes \fi
+  \artbook@bodylayout
+  \ifx\artbook@opt@theorems\artbook@str@off\else \artbook@definetheorems \fi}
+
+%% ----------------------------------------------------------------------
+%%  12. Theorem-like environments
+%%
+%%  Two amsthm styles, both with an italic body:
+%%    artbookplain   no box
+%%    artbookbox     zero skip above and below; the frame brings its own
+%%  and two mdframed frames:
+%%    artbookthm      square hairline box hanging on the divider: the top and
+%%                 bottom rules stop short of it by `rule gap', the divider
+%%                 is the left side, a vertical rule closes the right side.
+%%                 Used by theorem, lemma, definition.
+%%    artbookthmwide  the same without the right side: top and bottom rule only,
+%%                 running out past the text block to the full block edge,
+%%                 where the margin bar begins.  Used by example, remark.
+%%  The text inside is aligned with the text outside.  proposition,
+%%  corollary and question use artbookplain and have no frame.
+%%  In all of them the name and number stand in the label column, like the
+%%  label of a section (`theorem head font'), and the optional title is run
+%%  into the text in bold.  The environments are defined at \begin{document}
+%%  (after \artbooksetup has been read), unless `theorems = off'.
+%% ----------------------------------------------------------------------
+\def\artbook@str@off{off}
+\newskip\artbook@thmskip
+\newlength\artbook@thmL   % how far the box reaches left of the text
+
+% The title is run into the text, in bold, followed by a full stop.  (amsthm
+% drops \thmnote when there is no title.)
+\newcommand*\artbook@thmtitle[1]{\thmnote{{\artbook@opt@fontthmtitle #1.}\ }}
+% #1 = name, #2 = number (empty for the starred forms), #3 = title
+\newcommand*\artbook@thmhead[3]{%
+  \artbook@leftlabel{\artbook@opt@fontthmhead}{#1}{#2}\artbook@thmtitle{#3}}
+
+\newcommand*\artbook@definetheorems{%
+  \artbook@thmskip=\artbook@opt@thmskip\relax
+  \artbook@thmL=\dimexpr\artbook@bodygap-\artbook@opt@rule-\artbook@opt@rulegap\relax
+  \newtheoremstyle{artbookplain}%
+    {\artbook@thmskip}{\artbook@thmskip}{\itshape}{0pt}{}{}{0pt}%
+    {\artbook@thmhead{##1}{##2}{##3}}%
+  % the box brings its own space above and below
+  \newtheoremstyle{artbookbox}%
+    {0pt}{0pt}{\itshape}{0pt}{}{}{0pt}%
+    {\artbook@thmhead{##1}{##2}{##3}}%
+  \mdfdefinestyle{artbookthm}{%
+    linecolor=artbook@ink, linewidth=\artbook@opt@rule, roundcorner=0pt,
+    leftline=false,
+    leftmargin=-\artbook@thmL, rightmargin=0pt,
+    innerleftmargin=\artbook@thmL, innerrightmargin=\artbook@opt@thmboxsep,
+    innertopmargin=\artbook@opt@thmboxsep, innerbottommargin=\artbook@opt@thmboxsep,
+    skipabove=\artbook@thmskip, skipbelow=\artbook@thmskip}%
+  % example / remark: top and bottom rule only, from the divider to the margin bar
+  \mdfdefinestyle{artbookthmwide}{%
+    linecolor=artbook@ink, linewidth=\artbook@opt@rule, roundcorner=0pt,
+    leftline=false, rightline=false,
+    leftmargin=-\artbook@thmL, rightmargin=-\artbook@bodyright,
+    innerleftmargin=\artbook@thmL, innerrightmargin=\artbook@bodyright,
+    innertopmargin=\artbook@opt@thmboxsep, innerbottommargin=\artbook@opt@thmboxsep,
+    skipabove=\artbook@thmskip, skipbelow=\artbook@thmskip}%
+  % one counter for everything, reset in every section
+  \theoremstyle{artbookbox}%
+  \newtheorem{theorem}{Theorem}[section]
+  \newtheorem*{theorem*}{Theorem}%
+  \newtheorem{lemma}[theorem]{Lemma}%
+  \newtheorem*{lemma*}{Lemma}%
+  \newtheorem{definition}[theorem]{Definition}%
+  \newtheorem*{definition*}{Definition}%
+  \surroundwithmdframed[style=artbookthm]{theorem}%
+  \surroundwithmdframed[style=artbookthm]{theorem*}%
+  \surroundwithmdframed[style=artbookthm]{lemma}%
+  \surroundwithmdframed[style=artbookthm]{lemma*}%
+  \surroundwithmdframed[style=artbookthm]{definition}%
+  \surroundwithmdframed[style=artbookthm]{definition*}%
+  \theoremstyle{artbookplain}%
+  \newtheorem{proposition}[theorem]{Proposition}%
+  \newtheorem*{proposition*}{Proposition}%
+  \newtheorem{corollary}[theorem]{Corollary}%
+  \newtheorem*{corollary*}{Corollary}%
+  \newtheorem{question}[theorem]{Question}%
+  \newtheorem*{question*}{Question}%
+  \newtheorem*{claim}{Claim}%
+  % example and remark: artbookbox (zero skip) inside the wide frame
+  \theoremstyle{artbookbox}%
+  \newtheorem{example}[theorem]{Example}%
+  \newtheorem*{example*}{Example}%
+  \newtheorem{remark}[theorem]{Remark}%
+  \newtheorem*{remark*}{Remark}%
+  \surroundwithmdframed[style=artbookthmwide]{example}%
+  \surroundwithmdframed[style=artbookthmwide]{example*}%
+  \surroundwithmdframed[style=artbookthmwide]{remark}%
+  \surroundwithmdframed[style=artbookthmwide]{remark*}%
+  % the proof is labelled in the column too
+  \renewenvironment{proof}[1][\proofname]{%
+    \par\pushQED{\qed}\normalfont
+    \topsep=\artbook@thmskip \partopsep=\z@
+    \trivlist\item[]\leavevmode
+    \artbook@leftlabel{\artbook@opt@fontthmhead}{##1}{}%
+    \ignorespaces}%
+    {\popQED\endtrivlist\@endpefalse}}
+
+
+%% ----------------------------------------------------------------------
+%%  13. Cover page
+%%
+%%  \maketitle makes the cover from the parts of the other pages: the hairline
+%%  grid and the divider of the chapter openers, a huge accent-coloured letter
+%%  standing on a hairline and cut by the edge of the paper (the first letter
+%%  of the title; \covermark{...} sets another text), the title and subtitle
+%%  hanging from that hairline in the big column, a table of rows at the bottom
+%%  (a small label in the left column, its value in the big column), and the
+%%  accent bar of the ordinary pages down the outer margin with the title
+%%  running along it.  The logo of the part pages stands in the top right
+%%  corner.
+%%
+%%      \title{...}  \subtitle{...}  \author{A \and B}  \date{...}
+%%      \coverfield{Institution}{...}      % any number, in order
+%%      \maketitle
+%%
+%%  The rows are: the author, the \coverfield's, the date (empty \date{} omits
+%%  it).  The cover is not counted: the next page is page 1.  `cover color'
+%%  fills the page with a colour (then set `cover mark color' to something
+%%  that shows on it).
+%% ----------------------------------------------------------------------
+\let\artbook@subtitle\@empty
+\def\subtitle#1{\gdef\artbook@subtitle{#1}}
+\let\artbook@covermark\relax
+\def\covermark#1{\gdef\artbook@covermark{#1}}
+\def\artbook@firstletter#1#2\relax{#1}
+\let\artbook@fields\@empty
+\newcommand*\coverfield[2]{\g@addto@macro\artbook@fields{\artbook@coverrow{#1}{#2}}}
+\newlength\artbook@cvr    % y of the hairline the big letter stands on
+\def\artbook@and{\\}
+
+% One row: top rule, label in the left column, value in the big column.  The
+% first baselines of both stand at the same depth below the rule.
+\newcommand*\artbook@coverrow[2]{%
+  \setbox\z@\hbox{\artbook@opt@fontcoverfield H}%
+  \nointerlineskip
+  \artbook@gaprulew{\artbook@fulltw}{\z@}{\artbook@fulltw}{\artbook@csplit}%
+  \nointerlineskip
+  \hbox to\artbook@fulltw{%
+    \vtop{\hsize=\dimexpr\artbook@csplit-\artbook@pad\relax
+      \raggedleft \parindent\z@ \noindent
+      \artbook@strut{\dimexpr\artbook@opt@coverpad+\ht\z@\relax}{\z@}%
+      {\artbook@opt@fontcoverlabel\artbook@opt@case{#1}}\par}%
+    \hskip\dimexpr2\artbook@pad+\artbook@rule\relax
+    \vtop{\hsize=\dimexpr\artbook@fulltw-\artbook@csplit-\artbook@rule-2\artbook@pad\relax
+      \raggedright \parindent\z@ \noindent
+      \artbook@strut{\dimexpr\artbook@opt@coverpad+\ht\z@\relax}{\z@}%
+      {\artbook@opt@fontcoverfield #2}\par}%
+    \hss}%
+  \nointerlineskip\vskip\artbook@opt@coverpad}
+
+\newcommand*\artbook@cover{%
+  \clearpage
+  \artbook@fulllayout
+  \artbook@setlengths
+  \thispagestyle{empty}%
+  \ifx\artbook@opt@covercolor\artbook@str@none\else\pagecolor{\artbook@opt@covercolor}\fi
+  % paper edge to the text block, and the width of the outer margin (the bar)
+  \artbook@edge=\dimexpr1in+\hoffset+\oddsidemargin\relax
+  \artbook@mw=\dimexpr\paperwidth-\artbook@fulltw-\artbook@edge\relax
+  \artbook@cvr=\artbook@opt@coverrule\relax
+  \begingroup
+    \color{artbook@ink}\parindent\z@ \parskip\z@
+    \let\thanks\@gobble \let\and\artbook@and
+    % the big letter
+    \setbox\artbook@bxa\hbox{{\color{\artbook@opt@covermarkcolor}\artbook@opt@fontcovermark
+      \ifx\artbook@covermark\relax
+        \expandafter\artbook@firstletter\@title\relax\relax
+      \else \artbook@covermark \fi}}%
+    % the title running along the bar
+    \setbox\artbook@rbox\hbox{\rotatebox[origin=c]{-90}{\hbox{%
+      \artbook@opt@fontmargin\artbook@opt@case{\artbook@doctitle}}}}%
+    % title and subtitle, hanging from the hairline
+    \setbox\artbook@bxb\vtop{\hsize=\dimexpr\textwidth-\artbook@csplit-2\artbook@pad\relax
+      \raggedright \parindent\z@
+      {\artbook@opt@fontcovertitle \@title\par}%
+      \ifx\artbook@subtitle\@empty\else
+        \vskip 4mm {\artbook@opt@fontcoversub \artbook@subtitle\par}%
+      \fi}%
+    % the rows, closed by a rule at the bottom of the text block
+    \setbox\artbook@bxc\vbox{\offinterlineskip
+      \ifx\@author\@empty\else
+        \artbook@coverrow{\artbook@opt@coverauthorlabel}{\@author}\fi
+      \artbook@fields
+      \ifx\@date\@empty\else
+        \artbook@coverrow{\artbook@opt@coverdatelabel}{\@date}\fi
+      \nointerlineskip
+      \artbook@gaprulew{\artbook@fulltw}{\z@}{\artbook@fulltw}{\artbook@csplit}}%
+    \vbox to\textheight{%
+      \offinterlineskip \parindent\z@ \parskip\z@
+      % the bar, from the top to the bottom of the paper; then the big letter,
+      % drawn before everything else so that the hairlines run over it
+      \artbook@put{\artbook@fulltw}
+               {-\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax}
+               {{\color{artbook@accent}\vrule width\artbook@mw height\z@
+                                          depth\paperheight}}%
+      \artbook@put{\dimexpr\artbook@opt@covermarkx-\artbook@edge\relax}
+               {\dimexpr\artbook@cvr-\artbook@opt@covermarkshift-\ht\artbook@bxa\relax}
+               {\box\artbook@bxa}%
+      \artbook@put{\dimexpr\artbook@fulltw+\artbook@mw/2-\wd\artbook@rbox/2\relax}{\z@}
+               {\box\artbook@rbox}%
+      \artbook@put{\dimexpr\artbook@fulltw-\artbook@opt@coverpad\relax}{\z@}
+               {\llap{\artbook@opt@partlogo}}%
+      \artbook@put{\dimexpr\artbook@csplit+\artbook@pad\relax}
+               {\dimexpr\artbook@cvr+\artbook@opt@coverpad\relax}{\box\artbook@bxb}%
+      \artbook@put{\z@}{\dimexpr\textheight-\ht\artbook@bxc-\dp\artbook@bxc\relax}
+               {\box\artbook@bxc}%
+      \artbook@put{\z@}{\artbook@cvr}
+               {\artbook@gaprulew{\artbook@fulltw}{\z@}{\artbook@fulltw}{\artbook@csplit}}%
+      % the divider, from the top of the paper to just below the last rule
+      \artbook@put{\artbook@csplit}
+               {-\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax}
+               {\vrule width\artbook@rule height\z@
+                       depth\dimexpr1in+\voffset+\topmargin+\headheight+\headsep
+                                    +\textheight+\footskip+1.5mm\relax}%
+      \vss}%
+  \endgroup
+  \clearpage
+  \nopagecolor
+  \artbook@bodylayout
+  \setcounter{page}{\@ne}}
+\renewcommand\maketitle{\artbook@cover}
+
+
+%% ----------------------------------------------------------------------
+%%  14. Full-width blocks
+%%
+%%      \begin{fullwidth}[top=2mm, bottom=2mm, above=.., below=.., fill=white]
+%%        ...
+%%      \end{fullwidth}
+%%
+%%  The block grows to the full text block (over the label column).  A hairline
+%%  runs along its top and its bottom edge, from the left edge of the paper to
+%%  the margin bar, and the block is filled with `fill' so that the divider
+%%  does not run through it (fill=none: no fill).
+%%    top, bottom   distance between the hairline and the content (the
+%%                  vertical offsets of the two rules; negative values pull the
+%%                  rule into the content)
+%%    above, below  space outside the hairlines
+%%  Defaults: the keys `fullwidth top', `fullwidth bottom', `fullwidth above',
+%%  `fullwidth below', `fullwidth fill'.  Labels (captions, theorems) inside are
+%%  set in line with the text, since the label column is taken.
+%% ----------------------------------------------------------------------
+\pgfkeys{/artbook/fw/.cd,
+  top/.store in    = \artbook@fw@top,
+  bottom/.store in = \artbook@fw@bottom,
+  above/.store in  = \artbook@fw@above,
+  below/.store in  = \artbook@fw@below,
+  fill/.store in   = \artbook@fw@fill}
+\newlength\artbook@fwP   % paper edge to the full block
+\newlength\artbook@fwL   % paper edge to the text
+\newskip\artbook@fwabove
+\newskip\artbook@fwbelow
+
+% a label in line with the text: "FIGURE 1.1 "
+\DeclareRobustCommand*\artbook@inlinelabel[3]{%
+  \protected@edef\artbook@tmpa{#2}\protected@edef\artbook@tmpb{#3}%
+  {\normalfont #1%
+   \ifx\artbook@tmpa\@empty\else
+     \artbook@opt@case{#2}%
+     \ifx\artbook@tmpb\@empty\else\nobreakspace\fi
+   \fi
+   \ifx\artbook@tmpb\@empty\else{\color{artbook@accent}#3}\fi}\ \ignorespaces}
+
+% Defined at \begin{document}: a \fullwidth from a macro file loaded after this
+% package would otherwise clash with it (and is replaced by this one).
+\AtBeginDocument{%
+\@ifundefined{fullwidth}{\let\artbook@newenv\newenvironment}{\let\artbook@newenv\renewenvironment}%
+\artbook@newenv{fullwidth}[1][]{%
+  \let\artbook@fw@top\artbook@opt@fwtop \let\artbook@fw@bottom\artbook@opt@fwbottom
+  \let\artbook@fw@above\artbook@opt@fwabove \let\artbook@fw@below\artbook@opt@fwbelow
+  \let\artbook@fw@fill\artbook@opt@fwfill
+  \pgfkeys{/artbook/fw/.cd,#1}%
+  \artbook@fwP=\dimexpr\artbook@fullodd+1in+\hoffset\relax
+  \artbook@fwL=\dimexpr\artbook@bodyleft+\artbook@fwP\relax
+  \artbook@fwabove=\artbook@fw@above\relax \artbook@fwbelow=\artbook@fw@below\relax
+  \mdfsetup{linecolor=artbook@ink, linewidth=\artbook@opt@rule, roundcorner=0pt,
+    leftline=false, rightline=false,
+    leftmargin=-\artbook@fwL, rightmargin=-\artbook@bodyright,
+    innerleftmargin=\artbook@fwP, innerrightmargin=\artbook@bodyright,
+    innertopmargin=\artbook@fw@top, innerbottommargin=\artbook@fw@bottom,
+    skipabove=\artbook@fwabove, skipbelow=\artbook@fwbelow}%
+  \ifx\artbook@fw@fill\artbook@str@none\else
+    \mdfsetup{backgroundcolor=\artbook@fw@fill}%
+  \fi
+  \let\artbook@leftlabel\artbook@inlinelabel
+  \begin{mdframed}}
+ {\end{mdframed}}}
+
+% a white box behind full-width tikz figures (add [fwbg] to the tikzpicture);
+% not needed inside `fullwidth', which fills its block itself
+\AtBeginDocument{%
+  \@ifpackageloaded{tikz}{%
+    \tikzset{fwbg/.style={show background rectangle,
+      background rectangle/.style={fill=white,draw=none},inner frame sep=1.5mm}}}{}}
+
+
+%% ----------------------------------------------------------------------
+%%  15. Fitting in other packages and the course macros
+%% ----------------------------------------------------------------------
+% proofs end with a black square
+\renewcommand\qedsymbol{\ensuremath{\blacksquare}}
+
+% caption: "FIGURE 1.1" stands in the label column, like the name of a
+% theorem; the text of the caption runs in the text column.
+\newcommand*\artbook@captionsetup{%
+  \DeclareCaptionLabelFormat{artbook}{\artbook@leftlabel{\artbook@opt@fontthmhead}{##1}{##2}}%
+  \captionsetup{labelformat=artbook,labelsep=none,format=plain,
+    justification=raggedright,singlelinecheck=false,font=footnotesize}}
+\@ifpackageloaded{caption}{\artbook@captionsetup}
+  {\AtBeginDocument{\@ifpackageloaded{caption}{\artbook@captionsetup}{}}}
+
+% the caption of a figure that stands in the margin column (\marginnote)
+\newcommand*\margincaption[1]{%
+  \par\vskip 1.5mm\refstepcounter{figure}%
+  {\bfseries Figure~\thefigure.}\nobreakspace #1\par}
+
+% coloured links (link color = a colour name; none: leave hyperref alone)
+\AtBeginDocument{%
+  \ifx\artbook@opt@linkcolor\artbook@str@none\else
+    \@ifpackageloaded{hyperref}{%
+      \hypersetup{colorlinks=true,linkcolor=\artbook@opt@linkcolor,
+        citecolor=\artbook@opt@linkcolor,urlcolor=\artbook@opt@linkcolor}}{}%
+  \fi}
+
+% exercises and solutions (package option `exercises'): xsim, with a bold run-in
+% heading "1.2.3." and the points in brackets
+\if@artbook@exercises
+  \DeclareExerciseEnvironmentTemplate{custom}{%
+    \par\vspace{3.25ex plus 1ex minus .2ex}
+    \Needspace*{3\baselineskip}%
+    \noindent\normalsize
+    \textcolor{black}{%
+      \textbf{\XSIMmixedcase{\GetExerciseName}\nobreakspace\GetExerciseProperty{counter}}%
+    }%
+    \IfInsideSolutionF{%
+      \GetExercisePropertyT{subtitle}{ {\normalfont\itshape\PropertyValue}}%
+    }%
+    \normalsize
+    \GetExercisePropertyT{points}{%
+      \hfill {%
+          [{\color{teal}\printgoal{\PropertyValue}}]%
+          \GetExercisePropertyT{bonus-points}{~[+\printgoal{\PropertyValue}]}%
+      }%
+    }%
+    \;
+    \@afterindentfalse\@afterheading
+  }
+  {}
+
+  \xsimsetup{
+    exercise/within = section ,   % numbers restart in every section
+    exercise/the-counter = \thesection.\arabic{exercise}. ,
+    exercise/template = custom ,
+    exercise/name = ,
+    solution/template = custom ,
+  }
+
+  % heading shown above each section's group of solutions in the backmatter
+  \DeclareExerciseHeadingTemplate{persection}{%
+    \subsection*{\S\ExerciseSection}%
+  }
+
+  % print all solutions, grouped and headed section-by-section (across all chapters)
+  \newcommand{\printsolutionsbysection}{%
+    \def\lastchapter{}%
+    \def\lastsection{}%
+    \ForEachUsedExerciseByType{%
+      \edef\currentchapter{\ExercisePropertyGet{##1}{##2}{chapter-value}}%
+      \edef\currentsection{\ExercisePropertyGet{##1}{##2}{section-value}}%
+      \ifx\lastchapter\currentchapter\else
+        \section*{Chapter~\ExercisePropertyGet{##1}{##2}{chapter}}%
+      \fi
+      \ifx\lastsection\currentsection\else
+        \subsection*{\S\ExercisePropertyGet{##1}{##2}{section}}%
+      \fi
+      \XSIMprint{solution}{##1}{##2}%
+      \let\lastchapter\currentchapter
+      \let\lastsection\currentsection
+    }%
+  }
+\fi
+
+
+\endinput
