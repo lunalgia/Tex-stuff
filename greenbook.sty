@@ -606,6 +606,10 @@ urlcolor=hkgreen,
 %Theorems start with \addvspace{-\parskip} (LaTeX's \@item), so the inner top
 %margins below include the paragraph skip: with parskip 0 they are smaller
 %than they were with \nonzeroparskip.
+%A negative inner top margin makes mdframed overestimate the room for the
+%first part of a split box, which is then pushed to the next page with the
+%rest of the box after it; the example tab is put on the rule with
+%spaceabove=0pt instead.
 %for theorems and such, hanging title
 \mdfdefinestyle{mdthmbox}{%
       roundcorner=4pt,
@@ -662,7 +666,7 @@ urlcolor=hkgreen,
       roundcorner=1pt,
       skipabove=8pt,
       linewidth=1pt,
-      innertopmargin=-10pt,
+      innertopmargin=0pt,
       innerleftmargin=9.2pt,
       innerbottommargin=5pt,
       rightline=false,
@@ -686,7 +690,7 @@ urlcolor=hkgreen,
     headpunct={~\\ ~\\ },                            % No punctuation after the title
     headindent=-10.1pt,                          % No indentation for the title
     postheadspace=10pt,                       % No space after the title
-    spaceabove=10pt,                         % Space above the theorem box
+    spaceabove=0pt,                          % no space between the top rule and the tab
     spacebelow=10pt,                         % Space below the theorem box
     mdframed={style=examplebox},
   ]{thmexample}
