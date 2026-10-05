@@ -154,9 +154,7 @@
 
 \RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{ragged2e}
-%pages are filled to the bottom: when a box does not fit, the space left is
-%spread over the glue of the page instead of left empty at its foot
-\flushbottom
+\raggedbottom
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     _______. _______   ______ .___________.__    ______   .__   __.   %
@@ -549,21 +547,6 @@ urlcolor=hkgreen,
 \setmarginnotes{0.5cm}{4.5cm}{0.2cm}
 %need framemethod tikz for round corners, https://tex.stackexchange.com/questions/151532/could-not-get-round-corner-working-in-mdframed
 \RequirePackage[framemethod=TikZ]{mdframed}
-%A breakable box (example, remark) that does not fit on the rest of the page
-%but fits on an empty one goes to the next page instead of being split
-%(with \flushbottom the page before it is stretched to the bottom).
-%Only boxes taller than a page are split.
-\def\gb@mdf@split{%
-  \ifdim\pagegoal=\maxdimen
-    \def\mdf@reserved@a{\mdf@put@frame@i}%
-  \else\ifdim\mdf@verticalmarginwhole@length<\textheight
-    \hrule\@height\z@\@width\hsize\penalty-\@M
-    \def\mdf@reserved@a{\mdf@put@frame}%
-  \else
-    \def\mdf@reserved@a{\mdf@put@frame@i}%
-  \fi\fi}
-\patchcmd{\mdf@put@frame}{\def\mdf@reserved@a{\mdf@put@frame@i}}{\gb@mdf@split}{}
-  {\PackageWarning{greenbook}{Could not patch mdframed; boxes may split}}
 % https://tex.stackexchange.com/a/292090/76888
 % https://github.com/marcodaniel/mdframed/issues/12
 
