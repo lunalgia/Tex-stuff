@@ -1,0 +1,697 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{3}\setcounter{theorem}{43}
+\fi % TEST-ONLY-END
+% Source: book pp. 258--269 (PDF 272--283); no solutions.
+% \axeqno: see 7C.tex
+\DeclareRobustCommand\axeqno{\refstepcounter{theorem}\tag*{\thetheorem}}
+\section{Isometries, Unitary Operators, and Matrix Factorization}
+
+\subsection{Isometries}
+
+Linear maps that preserve norms are sufficiently important to deserve a name.
+
+\begin{definition}[Isometry]\label{ax:7.44}
+A linear map $S\in\Lin(V,W)$ is called an \emph{isometry} if
+\[ \norm{Sv}=\norm{v} \]
+for every $v\in V$. In other words, a linear map is an isometry if it preserves
+norms.
+\end{definition}
+
+\marginnote{The Greek word \textbf{isos} means equal; the Greek word
+\textbf{metron} means measure. Thus \textbf{isometry} literally means equal
+measure.}%
+If $S\in\Lin(V,W)$ is an isometry and $v\in V$ is such that $Sv=0$, then
+\[ \norm{v}=\norm{Sv}=\norm{0}=0, \]
+which implies that $v=0$. Thus every isometry is injective.
+
+\begin{example}[Orthonormal basis maps to orthonormal list $\implies$ isometry]%
+\label{ax:7.45}
+Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$ and $g_1,\dots,g_n$ is an
+orthonormal list in $W$. Let $S\in\Lin(V,W)$ be the linear map such that
+$Se_k=g_k$ for each $k=1,\dots,n$. To show that $S$ is an isometry, suppose
+$v\in V$. Then
+\[ v=\ip{v}{e_1}e_1+\cdots+\ip{v}{e_n}e_n \axeqno\label{ax:7.46} \]
+and
+\[ \norm{v}^2=\abs{\ip{v}{e_1}}^2+\cdots+\abs{\ip{v}{e_n}}^2,
+   \axeqno\label{ax:7.47} \]
+where we have used \ref{ax:6.30}(b). Applying $S$ to both sides of
+\ref{ax:7.46} gives
+\[ Sv=\ip{v}{e_1}Se_1+\cdots+\ip{v}{e_n}Se_n
+     =\ip{v}{e_1}g_1+\cdots+\ip{v}{e_n}g_n. \]
+Thus
+\[ \norm{Sv}^2=\abs{\ip{v}{e_1}}^2+\cdots+\abs{\ip{v}{e_n}}^2.
+   \axeqno\label{ax:7.48} \]
+Comparing \ref{ax:7.47} and \ref{ax:7.48} shows that $\norm{v}=\norm{Sv}$. Thus
+$S$ is an isometry.
+\end{example}
+
+The next result gives conditions equivalent to being an isometry. The
+equivalence of (a) and (c) shows that a linear map is an isometry if and only if
+it preserves inner products. The equivalence of (a) and (d) shows that a linear
+map is an isometry if and only if it maps some orthonormal basis to an
+orthonormal list. Thus the isometries given by Example~\ref{ax:7.45} include all
+isometries. Furthermore, a linear map is an isometry if and only if it maps
+every orthonormal basis to an orthonormal list [because whether or not (a) holds
+does not depend on the basis $e_1,\dots,e_n$].
+
+The equivalence of (a) and (e) in the next result shows that a linear map is an
+isometry if and only if the columns of its matrix (with respect to any
+orthonormal bases) form an orthonormal list. Here we are identifying the columns
+of an $m$-by-$n$ matrix with elements of $\F^m$ and then using the Euclidean
+inner product on $\F^m$.
+
+\begin{result}[Characterizations of isometries]\label{ax:7.49}
+Suppose $S\in\Lin(V,W)$. Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$
+and $f_1,\dots,f_m$ is an orthonormal basis of $W$. Then the following are
+equivalent.
+\begin{parts}
+\item $S$ is an isometry.
+\item $S^*S=I$.
+\item $\ip{Su}{Sv}=\ip{u}{v}$ for all $u,v\in V$.
+\item $Se_1,\dots,Se_n$ is an orthonormal list in $W$.
+\item The columns of $\Mat\bigl(S,(e_1,\dots,e_n),(f_1,\dots,f_m)\bigr)$ form an
+  orthonormal list in $\F^m$ with respect to the Euclidean inner product.
+\end{parts}
+\end{result}
+
+\begin{proof}
+First suppose (a) holds, so $S$ is an isometry. If $v\in V$ then
+\[ \bigl\langle(I-S^*S)v,v\bigr\rangle=\ip{v}{v}-\ip{S^*Sv}{v}
+   =\norm{v}^2-\ip{Sv}{Sv}=\norm{v}^2-\norm{Sv}^2=0. \]
+Hence the self-adjoint operator $I-S^*S$ equals $0$ (by \ref{ax:7.16}). Thus
+$S^*S=I$, proving that (a) implies (b).
+
+Now suppose (b) holds, so $S^*S=I$. If $u,v\in V$ then
+\[ \ip{Su}{Sv}=\ip{S^*Su}{v}=\ip{Iu}{v}=\ip{u}{v}, \]
+proving that (b) implies (c).
+
+Now suppose that (c) holds, so $\ip{Su}{Sv}=\ip{u}{v}$ for all $u,v\in V$. Thus
+if $j,k\in\{1,\dots,n\}$, then
+\[ \ip{Se_j}{Se_k}=\ip{e_j}{e_k}. \]
+Hence $Se_1,\dots,Se_n$ is an orthonormal list in $W$, proving that (c) implies
+(d).
+
+Now suppose that (d) holds, so $Se_1,\dots,Se_n$ is an orthonormal list in $W$.
+Let $A=\Mat\bigl(S,(e_1,\dots,e_n),(f_1,\dots,f_m)\bigr)$. If
+$k,r\in\{1,\dots,n\}$, then
+\[ \sum_{j=1}^mA_{j,k}\overline{A_{j,r}}
+   =\Bigl\langle\sum_{j=1}^mA_{j,k}f_j,\sum_{j=1}^mA_{j,r}f_j\Bigr\rangle
+   =\ip{Se_k}{Se_r}
+   =\begin{cases}1&\text{if }k=r,\\0&\text{if }k\ne r.\end{cases}
+   \axeqno\label{ax:7.50} \]
+The left side of \ref{ax:7.50} is the inner product in $\F^m$ of columns $k$ and
+$r$ of $A$. Thus the columns of $A$ form an orthonormal list in $\F^m$, proving
+that (d) implies (e).
+
+Now suppose (e) holds, so the columns of the matrix $A$ defined in the paragraph
+above form an orthonormal list in $\F^m$. Then \ref{ax:7.50} shows that
+$Se_1,\dots,Se_n$ is an orthonormal list in $W$. Thus Example~\ref{ax:7.45},
+with $Se_1,\dots,Se_n$ playing the role of $g_1,\dots,g_n$, shows that $S$ is an
+isometry, proving that (e) implies (a).
+\end{proof}
+
+\marginnote[-2em]{Although the words ``unitary'' and ``isometry'' mean the same thing
+for operators on finite-dimensional inner product spaces, remember that a
+unitary operator maps a vector space to itself, while an isometry maps a vector
+space to another (possibly different) vector space.}%
+As previously noted, every isometry is injective. Every injective operator on a
+finite-dimensional vector space is invertible (see \ref{ax:3.65}). A standing
+assumption for this chapter is that $V$ is a finite-dimensional inner product
+space. Thus we could delete the word ``invertible'' from the definition above
+without changing the meaning. The unnecessary word ``invertible'' has been
+retained in the definition above for consistency with the definition readers
+may encounter when learning about inner product spaces that are not necessarily
+finite-dimensional.
+
+
+See Exercises 1 and 11 for additional conditions that are equivalent to being
+an isometry.
+
+\subsection{Unitary Operators}
+
+In this subsection, we confine our attention to linear maps from a vector space
+to itself. In other words, we will be working with operators.
+
+\begin{definition}[Unitary operator]\label{ax:7.51}
+An operator $S\in\Lin(V)$ is called \emph{unitary} if $S$ is an invertible
+isometry.
+\end{definition}
+
+
+\begin{example}[Rotation of $\R^2$]\label{ax:7.52}
+Suppose $\theta\in\R$ and $S$ is the operator on $\F^2$ whose matrix with respect
+to the standard basis of $\F^2$ is
+\[ \begin{pmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{pmatrix}. \]
+The two columns of this matrix form an orthonormal list in $\F^2$; hence $S$ is
+an isometry [by the equivalence of (a) and (e) in \ref{ax:7.49}]. Thus $S$ is a
+unitary operator.
+
+If $\F=\R$, then $S$ is the operator of counterclockwise rotation by $\theta$
+radians around the origin of $\R^2$. This observation gives us another way to
+think about why $S$ is an isometry, because each rotation around the origin of
+$\R^2$ preserves norms.
+\end{example}
+
+The next result (\ref{ax:7.53}) lists several conditions that are equivalent to
+being a unitary operator. All the conditions equivalent to being an isometry in
+\ref{ax:7.49} should be added to this list. The extra conditions in
+\ref{ax:7.53} arise because of limiting the context to linear maps from a vector
+space to itself. For example, \ref{ax:7.49} shows that a linear map
+$S\in\Lin(V,W)$ is an isometry if and only if $S^*S=I$, while \ref{ax:7.53}
+shows that an operator $S\in\Lin(V)$ is a unitary operator if and only if
+$S^*S=SS^*=I$.
+
+Another difference is that \ref{ax:7.49}(d) mentions an orthonormal list, while
+\ref{ax:7.53}(d) mentions an orthonormal basis. Also, \ref{ax:7.49}(e) mentions
+the columns of $\Mat(T)$, while \ref{ax:7.53}(e) mentions the rows of $\Mat(T)$.
+Furthermore, $\Mat(T)$ in \ref{ax:7.49}(e) is with respect to an orthonormal
+basis of $V$ and an orthonormal basis of $W$, while $\Mat(T)$ in
+\ref{ax:7.53}(e) is with respect to a single basis of $V$ doing double duty.
+
+\begin{result}[Characterizations of unitary operators]\label{ax:7.53}
+Suppose $S\in\Lin(V)$. Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$.
+Then the following are equivalent.
+\begin{parts}
+\item $S$ is a unitary operator.
+\item $S^*S=SS^*=I$.
+\item $S$ is invertible and $S^{-1}=S^*$.
+\item $Se_1,\dots,Se_n$ is an orthonormal basis of $V$.
+\item The rows of $\Mat\bigl(S,(e_1,\dots,e_n)\bigr)$ form an orthonormal basis
+  of $\F^n$ with respect to the Euclidean inner product.
+\item $S^*$ is a unitary operator.
+\end{parts}
+\end{result}
+
+\begin{proof}
+First suppose (a) holds, so $S$ is a unitary operator. Hence
+\[ S^*S=I \]
+by the equivalence of (a) and (b) in \ref{ax:7.49}. Multiply both sides of this
+equation by $S^{-1}$ on the right, getting $S^*=S^{-1}$. Thus
+$SS^*=SS^{-1}=I$, as desired, proving that (a) implies (b).
+
+The definitions of invertible and inverse show that (b) implies (c).
+
+Now suppose (c) holds, so $S$ is invertible and $S^{-1}=S^*$. Thus $S^*S=I$.
+Hence $Se_1,\dots,Se_n$ is an orthonormal list in $V$, by the equivalence of (b)
+and (d) in \ref{ax:7.49}. The length of this list equals $\dim V$. Thus
+$Se_1,\dots,Se_n$ is an orthonormal basis of $V$, proving that (c) implies (d).
+
+Now suppose (d) holds, so $Se_1,\dots,Se_n$ is an orthonormal basis of $V$. The
+equivalence of (a) and (d) in \ref{ax:7.49} shows that $S$ is a unitary
+operator. Thus
+\[ (S^*)^*S^*=SS^*=I, \]
+where the last equation holds because we already showed that (a) implies (b) in
+this result. The equation above and the equivalence of (a) and (b) in
+\ref{ax:7.49} show that $S^*$ is an isometry. Thus the columns of
+$\Mat\bigl(S^*,(e_1,\dots,e_n)\bigr)$ form an orthonormal basis of $\F^n$ [by the
+equivalence of (a) and (e) of \ref{ax:7.49}]. The rows of
+$\Mat\bigl(S,(e_1,\dots,e_n)\bigr)$ are the complex conjugates of the columns of
+$\Mat\bigl(S^*,(e_1,\dots,e_n)\bigr)$. Thus the rows of
+$\Mat\bigl(S,(e_1,\dots,e_n)\bigr)$ form an orthonormal basis of $\F^n$, proving
+that (d) implies (e).
+
+Now suppose (e) holds. Thus the columns of $\Mat\bigl(S^*,(e_1,\dots,e_n)\bigr)$
+form an orthonormal basis of $\F^n$. The equivalence of (a) and (e) in
+\ref{ax:7.49} shows that $S^*$ is an isometry, proving that (e) implies (f).
+
+Now suppose (f) holds, so $S^*$ is a unitary operator. The chain of implications
+we have already proved in this result shows that (a) implies (f). Applying this
+result to $S^*$ shows that $(S^*)^*$ is a unitary operator, proving that (f)
+implies (a).
+
+We have shown that (a) $\Rightarrow$ (b) $\Rightarrow$ (c) $\Rightarrow$ (d)
+$\Rightarrow$ (e) $\Rightarrow$ (f) $\Rightarrow$ (a), completing the proof.
+\end{proof}
+
+Recall our analogy between $\C$ and $\Lin(V)$. Under this analogy, a complex
+number $z$ corresponds to an operator $S\in\Lin(V)$, and $\overline{z}$
+corresponds to $S^*$. The real numbers $(z=\overline{z})$ correspond to the
+self-adjoint operators $(S=S^*)$, and the nonnegative numbers correspond to the
+(badly named) positive operators.
+
+Another distinguished subset of $\C$ is the unit circle, which consists of the
+complex numbers $z$ such that $\abs{z}=1$. The condition $\abs{z}=1$ is
+equivalent to the condition $\overline{z}z=1$. Under our analogy, this
+corresponds to the condition $S^*S=I$, which is equivalent to $S$ being a
+unitary operator. Hence the analogy shows that the unit circle in $\C$
+corresponds to the set of unitary operators. In the next two results, this
+analogy appears in the eigenvalues of unitary operators. Also see Exercise~15
+for another example of this analogy.
+
+\begin{result}[Eigenvalues of unitary operators have absolute value $1$]%
+\label{ax:7.54}
+Suppose $\lambda$ is an eigenvalue of a unitary operator. Then $\abs{\lambda}=1$.
+\end{result}
+
+\begin{proof}
+Suppose $S\in\Lin(V)$ is a unitary operator and $\lambda$ is an eigenvalue of
+$S$. Let $v\in V$ be such that $v\ne0$ and $Sv=\lambda v$. Then
+\[ \abs{\lambda}\,\norm{v}=\norm{\lambda v}=\norm{Sv}=\norm{v}. \]
+Thus $\abs{\lambda}=1$, as desired.
+\end{proof}
+
+The next result characterizes unitary operators on finite-dimensional complex
+inner product spaces, using the complex spectral theorem as the main tool.
+
+\begin{result}[Description of unitary operators on complex inner product spaces]%
+\label{ax:7.55}
+Suppose $\F=\C$ and $S\in\Lin(V)$. Then the following are equivalent.
+\begin{parts}
+\item $S$ is a unitary operator.
+\item There is an orthonormal basis of $V$ consisting of eigenvectors of $S$
+  whose corresponding eigenvalues all have absolute value $1$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+Suppose (a) holds, so $S$ is a unitary operator. The equivalence of (a) and (b)
+in \ref{ax:7.53} shows that $S$ is normal. Thus the complex spectral theorem
+(\ref{ax:7.31}) shows that there is an orthonormal basis $e_1,\dots,e_n$ of $V$
+consisting of eigenvectors of $S$. Every eigenvalue of $S$ has absolute value
+$1$ (by \ref{ax:7.54}), completing the proof that (a) implies (b).
+
+Now suppose (b) holds. Let $e_1,\dots,e_n$ be an orthonormal basis of $V$
+consisting of eigenvectors of $S$ whose corresponding eigenvalues
+$\lambda_1,\dots,\lambda_n$ all have absolute value $1$. Then $Se_1,\dots,Se_n$
+is also an orthonormal basis of $V$ because
+\[ \ip{Se_j}{Se_k}=\ip{\lambda_je_j}{\lambda_ke_k}
+   =\lambda_j\overline{\lambda_k}\ip{e_j}{e_k}
+   =\begin{cases}0&\text{if }j\ne k,\\1&\text{if }j=k\end{cases} \]
+for all $j,k=1,\dots,n$. Thus the equivalence of (a) and (d) in \ref{ax:7.53}
+shows that $S$ is unitary, proving that (b) implies (a).
+\end{proof}
+
+\subsection{QR Factorization}
+
+In this subsection, we shift our attention from operators to matrices. This
+switch should give you good practice in identifying an operator with a square
+matrix (after picking a basis of the vector space on which the operator is
+defined). You should also become more comfortable with translating concepts and
+results back and forth between the context of operators and the context of
+square matrices.
+
+When starting with $n$-by-$n$ matrices instead of operators, unless otherwise
+specified assume that the associated operators live on $\F^n$ (with the
+Euclidean inner product) and that their matrices are computed with respect to
+the standard basis of $\F^n$.
+
+We begin by making the following definition, transferring the notion of a
+unitary operator to a unitary matrix.
+
+\begin{definition}[Unitary matrix]\label{ax:7.56}
+An $n$-by-$n$ matrix is called \emph{unitary} if its columns form an orthonormal
+list in $\F^n$.
+\end{definition}
+
+In the definition above, we could have replaced ``orthonormal list in $\F^n$''
+with ``orthonormal basis of $\F^n$'' because every orthonormal list of length
+$n$ in an $n$-dimensional inner product space is an orthonormal basis. If
+$S\in\Lin(V)$ and $e_1,\dots,e_n$ and $f_1,\dots,f_n$ are orthonormal bases of
+$V$, then $S$ is a unitary operator if and only if
+$\Mat\bigl(S,(e_1,\dots,e_n),(f_1,\dots,f_n)\bigr)$ is a unitary matrix, as
+shown by the equivalence of (a) and (e) in \ref{ax:7.49}. Also note that we
+could also have replaced ``columns'' in the definition above with ``rows'' by
+using the equivalence between conditions (a) and (e) in \ref{ax:7.53}.
+
+The next result, whose proof will be left as an exercise for the reader, gives
+some equivalent conditions for a square matrix to be unitary. In (c), $Qv$
+denotes the matrix product of $Q$ and $v$, identifying elements of $\F^n$ with
+$n$-by-$1$ matrices (sometimes called column vectors). The norm in (c) below is
+the usual Euclidean norm on $\F^n$ that comes from the Euclidean inner product.
+In (d), $Q^*$ denotes the conjugate transpose of the matrix $Q$, which
+corresponds to the adjoint of the associated operator.
+
+\begin{result}[Characterizations of unitary matrices]\label{ax:7.57}
+Suppose $Q$ is an $n$-by-$n$ matrix. Then the following are equivalent.
+\begin{parts}
+\item $Q$ is a unitary matrix.
+\item The rows of $Q$ form an orthonormal list in $\F^n$.
+\item $\norm{Qv}=\norm{v}$ for every $v\in\F^n$.
+\item $Q^*Q=QQ^*=I$, the $n$-by-$n$ matrix with $1$'s on the diagonal and $0$'s
+  elsewhere.
+\end{parts}
+\end{result}
+
+The QR factorization stated and proved below is the main tool in the widely
+used QR algorithm (not discussed here) for finding good approximations to
+eigenvalues and eigenvectors of square matrices. In the result below, if the
+matrix $A$ is in $\F^{n,n}$, then the matrices $Q$ and $R$ are also in
+$\F^{n,n}$.
+
+\begin{result}[QR factorization]\label{ax:7.58}
+Suppose $A$ is a square matrix with linearly independent columns. Then there
+exist unique matrices $Q$ and $R$ such that $Q$ is unitary, $R$ is upper
+triangular with only positive numbers on its diagonal, and
+\[ A=QR. \]
+\end{result}
+
+\begin{proof}
+Let $v_1,\dots,v_n$ denote the columns of $A$, thought of as elements of
+$\F^n$. Apply the Gram--Schmidt procedure (\ref{ax:6.32}) to the list
+$v_1,\dots,v_n$, getting an orthonormal basis $e_1,\dots,e_n$ of $\F^n$ such that
+\[ \spn(v_1,\dots,v_k)=\spn(e_1,\dots,e_k) \axeqno\label{ax:7.59} \]
+for each $k=1,\dots,n$. Let $R$ be the $n$-by-$n$ matrix defined by
+\[ R_{j,k}=\ip{v_k}{e_j}, \]
+where $R_{j,k}$ denotes the entry in row $j$, column $k$ of $R$. If $j>k$, then
+$e_j$ is orthogonal to $\spn(e_1,\dots,e_k)$ and hence $e_j$ is orthogonal to
+$v_k$ (by \ref{ax:7.59}). In other words, if $j>k$ then $\ip{v_k}{e_j}=0$. Thus
+$R$ is an upper-triangular matrix.
+
+Let $Q$ be the unitary matrix whose columns are $e_1,\dots,e_n$. If
+$k\in\{1,\dots,n\}$, then the $k^{\text{th}}$ column of $QR$ equals a linear
+combination of the columns of $Q$, with the coefficients for the linear
+combination coming from the $k^{\text{th}}$ column of $R$---see
+\ref{ax:3.51}(a). Hence the $k^{\text{th}}$ column of $QR$ equals
+\[ \ip{v_k}{e_1}e_1+\cdots+\ip{v_k}{e_k}e_k, \]
+which equals $v_k$ [by \ref{ax:6.30}(a)], the $k^{\text{th}}$ column of $A$.
+Thus $A=QR$, as desired.
+
+The equations defining the Gram--Schmidt procedure (see \ref{ax:6.32}) show
+that each $v_k$ equals a positive multiple of $e_k$ plus a linear combination of
+$e_1,\dots,e_{k-1}$. Thus each $\ip{v_k}{e_k}$ is a positive number. Hence all
+entries on the diagonal of $R$ are positive numbers, as desired.
+
+Finally, to show that $Q$ and $R$ are unique, suppose we also have
+$A=\widehat{Q}\widehat{R}$, where $\widehat{Q}$ is unitary and $\widehat{R}$ is
+upper triangular with only positive numbers on its diagonal. Let
+$q_1,\dots,q_n$ denote the columns of $\widehat{Q}$. Thinking of matrix
+multiplication as above, we see that each $v_k$ is a linear combination of
+$q_1,\dots,q_k$, with the coefficients coming from the $k^{\text{th}}$ column of
+$\widehat{R}$. This implies that $\spn(v_1,\dots,v_k)=\spn(q_1,\dots,q_k)$ and
+$\ip{v_k}{q_k}>0$. The uniqueness of the orthonormal lists satisfying these
+conditions (see Exercise~10 in Section~6B) now shows that $q_k=e_k$ for each
+$k=1,\dots,n$. Hence $\widehat{Q}=Q$, which then implies that $\widehat{R}=R$,
+completing the proof of uniqueness.
+\end{proof}
+
+The proof of the QR factorization shows that the columns of the unitary matrix
+can be computed by applying the Gram--Schmidt procedure to the columns of the
+matrix to be factored. The next example illustrates the computation of the QR
+factorization based on the proof that we just completed.
+
+\begin{example}[QR factorization of a $3$-by-$3$ matrix]\label{ax:7.60}
+To find the QR factorization of the matrix
+\[ A=\begin{pmatrix}1&2&1\\0&1&-4\\0&3&2\end{pmatrix}, \]
+follow the proof of \ref{ax:7.58}. Thus set $v_1,v_2,v_3$ equal to the columns
+of $A$:
+\[ v_1=(1,0,0),\quad v_2=(2,1,3),\quad v_3=(1,-4,2). \]
+Apply the Gram--Schmidt procedure to $v_1,v_2,v_3$, producing the orthonormal
+list
+\[ e_1=(1,0,0),\quad
+   e_2=\Bigl(0,1/\sqrt{10},3/\sqrt{10}\Bigr),\quad
+   e_3=\Bigl(0,-3/\sqrt{10},1/\sqrt{10}\Bigr). \]
+Still following the proof of \ref{ax:7.58}, let $Q$ be the unitary matrix whose
+columns are $e_1,e_2,e_3$:
+\[ Q=\begin{pmatrix}1&0&0\\[2pt]
+     0&1/\sqrt{10}&-3/\sqrt{10}\\[6pt]
+     0&3/\sqrt{10}&1/\sqrt{10}\end{pmatrix}. \]
+As in the proof of \ref{ax:7.58}, let $R$ be the $3$-by-$3$ matrix whose entry
+in row $j$, column $k$ is $\ip{v_k}{e_j}$, which gives
+\[ R=\begin{pmatrix}1&2&1\\[2pt]
+     0&\sqrt{10}&\sqrt{10}/5\\[6pt]
+     0&0&7\sqrt{10}/5\end{pmatrix}. \]
+Note that $R$ is indeed an upper-triangular matrix with only positive numbers on
+the diagonal, as required by the QR factorization.
+
+Now matrix multiplication can verify that $A=QR$ is the desired factorization
+of $A$:
+\[ QR=\begin{pmatrix}1&0&0\\[2pt]
+     0&1/\sqrt{10}&-3/\sqrt{10}\\[6pt]
+     0&3/\sqrt{10}&1/\sqrt{10}\end{pmatrix}
+     \begin{pmatrix}1&2&1\\[2pt]
+     0&\sqrt{10}&\sqrt{10}/5\\[6pt]
+     0&0&7\sqrt{10}/5\end{pmatrix}
+    =\begin{pmatrix}1&2&1\\0&1&-4\\0&3&2\end{pmatrix}=A. \]
+Thus $A=QR$, as expected.
+\end{example}
+
+The QR factorization will be the major tool used in the proof of the Cholesky
+factorization (\ref{ax:7.63}) in the next subsection. For another nice
+application of the QR factorization, see the proof of Hadamard's inequality
+(\ref{ax:9.66}).
+
+If a QR factorization is available, then it can be used to solve a
+corresponding system of linear equations without using Gaussian elimination.
+Specifically, suppose $A$ is an $n$-by-$n$ square matrix with linearly
+independent columns. Suppose that $b\in\F^n$ and we want to solve the equation
+$Ax=b$ for $x=(x_1,\dots,x_n)\in\F^n$ (as usual, we are identifying elements of
+$\F^n$ with $n$-by-$1$ column vectors).
+
+Suppose $A=QR$, where $Q$ is unitary and $R$ is upper triangular with only
+positive numbers on its diagonal ($Q$ and $R$ are computable from $A$ using
+just the Gram--Schmidt procedure, as shown in the proof of \ref{ax:7.58}). The
+equation $Ax=b$ is equivalent to the equation $QRx=b$. Multiplying both sides of
+this last equation by $Q^*$ on the left and using \ref{ax:7.57}(d) gives the
+equation
+\[ Rx=Q^*b. \]
+
+The matrix $Q^*$ is the conjugate transpose of the matrix $Q$. Thus computing
+$Q^*b$ is straightforward. Because $R$ is an upper-triangular matrix with
+positive numbers on its diagonal, the system of linear equations represented by
+the equation above can quickly be solved by first solving for $x_n$, then for
+$x_{n-1}$, and so on.
+
+\subsection{Cholesky Factorization}
+
+We begin this subsection with a characterization of positive invertible
+operators in terms of inner products.
+
+\begin{result}[Positive invertible operator]\label{ax:7.61}
+A self-adjoint operator $T\in\Lin(V)$ is a positive invertible operator if and
+only if $\ip{Tv}{v}>0$ for every nonzero $v\in V$.
+\end{result}
+
+\begin{proof}
+First suppose $T$ is a positive invertible operator. If $v\in V$ and $v\ne0$,
+then because $T$ is invertible we have $Tv\ne0$. This implies that
+$\ip{Tv}{v}\ne0$ (by \ref{ax:7.43}). Hence $\ip{Tv}{v}>0$.
+
+To prove the implication in the other direction, suppose now that
+$\ip{Tv}{v}>0$ for every nonzero $v\in V$. Thus $Tv\ne0$ for every nonzero
+$v\in V$. Hence $T$ is injective. Thus $T$ is invertible, as desired.
+\end{proof}
+
+The next definition transfers the result above to the language of matrices.
+Here we are using the usual Euclidean inner product on $\F^n$ and identifying
+elements of $\F^n$ with $n$-by-$1$ column vectors.
+
+\begin{definition}[Positive definite]\label{ax:7.62}
+A matrix $B\in\F^{n,n}$ is called \emph{positive definite} if $B^*=B$ and
+\[ \ip{Bx}{x}>0 \]
+for every nonzero $x\in\F^n$.
+\end{definition}
+
+A matrix is upper triangular if and only if its conjugate transpose is lower
+triangular (meaning that all entries above the diagonal are $0$). The
+factorization below, which has important consequences in computational linear
+algebra, writes a positive definite matrix as the product of a lower triangular
+matrix and its conjugate transpose.
+
+Our next result is solely about matrices, although the proof makes use of the
+identification of results about operators with results about square matrices.
+In the result below, if the matrix $B$ is in $\F^{n,n}$, then the matrix $R$ is
+also in $\F^{n,n}$.
+
+\begin{result}[Cholesky factorization]\label{ax:7.63}
+Suppose $B$ is a positive definite matrix. Then there exists a unique
+upper-triangular matrix $R$ with only positive numbers on its diagonal such that
+\[ B=R^*R. \]
+\end{result}
+
+\begin{proof}
+Because $B$ is positive definite, there exists an invertible square matrix $A$
+of the same size as $B$ such that $B=A^*A$ [by the equivalence of (a) and (f) in
+\ref{ax:7.38}].
+
+Let $A=QR$ be the QR factorization of $A$ (see \ref{ax:7.58}), where $Q$ is
+unitary and $R$ is upper triangular with only positive numbers on its diagonal.
+Then $A^*=R^*Q^*$.
+
+\marginnote{Andr\'e-Louis Cholesky (1875--1918) discovered this factorization,
+which was published posthumously in 1924.}%
+Thus
+\[ B=A^*A=R^*Q^*QR=R^*R, \]
+as desired.
+
+To prove the uniqueness part of this result, suppose $S$ is an upper-triangular
+matrix with only positive numbers on its diagonal and $B=S^*S$. The matrix $S$
+is invertible because $B$ is invertible (see Exercise~11 in Section~3D).
+Multiplying both sides of the equation $B=S^*S$ by $S^{-1}$ on the right gives
+the equation $BS^{-1}=S^*$.
+
+Let $A$ be the matrix from the first paragraph of this proof. Then
+\begin{align*}
+(AS^{-1})^*(AS^{-1}) &= (S^*)^{-1}A^*AS^{-1}\\
+  &= (S^*)^{-1}BS^{-1}\\
+  &= (S^*)^{-1}S^*\\
+  &= I.
+\end{align*}
+Thus $AS^{-1}$ is unitary.
+
+Hence $A=(AS^{-1})S$ is a factorization of $A$ as the product of a unitary
+matrix and an upper-triangular matrix with only positive numbers on its
+diagonal. The uniqueness of the QR factorization, as stated in \ref{ax:7.58},
+now implies that $S=R$.
+\end{proof}
+
+In the first paragraph of the proof above, we could have chosen $A$ to be the
+unique positive definite matrix that is a square root of $B$ (see
+\ref{ax:7.39}). However, the proof was presented with the more general choice of
+$A$ because for specific positive definite matrices $B$, it may be easier to
+find a different choice of $A$.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{7D}
+
+\begin{exercise}
+Suppose $\dim V\ge2$ and $S\in\Lin(V,W)$. Prove that $S$ is an isometry if and
+only if $Se_1,Se_2$ is an orthonormal list in $W$ for every orthonormal list
+$e_1,e_2$ of length two in $V$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ and $T\ne0$. Prove that $T$ is a scalar multiple of an
+isometry if and only if $T$ preserves orthogonality.
+\exnote{The phrase ``$T$ preserves orthogonality'' means that
+$\ip{Tu}{Tv}=0$ for all $u,v\in V$ such that $\ip{u}{v}=0$.}
+\end{exercise}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Show that the product of two unitary operators on $V$ is a unitary
+  operator.
+\item Show that the inverse of a unitary operator on $V$ is a unitary operator.
+\end{parts}
+\exnote{This exercise shows that the set of unitary operators on $V$ is a
+group, where the group operation is the usual product of two operators.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $A,B\in\Lin(V)$ are self-adjoint. Show that $A+iB$ is
+unitary if and only if $AB=BA$ and $A^2+B^2=I$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $S\in\Lin(V)$. Prove that the following are equivalent.
+\begin{parts}
+\item $S$ is a self-adjoint unitary operator.
+\item $S=2P-I$ for some orthogonal projection $P$ on $V$.
+\item There exists a subspace $U$ of $V$ such that $Su=u$ for every $u\in U$
+  and $Sw=-w$ for every $w\in U^\perp$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T_1,T_2$ are both normal operators on $\F^3$ with $2,5,7$ as
+eigenvalues. Prove that there exists a unitary operator $S\in\Lin(\F^3)$ such
+that $T_1=S^*T_2S$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of two self-adjoint operators $T_1,T_2\in\Lin(\F^4)$ such that
+the eigenvalues of both operators are $2,5,7$ but there does not exist a unitary
+operator $S\in\Lin(\F^4)$ such that $T_1=S^*T_2S$. Be sure to explain why there
+is no unitary operator with the required property.
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $S\in\Lin(V)$ and there exists an
+orthonormal basis $e_1,\dots,e_n$ of $V$ such that $\norm{Se_k}=1$ for each
+$e_k$, then $S$ is a unitary operator.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Suppose every eigenvalue of $T$ has absolute
+value $1$ and $\norm{Tv}\le\norm{v}$ for every $v\in V$. Prove that $T$ is a
+unitary operator.
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$ is a self-adjoint operator such that
+$\norm{Tv}\le\norm{v}$ for all $v\in V$.
+\begin{parts}
+\item Show that $I-T^2$ is a positive operator.
+\item Show that $T+i\sqrt{I-T^2}$ is a unitary operator.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $S\in\Lin(V)$. Prove that $S$ is a unitary operator if and only if
+\[ \{Sv : v\in V \text{ and } \norm{v}\le1\}=\{v\in V : \norm{v}\le1\}. \]
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $S\in\Lin(V)$ is invertible and
+$\norm{S^{-1}v}=\norm{Sv}$ for every $v\in V$, then $S$ is unitary.
+\end{exercise}
+
+\begin{exercise}
+Explain why the columns of a square matrix of complex numbers form an
+orthonormal list in $\C^n$ if and only if the rows of the matrix form an
+orthonormal list in $\C^n$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $v\in V$ with $\norm{v}=1$ and $b\in\F$. Also suppose $\dim V\ge2$.
+Prove that there exists a unitary operator $S\in\Lin(V)$ such that
+$\ip{Sv}{v}=b$ if and only if $\abs{b}\le1$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T$ is a unitary operator on $V$ such that $T-I$ is invertible.
+\begin{parts}
+\item Prove that $(T+I)(T-I)^{-1}$ is a skew operator (meaning that it equals
+  the negative of its adjoint).
+\item Prove that if $\F=\C$, then $i(T+I)(T-I)^{-1}$ is a self-adjoint
+  operator.
+\end{parts}
+\exnote{The function $z\mapsto i(z+1)(z-1)^{-1}$ maps the unit circle in $\C$
+(except for the point $1$) to $\R$. Thus (b) illustrates the analogy between
+the unitary operators and the unit circle in $\C$, along with the analogy
+between the self-adjoint operators and $\R$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $\F=\C$ and $T\in\Lin(V)$ is self-adjoint. Prove that
+$(T+iI)(T-iI)^{-1}$ is a unitary operator and $1$ is not an eigenvalue of this
+operator.
+\end{exercise}
+
+\begin{exercise}
+Explain why the characterizations of unitary matrices given by \ref{ax:7.57}
+hold.
+\end{exercise}
+
+\begin{exercise}
+A square matrix $A$ is called \emph{symmetric} if it equals its transpose. Prove
+that if $A$ is a symmetric matrix with real entries, then there exists a unitary
+matrix $Q$ with real entries such that $Q^*AQ$ is a diagonal matrix.
+\end{exercise}
+
+\begin{exercise}
+Suppose $n$ is a positive integer. For this exercise, we adopt the notation that
+a typical element $z$ of $\C^n$ is denoted by $z=(z_0,z_1,\dots,z_{n-1})$.
+Define linear functionals $\omega_0,\omega_1,\dots,\omega_{n-1}$ on $\C^n$ by
+\[ \omega_j(z_0,z_1,\dots,z_{n-1})
+   =\frac{1}{\sqrt{n}}\sum_{m=0}^{n-1}z_me^{-2\pi ijm/n}. \]
+The \emph{discrete Fourier transform} is the operator
+$\mathcal{F}\colon\C^n\to\C^n$ defined by
+\[ \mathcal{F}z=\bigl(\omega_0(z),\omega_1(z),\dots,\omega_{n-1}(z)\bigr). \]
+\begin{parts}
+\item Show that $\mathcal{F}$ is a unitary operator on $\C^n$.
+\item Show that if $(z_0,\dots,z_{n-1})\in\C^n$ and $z_n$ is defined to equal
+  $z_0$, then
+  \[ \mathcal{F}^{-1}(z_0,z_1,\dots,z_{n-1})=\mathcal{F}(z_n,z_{n-1},\dots,z_1). \]
+\item Show that $\mathcal{F}^4=I$.
+\end{parts}
+\exnote{The discrete Fourier transform has many important applications in data
+analysis. The usual Fourier transform involves expressions of the form
+$\int_{-\infty}^{\infty}f(x)e^{-2\pi itx}\,dx$ for complex-valued integrable
+functions $f$ defined on $\R$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $A$ is a square matrix with linearly independent columns. Prove that
+there exist unique matrices $R$ and $Q$ such that $R$ is lower triangular with
+only positive numbers on its diagonal, $Q$ is unitary, and $A=RQ$.
+\end{exercise}

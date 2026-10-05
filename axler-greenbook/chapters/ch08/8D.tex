@@ -1,0 +1,344 @@
+% Source: book pp. 326--331 (PDF 340--345).
+\section{Trace: A Connection Between Matrices and Operators}
+
+We begin this section by defining the trace of a square matrix. After
+developing some properties of the trace of a square matrix, we will use this
+concept to define the trace of an operator.
+
+\begin{definition}[Trace of a matrix]\label{ax:8.47}
+Suppose $A$ is a square matrix with entries in $\F$. The \emph{trace} of $A$,
+denoted $\tr A$, is defined to be the sum of the diagonal entries of $A$.
+\end{definition}
+
+\begin{example}[Trace of a 3-by-3 matrix]\label{ax:8.48}
+Suppose
+\[ A = \begin{pmatrix}
+{\color{red}3} & -1 & -2\\
+5 & {\color{red}2} & -3\\
+1 & 6 & {\color{red}0}
+\end{pmatrix}. \]
+The diagonal entries of $A$, which are shown in red above, are $3$, $2$, and
+$0$. Thus $\tr A=3+2+0=5$.
+\end{example}
+
+Matrix multiplication is not commutative, but the next result shows that the
+order of matrix multiplication does not matter to the trace.
+
+\begin{result}[Trace of $AB$ equals trace of $BA$]\label{ax:8.49}
+Suppose $A$ is an $m$-by-$n$ matrix and $B$ is an $n$-by-$m$ matrix. Then
+\[ \tr(AB) = \tr(BA). \]
+\end{result}
+
+\begin{proof}
+Suppose
+\[ A = \begin{pmatrix}
+A_{1,1} & \cdots & A_{1,n}\\
+\vdots & & \vdots\\
+A_{m,1} & \cdots & A_{m,n}
+\end{pmatrix}, \quad
+B = \begin{pmatrix}
+B_{1,1} & \cdots & B_{1,m}\\
+\vdots & & \vdots\\
+B_{n,1} & \cdots & B_{n,m}
+\end{pmatrix}. \]
+The $j^{\text{th}}$ term on the diagonal of the $m$-by-$m$ matrix $AB$ equals
+$\sum_{k=1}^n A_{j,k}B_{k,j}$. Thus
+\begin{align*}
+\tr(AB) &= \sum_{j=1}^m \sum_{k=1}^n A_{j,k}B_{k,j}\\
+&= \sum_{k=1}^n \sum_{j=1}^m B_{k,j}A_{j,k}\\
+&= \sum_{k=1}^n (k^{\text{th}} \text{ term on diagonal of the
+  $n$-by-$n$ matrix } BA)\\
+&= \tr(BA),
+\end{align*}
+as desired.
+\end{proof}
+
+We want to define the trace of an operator $T\in\Lin(V)$ to be the trace of the
+matrix of $T$ with respect to some basis of $V$. However, this definition should
+not depend on the choice of basis. The following result will make this
+possible.
+
+\begin{result}[Trace of matrix of operator does not depend on basis]\label{ax:8.50}
+Suppose $T\in\Lin(V)$. Suppose $u_1,\dots,u_n$ and $v_1,\dots,v_n$ are bases
+of $V$. Then
+\[ \tr\Mat\bigl(T,(u_1,\dots,u_n)\bigr) = \tr\Mat\bigl(T,(v_1,\dots,v_n)\bigr). \]
+\end{result}
+
+\begin{proof}
+Let $A=\Mat\bigl(T,(u_1,\dots,u_n)\bigr)$ and
+$B=\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$. The change-of-basis formula tells us
+that there exists an invertible $n$-by-$n$ matrix $C$ such that $A=C^{-1}BC$
+(see \ref{ax:3.84}). Thus
+\begin{align*}
+\tr A &= \tr\bigl((C^{-1}B)C\bigr)\\
+&= \tr\bigl(C(C^{-1}B)\bigr)\\
+&= \tr\bigl((CC^{-1})B\bigr)\\
+&= \tr B,
+\end{align*}
+where the second line comes from \ref{ax:8.49}.
+\end{proof}
+
+Because of \ref{ax:8.50}, the following definition now makes sense.
+
+\begin{definition}[Trace of an operator]\label{ax:8.51}
+Suppose $T\in\Lin(V)$. The \emph{trace} of $T$, denoted $\tr T$, is defined by
+\[ \tr T = \tr\Mat\bigl(T,(v_1,\dots,v_n)\bigr), \]
+where $v_1,\dots,v_n$ is any basis of $V$.
+\end{definition}
+
+Suppose $T\in\Lin(V)$ and $\lambda$ is an eigenvalue of $T$. Recall that we
+defined the multiplicity of $\lambda$ to be the dimension of the generalized
+eigenspace $G(\lambda,T)$ (see \ref{ax:8.23}); we proved that this multiplicity
+equals $\dim\nul(T-\lambda I)^{\dim V}$ (see \ref{ax:8.20}). Recall also that
+if $V$ is a complex vector space, then the sum of the multiplicities of all
+eigenvalues of $T$ equals $\dim V$ (see \ref{ax:8.25}).
+
+In the following result, the sum of the eigenvalues ``with each eigenvalue
+included as many times as its multiplicity'' means that if
+$\lambda_1,\dots,\lambda_m$ are the distinct eigenvalues of $T$ with
+multiplicities $d_1,\dots,d_m$, then the sum is
+\[ d_1\lambda_1+\cdots+d_m\lambda_m. \]
+Or if you prefer to work with a list of not-necessarily-distinct eigenvalues,
+with each eigenvalue included as many times as its multiplicity, then the
+eigenvalues could be denoted by $\lambda_1,\dots,\lambda_n$ (where $n$ equals
+$\dim V$) and the sum is
+\[ \lambda_1+\cdots+\lambda_n. \]
+
+\begin{result}[On complex vector spaces, trace equals sum of eigenvalues]\label{ax:8.52}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Then $\tr T$ equals the sum of the
+eigenvalues of $T$, with each eigenvalue included as many times as its
+multiplicity.
+\end{result}
+
+\begin{proof}
+There is a basis of $V$ with respect to which $T$ has an upper-triangular matrix
+with the diagonal entries of the matrix consisting of the eigenvalues of $T$,
+with each eigenvalue included as many times as its multiplicity---see
+\ref{ax:8.37}. Thus the definition of the trace of an operator along with
+\ref{ax:8.50}, which allows us to use a basis of our choice, implies that
+$\tr T$ equals the sum of the eigenvalues of $T$, with each eigenvalue included
+as many times as its multiplicity.
+\end{proof}
+
+\begin{example}[Trace of an operator on $\C^3$]\label{ax:8.53}
+Suppose $T\in\Lin(\C^3)$ is defined by
+\[ T(z_1,z_2,z_3) = (3z_1-z_2-2z_3,\,3z_1+2z_2-3z_3,\,z_1+2z_2). \]
+Then the matrix of $T$ with respect to the standard basis of $\C^3$ is
+\[ \begin{pmatrix}
+3 & -1 & -2\\
+3 & 2 & -3\\
+1 & 2 & 0
+\end{pmatrix}. \]
+Adding up the diagonal entries of this matrix, we see that $\tr T=5$.
+
+The eigenvalues of $T$ are $1$, $2+3i$, and $2-3i$, each with multiplicity
+$1$, as you can verify. The sum of these eigenvalues, each included as many
+times as its multiplicity, is $1+(2+3i)+(2-3i)$, which equals $5$, as expected
+by \ref{ax:8.52}.
+\end{example}
+
+The trace has a close connection with the characteristic polynomial. Suppose
+$\F=\C$, $T\in\Lin(V)$, and $\lambda_1,\dots,\lambda_n$ are the eigenvalues of
+$T$, with each eigenvalue included as many times as its multiplicity. Then by
+definition (see \ref{ax:8.26}), the characteristic polynomial of $T$ equals
+\[ (z-\lambda_1)\cdots(z-\lambda_n). \]
+Expanding the polynomial above, we can write the characteristic polynomial of
+$T$ in the form
+\[ z^n - (\lambda_1+\cdots+\lambda_n)z^{n-1} + \cdots
+   + (-1)^n(\lambda_1\cdots\lambda_n). \]
+
+The expression above immediately leads to the next result. Also see
+\ref{ax:9.65}, which does not require the hypothesis that $\F=\C$.
+
+\begin{result}[Trace and characteristic polynomial]\label{ax:8.54}
+Suppose $\F=\C$ and $T\in\Lin(V)$. Let $n=\dim V$. Then $\tr T$ equals the
+negative of the coefficient of $z^{n-1}$ in the characteristic polynomial of
+$T$.
+\end{result}
+
+The next result gives a nice formula for the trace of an operator on an inner
+product space.
+
+\begin{result}[Trace on an inner product space]\label{ax:8.55}
+Suppose $V$ is an inner product space, $T\in\Lin(V)$, and $e_1,\dots,e_n$ is an
+orthonormal basis of $V$. Then
+\[ \tr T = \ip{Te_1}{e_1} + \cdots + \ip{Te_n}{e_n}. \]
+\end{result}
+
+\begin{proof}
+The desired formula follows from the observation that the entry in row $k$,
+column $k$ of $\Mat\bigl(T,(e_1,\dots,e_n)\bigr)$ equals $\ip{Te_k}{e_k}$
+[use \ref{ax:6.30}(a) with $v=Te_k$].
+\end{proof}
+
+The algebraic properties of the trace as defined on square matrices translate
+to algebraic properties of the trace as defined on operators, as shown in the
+next result.
+
+\begin{result}[Trace is linear]\label{ax:8.56}
+The function $\tr\colon\Lin(V)\to\F$ is a linear functional on $\Lin(V)$ such
+that
+\[ \tr(ST) = \tr(TS) \]
+for all $S,T\in\Lin(V)$.
+\end{result}
+
+\begin{proof}
+Choose a basis of $V$. All matrices of operators in this proof will be with
+respect to that basis. Suppose $S,T\in\Lin(V)$.
+
+If $\lambda\in\F$, then
+\[ \tr(\lambda T) = \tr\Mat(\lambda T) = \tr\bigl(\lambda\Mat(T)\bigr)
+   = \lambda\tr\Mat(T) = \lambda\tr T, \]
+where the first and last equalities come from the definition of the trace of an
+operator, the second equality comes from \ref{ax:3.38}, and the third equality
+follows from the definition of the trace of a square matrix.
+
+Also,
+\[ \tr(S+T) = \tr\Mat(S+T) = \tr\bigl(\Mat(S)+\Mat(T)\bigr)
+   = \tr\Mat(S) + \tr\Mat(T) = \tr S + \tr T, \]
+where the first and last equalities come from the definition of the trace of an
+operator, the second equality comes from \ref{ax:3.35}, and the third equality
+follows from the definition of the trace of a square matrix. The two paragraphs
+above show that $\tr\colon\Lin(V)\to\F$ is a linear functional on $\Lin(V)$.
+
+Furthermore,
+\begin{multline*}
+\tr(ST) = \tr\Mat(ST) = \tr\bigl(\Mat(S)\Mat(T)\bigr)\\
+= \tr\bigl(\Mat(T)\Mat(S)\bigr) = \tr\Mat(TS) = \tr(TS),
+\end{multline*}
+where the second and fourth equalities come from \ref{ax:3.43} and the crucial
+third equality comes from \ref{ax:8.49}.
+\end{proof}
+
+The equations $\tr(ST)=\tr(TS)$ and $\tr I=\dim V$ uniquely characterize the
+trace among the linear functionals on $\Lin(V)$---see Exercise~10.
+
+\marginnote{The statement of the next result does not involve traces, but the
+short proof uses traces. When something like this happens in mathematics, then
+usually a good definition lurks in the background.}%
+The equation $\tr(ST)=\tr(TS)$ leads to our next result, which does not hold on
+infinite-dimensional vector spaces (see Exercise~13). However, additional
+hypotheses on $S$, $T$, and $V$ lead to an infinite-dimensional generalization
+of the result below, with important applications to quantum theory.
+
+\begin{result}[Identity operator is not the difference of $ST$ and $TS$]\label{ax:8.57}
+There do not exist operators $S,T\in\Lin(V)$ such that $ST-TS=I$.
+\end{result}
+
+\begin{proof}
+Suppose $S,T\in\Lin(V)$. Then
+\[ \tr(ST-TS) = \tr(ST) - \tr(TS) = 0, \]
+where both equalities come from \ref{ax:8.56}. The trace of $I$ equals
+$\dim V$, which is not $0$. Because $ST-TS$ and $I$ have different traces, they
+cannot be equal.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{8D}
+
+\begin{exercise}
+Suppose $V$ is an inner product space and $v,w\in V$. Define an operator
+$T\in\Lin(V)$ by $Tu=\ip{u}{v}w$. Find a formula for $\tr T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $P\in\Lin(V)$ satisfies $P^2=P$. Prove that
+\[ \tr P = \dim\range P. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $T^5=T$. Prove that the real and imaginary parts of
+$\tr T$ are both integers.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space and $T\in\Lin(V)$. Prove that
+\[ \tr T^* = \overline{\tr T}. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space. Suppose $T\in\Lin(V)$ is a positive
+operator and $\tr T=0$. Prove that $T=0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is an inner product space and $P,Q\in\Lin(V)$ are orthogonal
+projections. Prove that $\tr(PQ)\ge0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(\C^3)$ is the operator whose matrix is
+\[ \begin{pmatrix}
+51 & -12 & -21\\
+60 & -40 & -28\\
+57 & -68 & 1
+\end{pmatrix}. \]
+Someone tells you (accurately) that $-48$ and $24$ are eigenvalues of $T$.
+Without using a computer or writing anything down, find the third eigenvalue
+of $T$.
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $S,T\in\Lin(V)$, then
+$\tr(ST)=(\tr S)(\tr T)$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is such that $\tr(ST)=0$ for all $S\in\Lin(V)$. Prove
+that $T=0$.
+\end{exercise}
+
+\begin{exercise}
+Prove that the trace is the only linear functional $\tau\colon\Lin(V)\to\F$
+such that
+\[ \tau(ST) = \tau(TS) \]
+for all $S,T\in\Lin(V)$ and $\tau(I)=\dim V$.
+\exnote{Hint: Suppose that $v_1,\dots,v_n$ is a basis of $V$. For
+$j,k\in\{1,\dots,n\}$, define $P_{j,k}\in\Lin(V)$ by
+$P_{j,k}(a_1v_1+\cdots+a_nv_n)=a_kv_j$. Prove that
+\[ \tau(P_{j,k}) = \begin{cases} 1 & \text{if } j=k,\\
+   0 & \text{if } j\ne k. \end{cases} \]
+Then for $T\in\Lin(V)$, use the equation
+$T=\sum_{k=1}^n\sum_{j=1}^n\Mat(T)_{j,k}P_{j,k}$ to show that $\tau(T)=\tr T$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ and $W$ are inner product spaces and $T\in\Lin(V,W)$. Prove that if
+$e_1,\dots,e_n$ is an orthonormal basis of $V$ and $f_1,\dots,f_m$ is an
+orthonormal basis of $W$, then
+\[ \tr(T^*T) = \sum_{k=1}^n\sum_{j=1}^m \abs{\ip{Te_k}{f_j}}^2. \]
+\exnote{The numbers $\ip{Te_k}{f_j}$ are the entries of the matrix of $T$ with
+respect to the orthonormal bases $e_1,\dots,e_n$ and $f_1,\dots,f_m$. These
+numbers depend on the bases, but $\tr(T^*T)$ does not depend on a choice of
+bases. Thus this exercise shows that the sum of the squares of the absolute
+values of the matrix entries does not depend on which orthonormal bases are
+used.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional inner product spaces.
+\begin{parts}
+\item Prove that $\ip{S}{T}=\tr(T^*S)$ defines an inner product on
+  $\Lin(V,W)$.
+\item Suppose $e_1,\dots,e_n$ is an orthonormal basis of $V$ and
+  $f_1,\dots,f_m$ is an orthonormal basis of $W$. Show that the inner product
+  on $\Lin(V,W)$ from (a) is the same as the standard inner product on
+  $\F^{mn}$, where we identify each element of $\Lin(V,W)$ with its matrix
+  (with respect to the bases just mentioned) and then with an element of
+  $\F^{mn}$.
+\end{parts}
+\exnote{Caution: The norm of a linear map $T\in\Lin(V,W)$ as defined by
+\ref{ax:7.86} is not the same as the norm that comes from the inner product in
+(a) above. Unless explicitly stated otherwise, always assume that $\norm{T}$
+refers to the norm as defined by \ref{ax:7.86}. The norm that comes from the
+inner product in (a) is called the \textbf{Frobenius norm} or the
+\textbf{Hilbert--Schmidt norm}.}
+\end{exercise}
+
+\begin{exercise}
+Find $S,T\in\Lin\bigl(\Poly(\F)\bigr)$ such that $ST-TS=I$.
+\exnote{Hint: Make an appropriate modification of the operators in
+Example~\ref{ax:3.9}.}
+\exnote{This exercise shows that additional hypotheses are needed on $S$ and $T$
+to extend \ref{ax:8.57} to the setting of infinite-dimensional vector spaces.}
+\end{exercise}

@@ -1,0 +1,1233 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{3}\setcounter{theorem}{58}
+\fi % TEST-ONLY-END
+% Source: book pp. 82--95 (PDF 96--109); solutions pp. 93--103, 170--174.
+\section{Invertibility and Isomorphisms}
+
+\subsection{Invertible Linear Maps}
+
+We begin this section by defining the notions of invertible and inverse in the
+context of linear maps.
+
+\begin{definition}[Invertible, inverse]\label{ax:3.59}\leavevmode
+\begin{itemize}
+\item A linear map $T\in\Lin(V,W)$ is called \emph{invertible} if there exists
+  a linear map $S\in\Lin(W,V)$ such that $ST$ equals the identity operator on
+  $V$ and $TS$ equals the identity operator on $W$.
+\item A linear map $S\in\Lin(W,V)$ satisfying $ST=I$ and $TS=I$ is called an
+  \emph{inverse} of $T$ (note that the first $I$ is the identity operator on $V$
+  and the second $I$ is the identity operator on $W$).
+\end{itemize}
+\end{definition}
+
+The definition above mentions ``an inverse''. However, the next result shows
+that we can change this terminology to ``the inverse''.
+
+\begin{result}[Inverse is unique]\label{ax:3.60}
+An invertible linear map has a unique inverse.
+\end{result}
+
+\begin{proof}
+Suppose $T\in\Lin(V,W)$ is invertible and $S_1$ and $S_2$ are inverses of $T$.
+Then
+\[ S_1 = S_1I = S_1(TS_2) = (S_1T)S_2 = IS_2 = S_2. \]
+Thus $S_1=S_2$.
+\end{proof}
+
+Now that we know that the inverse is unique, we can give it a notation.
+
+\begin{notation}[$T^{-1}$]\label{ax:3.61}
+If $T$ is invertible, then its inverse is denoted by $T^{-1}$. In other words,
+if $T\in\Lin(V,W)$ is invertible, then $T^{-1}$ is the unique element of
+$\Lin(W,V)$ such that $T^{-1}T=I$ and $TT^{-1}=I$.
+\end{notation}
+
+\begin{example}[Inverse of a linear map from $\R^3$ to $\R^3$]\label{ax:3.62}
+Suppose $T\in\Lin(\R^3)$ is defined by $T(x,y,z)=(-y,x,4z)$. Thus $T$ is a
+counterclockwise rotation by $90^\circ$ in the $xy$-plane and a stretch by a
+factor of $4$ in the direction of the $z$-axis.
+
+Hence the inverse map $T^{-1}\in\Lin(\R^3)$ is the clockwise rotation by
+$90^\circ$ in the $xy$-plane and a stretch by a factor of $1/4$ in the
+direction of the $z$-axis:
+\[ T^{-1}(x,y,z) = (y,-x,1/4z). \]
+\end{example}
+
+The next result shows that a linear map is invertible if and only if it is
+one-to-one and onto.
+
+\begin{result}[Invertibility $\iff$ injectivity and surjectivity]\label{ax:3.63}
+A linear map is invertible if and only if it is injective and surjective.
+\end{result}
+
+\begin{proof}
+Suppose $T\in\Lin(V,W)$. We need to show that $T$ is invertible if and only if
+it is injective and surjective.
+
+First suppose $T$ is invertible. To show that $T$ is injective, suppose
+$u,v\in V$ and $Tu=Tv$. Then
+\[ u = T^{-1}(Tu) = T^{-1}(Tv) = v, \]
+so $u=v$. Hence $T$ is injective.
+
+We are still assuming that $T$ is invertible. Now we want to prove that $T$ is
+surjective. To do this, let $w\in W$. Then $w=T(T^{-1}w)$, which shows that $w$
+is in the range of $T$. Thus $\range T=W$. Hence $T$ is surjective, completing
+this direction of the proof.
+
+Now suppose $T$ is injective and surjective. We want to prove that $T$ is
+invertible. For each $w\in W$, define $S(w)$ to be the unique element of $V$
+such that $T\bigl(S(w)\bigr)=w$ (the existence and uniqueness of such an
+element follow from the surjectivity and injectivity of $T$). The definition of
+$S$ implies that $T\circ S$ equals the identity operator on $W$.
+
+To prove that $S\circ T$ equals the identity operator on $V$, let $v\in V$.
+Then
+\[ T\bigl((S\circ T)v\bigr) = (T\circ S)(Tv) = I(Tv) = Tv. \]
+This equation implies that $(S\circ T)v=v$ (because $T$ is injective). Thus
+$S\circ T$ equals the identity operator on $V$.
+
+To complete the proof, we need to show that $S$ is linear. To do this, suppose
+$w_1,w_2\in W$. Then
+\[ T\bigl(S(w_1)+S(w_2)\bigr) = T\bigl(S(w_1)\bigr)+T\bigl(S(w_2)\bigr)
+   = w_1+w_2. \]
+Thus $S(w_1)+S(w_2)$ is the unique element of $V$ that $T$ maps to $w_1+w_2$.
+By the definition of $S$, this implies that $S(w_1+w_2)=S(w_1)+S(w_2)$. Hence
+$S$ satisfies the additive property required for linearity.
+
+The proof of homogeneity is similar. Specifically, if $w\in W$ and
+$\lambda\in\F$, then
+\[ T\bigl(\lambda S(w)\bigr) = \lambda T\bigl(S(w)\bigr) = \lambda w. \]
+Thus $\lambda S(w)$ is the unique element of $V$ that $T$ maps to $\lambda w$.
+By the definition of $S$, this implies that $S(\lambda w)=\lambda S(w)$. Hence
+$S$ is linear, as desired.
+\end{proof}
+
+For a linear map from a vector space to itself, you might wonder whether
+injectivity alone, or surjectivity alone, is enough to imply invertibility. On
+infinite-dimensional vector spaces, neither condition alone implies
+invertibility, as illustrated by the next example, which uses two familiar
+linear maps from Example~\ref{ax:3.3}.
+
+\begin{example}[Neither injectivity nor surjectivity implies
+invertibility]\label{ax:3.64}\leavevmode
+\begin{itemize}
+\item The multiplication by $x^2$ linear map from $\Poly(\R)$ to $\Poly(\R)$
+  (see \ref{ax:3.3}) is injective but it is not invertible because it is not
+  surjective (the polynomial $1$ is not in the range).
+\item The backward shift linear map from $\F^\infty$ to $\F^\infty$ (see
+  \ref{ax:3.3}) is surjective but it is not invertible because it is not
+  injective [the vector $(1,0,0,0,\dots)$ is in the null space].
+\end{itemize}
+\end{example}
+
+In view of the example above, the next result is remarkable---it states that
+for a linear map from a finite-dimensional vector space to a vector space of the
+same dimension, either injectivity or surjectivity alone implies the other
+condition. Note that the hypothesis below that $\dim V=\dim W$ is automatically
+satisfied in the important special case where $V$ is finite-dimensional and
+$W=V$.
+
+\begin{result}[Injectivity is equivalent to surjectivity (if
+$\dim V=\dim W<\infty$)]\label{ax:3.65}
+Suppose that $V$ and $W$ are finite-dimensional vector spaces, $\dim V=\dim W$,
+and $T\in\Lin(V,W)$. Then
+\[ T \text{ is invertible} \iff T \text{ is injective} \iff
+   T \text{ is surjective}. \]
+\end{result}
+
+\begin{proof}
+The fundamental theorem of linear maps (\ref{ax:3.21}) states that
+\[ \refstepcounter{theorem}\tag*{\thetheorem}\label{ax:3.66}
+   \dim V = \dim\nul T+\dim\range T. \]
+If $T$ is injective (which by \ref{ax:3.15} is equivalent to the condition
+$\dim\nul T=0$), then the equation above implies that
+\[ \dim\range T = \dim V-\dim\nul T = \dim V = \dim W, \]
+which implies that $T$ is surjective (by \ref{ax:2.39}).
+
+Conversely, if $T$ is surjective, then \ref{ax:3.66} implies that
+\[ \dim\nul T = \dim V-\dim\range T = \dim V-\dim W = 0, \]
+which implies that $T$ is injective.
+
+Thus we have shown that $T$ is injective if and only if $T$ is surjective. Thus
+if $T$ is either injective or surjective, then $T$ is both injective and
+surjective, which implies that $T$ is invertible. Hence $T$ is invertible if and
+only if $T$ is injective if and only if $T$ is surjective.
+\end{proof}
+
+The next example illustrates the power of the previous result. Although it is
+possible to prove the result in the example below without using linear algebra,
+the proof using linear algebra is cleaner and easier.
+
+\begin{example}[There exists a polynomial $p$ such that
+$\bigl((x^2+5x+7)p\bigr)''=q$]\label{ax:3.67}
+The linear map
+\[ p \mapsto \bigl((x^2+5x+7)p\bigr)'' \]
+from $\Poly(\R)$ to itself is injective, as you can show. Thus we are tempted
+to use \ref{ax:3.65} to show that this map is surjective. However,
+Example~\ref{ax:3.64} shows that the magic of \ref{ax:3.65} does not apply to
+the infinite-dimensional vector space $\Poly(\R)$. We will get around this
+problem by restricting attention to the finite-dimensional vector space
+$\Poly_m(\R)$.
+
+Suppose $q\in\Poly(\R)$. There exists a nonnegative integer $m$ such that
+$q\in\Poly_m(\R)$. Define $T\colon\Poly_m(\R)\to\Poly_m(\R)$ by
+\[ Tp = \bigl((x^2+5x+7)p\bigr)''. \]
+Multiplying a nonzero polynomial by $(x^2+5x+7)$ increases the degree by $2$,
+and then differentiating twice reduces the degree by $2$. Thus $T$ is indeed a
+linear map from $\Poly_m(\R)$ to itself.
+
+Every polynomial whose second derivative equals $0$ is of the form $ax+b$,
+where $a,b\in\R$. Thus $\nul T=\{0\}$. Hence $T$ is injective.
+
+Thus $T$ is surjective (by \ref{ax:3.65}), which means that there exists a
+polynomial $p\in\Poly_m(\R)$ such that $\bigl((x^2+5x+7)p\bigr)''=q$, as
+claimed in the title of this example.
+\end{example}
+
+Exercise~35 in Section~6A gives a similar but more spectacular example of using
+\ref{ax:3.65}.
+
+The hypothesis in the result below that $\dim V=\dim W$ holds in the important
+special case in which $V$ is finite-dimensional and $W=V$. Thus in that case,
+the equation $ST=I$ implies that $ST=TS$, even though we do not have
+multiplicative commutativity of arbitrary linear maps from $V$ to $V$.
+
+\begin{result}[$ST=I \iff TS=I$ (on vector spaces of the same
+dimension)]\label{ax:3.68}
+Suppose $V$ and $W$ are finite-dimensional vector spaces of the same dimension,
+$S\in\Lin(W,V)$, and $T\in\Lin(V,W)$. Then $ST=I$ if and only if $TS=I$.
+\end{result}
+
+\begin{proof}
+First suppose $ST=I$. If $v\in V$ and $Tv=0$, then
+\[ v = Iv = (ST)v = S(Tv) = S(0) = 0. \]
+Thus $T$ is injective (by \ref{ax:3.15}). Because $V$ and $W$ have the same
+dimension, this implies that $T$ is invertible (by \ref{ax:3.65}).
+
+Now multiply both sides of the equation $ST=I$ by $T^{-1}$ on the right,
+getting
+\[ S = T^{-1}. \]
+Thus $TS=TT^{-1}=I$, as desired.
+
+To prove the implication in the other direction, simply reverse the roles of
+$S$ and $T$ (and $V$ and $W$) in the direction we have already proved, showing
+that if $TS=I$, then $ST=I$.
+\end{proof}
+
+\subsection{Isomorphic Vector Spaces}
+
+The next definition captures the idea of two vector spaces that are essentially
+the same, except for the names of their elements.
+
+\begin{definition}[Isomorphism, isomorphic]\label{ax:3.69}\leavevmode
+\begin{itemize}
+\item An \emph{isomorphism} is an invertible linear map.
+\item Two vector spaces are called \emph{isomorphic} if there is an isomorphism
+  from one vector space onto the other one.
+\end{itemize}
+\end{definition}
+
+Think of an isomorphism $T\colon V\to W$ as relabeling $v\in V$ as $Tv\in W$.
+This viewpoint explains why two isomorphic vector spaces have the same vector
+space properties. The terms ``isomorphism'' and ``invertible linear map'' mean
+the same thing. Use ``isomorphism'' when you want to emphasize that the two
+spaces are essentially the same.
+
+It can be difficult to determine whether two mathematical structures (such as
+groups or topological spaces) are essentially the same, differing only in the
+names of the elements of underlying sets. However, the next result shows that
+we need to look at only a single number (the dimension) to determine whether two
+vector spaces are isomorphic.
+
+\begin{result}[Dimension shows whether vector spaces are
+isomorphic]\label{ax:3.70}
+Two finite-dimensional vector spaces over $\F$ are isomorphic if and only if
+they have the same dimension.
+\end{result}
+
+\begin{proof}
+First suppose $V$ and $W$ are isomorphic finite-dimensional vector spaces. Thus
+there exists an isomorphism $T$ from $V$ onto $W$. Because $T$ is invertible,
+we have $\nul T=\{0\}$ and $\range T=W$. Thus
+\[ \dim\nul T = 0 \quad\text{and}\quad \dim\range T = \dim W. \]
+The formula
+\[ \dim V = \dim\nul T+\dim\range T \]
+(the fundamental theorem of linear maps, which is \ref{ax:3.21}) thus becomes
+the equation $\dim V=\dim W$, completing the proof in one direction.
+
+To prove the other direction, suppose $V$ and $W$ are finite-dimensional vector
+spaces of the same dimension. Let $v_1,\dots,v_n$ be a basis of $V$ and
+$w_1,\dots,w_n$ be a basis of $W$. Let $T\in\Lin(V,W)$ be defined by
+\[ T(c_1v_1+\cdots+c_nv_n) = c_1w_1+\cdots+c_nw_n. \]
+Then $T$ is a well-defined linear map because $v_1,\dots,v_n$ is a basis of
+$V$. Also, $T$ is surjective because $w_1,\dots,w_n$ spans $W$. Furthermore,
+$\nul T=\{0\}$ because $w_1,\dots,w_n$ is linearly independent. Thus $T$ is
+injective. Because $T$ is injective and surjective, it is an isomorphism (see
+\ref{ax:3.63}). Hence $V$ and $W$ are isomorphic.
+\end{proof}
+
+\marginnote[-15mm]{Every finite-dimensional vector space is isomorphic to some $\F^n$.
+Thus why not just study $\F^n$ instead of more general vector spaces? To answer
+this question, note that an investigation of $\F^n$ would soon lead to other
+vector spaces. For example, we would encounter the null space and range of
+linear maps. Although each of these vector spaces is isomorphic to some $\F^m$,
+thinking of them that way often adds complexity but no new insight.}%
+The previous result implies that each finite-dimensional vector space $V$ is
+isomorphic to $\F^n$, where $n=\dim V$. For example, if $m$ is a nonnegative
+integer, then $\Poly_m(\F)$ is isomorphic to $\F^{m+1}$.
+
+Recall that the notation $\F^{m,n}$ denotes the vector space of $m$-by-$n$
+matrices with entries in $\F$. If $v_1,\dots,v_n$ is a basis of $V$ and
+$w_1,\dots,w_m$ is a basis of $W$, then for each $T\in\Lin(V,W)$, we have a
+matrix $\Mat(T)\in\F^{m,n}$. Thus once bases have been fixed for $V$ and $W$,
+$\Mat$ becomes a function from $\Lin(V,W)$ to $\F^{m,n}$. Notice that
+\ref{ax:3.35} and \ref{ax:3.38} show that $\Mat$ is a linear map. This linear
+map is actually an isomorphism, as we now show.
+
+\begin{result}[$\Lin(V,W)$ and $\F^{m,n}$ are isomorphic]\label{ax:3.71}
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $w_1,\dots,w_m$ is a basis of
+$W$. Then $\Mat$ is an isomorphism between $\Lin(V,W)$ and $\F^{m,n}$.
+\end{result}
+
+\begin{proof}
+We already noted that $\Mat$ is linear. We need to prove that $\Mat$ is
+injective and surjective.
+
+We begin with injectivity. If $T\in\Lin(V,W)$ and $\Mat(T)=0$, then $Tv_k=0$
+for each $k=1,\dots,n$. Because $v_1,\dots,v_n$ is a basis of $V$, this implies
+$T=0$. Thus $\Mat$ is injective (by \ref{ax:3.15}).
+
+To prove that $\Mat$ is surjective, suppose $A\in\F^{m,n}$. By the linear map
+lemma (\ref{ax:3.4}), there exists $T\in\Lin(V,W)$ such that
+\[ Tv_k = \sum_{j=1}^m A_{j,k}w_j \]
+for each $k=1,\dots,n$. Because $\Mat(T)$ equals $A$, the range of $\Mat$
+equals $\F^{m,n}$, as desired.
+\end{proof}
+
+Now we can determine the dimension of the vector space of linear maps from one
+finite-dimensional vector space to another.
+
+\begin{result}[$\dim\Lin(V,W)=(\dim V)(\dim W)$]\label{ax:3.72}
+Suppose $V$ and $W$ are finite-dimensional. Then $\Lin(V,W)$ is
+finite-dimensional and
+\[ \dim\Lin(V,W) = (\dim V)(\dim W). \]
+\end{result}
+
+\begin{proof}
+The desired result follows from \ref{ax:3.71}, \ref{ax:3.70}, and
+\ref{ax:3.40}.
+\end{proof}
+
+\subsection{Linear Maps Thought of as Matrix Multiplication}
+
+Previously we defined the matrix of a linear map. Now we define the matrix of a
+vector.
+
+\begin{definition}[Matrix of a vector, $\Mat(v)$]\label{ax:3.73}
+Suppose $v\in V$ and $v_1,\dots,v_n$ is a basis of $V$. The \emph{matrix of $v$}
+with respect to this basis is the $n$-by-$1$ matrix
+\[ \Mat(v) = \begin{pmatrix} b_1\\ \vdots\\ b_n \end{pmatrix}, \]
+where $b_1,\dots,b_n$ are the scalars such that
+\[ v = b_1v_1+\cdots+b_nv_n. \]
+\end{definition}
+
+The matrix $\Mat(v)$ of a vector $v\in V$ depends on the basis $v_1,\dots,v_n$
+of $V$, as well as on $v$. However, the basis should be clear from the context
+and thus it is not included in the notation.
+
+\begin{example}[Matrix of a vector]\label{ax:3.74}\leavevmode
+\begin{itemize}
+\item The matrix of the polynomial $2-7x+5x^3+x^4$ with respect to the standard
+  basis of $\Poly_4(\R)$ is
+  \[ \begin{pmatrix} 2\\ -7\\ 0\\ 5\\ 1 \end{pmatrix}. \]
+\item The matrix of a vector $x\in\F^n$ with respect to the standard basis is
+  obtained by writing the coordinates of $x$ as the entries in an $n$-by-$1$
+  matrix. In other words, if $x=(x_1,\dots,x_n)\in\F^n$, then
+  \[ \Mat(x) = \begin{pmatrix} x_1\\ \vdots\\ x_n \end{pmatrix}. \]
+\end{itemize}
+\end{example}
+
+Occasionally we want to think of elements of $V$ as relabeled to be $n$-by-$1$
+matrices. Once a basis $v_1,\dots,v_n$ is chosen, the function $\Mat$ that
+takes $v\in V$ to $\Mat(v)$ is an isomorphism of $V$ onto $\F^{n,1}$ that
+implements this relabeling.
+
+Recall that if $A$ is an $m$-by-$n$ matrix, then $A_{\cdot,k}$ denotes the
+$k^{\text{th}}$ column of $A$, thought of as an $m$-by-$1$ matrix. In the next
+result, $\Mat(Tv_k)$ is computed with respect to the basis $w_1,\dots,w_m$ of
+$W$.
+
+\begin{result}[$\Mat(T)_{\cdot,k}=\Mat(Tv_k)$]\label{ax:3.75}
+Suppose $T\in\Lin(V,W)$ and $v_1,\dots,v_n$ is a basis of $V$ and
+$w_1,\dots,w_m$ is a basis of $W$. Let $1\le k\le n$. Then the
+$k^{\text{th}}$ column of $\Mat(T)$, which is denoted by $\Mat(T)_{\cdot,k}$,
+equals $\Mat(Tv_k)$.
+\end{result}
+
+\begin{proof}
+The desired result follows immediately from the definitions of $\Mat(T)$ and
+$\Mat(Tv_k)$.
+\end{proof}
+
+The next result shows how the notions of the matrix of a linear map, the matrix
+of a vector, and matrix multiplication fit together.
+
+\begin{result}[Linear maps act like matrix multiplication]\label{ax:3.76}
+Suppose $T\in\Lin(V,W)$ and $v\in V$. Suppose $v_1,\dots,v_n$ is a basis of $V$
+and $w_1,\dots,w_m$ is a basis of $W$. Then
+\[ \Mat(Tv) = \Mat(T)\Mat(v). \]
+\end{result}
+
+\begin{proof}
+Suppose $v=b_1v_1+\cdots+b_nv_n$, where $b_1,\dots,b_n\in\F$. Thus
+\[ \refstepcounter{theorem}\tag*{\thetheorem}\label{ax:3.77}
+   Tv = b_1Tv_1+\cdots+b_nTv_n. \]
+Hence
+\begin{align*}
+\Mat(Tv) &= b_1\Mat(Tv_1)+\cdots+b_n\Mat(Tv_n)\\
+         &= b_1\Mat(T)_{\cdot,1}+\cdots+b_n\Mat(T)_{\cdot,n}\\
+         &= \Mat(T)\Mat(v),
+\end{align*}
+where the first equality follows from \ref{ax:3.77} and the linearity of
+$\Mat$, the second equality comes from \ref{ax:3.75}, and the last equality
+comes from \ref{ax:3.50}.
+\end{proof}
+
+Each $m$-by-$n$ matrix $A$ induces a linear map from $\F^{n,1}$ to $\F^{m,1}$,
+namely the matrix multiplication function that takes $x\in\F^{n,1}$ to
+$Ax\in\F^{m,1}$. The result above can be used to think of every linear map
+(from a finite-dimensional vector space to another finite-dimensional vector
+space) as a matrix multiplication map after suitable relabeling via the
+isomorphisms given by $\Mat$. Specifically, if $T\in\Lin(V,W)$ and we identify
+$v\in V$ with $\Mat(v)\in\F^{n,1}$, then the result above says that we can
+identify $Tv$ with $\Mat(T)\Mat(v)$.
+
+Because the result above allows us to think (via isomorphisms) of each linear
+map as multiplication on $\F^{n,1}$ by some matrix $A$, keep in mind that the
+specific matrix $A$ depends not only on the linear map but also on the choice
+of bases. One of the themes of many of the most important results in later
+chapters will be the choice of a basis that makes the matrix $A$ as simple as
+possible.
+
+In this book, we concentrate on linear maps rather than on matrices. However,
+sometimes thinking of linear maps as matrices (or thinking of matrices as
+linear maps) gives important insights that we will find useful.
+
+Notice that no bases are in sight in the statement of the next result. Although
+$\Mat(T)$ in the next result depends on a choice of bases of $V$ and $W$, the
+next result shows that the column rank of $\Mat(T)$ is the same for all such
+choices (because $\range T$ does not depend on a choice of basis).
+
+\begin{result}[Dimension of $\range T$ equals column rank of
+$\Mat(T)$]\label{ax:3.78}
+Suppose $V$ and $W$ are finite-dimensional and $T\in\Lin(V,W)$. Then
+$\dim\range T$ equals the column rank of $\Mat(T)$.
+\end{result}
+
+\begin{proof}\emergencystretch=1.5em
+Suppose $v_1,\dots,v_n$ is a basis of $V$ and $w_1,\dots,w_m$ is a basis of
+$W$. The linear map that takes $w\in W$ to $\Mat(w)$ is an isomorphism from $W$
+onto the space $\F^{m,1}$ of $m$-by-$1$ column vectors. The restriction of this
+isomorphism to $\range T$ [which equals $\spn(Tv_1,\dots,Tv_n)$ by Exercise~10
+in Section~3B] is an isomorphism from $\range T$ onto
+$\spn\bigl(\Mat(Tv_1),\dots,\Mat(Tv_n)\bigr)$. For each $k\in\{1,\dots,n\}$,
+the $m$-by-$1$ matrix $\Mat(Tv_k)$ equals column $k$ of $\Mat(T)$. Thus
+\[ \dim\range T = \text{the column rank of } \Mat(T), \]
+as desired.
+\end{proof}
+
+\subsection{Change of Basis}
+
+In Section~3C we defined the matrix
+\[ \Mat\bigl(T,(v_1,\dots,v_n),(w_1,\dots,w_m)\bigr) \]
+of a linear map $T$ from $V$ to a possibly different vector space $W$, where
+$v_1,\dots,v_n$ is a basis of $V$ and $w_1,\dots,w_m$ is a basis of $W$. For
+linear maps from a vector space to itself, we usually use the same basis for
+both the domain vector space and the target vector space. When using a single
+basis in both capacities, we often write the basis only once. In other words,
+if $T\in\Lin(V)$ and $v_1,\dots,v_n$ is a basis of $V$, then the notation
+$\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ is defined by the equation
+\[ \Mat\bigl(T,(v_1,\dots,v_n)\bigr)
+   = \Mat\bigl(T,(v_1,\dots,v_n),(v_1,\dots,v_n)\bigr). \]
+If the basis $v_1,\dots,v_n$ is clear from the context, then we can write just
+$\Mat(T)$.
+
+\begin{definition}[Identity matrix, $I$]\label{ax:3.79}
+Suppose $n$ is a positive integer. The $n$-by-$n$ matrix
+\[ \begin{pmatrix} 1 & & 0\\ & \ddots & \\ 0 & & 1 \end{pmatrix} \]
+with $1$'s on the diagonal (the entries where the row number equals the column
+number) and $0$'s elsewhere is called the \emph{identity matrix} and is denoted
+by $I$.
+\end{definition}
+
+In the definition above, the $0$ in the lower left corner of the matrix
+indicates that all entries below the diagonal are $0$, and the $0$ in the upper
+right corner indicates that all entries above the diagonal are $0$.
+
+With respect to each basis of $V$, the matrix of the identity operator
+$I\in\Lin(V)$ is the identity matrix $I$. Note that the symbol $I$ is used to
+denote both the identity operator and the identity matrix. The context indicates
+which meaning of $I$ is intended. For example, consider the equation
+$\Mat(I)=I$; on the left side $I$ denotes the identity operator, and on the
+right side $I$ denotes the identity matrix.
+
+If $A$ is a square matrix (meaning it has the same number of rows as columns)
+with the same size as $I$, then $AI=IA=A$, as you should verify.
+
+\begin{definition}[Invertible, inverse, $A^{-1}$]\label{ax:3.80}
+A square matrix $A$ is called \emph{invertible} if there is a square matrix $B$
+of the same size such that $AB=BA=I$; we call $B$ the \emph{inverse} of $A$ and
+denote it by $A^{-1}$.
+\end{definition}
+
+\marginnote{Some mathematicians use the terms \textbf{nonsingular} and
+\textbf{singular}, which mean the same as invertible and noninvertible.}%
+The same proof as used in \ref{ax:3.60} shows that if $A$ is an invertible
+square matrix, then there is a unique matrix $B$ such that $AB=BA=I$ (and thus
+the notation $B=A^{-1}$ is justified).
+
+If $A$ is an invertible matrix, then $(A^{-1})^{-1}=A$ because
+\[ A^{-1}A = AA^{-1} = I. \]
+Also, if $A$ and $C$ are invertible square matrices of the same size, then $AC$
+is invertible and $(AC)^{-1}=C^{-1}A^{-1}$ because
+\begin{align*}
+(AC)(C^{-1}A^{-1}) &= A(CC^{-1})A^{-1}\\
+                   &= AIA^{-1}\\
+                   &= AA^{-1}\\
+                   &= I,
+\end{align*}
+and similarly $(C^{-1}A^{-1})(AC)=I$.
+
+The next result holds because we defined matrix multiplication to make it
+true---see \ref{ax:3.43} and the material preceding it. Now we are just being
+more explicit about the bases involved.
+
+\begin{result}[Matrix of product of linear maps]\label{ax:3.81}
+Suppose $T\in\Lin(U,V)$ and $S\in\Lin(V,W)$. If $u_1,\dots,u_m$ is a basis of
+$U$, $v_1,\dots,v_n$ is a basis of $V$, and $w_1,\dots,w_p$ is a basis of $W$,
+then
+\begin{multline*}
+\Mat\bigl(ST,(u_1,\dots,u_m),(w_1,\dots,w_p)\bigr) =\\
+\Mat\bigl(S,(v_1,\dots,v_n),(w_1,\dots,w_p)\bigr)
+\Mat\bigl(T,(u_1,\dots,u_m),(v_1,\dots,v_n)\bigr).
+\end{multline*}
+\end{result}
+
+The next result deals with the matrix of the identity operator $I$ with respect
+to two different bases. Note that the $k^{\text{th}}$ column of
+$\Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr)$ consists of the scalars
+needed to write $u_k$ as a linear combination of the basis $v_1,\dots,v_n$.
+
+In the statement of the next result, $I$ denotes the identity operator from $V$
+to $V$. In the proof, $I$ also denotes the $n$-by-$n$ identity matrix.
+
+\begin{result}[Matrix of identity operator with respect to two
+bases]\label{ax:3.82}
+Suppose that $u_1,\dots,u_n$ and $v_1,\dots,v_n$ are bases of $V$. Then the
+matrices
+\[ \Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr) \quad\text{and}\quad
+   \Mat\bigl(I,(v_1,\dots,v_n),(u_1,\dots,u_n)\bigr) \]
+are invertible, and each is the inverse of the other.
+\end{result}
+
+\begin{proof}
+In \ref{ax:3.81}, replace $w_k$ with $u_k$, and replace $S$ and $T$ with $I$,
+getting
+\[ I = \Mat\bigl(I,(v_1,\dots,v_n),(u_1,\dots,u_n)\bigr)
+       \Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr). \]
+Now interchange the roles of the $u$'s and $v$'s, getting
+\[ I = \Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr)
+       \Mat\bigl(I,(v_1,\dots,v_n),(u_1,\dots,u_n)\bigr). \]
+These two equations above give the desired result.
+\end{proof}
+
+\begin{example}[Matrix of identity operator on $\F^2$ with respect to two
+bases]\label{ax:3.83}
+Consider the bases $(4,2),(5,3)$ and $(1,0),(0,1)$ of $\F^2$. Because
+$I(4,2)=4(1,0)+2(0,1)$ and $I(5,3)=5(1,0)+3(0,1)$, we have
+\[ \Mat\Bigl(I,\bigl((4,2),(5,3)\bigr),\bigl((1,0),(0,1)\bigr)\Bigr)
+   = \begin{pmatrix} 4 & 5\\ 2 & 3 \end{pmatrix}. \]
+The inverse of the matrix above is
+\[ \begin{pmatrix} 3/2 & -5/2\\ -1 & 2 \end{pmatrix}, \]
+as you should verify. Thus \ref{ax:3.82} implies that
+\[ \Mat\Bigl(I,\bigl((1,0),(0,1)\bigr),\bigl((4,2),(5,3)\bigr)\Bigr)
+   = \begin{pmatrix} 3/2 & -5/2\\ -1 & 2 \end{pmatrix}. \]
+\end{example}
+
+Our next result shows how the matrix of $T$ changes when we change bases. In the
+next result, we have two different bases of $V$, each of which is used as a
+basis for the domain space and as a basis for the target space. Recall our
+shorthand notation that allows us to display a basis only once when it is used
+in both capacities:
+\[ \Mat\bigl(T,(u_1,\dots,u_n)\bigr)
+   = \Mat\bigl(T,(u_1,\dots,u_n),(u_1,\dots,u_n)\bigr). \]
+
+\begin{result}[Change-of-basis formula]\label{ax:3.84}
+Suppose $T\in\Lin(V)$. Suppose $u_1,\dots,u_n$ and $v_1,\dots,v_n$ are bases of
+$V$. Let
+\[ A = \Mat\bigl(T,(u_1,\dots,u_n)\bigr) \quad\text{and}\quad
+   B = \Mat\bigl(T,(v_1,\dots,v_n)\bigr) \]
+and $C=\Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr)$. Then
+\[ A = C^{-1}BC. \]
+\end{result}
+
+\begin{proof}
+In \ref{ax:3.81}, replace $w_k$ with $u_k$ and replace $S$ with $I$, getting
+\[ \refstepcounter{theorem}\tag*{\thetheorem}\label{ax:3.85}
+   A = C^{-1}\Mat\bigl(T,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr), \]
+where we have used \ref{ax:3.82}.
+
+Again use \ref{ax:3.81}, this time replacing $w_k$ with $v_k$. Also replace $T$
+with $I$ and replace $S$ with $T$, getting
+\[ \Mat\bigl(T,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr) = BC. \]
+Substituting the equation above into \ref{ax:3.85} gives the equation
+$A=C^{-1}BC$.
+\end{proof}
+
+The proof of the next result is left as an exercise.
+
+\begin{result}[Matrix of inverse equals inverse of matrix]\label{ax:3.86}
+Suppose that $v_1,\dots,v_n$ is a basis of $V$ and $T\in\Lin(V)$ is invertible.
+Then $\Mat(T^{-1})=\bigl(\Mat(T)\bigr)^{-1}$, where both matrices are with
+respect to the basis $v_1,\dots,v_n$.
+\end{result}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{3D}
+
+\begin{exercise}
+Suppose $T\in\Lin(V,W)$ is invertible. Show that $T^{-1}$ is invertible and
+\[ (T^{-1})^{-1} = T. \]
+\end{exercise}
+\begin{solution}
+Since $T$ is invertible, then $T^{-1}\in\Lin(W,V)$. By $TT^{-1}=I$ and
+$T^{-1}T=I$, we have that $T^{-1}$ is invertible and $(T^{-1})^{-1}=T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(U,V)$ and $S\in\Lin(V,W)$ are both invertible linear maps.
+Prove that $ST\in\Lin(U,W)$ is invertible and that $(ST)^{-1}=T^{-1}S^{-1}$.
+\end{exercise}
+\begin{solution}
+Since $T$ and $S$ are invertible, then $T^{-1}\in\Lin(V,U)$ and
+$S^{-1}\in\Lin(W,V)$. By the definition of the inverse, we have that
+\[ (ST)(T^{-1}S^{-1}) = S(TT^{-1})S^{-1} = SIS^{-1} = SS^{-1} = I, \]
+and
+\[ (T^{-1}S^{-1})(ST) = T^{-1}(S^{-1}S)T = T^{-1}IT = T^{-1}T = I. \]
+Thus, $ST$ is invertible and $(ST)^{-1}=T^{-1}S^{-1}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that the following
+are equivalent.
+\begin{parts}
+\item $T$ is invertible.
+\item $Tv_1,\dots,Tv_n$ is a basis of $V$ for every basis $v_1,\dots,v_n$ of
+  $V$.
+\item $Tv_1,\dots,Tv_n$ is a basis of $V$ for some basis $v_1,\dots,v_n$ of $V$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{itemize}
+\item (a) $\implies$ (b): Suppose $T$ is invertible. Consider scalars
+  $\alpha_1,\dots,\alpha_n$ such that
+  \[ \alpha_1Tv_1+\cdots+\alpha_nTv_n = 0. \]
+  Applying $T^{-1}$ to both sides, we get
+  \[ \alpha_1v_1+\cdots+\alpha_nv_n = 0. \]
+  Since $v_1,\dots,v_n$ is a basis of $V$, it follows that
+  $\alpha_1=\cdots=\alpha_n=0$. Hence, $Tv_1,\dots,Tv_n$ is linearly
+  independent. Since $Tv_1,\dots,Tv_n$ has $n$ elements and $V$ is
+  $n$-dimensional, it follows that $Tv_1,\dots,Tv_n$ is a basis of $V$.
+\item (b) $\implies$ (c): This is trivial.
+\item (c) $\implies$ (a): Suppose $Tv_1,\dots,Tv_n$ is a basis of $V$ for some
+  basis $v_1,\dots,v_n$ of $V$. Then $\range T=V$. By the fundamental theorem of
+  linear maps, we have that $\dim\nul T=0$. Thus, $T$ is injective. Since $T$ is
+  injective and $\range T=V$, then $T$ is invertible.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $\dim V>1$. Prove that the set of
+noninvertible linear maps from $V$ to itself is not a subspace of $\Lin(V)$.
+\end{exercise}
+\begin{solution}
+Let $v_1,\dots,v_n$ be a basis of $V$. Define $T,S\in\Lin(V)$ such that
+\[ Tv_1 = 0, \quad Tv_k = v_k \text{ for } k=2,\dots,n, \]
+and
+\[ Sv_1 = v_1, \quad Sv_k = 0 \text{ for } k=2,\dots,n. \]
+Then $T$ and $S$ are non-invertible linear maps, since $\nul T=\spn v_1$ and
+$\nul S=\spn(v_2,\dots,v_n)$. However, $T+S$ is invertible, since
+\[ (T+S)v_1 = v_1, \quad (T+S)v_k = v_k \text{ for } k=2,\dots,n. \]
+Hence, $T+S=I$ is invertible. Therefore, the set of non-invertible linear maps
+from $V$ to itself is not a subspace of $\Lin(V)$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional, $U$ is a subspace of $V$, and
+$S\in\Lin(U,V)$. Prove that there exists an invertible linear map $T$ from $V$
+to itself such that $Tu=Su$ for every $u\in U$ if and only if $S$ is injective.
+\end{exercise}
+\begin{solution}
+Suppose there exists an invertible linear map $T$ from $V$ to itself such that
+$Tu=Su$ for every $u\in U$. If $Su=0$, then $Tu=0$, and since $T$ is
+invertible, $u=0$. Hence, $S$ is injective.
+
+Conversely, suppose $S$ is injective. Let $u_1,\dots,u_m$ be a basis of $U$.
+Since $S$ is injective, then $Su_1,\dots,Su_m$ is linearly independent. Extend
+$u_1,\dots,u_m$ to a basis $u_1,\dots,u_n$ of $V$. Extend $Su_1,\dots,Su_m$ to
+a basis $v_1,\dots,v_n$ of $V$. Define $T\in\Lin(V)$ such that
+\[ Tu_k = Su_k \text{ for } k=1,\dots,m, \quad
+   Tu_k = v_k \text{ for } k=m+1,\dots,n. \]
+Then $T$ is invertible, since $Tu_1,\dots,Tu_n$ is a basis of $V$. Thus, there
+exists an invertible linear map $T$ from $V$ to itself such that $Tu=Su$ for
+every $u\in U$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $W$ is finite-dimensional and $S,T\in\Lin(V,W)$. Prove that
+$\nul S=\nul T$ if and only if there exists an invertible $E\in\Lin(W)$ such
+that $S=ET$.
+\end{exercise}
+\begin{solution}
+Suppose $\nul S=\nul T$. Define a linear map $E_0$ from $\range T$ to
+$\range S$ by setting $E_0(Tv)=Sv$ for all $v\in V$. This is well-defined
+because if $Tv=Tv'$ for some $v,v'\in V$, then $T(v-v')=0$, so
+$v-v'\in\nul T=\nul S$, and thus $S(v-v')=0$, which implies $Sv=Sv'$. Moreover,
+if $E_0(Tv)=0$ for some $v\in V$, then $Sv=0$, which implies
+$v\in\nul S=\nul T$, and thus $Tv=0$. Hence, $E_0$ is injective. By
+Exercise~3D5, we can extend $E_0$ to an invertible linear map $E$ on all of
+$W$, and then we have $S=ET$.
+
+Conversely, suppose there exists an invertible $E\in\Lin(W)$ such that $S=ET$.
+If $v\in\nul S$, then $Sv=0$, and since $S=ET$, we have $ETv=0$. Since $E$ is
+invertible, $Tv=0$ so that $v\in\nul T$. Hence, $\nul S\subseteq\nul T$.
+Similarly, if $v\in\nul T$, then $Tv=0$, and since $S=ET$, we have
+$Sv=ETv=E0=0$. Thus, $v\in\nul S$, and $\nul T\subseteq\nul S$. Therefore,
+$\nul S=\nul T$.
+\end{solution}
+
+\begin{exercise}
+Suppose that $V$ is finite-dimensional and $S,T\in\Lin(V,W)$. Prove that
+$\range S=\range T$ if and only if there exists an invertible $E\in\Lin(V)$ such
+that $S=TE$.
+\end{exercise}
+\begin{solution}
+Suppose $\range S=\range T$. Then $\dim\nul S=\dim\nul T$. Let $u_1,\dots,u_k$
+be a basis of $\nul S$ and $v_1,\dots,v_k$ be a basis of $\nul T$. Extend both
+bases to a basis of $V$, say $u_1,\dots,u_n$ and $v_1,\dots,v_n$. Observe that
+for $i>k$, we have that $Su_i\in\range S=\range T$. Then there must exist
+$y_i\in V$ such that $Ty_i=Su_i$. Define a linear map $E\in\Lin(V)$ by setting
+$Eu_i=v_i$ for $i\le k$ and $Eu_i=y_i$ for $i>k$. To see that $TE=S$, we have
+for $i\le k$ that $TEu_i=Tv_i=0=Su_i$. Moreover, for $i>k$, we have
+$TEu_i=Ty_i=Su_i$. To see that $E$ is invertible, suppose we have scalars
+$\alpha_1,\dots,\alpha_n$ such that
+\[ \alpha_1Eu_1+\alpha_2Eu_2+\cdots+\alpha_nEu_n = 0. \]
+Applying $T$, we get
+\[ \alpha_{k+1}Su_{k+1}+\cdots+\alpha_nSu_n = 0, \]
+where we used the fact that $TE=S$ and $Su_1=\cdots=Su_k=0$ because
+$u_1,\dots,u_k\in\nul S$. Since $u_1,\dots,u_n$ is a basis of $V$, the vectors
+$u_{k+1},\dots,u_n$ map to a spanning list of $\range S$. Since
+$\dim\range S=n-k$, it follows that $Su_{k+1},\dots,Su_n$ are linearly
+independent. Then from the previous equation, $\alpha_{k+1}=\cdots=\alpha_n=0$.
+Substituting this back into the original equation, we get
+$\alpha_1v_1+\cdots+\alpha_kv_k=0$, and since $v_1,\dots,v_k$ are linearly
+independent, we must have $\alpha_1=\cdots=\alpha_k=0$. Hence, all the scalars
+are zero, proving that $E$ is invertible.
+
+Conversely, suppose there exists an invertible $E\in\Lin(V)$ such that $S=TE$.
+If $w\in\range S$, then there exists some $v\in V$ such that $Sv=w$. Since
+$S=TE$, we have $TEv=w$, and thus $w\in\range T$. Hence,
+$\range S\subseteq\range T$. Similarly, if $w\in\range T$, then there exists
+some $v\in V$ such that $Tv=w$. Since $E$ is invertible, there exists some
+$u\in V$ such that $Eu=v$. Then we have
+\[ Su = TEu = Tv = w, \]
+and thus $w\in\range S$. Hence, $\range T\subseteq\range S$. Therefore,
+$\range S=\range T$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional and $S,T\in\Lin(V,W)$. Prove that
+there exist invertible $E_1\in\Lin(V)$ and $E_2\in\Lin(W)$ such that
+$S=E_2TE_1$ if and only if $\dim\nul S=\dim\nul T$.
+\end{exercise}
+\begin{solution}
+Suppose there exist invertible $E_1\in\Lin(V)$ and invertible $E_2\in\Lin(W)$
+such that $S=E_2TE_1$. We claim that $E_1$ is an invertible map from $\nul S$
+to $\nul T$. To see this, suppose $v,w\in\nul S$ and $E_1v=E_1w$. Then $v=w$
+since $E_1$ is invertible, proving injectivity. To see surjectivity, let
+$u\in\nul T$. Since $E_1$ is invertible, there exists some $v\in V$ such that
+$E_1v=u$. Then
+\[ Sv = E_2TE_1v = E_2Tu = E_20 = 0, \]
+and thus $v\in\nul S$. Hence, $E_1$ is an invertible map from $\nul S$ to
+$\nul T$, and thus $\dim\nul S=\dim\nul T$.
+
+Conversely, suppose $\dim\nul S=\dim\nul T$. Then we may construct an
+invertible linear map $E_1\in\Lin(V)$ that maps $\nul S$ onto $\nul T$. We now
+claim that $\nul TE_1=\nul S$. To see this, let $v\in\nul TE_1$. This is only
+true when $TE_1v=0$, or $E_1v\in\nul T$. By invertibility of $E_1$, we have
+$v\in\nul S$. By Exercise~3D6 with $\nul S=\nul TE_1$, there exists an
+invertible $E_2\in\Lin(W)$ such that $S=E_2TE_1$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\colon V\to W$ is a surjective linear
+map of $V$ onto $W$. Prove that there is a subspace $U$ of $V$ such that
+$T|_U$ is an isomorphism of $U$ onto $W$.
+\exnote{Here $T|_U$ means the function $T$ restricted to $U$. Thus $T|_U$ is
+the function whose domain is $U$, with $T|_U$ defined by $T|_U(u)=Tu$ for every
+$u\in U$.}
+\end{exercise}
+\begin{solution}
+Since $T$ is surjective, then $\range T=W$. By Exercise~3B11, there exists a
+subspace $U$ of $V$ such that $V=\nul T\oplus U$. We show that $T|_U$ is an
+isomorphism of $U$ onto $W$.
+
+Suppose $u\in U$ such that $T|_Uu=0$. Then $Tu=0$, and thus
+$u\in\nul T\cap U$. Since $V=\nul T\oplus U$, we have $\nul T\cap U=\{0\}$, and
+thus $u=0$. This shows that $T|_U$ is injective.
+
+To see surjectivity, let $w\in W$. Since $T$ is surjective, there exists
+$v\in V$ such that $Tv=w$. Write $v=n+u$ with $n\in\nul T$ and $u\in U$. Then
+$Tu=T(v-n)=Tv-Tn=w-0=w$. Hence, $T|_U$ is surjective onto $W$, and therefore an
+isomorphism of $U$ onto $W$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ and $W$ are finite-dimensional and $U$ is a subspace of $V$. Let
+\[ \mathcal{E} = \{T\in\Lin(V,W) : U\subseteq\nul T\}. \]
+\begin{parts}
+\item Show that $\mathcal{E}$ is a subspace of $\Lin(V,W)$.
+\item Find a formula for $\dim\mathcal{E}$ in terms of $\dim V$, $\dim W$, and
+  $\dim U$.
+\end{parts}
+\exnote{Hint: Define $\Phi\colon\Lin(V,W)\to\Lin(U,W)$ by $\Phi(T)=T|_U$. What
+is $\nul\Phi$? What is $\range\Phi$?}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Consider the zero map $0\in\Lin(V,W)$. For this map, $U\subseteq\nul 0$
+  since $\nul 0=V$. Hence, $0\in\mathcal{E}$, showing that $\mathcal{E}$ is
+  non-empty. To see that $\mathcal{E}$ is closed under addition and scalar
+  multiplication, let $S,T\in\mathcal{E}$ and $\alpha\in\F$. For any $u\in U$,
+  we have $(S+T)u=Su+Tu=0+0=0$, so $S+T\in\mathcal{E}$. Similarly,
+  $(\alpha T)u=\alpha(Tu)=\alpha\cdot0=0$, so $\alpha T\in\mathcal{E}$.
+  Therefore, $\mathcal{E}$ is a subspace of $\Lin(V,W)$.
+\item Consider the linear map $\Phi\colon\Lin(V,W)\to\Lin(U,W)$ defined by
+  $\Phi(T)=T|_U$. Let $T\in\Lin(V,W)$ such that $\Phi(T)=T|_U=0$. Then
+  $T|_U=0$ implies that for every $u\in U$, we have $Tu=0$, i.e.,
+  $U\subseteq\nul T$. Hence, $T\in\mathcal{E}$, showing that
+  $\nul\Phi\subseteq\mathcal{E}$. Conversely, if $T\in\mathcal{E}$, then
+  $U\subseteq\nul T$, which means that $T|_U=0$, i.e., $T\in\nul\Phi$.
+  Therefore, $\nul\Phi=\mathcal{E}$, and $\dim\mathcal{E}=\dim\nul\Phi$.
+
+  We now show that $\Phi$ is surjective. Let $S\in\Lin(U,W)$, and let
+  $u_1,\dots,u_m$ be a basis for $U$. Extend this to a basis
+  $u_1,\dots,u_m,v_1,\dots,v_n$ for $V$. Define a linear map $T\in\Lin(V,W)$ by
+  setting $Tu_i=Su_i$ for $i=1,\dots,m$ and $Tv_j=0$ for $j=1,\dots,n$. Then
+  $T|_U=S$, so $\Phi(T)=S$. Hence, $\Phi$ is surjective, and
+  $\range\Phi=\Lin(U,W)$. Therefore,
+  $\dim\range\Phi=\dim\Lin(U,W)=(\dim U)(\dim W)$. By the fundamental theorem
+  of linear maps,
+  \[ \dim\Lin(V,W) = \dim\nul\Phi+\dim\range\Phi
+     = \dim\mathcal{E}+(\dim U)(\dim W), \]
+  Observing that $\dim\Lin(V,W)=(\dim V)(\dim W)$, we get
+  \[ \dim\mathcal{E} = (\dim V)(\dim W)-(\dim U)(\dim W)
+     = (\dim V-\dim U)(\dim W). \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $S,T\in\Lin(V)$. Prove that
+\[ ST \text{ is invertible} \iff S \text{ and } T \text{ are invertible}. \]
+\end{exercise}
+\begin{solution}
+Suppose $ST$ is invertible. Then $\nul ST=\{0\}$. If $v\in\nul T$, then
+$STv=S0=0$, and thus $v\in\nul ST$. Since $\nul ST=\{0\}$, we have $v=0$, and
+thus $\nul T=\{0\}$. Hence, $T$ is injective, and since $V$ is
+finite-dimensional, $T$ is invertible. Then $S=(ST)T^{-1}$ is a product of
+invertible linear maps, and thus $S$ is invertible by Exercise~3D2.
+
+Conversely, suppose $S$ and $T$ are invertible. Then $ST$ is a product of
+invertible linear maps, and thus $ST$ is invertible by Exercise~3D2.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $S,T,U\in\Lin(V)$ and $STU=I$. Show that
+$T$ is invertible and that $T^{-1}=US$.
+\end{exercise}
+\begin{solution}
+Since $STU=I$, then we have that $S(TU)=I$. By Exercise~3B20, then $S$ is
+surjective, hence invertible with $S^{-1}=TU$. Similarly, $(ST)U=I$. By
+Exercise~3B19, then $U$ is injective, hence invertible with $U^{-1}=ST$.
+\[ T(US) = (TU)S = S^{-1}S = I, \quad (US)T = U(ST) = UU^{-1} = I. \]
+Hence, $T$ is invertible with $T^{-1}=US$.
+\end{solution}
+
+\begin{exercise}
+Show that the result in Exercise~12 can fail without the hypothesis that $V$ is
+finite-dimensional.
+\end{exercise}
+\begin{solution}
+If $V$ were not finite-dimensional, let $v_1,v_2,\dots$ be an infinite basis for
+$V$. Let $S,T,U\in\Lin(V)$ be defined as follows: let $S=I$,
+\[ Tv_1 = 0, \quad Tv_k = v_{k-1} \text{ for } k=2,3,\dots \]
+and
+\[ Uv_k = v_{k+1} \text{ for } k=1,2,\dots \]
+It is clear that $TUv_k=v_k$ for all $k=1,2,\dots$, so $STU=I$. However, $T$ is
+not injective since $\nul T=\spn v_1$, and thus $T$ is not invertible.
+\end{solution}
+
+\begin{exercise}
+Prove or give a counterexample: If $V$ is a finite-dimensional vector space and
+$R,S,T\in\Lin(V)$ are such that $RST$ is surjective, then $S$ is injective.
+\end{exercise}
+\begin{solution}
+Since $RST$ is surjective, and $V$ is finite dimensional, it follows that $RST$
+is injective, hence invertible. By Exercise~3D11, then $RST=(RS)T$ is
+invertible if and only if $RS$ and $T$ are invertible. In particular, $RS$ is
+invertible, and applying Exercise~3D11 again, we have that $R$ and $S$ are
+invertible. Hence, $S$ is injective.
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $v_1,\dots,v_m$ is a list in $V$ such that
+$Tv_1,\dots,Tv_m$ spans $V$. Prove that $v_1,\dots,v_m$ spans $V$.
+\end{exercise}
+\begin{solution}
+Since $Tv_1,\dots,Tv_m$ spans $V$, we have $T$ surjective. Moreover, $V$ is
+finite-dimensional, so a surjective linear map on $V$ is also injective, hence
+invertible. Therefore, for every $v\in V$, there exist scalars
+$\alpha_1,\dots,\alpha_m$ such that
+\[ v = \alpha_1Tv_1+\cdots+\alpha_mTv_m. \]
+Applying $T^{-1}$ to both sides, we get
+\[ T^{-1}v = \alpha_1v_1+\cdots+\alpha_mv_m. \]
+Since $T^{-1}$ is surjective, every vector $w\in V$ can be written as $T^{-1}v$
+for some $v\in V$, and thus $v_1,\dots,v_m$ spans $V$.
+\end{solution}
+
+\begin{exercise}
+Prove that every linear map from $\F^{n,1}$ to $\F^{m,1}$ is given by a matrix
+multiplication. In other words, prove that if $T\in\Lin(\F^{n,1},\F^{m,1})$,
+then there exists an $m$-by-$n$ matrix $A$ such that $Tx=Ax$ for every
+$x\in\F^{n,1}$.
+\end{exercise}
+\begin{solution}
+Let $e_1,\dots,e_n$ be the standard basis of $\F^{n,1}$. Define the $k$-th
+column of $A$ to be $Te_k\in\F^{m,1}$ for $k=1,\dots,n$. Then for every
+$x\in\F^{n,1}$, there exist scalars $\alpha_1,\dots,\alpha_n$ such that
+\[ x = \alpha_1e_1+\cdots+\alpha_ne_n. \]
+Applying $T$ to both sides, we have
+\[ Tx = \alpha_1Te_1+\cdots+\alpha_nTe_n = Ax, \]
+where the last equality follows from the definition of matrix multiplication.
+Hence, $Tx=Ax$ for every $x\in\F^{n,1}$.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $S\in\Lin(V)$. Define
+$\mathcal{A}\in\Lin\bigl(\Lin(V)\bigr)$ by
+\[ \mathcal{A}(T) = ST \]
+for $T\in\Lin(V)$.
+\begin{parts}
+\item Show that $\dim\nul\mathcal{A}=(\dim V)(\dim\nul S)$.
+\item Show that $\dim\range\mathcal{A}=(\dim V)(\dim\range S)$.
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Consider $T\in\nul\mathcal{A}$. Then $\mathcal{A}(T)=ST=0$, so $T$ is a
+  linear map from $V$ to $\nul S$. Conversely, if $T$ is a linear map from $V$
+  to $\nul S$, then $ST=0$, so $T\in\nul\mathcal{A}$. Hence, $\nul\mathcal{A}$
+  is the set of linear maps from $V$ to $\nul S$, and thus
+  $\dim\nul\mathcal{A}=(\dim V)(\dim\nul S)$.
+\item By fundamental theorem of linear maps, we have
+  \[ \dim\Lin(V) = \dim\nul\mathcal{A}+\dim\range\mathcal{A}. \]
+  Since $\dim\Lin(V)=(\dim V)^2$ and
+  $\dim\nul\mathcal{A}=(\dim V)(\dim\nul S)$, we get
+  \[ (\dim V)^2 = (\dim V)(\dim\nul S)+\dim\range\mathcal{A}, \]
+  which implies
+  \[ \dim\range\mathcal{A} = (\dim V)^2-(\dim V)(\dim\nul S)
+     = (\dim V)(\dim\range S). \qedhere \]
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Show that $V$ and $\Lin(\F,V)$ are isomorphic vector spaces.
+\end{exercise}
+\begin{solution}
+Let $T\colon\Lin(\F,V)\to V$ be defined by $T(\alpha)=\alpha(1)$ for
+$\alpha\in\Lin(\F,V)$. We first show that $T$ is a linear map. Let
+$\alpha,\beta\in\Lin(\F,V)$ and $\lambda\in\F$. Then
+\[ T(\alpha+\beta) = (\alpha+\beta)(1) = \alpha(1)+\beta(1)
+   = T\alpha+T\beta, \]
+and
+\[ T(\lambda\alpha) = (\lambda\alpha)(1) = \lambda\alpha(1) = \lambda T\alpha. \]
+We now show that $T$ is an isomorphism. To see injectivity, let
+$\alpha,\beta\in\Lin(\F,V)$ such that $T\alpha=T\beta$. Then
+$\alpha(1)=\beta(1)$. For any $x\in\F$, we have
+$\alpha(x)=x\alpha(1)=x\beta(1)=\beta(x)$, so $\alpha=\beta$. Hence, $T$ is
+injective.
+
+To see surjectivity, let $v\in V$. Define $\alpha\in\Lin(\F,V)$ by
+$\alpha(x)=xv$ for $x\in\F$. Then $T\alpha=\alpha(1)=v$, so $T$ is surjective.
+Therefore, $T$ is an isomorphism, and thus $V$ and $\Lin(\F,V)$ are isomorphic
+vector spaces.
+\end{solution}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that $T$ has the
+same matrix with respect to every basis of $V$ if and only if $T$ is a scalar
+multiple of the identity operator.
+\end{exercise}
+\begin{solution}
+\solnote{Manual Remark}{See the alternate proofs at the end of this solution
+for other constructions of bases to eliminate off-diagonal entries.}
+
+Suppose $T$ has the same matrix with respect to every basis of $V$. Then for any
+set of bases for $V$, its matrix must be the same. If $\dim V\le1$, then every
+operator on $V$ is a scalar multiple of the identity operator. Now suppose
+$\dim V\ge2$. For any bases $v_1,\dots,v_n$ and $u_1,\dots,u_n$ of $V$, we have
+\[ \Mat\bigl(T,(v_1,\dots,v_n)\bigr) = \Mat\bigl(T,(u_1,\dots,u_n)\bigr). \]
+Hence, we can declare that their matrix is just some $A$. We now consider the
+basis $v_1+v_2,v_2,\dots,v_n$, which yields the same matrix $A$. Let
+$w_1=v_1+v_2$ and $w_i=v_i$ for $i\ge2$. In the new basis, we have the
+expression
+\begin{align*}
+Tw_1 &= A_{1,1}w_1+A_{2,1}w_2+\cdots+A_{n,1}w_n\\
+     &= A_{1,1}v_1+(A_{1,1}+A_{2,1})v_2+A_{3,1}v_3+\cdots+A_{n,1}v_n.
+\end{align*}
+This must equal the expression for $Tw_1=Tv_1+Tv_2$ in the original basis:
+\[ Tv_1+Tv_2 = (A_{1,1}+A_{1,2})v_1+(A_{2,1}+A_{2,2})v_2+\cdots
+   +(A_{n,1}+A_{n,2})v_n. \]
+Comparing coefficients of $v_1,\dots,v_n$ in the two expressions, we get
+\begin{align*}
+A_{1,1} &= A_{1,1}+A_{1,2},\\
+A_{1,1}+A_{2,1} &= A_{2,1}+A_{2,2},\\
+A_{j,1} &= A_{j,1}+A_{j,2} \text{ for } j\ge3.
+\end{align*}
+From this, we obtain that $A_{1,2}=0$, $A_{2,2}=A_{1,1}$, and $A_{j,2}=0$ for
+$j\ge3$, i.e., the diagonal elements $A_{1,1}$ and $A_{2,2}$ are equal, while
+off-diagonal entries in column $2$ are $0$. Now consider the basis
+$v_1,v_1+v_2,\dots,v_n$. Let $u_1=v_1$, $u_2=v_1+v_2$, and $u_i=v_i$ for
+$i\ge3$. In the new basis, we have
+\begin{align*}
+Tu_2 &= A_{1,2}u_1+\cdots+A_{n,2}u_n\\
+     &= A_{1,2}v_1+A_{2,2}(v_1+v_2)+A_{3,2}v_3+\cdots+A_{n,2}v_n\\
+     &= (A_{1,2}+A_{2,2})v_1+A_{2,2}v_2+A_{3,2}v_3+\cdots+A_{n,2}v_n.\\
+     &= A_{1,1}v_1+A_{2,2}v_2.
+\end{align*}
+This must equal the expression for $Tu_2=Tv_1+Tv_2$ in the original basis,
+whose expression is listed above. Comparing coefficients of $v_1$ and $v_2$, we
+get
+\begin{align*}
+A_{1,1} &= A_{1,1}+A_{1,2},\\
+A_{2,2} &= A_{2,1}+A_{2,2},\\
+A_{j,2} &= A_{j,1}+A_{j,2} \quad\text{for } j\ge3.
+\end{align*}
+From this, we obtain similar results about diagonal entries, but the
+off-diagonal entries in column $1$ must also be $0$. We may repeat the first
+process for $v_1+v_k$ for $k\ge3$ to get that entries off the diagonal in column
+$k$ must also be $0$. Continuing this process, we conclude all off-diagonal
+entries are $0$, and all diagonal entries are equal, i.e., $A$ is a scalar
+multiple of the identity matrix.
+
+Conversely, suppose $T$ is a scalar multiple of the identity operator. Then
+there exists some $\lambda\in\F$ such that $T=\lambda I$. For any basis of $V$,
+the matrix representation of $T$ with respect to that basis is the diagonal
+matrix with $\lambda$ on the diagonal. Hence, $T$ has the same matrix with
+respect to every basis of $V$.
+
+\emph{Alternate proof.} The manual solution provides a constructive proof
+utilizing sums of the form $v_1+v_k$ to eliminate the $k$-th column, along with
+$v_2+v_1$ to eliminate the 1st column. Here, we present different
+constructions. Each proof assumes the declaration of the matrix to be $A$ and
+that $\dim V\ge2$.
+
+This method shows that we can swap two \emph{arbitrary} basis vectors to force
+the same value of all off-diagonal entries as well as the same value of all
+diagonal entries. Then, we can negate one basis vector to force all
+off-diagonal entries to be $0$ via the linear independence of the basis
+vectors.
+
+\emph{Coolempire93.} Let $i,j$ be arbitrary with $1\le i,j\le n$ and $i\ne j$.
+Consider the basis $w_1,\dots,w_n$ of $V$ defined by $w_i=v_j$, $w_j=v_i$ and
+$w_k=v_k$ otherwise. Then
+\begin{align*}
+T(w_j-v_i) &= Tw_j-Tv_i\\
+T(0) &= A_{1,j}w_1+A_{2,j}w_2+\cdots+A_{n,j}w_n
+        -(A_{1,i}v_1+A_{2,i}v_2+\cdots+A_{n,i}v_n)\\
+0 &= (A_{j,j}-A_{i,i})v_i+(A_{i,j}-A_{j,i})v_j
+     +\sum_{\substack{k\ne i\\ k\ne j}}(A_{k,j}-A_{k,i})v_k.
+\end{align*}
+By linear independence of $v_1,\dots,v_n$, we have $A_{i,i}=A_{j,j}$,
+$A_{i,j}=A_{j,i}$ and $A_{k,j}=A_{k,i}$ for all $k\ne i,j$. Because $i$ and $j$
+were arbitrary, we have $A_{1,1}=A_{2,2}=\cdots=A_{n,n}=\lambda$, as well as $A$
+is symmetric, and all off-diagonal entries match across rows, so we can say
+$A_{i,j}=\gamma$ for all $i\ne j$. To finish, consider the basis
+$u_1,\dots,u_n$ defined by $u_1=-v_1$ and $u_k=v_k$ otherwise. Then
+\begin{align*}
+T(v_1+u_1) &= Tv_1+Tu_1\\
+T(0) &= \lambda v_1+\gamma(v_2+\cdots+v_n)
+        +\bigl(\lambda u_1+\gamma(u_2+\cdots+u_n)\bigr)\\
+0 &= 2\gamma(v_2+\cdots+v_n).
+\end{align*}
+Again by linear independence of $v_1,\dots,v_n$, we have $2\gamma=0$ and thus
+$\gamma=0$. Therefore, $A=\lambda I$ and $T$ is a scalar multiple of the
+identity.
+
+\emph{Alternate proof.} This method shows that we can negate one
+\emph{arbitrary} basis vector to force
+all off-diagonal entries to be $0$ via the linear independence of the basis
+vectors. Then, we can swap $v_1$ with any other basis vector to force all
+diagonal entries to be the same.
+
+\emph{Coolempire93.} Let $j$ be arbitrary and consider the basis
+$w_1,\dots,w_n$ of $V$ defined by $w_j=-v_j$ and $w_i=v_i$ otherwise. Then
+\begin{align*}
+T(w_j+v_j) &= Tw_j+Tv_j\\
+T(0) &= A_{1,j}w_1+A_{2,j}w_2+\cdots+A_{n,j}w_n
+        +A_{1,j}v_1+A_{2,j}v_2+\cdots+A_{n,j}v_n\\
+0 &= 2\sum_{k\ne j}A_{k,j}v_k.
+\end{align*}
+By linear independence of $v_1,\dots,v_n$, we have $A_{k,j}=0$ for all $k\ne j$.
+Since $j$ was arbitrary, we have that all off-diagonal entries of $A$ are $0$.
+
+We turn to one more basis to prove that all diagonal entries of $A$ must be the
+same. Once again, let $j$ be arbitrary, and this time consider the basis
+$u_1,\dots,u_n$ defined by $u_1=v_j$, $u_j=v_1$ and $u_i=v_i$ otherwise. Then
+\begin{align*}
+T(v_1-u_j) &= Tv_1-Tu_j\\
+T(0) &= A_{1,1}v_1-A_{j,j}u_j\\
+0 &= (A_{1,1}-A_{j,j})v_1.
+\end{align*}
+As $v_1$ belongs to a basis for $V$, it is nonzero, and thus as $j$ was
+arbitrary, $A_{1,1}=A_{2,2}=\cdots=A_{n,n}=\lambda$ for some scalar $\lambda$,
+and we have $A=\lambda I$, i.e., $T$ is a multiple of the identity operator.
+\end{solution}
+
+\begin{exercise}
+Suppose $q\in\Poly(\R)$. Prove that there exists a polynomial $p\in\Poly(\R)$
+such that
+\[ q(x) = (x^2+x)p''(x)+2xp'(x)+p(3) \]
+for all $x\in\R$.
+\end{exercise}
+\begin{solution}
+Let $T\colon\Poly_n(\R)\to\Poly_n(\R)$ be defined by
+\[ Tp = (x^2+x)p''+2xp'+p(3) \]
+for $p\in\Poly_n(\R)$. We first show that $T$ is a linear map. Let
+$p,q\in\Poly_n(\R)$ and $\alpha\in\R$. Then
+\[ T(p+q) = (x^2+x)(p+q)''+2x(p+q)'+(p+q)(3) = Tp+Tq, \]
+and
+\[ T(\alpha p) = (x^2+x)(\alpha p)''+2x(\alpha p)'+(\alpha p)(3)
+   = \alpha Tp. \]
+Then $T\in\Lin\bigl(\Poly_n(\R)\bigr)$. We now show that $T$ is invertible. To
+see injectivity, let $p\in\Poly_n(\R)$ such that $Tp=0$. Then
+\[ (x^2+x)p''+2xp'+p(3) = 0. \]
+Then
+\[ (x^2+x)p''+2xp' = -p(3). \]
+We analyze the degree of $p$ as follows:
+\begin{itemize}
+\item If $\deg p\ge2$, consider $(x^2+x)p''$. In particular,
+  $(a_mx^m)''=a_mm(m-1)x^{m-2}$, hence the coefficient of $x^m$ is
+  $a_mm(m-1)$. Moreover, $2xp'$ has coefficient $2ma_m$. Since $\deg p\ge2$,
+  then $m\ge2$, so the total coefficient of $x^m$ is
+  $a_mm(m-1)+2ma_m=a_mm(m-1+2)=a_mm(m+1)$. Since this is nonzero for
+  $a_m\ne0$, we get a contradiction with the right-hand side being a constant.
+\item If $\deg p=1$, then $p(x)=ax+b$ for some $a,b\in\R$. Then $p''(x)=0$ and
+  $p'(x)=a$, so the left-hand side is $2ax$. Since the right-hand side is a
+  constant, this is a contradiction.
+\item If $\deg p=0$, then $p(x)=c$ for some $c\in\R$. Then $p''(x)=0$ and
+  $p'(x)=0$, so the left-hand side is $0$, and the right-hand side is
+  $p(3)=c$. Hence, $c=0$, and thus $p=0$. Therefore, $T$ is injective.
+\end{itemize}
+Since $T$ is injective and $\Poly_n(\R)$ is finite-dimensional, then $T$ is
+surjective, hence invertible. Then there does exist some $p\in\Poly_n(\R)$ such
+that $Tp=q$.
+\end{solution}
+
+\begin{exercise}
+Suppose $n$ is a positive integer and $A_{j,k}\in\F$ for all
+$j,k=1,\dots,n$. Prove that the following are equivalent (note that in both
+parts below, the number of equations equals the number of variables).
+\begin{parts}
+\item The trivial solution $x_1=\cdots=x_n=0$ is the only solution to the
+  homogeneous system of equations
+  \[ \begin{gathered}
+     \sum_{k=1}^n A_{1,k}x_k = 0\\ \vdots\\ \sum_{k=1}^n A_{n,k}x_k = 0.
+     \end{gathered} \]
+\item For every $c_1,\dots,c_n\in\F$, there exists a solution to the system of
+  equations
+  \[ \begin{gathered}
+     \sum_{k=1}^n A_{1,k}x_k = c_1\\ \vdots\\ \sum_{k=1}^n A_{n,k}x_k = c_n.
+     \end{gathered} \]
+\end{parts}
+\end{exercise}
+\begin{solution}\leavevmode
+\begin{parts}
+\item Suppose the trivial solution $0\in\F^{n,1}$ is the only solution to the
+  homogeneous system of equations. Then $\nul T=\{0\}$, where
+  $T\colon\F^{n,1}\to\F^{n,1}$ is defined by $Tx=Ax$ for $x\in\F^{n,1}$. Since
+  $\nul T=\{0\}$, then $T$ is injective. Since $\F^{n,1}$ is finite-dimensional,
+  then $T$ is surjective, hence invertible. Then for every
+  $c_1,\dots,c_n\in\F$, there exists some $x\in\F^{n,1}$ such that $Tx=c$,
+  where $c$ is the column vector with entries $c_1,\dots,c_n$. Hence, there
+  exists a solution to the system of equations.
+\item Suppose for every $c_1,\dots,c_n\in\F$, there exists a solution to the
+  system of equations. Then $T\colon\F^{n,1}\to\F^{n,1}$ defined by $Tx=Ax$ for
+  $x\in\F^{n,1}$ is surjective. Since $\F^{n,1}$ is finite-dimensional, then
+  $T$ is injective. Hence, the trivial solution is the only solution to the
+  homogeneous system of equations.
+\end{parts}
+\end{solution}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $v_1,\dots,v_n$ is a basis of $V$. Prove that
+\[ \Mat\bigl(T,(v_1,\dots,v_n)\bigr) \text{ is invertible} \iff
+   T \text{ is invertible}. \]
+\end{exercise}
+\begin{solution}
+Suppose $\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ is invertible. Then there exists
+some $A\in\F^{n,n}$ such that $A\Mat\bigl(T,(v_1,\dots,v_n)\bigr)=I$. Let $U$
+be the linear map from $V$ to $V$ whose matrix with respect to the basis
+$v_1,\dots,v_n$ is $A$. Then
+\begin{align*}
+\Mat\bigl(UT,(v_1,\dots,v_n)\bigr)
+  &= \Mat\bigl(U,(v_1,\dots,v_n)\bigr)\Mat\bigl(T,(v_1,\dots,v_n)\bigr)\\
+  &= A\Mat\bigl(T,(v_1,\dots,v_n)\bigr) = I.
+\end{align*}
+Then $UT$ is the identity operator, and thus $T$ is injective. Since $V$ is
+finite-dimensional, then $T$ is surjective, hence invertible.
+
+Suppose $T$ is invertible. Then $T^{-1}$ exists, and we have
+\[ \Mat\bigl(T^{-1}T,(v_1,\dots,v_n)\bigr)
+   = \Mat\bigl(T^{-1},(v_1,\dots,v_n)\bigr)\Mat\bigl(T,(v_1,\dots,v_n)\bigr)
+   = I. \]
+Hence, $\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ is invertible.
+\end{solution}
+
+\begin{exercise}
+Suppose that $u_1,\dots,u_n$ and $v_1,\dots,v_n$ are bases of $V$. Let
+$T\in\Lin(V)$ be such that $Tv_k=u_k$ for each $k=1,\dots,n$. Prove that
+\[ \Mat\bigl(T,(v_1,\dots,v_n)\bigr)
+   = \Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr). \]
+\end{exercise}
+\begin{solution}
+By definition, column $k$ of $\Mat\bigl(T,(v_1,\dots,v_n)\bigr)$ is $Tv_k=u_k$
+with respect to the basis $v_1,\dots,v_n$. Similarly, column $k$ of
+$\Mat\bigl(I,(u_1,\dots,u_n),(v_1,\dots,v_n)\bigr)$ is also $u_k$ with respect
+to the basis $v_1,\dots,v_n$.
+\end{solution}
+
+\begin{exercise}
+Suppose $A$ and $B$ are square matrices of the same size and $AB=I$. Prove that
+$BA=I$.
+\end{exercise}
+\begin{solution}
+Let $T\colon\F^{n,1}\to\F^{n,1}$ be defined by $Tx=Ax$ for $x\in\F^{n,1}$.
+Since $AB=I$, then $T$ is surjective. Since $\F^{n,1}$ is finite-dimensional,
+surjectivity implies injectivity. Hence, $T$ is invertible, and
+$T(Bx)=x=T(T^{-1}x)$. Then $Bx=T^{-1}x$ for every $x\in\F^{n,1}$. Therefore,
+\[ BAx = B(Tx) = T^{-1}(Tx) = x \]
+for every $x\in\F^{n,1}$. Hence, $BA=I$.
+\end{solution}
+
+\vspace{2em}

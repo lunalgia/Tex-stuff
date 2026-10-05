@@ -1,0 +1,631 @@
+% Source: book pp. 163--174 (PDF 177--188); no solutions (manual stops at 5B).
+% \axtag and \exnote: see the top of 5C.tex.
+\DeclareRobustCommand\axtag[1]{\refstepcounter{theorem}\tag{\thetheorem}\label{#1}}
+\section{Diagonalizable Operators}
+
+\subsection{Diagonal Matrices}
+
+\begin{definition}[Diagonal matrix]\label{ax:5.48}
+A \emph{diagonal matrix} is a square matrix that is $0$ everywhere except
+possibly on the diagonal.
+\end{definition}
+
+\begin{example}[Diagonal matrix]\label{ax:5.49}\leavevmode
+\[ \begin{pmatrix} 8&0&0\\ 0&5&0\\ 0&0&5 \end{pmatrix} \]
+is a diagonal matrix.
+\end{example}
+
+\marginnote{Every diagonal matrix is upper triangular. Diagonal matrices
+typically have many more $0$'s than most upper-triangular matrices of the same
+size.}%
+If an operator has a diagonal matrix with respect to some basis, then the entries
+on the diagonal are precisely the eigenvalues of the operator; this follows from
+\ref{ax:5.41} (or find an easier direct proof for diagonal matrices).
+
+\begin{definition}[Diagonalizable]\label{ax:5.50}
+An operator on $V$ is called \emph{diagonalizable} if the operator has a diagonal
+matrix with respect to some basis of $V$.
+\end{definition}
+
+\begin{example}[Diagonalization may require a different basis]\label{ax:5.51}
+Define $T\in\Lin(\R^2)$ by
+\[ T(x,y)=(41x+7y,-20x+74y). \]
+The matrix of $T$ with respect to the standard basis of $\R^2$ is
+\[ \begin{pmatrix} 41&7\\ -20&74 \end{pmatrix}, \]
+which is not a diagonal matrix. However, $T$ is diagonalizable. Specifically, the
+matrix of $T$ with respect to the basis $(1,4)$, $(7,5)$ is
+\[ \begin{pmatrix} 69&0\\ 0&46 \end{pmatrix} \]
+because $T(1,4)=(69,276)=69(1,4)$ and $T(7,5)=(322,230)=46(7,5)$.
+\end{example}
+
+For $\lambda\in\F$, we will find it convenient to have a name and a notation for
+the set of vectors that an operator $T$ maps to $\lambda$ times the vector.
+
+\begin{definition}[Eigenspace, $E(\lambda,T)$]\label{ax:5.52}
+Suppose $T\in\Lin(V)$ and $\lambda\in\F$. The \emph{eigenspace} of $T$
+corresponding to $\lambda$ is the subspace $E(\lambda,T)$ of $V$ defined by
+\[ E(\lambda,T)=\nul(T-\lambda I)=\{v\in V : Tv=\lambda v\}. \]
+Hence $E(\lambda,T)$ is the set of all eigenvectors of $T$ corresponding to
+$\lambda$, along with the $0$ vector.
+\end{definition}
+
+For $T\in\Lin(V)$ and $\lambda\in\F$, the set $E(\lambda,T)$ is a subspace of
+$V$ because the null space of each linear map on $V$ is a subspace of $V$. The
+definitions imply that $\lambda$ is an eigenvalue of $T$ if and only if
+$E(\lambda,T)\ne\{0\}$.
+
+\begin{example}[Eigenspaces of an operator]\label{ax:5.53}
+Suppose the matrix of an operator $T\in\Lin(V)$ with respect to a basis
+$v_1,v_2,v_3$ of $V$ is the matrix in Example~\ref{ax:5.49}. Then
+\[ E(8,T)=\spn(v_1), \qquad E(5,T)=\spn(v_2,v_3). \]
+\end{example}
+
+If $\lambda$ is an eigenvalue of an operator $T\in\Lin(V)$, then $T$ restricted
+to $E(\lambda,T)$ is just the operator of multiplication by $\lambda$.
+
+\begin{result}[Sum of eigenspaces is a direct sum]\label{ax:5.54}
+Suppose $T\in\Lin(V)$ and $\lambda_1,\dots,\lambda_m$ are distinct eigenvalues
+of $T$. Then
+\[ E(\lambda_1,T)+\cdots+E(\lambda_m,T) \]
+is a direct sum. Furthermore, if $V$ is finite-dimensional, then
+\[ \dim E(\lambda_1,T)+\cdots+\dim E(\lambda_m,T)\le\dim V. \]
+\end{result}
+
+\begin{proof}
+To show that $E(\lambda_1,T)+\cdots+E(\lambda_m,T)$ is a direct sum, suppose
+\[ v_1+\cdots+v_m=0, \]
+where each $v_k$ is in $E(\lambda_k,T)$. Because eigenvectors corresponding to
+distinct eigenvalues are linearly independent (by \ref{ax:5.11}), this implies
+that each $v_k$ equals $0$. Thus $E(\lambda_1,T)+\cdots+E(\lambda_m,T)$ is a
+direct sum (by \ref{ax:1.45}), as desired.
+
+Now suppose $V$ is finite-dimensional. Then
+\begin{align*}
+\dim E(\lambda_1,T)+\cdots+\dim E(\lambda_m,T)
+  &= \dim\bigl(E(\lambda_1,T)\oplus\cdots\oplus E(\lambda_m,T)\bigr)\\
+  &\le \dim V,
+\end{align*}
+where the first line follows from \ref{ax:3.94} and the second line follows from
+\ref{ax:2.37}.
+\end{proof}
+
+\subsection{Conditions for Diagonalizability}
+
+The following characterizations of diagonalizable operators will be useful.
+
+\begin{result}[Conditions equivalent to diagonalizability]\label{ax:5.55}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Let
+$\lambda_1,\dots,\lambda_m$ denote the distinct eigenvalues of $T$. Then the
+following are equivalent.
+\begin{parts}
+\item $T$ is diagonalizable.
+\item $V$ has a basis consisting of eigenvectors of $T$.
+\item $V=E(\lambda_1,T)\oplus\cdots\oplus E(\lambda_m,T)$.
+\item $\dim V=\dim E(\lambda_1,T)+\cdots+\dim E(\lambda_m,T)$.
+\end{parts}
+\end{result}
+
+\begin{proof}
+An operator $T\in\Lin(V)$ has a diagonal matrix
+\[ \begin{pmatrix} \lambda_1 & & 0\\ & \ddots & \\ 0 & & \lambda_n
+   \end{pmatrix} \]
+with respect to a basis $v_1,\dots,v_n$ of $V$ if and only if
+$Tv_k=\lambda_kv_k$ for each $k$. Thus (a) and (b) are equivalent.
+
+Suppose (b) holds; thus $V$ has a basis consisting of eigenvectors of $T$. Hence
+every vector in $V$ is a linear combination of eigenvectors of $T$, which implies
+that
+\[ V=E(\lambda_1,T)+\cdots+E(\lambda_m,T). \]
+Now \ref{ax:5.54} shows that (c) holds, proving that (b) implies (c).
+
+That (c) implies (d) follows immediately from \ref{ax:3.94}.
+
+Finally, suppose (d) holds; thus
+\[ \dim V=\dim E(\lambda_1,T)+\cdots+\dim E(\lambda_m,T). \axtag{ax:5.56} \]
+Choose a basis of each $E(\lambda_k,T)$; put all these bases together to form a
+list $v_1,\dots,v_n$ of eigenvectors of $T$, where $n=\dim V$ (by
+\ref{ax:5.56}). To show that this list is linearly independent, suppose
+\[ a_1v_1+\cdots+a_nv_n=0, \]
+where $a_1,\dots,a_n\in\F$. For each $k=1,\dots,m$, let $u_k$ denote the sum of
+all the terms $a_jv_j$ such that $v_j\in E(\lambda_k,T)$. Thus each $u_k$ is in
+$E(\lambda_k,T)$, and
+\[ u_1+\cdots+u_m=0. \]
+Because eigenvectors corresponding to distinct eigenvalues are linearly
+independent (see \ref{ax:5.11}), this implies that each $u_k$ equals $0$.
+Because each $u_k$ is a sum of terms $a_jv_j$, where the $v_j$'s were chosen to
+be a basis of $E(\lambda_k,T)$, this implies that all $a_j$'s equal $0$. Thus
+$v_1,\dots,v_n$ is linearly independent and hence is a basis of $V$ (by
+\ref{ax:2.38}). Thus (d) implies (b), completing the proof.
+\end{proof}
+
+For additional conditions equivalent to diagonalizability, see \ref{ax:5.62},
+Exercises~5 and~15 in this section, Exercise~24 in Section~7B, and Exercise~15
+in Section~8A.
+
+As we know, every operator on a nonzero finite-dimensional complex vector space
+has an eigenvalue. However, not every operator on a nonzero finite-dimensional
+complex vector space has enough eigenvectors to be diagonalizable, as shown by
+the next example.
+
+\begin{example}[An operator that is not diagonalizable]\label{ax:5.57}
+Define an operator $T\in\Lin(\F^3)$ by $T(a,b,c)=(b,c,0)$. The matrix of $T$
+with respect to the standard basis of $\F^3$ is
+\[ \begin{pmatrix} 0&1&0\\ 0&0&1\\ 0&0&0 \end{pmatrix}, \]
+which is an upper-triangular matrix but is not a diagonal matrix.
+
+As you should verify, $0$ is the only eigenvalue of $T$ and furthermore
+\[ E(0,T)=\{(a,0,0)\in\F^3 : a\in\F\}. \]
+Hence conditions (b), (c), and (d) of \ref{ax:5.55} fail (of course, because
+these conditions are equivalent, it is sufficient to check that only one of them
+fails). Thus condition (a) of \ref{ax:5.55} also fails. Hence $T$ is not
+diagonalizable, regardless of whether $\F=\R$ or $\F=\C$.
+\end{example}
+
+The next result shows that if an operator has as many distinct eigenvalues as the
+dimension of its domain, then the operator is diagonalizable.
+
+\begin{result}[Enough eigenvalues implies diagonalizability]\label{ax:5.58}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$ has $\dim V$ distinct
+eigenvalues. Then $T$ is diagonalizable.
+\end{result}
+
+\begin{proof}
+Suppose $T$ has distinct eigenvalues $\lambda_1,\dots,\lambda_{\dim V}$. For
+each $k$, let $v_k\in V$ be an eigenvector corresponding to the eigenvalue
+$\lambda_k$. Because eigenvectors corresponding to distinct eigenvalues are
+linearly independent (see \ref{ax:5.11}), $v_1,\dots,v_{\dim V}$ is linearly
+independent.
+
+A linearly independent list of $\dim V$ vectors in $V$ is a basis of $V$ (see
+\ref{ax:2.38}); thus $v_1,\dots,v_{\dim V}$ is a basis of $V$. With respect to
+this basis consisting of eigenvectors, $T$ has a diagonal matrix.
+\end{proof}
+
+In later chapters we will find additional conditions that imply that certain
+operators are diagonalizable. For example, see the real spectral theorem
+(\ref{ax:7.29}) and the complex spectral theorem (\ref{ax:7.31}).
+
+The result above gives a sufficient condition for an operator to be
+diagonalizable. However, this condition is not necessary. For example, the
+operator $T$ on $\F^3$ defined by $T(x,y,z)=(6x,6y,7z)$ has only two eigenvalues
+($6$ and $7$) and $\dim\F^3=3$, but $T$ is diagonalizable (by the standard basis
+of $\F^3$).
+
+\marginnote{For a spectacular application of these techniques, see Exercise~21,
+which shows how to use diagonalization to find an exact formula for the
+$n^{\text{th}}$ term of the Fibonacci sequence.}%
+The next example illustrates the importance of diagonalization, which can be used
+to compute high powers of an operator, taking advantage of the equation
+$T^kv=\lambda^kv$ if $v$ is an eigenvector of $T$ with eigenvalue $\lambda$.
+
+\begin{example}[Using diagonalization to compute $T^{100}$]\label{ax:5.59}
+Define $T\in\Lin(\F^3)$ by $T(x,y,z)=(2x+y,5y+3z,8z)$. With respect to the
+standard basis, the matrix of $T$ is
+\[ \begin{pmatrix} 2&1&0\\ 0&5&3\\ 0&0&8 \end{pmatrix}. \]
+The matrix above is an upper-triangular matrix but it is not a diagonal matrix.
+By \ref{ax:5.41}, the eigenvalues of $T$ are $2$, $5$, and $8$. Because $T$ is an
+operator on a vector space of dimension three and $T$ has three distinct
+eigenvalues, \ref{ax:5.58} assures us that there exists a basis of $\F^3$ with
+respect to which $T$ has a diagonal matrix.
+
+To find this basis, we only have to find an eigenvector for each eigenvalue. In
+other words, we have to find a nonzero solution to the equation
+\[ T(x,y,z)=\lambda(x,y,z) \]
+for $\lambda=2$, then for $\lambda=5$, and then for $\lambda=8$. Solving these
+simple equations shows that for $\lambda=2$ we have an eigenvector $(1,0,0)$, for
+$\lambda=5$ we have an eigenvector $(1,3,0)$, and for $\lambda=8$ we have an
+eigenvector $(1,6,6)$.
+
+Thus $(1,0,0)$, $(1,3,0)$, $(1,6,6)$ is a basis of $\F^3$ consisting of
+eigenvectors of $T$, and with respect to this basis the matrix of $T$ is the
+diagonal matrix
+\[ \begin{pmatrix} 2&0&0\\ 0&5&0\\ 0&0&8 \end{pmatrix}. \]
+
+To compute $T^{100}(0,0,1)$, for example, write $(0,0,1)$ as a linear
+combination of our basis of eigenvectors:
+\[ (0,0,1)=(1/6)(1,0,0)-(1/3)(1,3,0)+(1/6)(1,6,6). \]
+Now apply $T^{100}$ to both sides of the equation above, getting
+\begin{align*}
+T^{100}(0,0,1)
+  &= 1/6\bigl(T^{100}(1,0,0)\bigr)-1/3\bigl(T^{100}(1,3,0)\bigr)
+     +1/6\bigl(T^{100}(1,6,6)\bigr)\\
+  &= 1/6\bigl(2^{100}(1,0,0)-2\cdot5^{100}(1,3,0)+8^{100}(1,6,6)\bigr)\\
+  &= 1/6\bigl(2^{100}-2\cdot5^{100}+8^{100},\
+     6\cdot8^{100}-6\cdot5^{100},\ 6\cdot8^{100}\bigr).
+\end{align*}
+\end{example}
+
+We saw earlier that an operator $T$ on a finite-dimensional vector space $V$ has
+an upper-triangular matrix with respect to some basis of $V$ if and only if the
+minimal polynomial of $T$ equals $(z-\lambda_1)\cdots(z-\lambda_m)$ for some
+$\lambda_1,\dots,\lambda_m\in\F$ (see \ref{ax:5.44}). As we previously noted
+(see \ref{ax:5.47}), this condition is always satisfied if $\F=\C$.
+
+Our next result \ref{ax:5.62} states that an operator $T\in\Lin(V)$ has a
+diagonal matrix with respect to some basis of $V$ if and only if the minimal
+polynomial of $T$ equals $(z-\lambda_1)\cdots(z-\lambda_m)$ for some
+\textbf{\emph{distinct}} $\lambda_1,\dots,\lambda_m\in\F$. Before formally
+stating this result, we give two examples of using it.
+
+\begin{example}[Diagonalizable, but with no known exact eigenvalues]%
+\label{ax:5.60}
+Define $T\in\Lin(\C^5)$ by
+\[ T(z_1,z_2,z_3,z_4,z_5)=(-3z_5,z_1+6z_5,z_2,z_3,z_4). \]
+The matrix of $T$ is shown in Example~\ref{ax:5.26}, where we showed that the
+minimal polynomial of $T$ is $3-6z+z^5$.
+
+As mentioned in Example~\ref{ax:5.28}, no exact expression is known for any of
+the zeros of this polynomial, but numerical techniques show that the zeros of
+this polynomial are approximately $-1.67$, $0.51$, $1.40$, $-0.12+1.59i$,
+$-0.12-1.59i$.
+
+The software that produces these approximations is accurate to more than three
+digits. Thus these approximations are good enough to show that the five numbers
+above are distinct. The minimal polynomial of $T$ equals the fifth degree monic
+polynomial with these zeros. Now \ref{ax:5.62} shows that $T$ is
+diagonalizable.
+\end{example}
+
+\begin{example}[Showing that an operator is not diagonalizable]\label{ax:5.61}
+Define $T\in\Lin(\F^3)$ by
+\[ T(z_1,z_2,z_3)=(6z_1+3z_2+4z_3,6z_2+2z_3,7z_3). \]
+The matrix of $T$ with respect to the standard basis of $\F^3$ is
+\[ \begin{pmatrix} 6&3&4\\ 0&6&2\\ 0&0&7 \end{pmatrix}. \]
+The matrix above is an upper-triangular matrix but is not a diagonal matrix.
+Might $T$ have a diagonal matrix with respect to some other basis of $\F^3$?
+
+To answer this question, we will find the minimal polynomial of $T$. First note
+that the eigenvalues of $T$ are the diagonal entries of the matrix above (by
+\ref{ax:5.41}). Thus the zeros of the minimal polynomial of $T$ are $6,7$
+[by \ref{ax:5.27}(a)]. The diagonal of the matrix above tells us that
+$(T-6I)^2(T-7I)=0$ (by \ref{ax:5.40}). The minimal polynomial of $T$ has degree
+at most $3$ (by \ref{ax:5.22}). Putting all this together, we see that the
+minimal polynomial of $T$ is either $(z-6)(z-7)$ or $(z-6)^2(z-7)$.
+
+A simple computation shows that $(T-6I)(T-7I)\ne0$. Thus the minimal polynomial
+of $T$ is $(z-6)^2(z-7)$.
+
+Now \ref{ax:5.62} shows that $T$ is not diagonalizable.
+\end{example}
+
+\begin{result}[Necessary and sufficient condition for diagonalizability]%
+\label{ax:5.62}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Then $T$ is diagonalizable
+if and only if the minimal polynomial of $T$ equals
+$(z-\lambda_1)\cdots(z-\lambda_m)$ for some list of distinct numbers
+$\lambda_1,\dots,\lambda_m\in\F$.
+\end{result}
+
+\begin{proof}
+First suppose $T$ is diagonalizable. Thus there is a basis $v_1,\dots,v_n$ of
+$V$ consisting of eigenvectors of $T$. Let $\lambda_1,\dots,\lambda_m$ be the
+distinct eigenvalues of $T$. Then for each $v_j$, there exists $\lambda_k$ with
+$(T-\lambda_kI)v_j=0$. Thus
+\[ (T-\lambda_1I)\cdots(T-\lambda_mI)v_j=0, \]
+which implies that the minimal polynomial of $T$ equals
+$(z-\lambda_1)\cdots(z-\lambda_m)$.
+
+To prove the implication in the other direction, now suppose the minimal
+polynomial of $T$ equals $(z-\lambda_1)\cdots(z-\lambda_m)$ for some list of
+distinct numbers $\lambda_1,\dots,\lambda_m\in\F$. Thus
+\[ (T-\lambda_1I)\cdots(T-\lambda_mI)=0. \axtag{ax:5.63} \]
+
+We will prove that $T$ is diagonalizable by induction on $m$. To get started,
+suppose $m=1$. Then $T-\lambda_1I=0$, which means that $T$ is a scalar multiple
+of the identity operator, which implies that $T$ is diagonalizable.
+
+Now suppose that $m>1$ and the desired result holds for all smaller values of
+$m$. The subspace $\range(T-\lambda_mI)$ is invariant under $T$ [this is a
+special case of \ref{ax:5.18} with $p(z)=z-\lambda_m$]. Thus $T$ restricted to
+$\range(T-\lambda_mI)$ is an operator on $\range(T-\lambda_mI)$.
+
+If $u\in\range(T-\lambda_mI)$, then $u=(T-\lambda_mI)v$ for some $v\in V$, and
+\ref{ax:5.63} implies
+\[ (T-\lambda_1I)\cdots(T-\lambda_{m-1}I)u=(T-\lambda_1I)\cdots(T-\lambda_mI)v=0.
+   \axtag{ax:5.64} \]
+Hence $(z-\lambda_1)\cdots(z-\lambda_{m-1})$ is a polynomial multiple of the
+minimal polynomial of $T$ restricted to $\range(T-\lambda_mI)$
+[by \ref{ax:5.29}]. Thus by our induction hypothesis, there is a basis of
+$\range(T-\lambda_mI)$ consisting of eigenvectors of $T$.
+
+Suppose that $u\in\range(T-\lambda_mI)\cap\nul(T-\lambda_mI)$. Then
+$Tu=\lambda_mu$. Now \ref{ax:5.64} implies that
+\begin{align*}
+0 &= (T-\lambda_1I)\cdots(T-\lambda_{m-1}I)u\\
+  &= (\lambda_m-\lambda_1)\cdots(\lambda_m-\lambda_{m-1})u.
+\end{align*}
+Because $\lambda_1,\dots,\lambda_m$ are distinct, the equation above implies that
+$u=0$. Hence $\range(T-\lambda_mI)\cap\nul(T-\lambda_mI)=\{0\}$.
+
+Thus $\range(T-\lambda_mI)+\nul(T-\lambda_mI)$ is a direct sum (by
+\ref{ax:1.46}) whose dimension is $\dim V$ (by \ref{ax:3.94} and \ref{ax:3.21}).
+Hence $\range(T-\lambda_mI)\oplus\nul(T-\lambda_mI)=V$. Every nonzero vector in
+$\nul(T-\lambda_mI)$ is an eigenvector of $T$ with eigenvalue $\lambda_m$.
+Earlier in this proof we saw that there is a basis of $\range(T-\lambda_mI)$
+consisting of eigenvectors of $T$. Adjoining to that basis a basis of
+$\nul(T-\lambda_mI)$ gives a basis of $V$ consisting of eigenvectors of $T$. The
+matrix of $T$ with respect to this basis is a diagonal matrix, as desired.
+\end{proof}
+
+No formula exists for the zeros of polynomials of degree $5$ or greater.
+However, the previous result can be used to determine whether an operator on a
+complex vector space is diagonalizable without even finding approximations of the
+zeros of the minimal polynomial---see Exercise~15.
+
+The next result will be a key tool when we prove a result about the simultaneous
+diagonalization of two operators; see \ref{ax:5.76}. Note how the use of a
+characterization of diagonalizable operators in terms of the minimal polynomial
+(see \ref{ax:5.62}) leads to a short proof of the next result.
+
+\begin{result}[Restriction of diagonalizable operator to invariant subspace]%
+\label{ax:5.65}
+Suppose $T\in\Lin(V)$ is diagonalizable and $U$ is a subspace of $V$ that is
+invariant under $T$. Then $T|_U$ is a diagonalizable operator on $U$.
+\end{result}
+
+\begin{proof}
+Because the operator $T$ is diagonalizable, the minimal polynomial of $T$ equals
+$(z-\lambda_1)\cdots(z-\lambda_m)$ for some list of distinct numbers
+$\lambda_1,\dots,\lambda_m\in\F$ (by \ref{ax:5.62}). The minimal polynomial of
+$T$ is a polynomial multiple of the minimal polynomial of $T|_U$ (by
+\ref{ax:5.31}). Hence the minimal polynomial of $T|_U$ has the form required by
+\ref{ax:5.62}, which shows that $T|_U$ is diagonalizable.
+\end{proof}
+
+\subsection{Gershgorin Disk Theorem}
+
+\begin{definition}[Gershgorin disks]\label{ax:5.66}
+Suppose $T\in\Lin(V)$ and $v_1,\dots,v_n$ is a basis of $V$. Let $A$ denote the
+matrix of $T$ with respect to this basis. A \emph{Gershgorin disk} of $T$ with
+respect to the basis $v_1,\dots,v_n$ is a set of the form
+\[ \biggl\{z\in\F : \abs{z-A_{j,j}}\le\sum_{\substack{k=1\\k\ne j}}^n
+   \abs{A_{j,k}}\biggr\}, \]
+where $j\in\{1,\dots,n\}$.
+\end{definition}
+
+Because there are $n$ choices for $j$ in the definition above, $T$ has $n$
+Gershgorin disks. If $\F=\C$, then for each $j\in\{1,\dots,n\}$, the
+corresponding Gershgorin disk is a closed disk in $\C$ centered at $A_{j,j}$,
+which is the $j^{\text{th}}$ entry on the diagonal of $A$. The radius of this
+closed disk is the sum of the absolute values of the entries in row $j$ of $A$,
+excluding the diagonal entry. If $\F=\R$, then the Gershgorin disks are closed
+intervals in $\R$.
+
+In the special case that the square matrix $A$ above is a diagonal matrix, each
+Gershgorin disk consists of a single point that is a diagonal entry of $A$ (and
+each eigenvalue of $T$ is one of those points, as required by the next result).
+One consequence of our next result is that if the nondiagonal entries of $A$ are
+small, then each eigenvalue of $T$ is near a diagonal entry of $A$.
+
+\begin{result}[Gershgorin disk theorem]\label{ax:5.67}
+Suppose $T\in\Lin(V)$ and $v_1,\dots,v_n$ is a basis of $V$. Then each
+eigenvalue of $T$ is contained in some Gershgorin disk of $T$ with respect to the
+basis $v_1,\dots,v_n$.
+\end{result}
+
+\begin{proof}
+Suppose $\lambda\in\F$ is an eigenvalue of $T$. Let $w\in V$ be a corresponding
+eigenvector. There exist $c_1,\dots,c_n\in\F$ such that
+\[ w=c_1v_1+\cdots+c_nv_n. \axtag{ax:5.68} \]
+
+Let $A$ denote the matrix of $T$ with respect to the basis $v_1,\dots,v_n$.
+Applying $T$ to both sides of the equation above gives
+\begin{align*}
+\lambda w &= \sum_{k=1}^n c_kTv_k \axtag{ax:5.69}\\
+  &= \sum_{k=1}^n c_k\sum_{j=1}^n A_{j,k}v_j\\
+  &= \sum_{j=1}^n\Bigl(\sum_{k=1}^n A_{j,k}c_k\Bigr)v_j. \axtag{ax:5.70}
+\end{align*}
+
+Let $j\in\{1,\dots,n\}$ be such that
+\[ \abs{c_j}=\max\{\abs{c_1},\dots,\abs{c_n}\}. \]
+Using \ref{ax:5.68}, we see that the coefficient of $v_j$ on the left side of
+\ref{ax:5.69} equals $\lambda c_j$, which must equal the coefficient of $v_j$ on
+the right side of \ref{ax:5.70}. In other words,
+\[ \lambda c_j=\sum_{k=1}^n A_{j,k}c_k. \]
+Subtract $A_{j,j}c_j$ from each side of the equation above and then divide both
+sides by $c_j$ to get
+\begin{align*}
+\abs{\lambda-A_{j,j}} &= \biggl\lvert\sum_{\substack{k=1\\k\ne j}}^n
+     A_{j,k}\frac{c_k}{c_j}\biggr\rvert\\
+  &\le \sum_{\substack{k=1\\k\ne j}}^n \abs{A_{j,k}}.
+\end{align*}
+Thus $\lambda$ is in the $j^{\text{th}}$ Gershgorin disk with respect to the
+basis $v_1,\dots,v_n$.
+\end{proof}
+
+\marginnote{The Gershgorin disk theorem is named for Semyon Aronovich
+Gershgorin, who published this result in 1931.}%
+Exercise~22 gives a nice application of the Gershgorin disk theorem.
+
+Exercise~23 states that the radius of each Gershgorin disk could be changed to
+the sum of the absolute values of corresponding column entries (instead of row
+entries), excluding the diagonal entry, and the theorem above would still hold.
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{5D}
+
+\begin{exercise}
+Suppose $V$ is a finite-dimensional complex vector space and $T\in\Lin(V)$.
+\begin{parts}
+\item Prove that if $T^4=I$, then $T$ is diagonalizable.
+\item Prove that if $T^4=T$, then $T$ is diagonalizable.
+\item Give an example of an operator $T\in\Lin(\C^2)$ such that $T^4=T^2$ and
+  $T$ is not diagonalizable.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ has a diagonal matrix $A$ with respect to some basis of
+$V$. Prove that if $\lambda\in\F$, then $\lambda$ appears on the diagonal of $A$
+precisely $\dim E(\lambda,T)$ times.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that if the operator
+$T$ is diagonalizable, then $V=\nul T\oplus\range T$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that the following
+are equivalent.
+\begin{parts}
+\item $V=\nul T\oplus\range T$.
+\item $V=\nul T+\range T$.
+\item $\nul T\cap\range T=\{0\}$.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a finite-dimensional complex vector space and $T\in\Lin(V)$.
+Prove that $T$ is diagonalizable if and only if
+\[ V=\nul(T-\lambda I)\oplus\range(T-\lambda I) \]
+for every $\lambda\in\C$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(\F^5)$ and $\dim E(8,T)=4$. Prove that $T-2I$ or $T-6I$ is
+invertible.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ is invertible. Prove that
+\[ E(\lambda,T)=E\Bigl(\tfrac{1}{\lambda},T^{-1}\Bigr) \]
+for every $\lambda\in\F$ with $\lambda\ne0$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Let
+$\lambda_1,\dots,\lambda_m$ denote the distinct nonzero eigenvalues of $T$.
+Prove that
+\[ \dim E(\lambda_1,T)+\cdots+\dim E(\lambda_m,T)\le\dim\range T. \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $R,T\in\Lin(\F^3)$ each have $2,6,7$ as eigenvalues. Prove that there
+exists an invertible operator $S\in\Lin(\F^3)$ such that $R=S^{-1}TS$.
+\end{exercise}
+
+\begin{exercise}
+Find $R,T\in\Lin(\F^4)$ such that $R$ and $T$ each have $2,6,7$ as eigenvalues,
+$R$ and $T$ have no other eigenvalues, and there does not exist an invertible
+operator $S\in\Lin(\F^4)$ such that $R=S^{-1}TS$.
+\end{exercise}
+
+\begin{exercise}
+Find $T\in\Lin(\C^3)$ such that $6$ and $7$ are eigenvalues of $T$ and such that
+$T$ does not have a diagonal matrix with respect to any basis of $\C^3$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(\C^3)$ is such that $6$ and $7$ are eigenvalues of $T$.
+Furthermore, suppose $T$ does not have a diagonal matrix with respect to any
+basis of $\C^3$. Prove that there exists $(z_1,z_2,z_3)\in\C^3$ such that
+\[ T(z_1,z_2,z_3)=(6+8z_1,7+8z_2,13+8z_3). \]
+\end{exercise}
+
+\begin{exercise}
+Suppose $A$ is a diagonal matrix with distinct entries on the diagonal and $B$ is
+a matrix of the same size as $A$. Show that $AB=BA$ if and only if $B$ is a
+diagonal matrix.
+\end{exercise}
+
+\begin{exercise}\leavevmode
+\begin{parts}
+\item Give an example of a finite-dimensional complex vector space and an
+  operator $T$ on that vector space such that $T^2$ is diagonalizable but $T$ is
+  not diagonalizable.
+\item Suppose $\F=\C$, $k$ is a positive integer, and $T\in\Lin(V)$ is
+  invertible. Prove that $T$ is diagonalizable if and only if $T^k$ is
+  diagonalizable.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is a finite-dimensional complex vector space, $T\in\Lin(V)$, and $p$
+is the minimal polynomial of $T$. Prove that the following are equivalent.
+\begin{parts}
+\item $T$ is diagonalizable.
+\item There does not exist $\lambda\in\C$ such that $p$ is a polynomial multiple
+  of $(z-\lambda)^2$.
+\item $p$ and its derivative $p'$ have no zeros in common.
+\item The greatest common divisor of $p$ and $p'$ is the constant polynomial $1$.
+\end{parts}
+\exnote{The \textbf{greatest common divisor} of $p$ and $p'$ is the monic
+polynomial $q$ of largest degree such that $p$ and $p'$ are both polynomial
+multiples of $q$. The Euclidean algorithm for polynomials (look it up) can
+quickly determine the greatest common divisor of two polynomials, without
+requiring any information about the zeros of the polynomials. Thus the
+equivalence of (a) and (d) above shows that we can determine whether $T$ is
+diagonalizable without knowing anything about the zeros of $p$.}
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V)$ is diagonalizable. Let $\lambda_1,\dots,\lambda_m$
+denote the distinct eigenvalues of $T$. Prove that a subspace $U$ of $V$ is
+invariant under $T$ if and only if there exist subspaces $U_1,\dots,U_m$ of $V$
+such that $U_k\subseteq E(\lambda_k,T)$ for each $k$ and
+$U=U_1\oplus\cdots\oplus U_m$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional. Prove that $\Lin(V)$ has a basis consisting of
+diagonalizable operators.
+\end{exercise}
+
+\begin{exercise}
+Suppose that $T\in\Lin(V)$ is diagonalizable and $U$ is a subspace of $V$ that
+is invariant under $T$. Prove that the quotient operator $T/U$ is a
+diagonalizable operator on $V/U$.
+\exnote{The quotient operator $T/U$ was defined in Exercise~38 in Section~5A.}
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $T\in\Lin(V)$ and there exists a subspace $U$
+of $V$ that is invariant under $T$ such that $T|_U$ and $T/U$ are both
+diagonalizable, then $T$ is diagonalizable.
+\exnote{See Exercise~13 in Section~5C for an analogous statement about
+upper-triangular matrices.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $V$ is finite-dimensional and $T\in\Lin(V)$. Prove that $T$ is
+diagonalizable if and only if the dual operator $T'$ is diagonalizable.
+\end{exercise}
+
+\begin{exercise}
+The \emph{Fibonacci sequence} $F_0,F_1,F_2,\dots$ is defined by
+\[ F_0=0,\ F_1=1,\ \text{and } F_n=F_{n-2}+F_{n-1} \text{ for } n\ge2. \]
+Define $T\in\Lin(\R^2)$ by $T(x,y)=(y,x+y)$.
+\begin{parts}
+\item Show that $T^n(0,1)=(F_n,F_{n+1})$ for each nonnegative integer $n$.
+\item Find the eigenvalues of $T$.
+\item Find a basis of $\R^2$ consisting of eigenvectors of $T$.
+\item Use the solution to (c) to compute $T^n(0,1)$. Conclude that
+  \[ F_n=1/\sqrt5\biggl[\biggl(\frac{1+\sqrt5}{2}\biggr)^{\!n}
+     -\biggl(\frac{1-\sqrt5}{2}\biggr)^{\!n}\biggr] \]
+  for each nonnegative integer $n$.
+\item Use (d) to conclude that if $n$ is a nonnegative integer, then the
+  Fibonacci number $F_n$ is the integer that is closest to
+  \[ 1/\sqrt5\biggl(\frac{1+\sqrt5}{2}\biggr)^{\!n}. \]
+\end{parts}
+\exnote{Each $F_n$ is a nonnegative integer, even though the right side of the
+formula in (d) does not look like an integer. The number
+\[ \frac{1+\sqrt5}{2} \]
+is called the \textbf{golden ratio}.}
+\end{exercise}
+
+\begin{exercise}
+Suppose $T\in\Lin(V)$ and $A$ is an $n$-by-$n$ matrix that is the matrix of $T$
+with respect to some basis of $V$. Prove that if
+\[ \abs{A_{j,j}}>\sum_{\substack{k=1\\k\ne j}}^n \abs{A_{j,k}} \]
+for each $j\in\{1,\dots,n\}$, then $T$ is invertible.
+\exnote{This exercise states that if the diagonal entries of the matrix of $T$
+are large compared to the nondiagonal entries, then $T$ is invertible.}
+\end{exercise}
+
+\begin{exercise}
+Suppose the definition of the Gershgorin disks is changed so that the radius of
+the $k^{\text{th}}$ disk is the sum of the absolute values of the entries in
+column (instead of row) $k$ of $A$, excluding the diagonal entry. Show that the
+Gershgorin disk theorem (\ref{ax:5.67}) still holds with this changed definition.
+\end{exercise}

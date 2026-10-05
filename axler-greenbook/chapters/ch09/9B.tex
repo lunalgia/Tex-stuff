@@ -1,0 +1,417 @@
+\iftestbuild % TEST-ONLY-BEGIN
+\setcounter{section}{1}\setcounter{theorem}{23}
+\fi % TEST-ONLY-END
+% Source: book pp. 346--353 (PDF 360--367); no solutions.
+% \exnote: Axler's small italic comment under an exercise
+\section{Alternating Multilinear Forms}
+
+\subsection{Multilinear Forms}
+
+\begin{definition}[$V^m$]\label{ax:9.24}
+For $m$ a positive integer, define $V^m$ by
+\[ V^m = \ftimes{V\times\cdots\times V}{m\text{ times}}. \]
+\end{definition}
+
+Now we can define $m$-linear forms as a generalization of the bilinear forms
+that we discussed in the previous section.
+
+\begin{definition}[$m$-linear form, $V^{(m)}$, multilinear form]\label{ax:9.25}\leavevmode
+\begin{itemize}
+\item For $m$ a positive integer, an \emph{$m$-linear form} on $V$ is a
+  function $\beta\colon V^m\to\F$ that is linear in each slot when the other
+  slots are held fixed. This means that for each $k\in\{1,\dots,m\}$ and all
+  $u_1,\dots,u_m\in V$, the function
+  \[ v\mapsto\beta(u_1,\dots,u_{k-1},v,u_{k+1},\dots,u_m) \]
+  is a linear map from $V$ to $\F$.
+\item The set of $m$-linear forms on $V$ is denoted by $V^{(m)}$.
+\item A function $\beta$ is called a \emph{multilinear form} on $V$ if it is an
+  $m$-linear form on $V$ for some positive integer $m$.
+\end{itemize}
+\end{definition}
+
+In the definition above, the expression
+$\beta(u_1,\dots,u_{k-1},v,\allowbreak u_{k+1},\dots,u_m)$ means
+$\beta(v,\allowbreak u_2,\dots,u_m)$
+if $k=1$ and means $\beta(u_1,\dots,u_{m-1},v)$ if $k=m$.
+
+A $1$-linear form on $V$ is a linear functional on $V$. A $2$-linear form on
+$V$ is a bilinear form on $V$. You can verify that with the usual addition and
+scalar multiplication of functions, $V^{(m)}$ is a vector space.
+
+\begin{example}[$m$-linear forms]\label{ax:9.26}\leavevmode
+\begin{itemize}
+\item Suppose $\alpha,\rho\in V^{(2)}$. Define a function
+  $\beta\colon V^4\to\F$ by
+  \[ \beta(v_1,v_2,v_3,v_4) = \alpha(v_1,v_2)\,\rho(v_3,v_4). \]
+  Then $\beta\in V^{(4)}$.
+\item Define $\beta\colon\bigl(\Lin(V)\bigr)^m\to\F$ by
+  \[ \beta(T_1,\dots,T_m) = \tr(T_1\cdots T_m). \]
+  Then $\beta$ is an $m$-linear form on $\Lin(V)$.
+\end{itemize}
+\end{example}
+
+Alternating multilinear forms, which we now define, play an important role as
+we head toward defining determinants.
+
+\begin{definition}[Alternating forms, $V_{\mathrm{alt}}^{(m)}$]\label{ax:9.27}
+Suppose $m$ is a positive integer.
+\begin{itemize}
+\item An $m$-linear form $\alpha$ on $V$ is called \emph{alternating} if
+  $\alpha(v_1,\dots,v_m)=0$ whenever $v_1,\dots,v_m$ is a list of vectors in
+  $V$ with $v_j=v_k$ for some two distinct values of $j$ and $k$ in
+  $\{1,\dots,m\}$.
+\item $V_{\mathrm{alt}}^{(m)} = \{\alpha\in V^{(m)} : \alpha \text{ is an
+  alternating } m\text{-linear form on } V\}$.
+\end{itemize}
+\end{definition}
+
+You should verify that $V_{\mathrm{alt}}^{(m)}$ is a subspace of $V^{(m)}$.
+See Example~\ref{ax:9.15} for examples of alternating $2$-linear forms. See
+Exercise~2 for an example of an alternating $3$-linear form.
+
+The next result tells us that if a linearly dependent list is input to an
+alternating multilinear form, then the output equals $0$.
+
+\begin{result}[Alternating multilinear forms and linear dependence]\label{ax:9.28}
+Suppose $m$ is a positive integer and $\alpha$ is an alternating $m$-linear
+form on $V$. If $v_1,\dots,v_m$ is a linearly dependent list in $V$, then
+\[ \alpha(v_1,\dots,v_m) = 0. \]
+\end{result}
+
+\begin{proof}
+Suppose $v_1,\dots,v_m$ is a linearly dependent list in $V$. By the linear
+dependence lemma (\ref{ax:2.19}), some $v_k$ is a linear combination of
+$v_1,\dots,v_{k-1}$. Thus there exist $b_1,\dots,b_{k-1}$ such that
+$v_k=b_1v_1+\cdots+b_{k-1}v_{k-1}$. Now
+\begin{align*}
+\alpha(v_1,\dots,v_m)
+  &= \alpha\biggl(v_1,\dots,v_{k-1},\sum_{j=1}^{k-1}b_jv_j,v_{k+1},\dots,v_m\biggr)\\
+  &= \sum_{j=1}^{k-1}b_j\,\alpha(v_1,\dots,v_{k-1},v_j,v_{k+1},\dots,v_m)\\
+  &= 0. \qedhere
+\end{align*}
+\end{proof}
+
+The next result states that if $m>\dim V$, then there are no alternating
+$m$-linear forms on $V$ other than the function on $V^m$ that is identically
+$0$.
+
+\begin{result}[No nonzero alternating $m$-linear forms for $m>\dim V$]\label{ax:9.29}
+Suppose $m>\dim V$. Then $0$ is the only alternating $m$-linear form on $V$.
+\end{result}
+
+\begin{proof}
+Suppose that $\alpha$ is an alternating $m$-linear form on $V$ and
+$v_1,\dots,v_m\in V$. Because $m>\dim V$, this list is not linearly
+independent (by \ref{ax:2.22}). Thus \ref{ax:9.28} implies that
+$\alpha(v_1,\dots,v_m)=0$. Hence $\alpha$ is the zero function from $V^m$ to
+$\F$.
+\end{proof}
+
+\subsection{Alternating Multilinear Forms and Permutations}
+
+\begin{result}[Swapping input vectors in an alternating multilinear form]\label{ax:9.30}
+Suppose $m$ is a positive integer, $\alpha$ is an alternating $m$-linear form
+on $V$, and $v_1,\dots,v_m$ is a list of vectors in $V$. Then swapping the
+vectors in any two slots of $\alpha(v_1,\dots,v_m)$ changes the value of
+$\alpha$ by a factor of $-1$.
+\end{result}
+
+\begin{proof}
+Put $v_1+v_2$ in both the first two slots, getting
+\[ 0 = \alpha(v_1+v_2,v_1+v_2,v_3,\dots,v_m). \]
+Use the multilinear properties of $\alpha$ to expand the right side of the
+equation above (as in the proof of \ref{ax:9.16}) to get
+\[ \alpha(v_2,v_1,v_3,\dots,v_m) = -\alpha(v_1,v_2,v_3,\dots,v_m). \]
+
+Similarly, swapping the vectors in any two slots of $\alpha(v_1,\dots,v_m)$
+changes the value of $\alpha$ by a factor of $-1$.
+\end{proof}
+
+To see what can happen with multiple swaps, suppose $\alpha$ is an alternating
+$3$-linear form on $V$ and $v_1,v_2,v_3\in V$. To evaluate
+$\alpha(v_3,v_1,v_2)$ in terms of $\alpha(v_1,v_2,v_3)$, start with
+$\alpha(v_3,v_1,v_2)$ and swap the entries in the first and third slots,
+getting
+$\alpha(v_3,\allowbreak v_1,v_2)=-\alpha(v_2,v_1,v_3)$. Now in the last
+expression, swap the entries in the first and second slots, getting
+\[ \alpha(v_3,v_1,v_2) = -\alpha(v_2,v_1,v_3) = \alpha(v_1,v_2,v_3). \]
+More generally, we see that if we do an odd number of swaps, then the value of
+$\alpha$ changes by a factor of $-1$, and if we do an even number of swaps,
+then the value of $\alpha$ does not change.
+
+To deal with arbitrary multiple swaps, we need a bit of information about
+permutations.
+
+\begin{definition}[Permutation, $\operatorname{perm} m$]\label{ax:9.31}
+Suppose $m$ is a positive integer.
+\begin{itemize}
+\item A \emph{permutation} of $(1,\dots,m)$ is a list $(j_1,\dots,j_m)$ that
+  contains each of the numbers $1,\dots,m$ exactly once.
+\item The set of all permutations of $(1,\dots,m)$ is denoted by
+  $\operatorname{perm} m$.
+\end{itemize}
+\end{definition}
+
+For example, $(2,3,4,5,1)\in\operatorname{perm} 5$. You should think of an
+element of $\operatorname{perm} m$ as a rearrangement of the first $m$
+positive integers.
+
+The number of swaps used to change a permutation $(j_1,\dots,j_m)$ to the
+standard order $(1,\dots,m)$ can depend on the specific swaps selected. The
+following definition has the advantage of assigning a well-defined sign to
+every permutation.
+
+\begin{definition}[Sign of a permutation]\label{ax:9.32}
+The \emph{sign} of a permutation $(j_1,\dots,j_m)$ is defined by
+\[ \sgn(j_1,\dots,j_m) = (-1)^N, \]
+where $N$ is the number of pairs of integers $(k,\ell)$ with
+$1\le k<\ell\le m$ such that $k$ appears after $\ell$ in the list
+$(j_1,\dots,j_m)$.
+\end{definition}
+
+Hence the sign of a permutation equals $1$ if the natural order has been
+changed an even number of times and equals $-1$ if the natural order has been
+changed an odd number of times.
+
+\begin{example}[Signs]\label{ax:9.33}\leavevmode
+\begin{itemize}
+\item The permutation $(1,\dots,m)$ [no changes in the natural order] has
+  sign $1$.
+\item The only pair of integers $(k,\ell)$ with $k<\ell$ such that $k$
+  appears after $\ell$ in the list $(2,1,3,4)$ is $(1,2)$. Thus the
+  permutation $(2,1,3,4)$ has sign $-1$.
+\item In the permutation $(2,3,\dots,m,1)$, the only pairs $(k,\ell)$ with
+  $k<\ell$ that appear with changed order are $(1,2),(1,3),\dots,(1,m)$.
+  Because we have $m-1$ such pairs, the sign of this permutation equals
+  $(-1)^{m-1}$.
+\end{itemize}
+\end{example}
+
+\begin{result}[Swapping two entries in a permutation]\label{ax:9.34}
+Swapping two entries in a permutation multiplies the sign of the permutation
+by $-1$.
+\end{result}
+
+\begin{proof}
+Suppose we have two permutations, where the second permutation is obtained
+from the first by swapping two entries. The two swapped entries were in their
+natural order in the first permutation if and only if they are not in their
+natural order in the second permutation. Thus we have a net change (so far)
+of $1$ or $-1$ (both odd numbers) in the number of pairs not in their natural
+order.
+
+Consider each entry between the two swapped entries. If an intermediate entry
+was originally in the natural order with respect to both swapped entries, then
+it is now in the natural order with respect to neither swapped entry.
+Similarly, if an intermediate entry was originally in the natural order with
+respect to neither of the swapped entries, then it is now in the natural order
+with respect to both swapped entries. If an intermediate entry was originally
+in the natural order with respect to exactly one of the swapped entries, then
+that is still true. Thus the net change (for each pair containing an entry
+between the two swapped entries) in the number of pairs not in their natural
+order is $2$, $-2$, or $0$ (all even numbers).
+
+For all other pairs of entries, there is no change in whether or not they are
+in their natural order. Thus the total net change in the number of pairs not
+in their natural order is an odd number. Hence the sign of the second
+permutation equals $-1$ times the sign of the first permutation.
+\end{proof}
+
+\begin{result}[Permutations and alternating multilinear forms]\label{ax:9.35}
+Suppose $m$ is a positive integer and $\alpha\in V_{\mathrm{alt}}^{(m)}$. Then
+\[ \alpha(v_{j_1},\dots,v_{j_m})
+   = \bigl(\sgn(j_1,\dots,j_m)\bigr)\alpha(v_1,\dots,v_m) \]
+for every list $v_1,\dots,v_m$ of vectors in $V$ and all
+$(j_1,\dots,j_m)\in\operatorname{perm} m$.
+\end{result}
+
+\begin{proof}
+Suppose $v_1,\dots,v_m\in V$ and $(j_1,\dots,j_m)\in\operatorname{perm} m$. We
+can get from $(j_1,\dots,j_m)$ to $(1,\dots,m)$ by a series of swaps of entries
+in different slots. Each such swap changes the value of $\alpha$ by a factor of
+$-1$ (by \ref{ax:9.30}) and also changes the sign of the remaining permutation
+by a factor of $-1$ (by \ref{ax:9.34}). After an appropriate number of swaps,
+we reach the permutation $1,\dots,m$, which has sign $1$. Thus the value of
+$\alpha$ changed signs an even number of times if $\sgn(j_1,\dots,j_m)=1$ and
+an odd number of times if $\sgn(j_1,\dots,j_m)=-1$, which gives the desired
+result.
+\end{proof}
+
+Our use of permutations now leads in a natural way to the following beautiful
+formula for alternating $n$-linear forms on an $n$-dimensional vector space.
+
+\begin{result}[Formula for $(\dim V)$-linear alternating forms on $V$]\label{ax:9.36}
+Let $n=\dim V$. Suppose $e_1,\dots,\allowbreak e_n$ is a basis of $V$ and
+$v_1,\dots,v_n\in V$. For each $k\in\{1,\dots,n\}$, let
+$b_{1,k},\dots,b_{n,k}\in\F$ be such that
+\[ v_k = \sum_{j=1}^n b_{j,k}e_j. \]
+Then
+\[ \alpha(v_1,\dots,v_n) = \alpha(e_1,\dots,e_n)
+   \sum_{(j_1,\dots,j_n)\in\operatorname{perm} n}
+   \bigl(\sgn(j_1,\dots,j_n)\bigr)b_{j_1,1}\cdots b_{j_n,n} \]
+for every alternating $n$-linear form $\alpha$ on $V$.
+\end{result}
+
+\begin{proof}
+Suppose $\alpha$ is an alternating $n$-linear form on $V$. Then
+\begin{align*}
+\alpha(v_1,\dots,v_n)
+  &= \alpha\biggl(\sum_{j_1=1}^n b_{j_1,1}e_{j_1},\dots,
+     \sum_{j_n=1}^n b_{j_n,n}e_{j_n}\biggr)\\
+  &= \sum_{j_1=1}^n\cdots\sum_{j_n=1}^n b_{j_1,1}\cdots b_{j_n,n}\,
+     \alpha(e_{j_1},\dots,e_{j_n})\\
+  &= \sum_{(j_1,\dots,j_n)\in\operatorname{perm} n} b_{j_1,1}\cdots b_{j_n,n}\,
+     \alpha(e_{j_1},\dots,e_{j_n})\\
+  &= \alpha(e_1,\dots,e_n)\sum_{(j_1,\dots,j_n)\in\operatorname{perm} n}
+     \bigl(\sgn(j_1,\dots,j_n)\bigr)b_{j_1,1}\cdots b_{j_n,n},
+\end{align*}
+where the third line holds because $\alpha(e_{j_1},\dots,e_{j_n})=0$ if
+$j_1,\dots,j_n$ are not distinct integers, and the last line holds by
+\ref{ax:9.35}.
+\end{proof}
+
+The following result will be the key to our definition of the determinant in
+the next section.
+
+\begin{result}[$\dim V_{\mathrm{alt}}^{(\dim V)}=1$]\label{ax:9.37}
+The vector space $V_{\mathrm{alt}}^{(\dim V)}$ has dimension one.
+\end{result}
+
+\begin{proof}
+Let $n=\dim V$. Suppose $\alpha$ and $\alpha'$ are alternating $n$-linear forms
+on $V$ with $\alpha\ne0$. Let $e_1,\dots,e_n$ be such that
+$\alpha(e_1,\dots,e_n)\ne0$. There exists $c\in\F$ such that
+\[ \alpha'(e_1,\dots,e_n) = c\alpha(e_1,\dots,e_n). \]
+Furthermore, \ref{ax:9.28} implies that $e_1,\dots,e_n$ is linearly
+independent and thus is a basis of $V$.
+
+Suppose $v_1,\dots,v_n\in V$. Let $b_{j,k}$ be as in \ref{ax:9.36} for
+$j,k=1,\dots,n$. Then
+\begin{align*}
+\alpha'(v_1,\dots,v_n)
+  &= \alpha'(e_1,\dots,e_n)\sum_{(j_1,\dots,j_n)\in\operatorname{perm} n}
+     \bigl(\sgn(j_1,\dots,j_n)\bigr)b_{j_1,1}\cdots b_{j_n,n}\\
+  &= c\alpha(e_1,\dots,e_n)\sum_{(j_1,\dots,j_n)\in\operatorname{perm} n}
+     \bigl(\sgn(j_1,\dots,j_n)\bigr)b_{j_1,1}\cdots b_{j_n,n}\\
+  &= c\alpha(v_1,\dots,v_n),
+\end{align*}
+where the first and last lines above come from \ref{ax:9.36}. The equation
+above implies that $\alpha'=c\alpha$. Thus $\alpha',\alpha$ is not a linearly
+independent list, which implies that $\dim V_{\mathrm{alt}}^{(n)}\le1$.
+
+To complete the proof, we only need to show that there exists a nonzero
+alternating $n$-linear form $\alpha$ on $V$ (thus eliminating the possibility
+that $\dim V_{\mathrm{alt}}^{(n)}$ equals $0$). To do this, let
+$e_1,\dots,e_n$ be any basis of $V$, and let $\varphi_1,\dots,\varphi_n\in V'$
+be the linear functionals on $V$ that allow us to express each element of $V$
+as a linear combination of $e_1,\dots,e_n$. In other words,
+\[ v = \sum_{j=1}^n\varphi_j(v)e_j \]
+for every $v\in V$ (see \ref{ax:3.114}). Now for $v_1,\dots,v_n\in V$, define
+\refstepcounter{theorem}%
+\[ \alpha(v_1,\dots,v_n) = \sum_{(j_1,\dots,j_n)\in\operatorname{perm} n}
+   \bigl(\sgn(j_1,\dots,j_n)\bigr)\varphi_{j_1}(v_1)\cdots\varphi_{j_n}(v_n).
+   \tag*{\thetheorem}\label{ax:9.38} \]
+The verification that $\alpha$ is an $n$-linear form on $V$ is
+straightforward.
+
+To see that $\alpha$ is alternating, suppose $v_1,\dots,v_n\in V$ with
+$v_1=v_2$. For each $(j_1,\dots,j_n)\in\operatorname{perm} n$, the permutation
+$(j_2,j_1,j_3,\dots,j_n)$ has the opposite sign. Because $v_1=v_2$, the
+contributions from these two permutations to the sum in \ref{ax:9.38} cancel
+each other. Hence $\alpha(v_1,v_1,v_3,\dots,v_n)=0$. Similarly,
+$\alpha(v_1,\dots,v_n)=0$ if any two vectors in the list $v_1,\dots,v_n$ are
+equal. Thus $\alpha$ is alternating.
+
+Finally, consider \ref{ax:9.38} with each $v_k=e_k$. Because
+$\varphi_j(e_k)$ equals $0$ if $j\ne k$ and equals $1$ if $j=k$, only the
+permutation $(1,\dots,n)$ makes a nonzero contribution to the right side of
+\ref{ax:9.38} in this case, giving the equation $\alpha(e_1,\dots,e_n)=1$.
+Thus we have produced a nonzero alternating $n$-linear form $\alpha$ on $V$,
+as desired.
+\end{proof}
+
+\marginnote{The formula \ref{ax:9.38} used in the last proof to construct a
+nonzero alternating $n$-linear form came from the formula in \ref{ax:9.36},
+and that formula arose naturally from the properties of an alternating
+multilinear form.}%
+Earlier we showed that the value of an alternating multilinear form applied to
+a linearly dependent list is $0$; see \ref{ax:9.28}. The next result provides a
+converse of \ref{ax:9.28} for alternating $n$-linear forms when $n=\dim V$. In
+the following result, the statement that $\alpha$ is nonzero means (as usual
+for a function) that $\alpha$ is not the function on $V^n$ that is
+identically $0$.
+
+\begin{result}[Alternating $(\dim V)$-linear forms and linear independence]\label{ax:9.39}
+Let $n=\dim V$. Suppose $\alpha$ is a nonzero alternating $n$-linear form on
+$V$ and $e_1,\dots,e_n$ is a list of vectors in $V$. Then
+\[ \alpha(e_1,\dots,e_n)\ne0 \]
+if and only if $e_1,\dots,e_n$ is linearly independent.
+\end{result}
+
+\begin{proof}
+First suppose $\alpha(e_1,\dots,e_n)\ne0$. Then \ref{ax:9.28} implies that
+$e_1,\dots,e_n$ is linearly independent.
+
+To prove the implication in the other direction, now suppose $e_1,\dots,e_n$
+is linearly independent. Because $n=\dim V$, this implies that
+$e_1,\dots,e_n$ is a basis of $V$ (see \ref{ax:2.38}).
+
+Because $\alpha$ is not the zero $n$-linear form, there exist
+$v_1,\dots,v_n\in V$ such that $\alpha(v_1,\dots,v_n)\ne0$. Now \ref{ax:9.36}
+implies that $\alpha(e_1,\dots,e_n)\ne0$.
+\end{proof}
+
+% ------------------------------------------------------------------ exercises
+\exercisesheading{9B}
+
+\begin{exercise}
+Suppose $m$ is a positive integer. Show that $\dim V^{(m)}=(\dim V)^m$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $n\ge3$ and $\alpha\colon\F^n\times\F^n\times\F^n\to\F$ is defined by
+\begin{multline*}
+\alpha\bigl((x_1,\dots,x_n),(y_1,\dots,y_n),(z_1,\dots,z_n)\bigr)\\
+  = x_1y_2z_3-x_2y_1z_3-x_3y_2z_1-x_1y_3z_2+x_3y_1z_2+x_2y_3z_1.
+\end{multline*}
+Show that $\alpha$ is an alternating $3$-linear form on $\F^n$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $m$ is a positive integer and $\alpha$ is an $m$-linear form on $V$
+such that $\alpha(v_1,\dots,v_m)=0$ whenever $v_1,\dots,v_m$ is a list of
+vectors in $V$ with $v_j=v_{j+1}$ for some $j\in\{1,\dots,m-1\}$. Prove that
+$\alpha$ is an alternating $m$-linear form on $V$.
+\end{exercise}
+
+\begin{exercise}
+Prove or give a counterexample: If $\alpha\in V_{\mathrm{alt}}^{(4)}$, then
+\[ \{(v_1,v_2,v_3,v_4)\in V^4 : \alpha(v_1,v_2,v_3,v_4)=0\} \]
+is a subspace of $V^4$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $m$ is a positive integer and $\beta$ is an $m$-linear form on $V$.
+Define an $m$-linear form $\alpha$ on $V$ by
+\[ \alpha(v_1,\dots,v_m) = \sum_{(j_1,\dots,j_m)\in\operatorname{perm} m}
+   \bigl(\sgn(j_1,\dots,j_m)\bigr)\beta(v_{j_1},\dots,v_{j_m}) \]
+for $v_1,\dots,v_m\in V$. Explain why $\alpha\in V_{\mathrm{alt}}^{(m)}$.
+\end{exercise}
+
+\begin{exercise}
+Suppose $m$ is a positive integer and $\beta$ is an $m$-linear form on $V$.
+Define an $m$-linear form $\alpha$ on $V$ by
+\[ \alpha(v_1,\dots,v_m) = \sum_{(j_1,\dots,j_m)\in\operatorname{perm} m}
+   \beta(v_{j_1},\dots,v_{j_m}) \]
+for $v_1,\dots,v_m\in V$. Explain why
+\[ \alpha(v_{k_1},\dots,v_{k_m}) = \alpha(v_1,\dots,v_m) \]
+for all $v_1,\dots,v_m\in V$ and all $(k_1,\dots,k_m)\in\operatorname{perm} m$.
+\end{exercise}
+
+\begin{exercise}
+Give an example of a nonzero alternating $2$-linear form $\alpha$ on $\R^3$
+and a linearly independent list $v_1,v_2$ in $\R^3$ such that
+$\alpha(v_1,v_2)=0$.
+\exnote{This exercise shows that \ref{ax:9.39} can fail if the hypothesis that
+$n=\dim V$ is deleted.}
+\end{exercise}
